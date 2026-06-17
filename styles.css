@@ -60,5 +60,3 @@ button,.fileBtn{min-width:0;white-space:normal}
 
 .hero{position:relative}
 .versionBadge{position:absolute;top:.55rem;right:.75rem;font-size:.78rem;font-weight:500;opacity:.84}
-.top,.hero{position:relative}
-.versionBadge{position:absolute;top:.55rem;right:.75rem;font-size:.78rem;font-style:italic;font-weight:500;opacity:.9;z-index:20}
