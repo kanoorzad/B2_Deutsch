@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#17324d">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="DE Cards v26">
+  <meta name="apple-mobile-web-app-title" content="DE Cards v29">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=26">
-  <link rel="apple-touch-icon" href="icon.svg?v=26">
-  <link rel="stylesheet" href="styles.css?v=26">
-  <title>B2 + B1 Plus Flashcards v26</title>
+  <link rel="manifest" href="manifest.webmanifest?v=29">
+  <link rel="apple-touch-icon" href="icon.svg?v=29">
+  <link rel="stylesheet" href="styles.css?v=29">
+  <title>B2 + B1 Plus Flashcards v29</title>
 </head>
 <body>
 <header class="hero">
-  <em class="versionBadge">v26</em>
+  <em class="versionBadge">v29</em>
   <h1>B2 + B1 Plus Flashcards</h1>
   <p>German · English · Dari</p>
   <p class="initiative"><em>Initiative by Khalid Noorzad for Afghan Students</em></p>
@@ -84,14 +84,15 @@
       <p class="voiceLine"><strong>Dari:</strong> <span id="voiceFa">—</span></p>
       <button id="unlockSpeech" class="wide">Refresh voices</button>
       <div class="testRow"><button id="testDe">Test German</button><button id="testEn">Test English</button><button id="testFa">Test Dari</button></div>
-      <p class="small">Dari mobile pronunciation uses bundled local audio files from this package.</p>
+      <p class="small">Dari/Farsi uses one local same-site audio-sprite MP3.</p>
     </details>
     <details><summary>Add your own card</summary><form id="addForm"><div class="grid"><label>Type<select name="category"><option>noun</option><option>verb</option><option>adjective</option><option>phrase</option><option>other</option></select></label><label>Unit<input name="unit" placeholder="My list"></label></div><label>German<input name="german" required></label><div class="grid"><label>Article<input name="article" placeholder="der/die/das"></label><label>Plural<input name="plural"></label></div><div class="grid"><label>English<input name="english" required></label><label>Dari<input name="dari" required dir="rtl"></label></div><details><summary>Verb forms</summary><label>Infinitive<input name="infinitive"></label><label>Past / Präteritum<input name="past"></label><label>Perfekt<input name="perfect"></label><label>Plusquamperfekt<input name="plusquamperfekt"></label></details><label>Related meanings<input name="synonyms" placeholder="three verb synonyms, comma separated"></label><button class="primary">Add card</button></form></details>
     <details><summary>Backup</summary><div class="testRow"><button id="exportBtn">Export backup</button><label class="fileBtn">Import backup<input id="importJson" type="file" accept="application/json" hidden></label></div></details>
   </section>
 </main>
 
-<script src="data.js?v=26"></script>
-<script src="app.js?v=26"></script>
+<script src="data.js?v=29"></script>
+<script src="audio-index.js?v=29"></script>
+<script src="app.js?v=29"></script>
 </body>
 </html>

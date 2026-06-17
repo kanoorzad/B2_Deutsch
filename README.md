@@ -1,41 +1,48 @@
-# B2 + B1 Plus Flashcards v26
+# B2 + B1 Plus Flashcards v29 — Dari/Farsi Audio Sprite Redesign
 
-## Fix
+This version redesigns Dari/Farsi audio completely.
 
-Your mobile test result was:
+## Audio design
 
-`Dari: Web Audio failed: audio-http-404`
+Dari/Farsi uses exactly two root files:
 
-That means the mobile browser requested an audio file, but GitHub Pages returned 404 Not Found.
+- `dari-sprite.mp3`
+- `audio-index.js`
 
-v26 fixes that by:
+The app seeks inside `dari-sprite.mp3` and plays the matching segment for each card.
 
-- adding `audio/fa/_test.mp3`
-- adding `testAudioFa: "audio/fa/_test.mp3"` to `data.js`
-- making the Test Dari button use that data path
-- if `_test.mp3` still 404s, falling back to the first real bundled Dari audio file
-- showing the failed path in the error message if a file is missing
+## Why this should upload and work better
 
-## Important upload instruction
+- No `audio/fa/` folder.
+- No thousands of MP3 files.
+- No large embedded audio JS chunks.
+- No remote/online TTS.
+- No CORS.
+- No mobile Web Speech dependency for Dari.
+- Single audio file size: 7.84 MB.
 
-Upload the **whole folder**, including:
+## Required files to upload
 
-- `audio/fa/_test.mp3`
-- all other `audio/fa/*.mp3` files
-- `data.js`
+Upload all root files, especially:
+
+- `dari-sprite.mp3`
+- `audio-index.js`
 - `app.js`
-
-If GitHub Pages does not contain the `audio/fa/` folder, Dari cannot play.
+- `data.js`
+- `index.html`
+- `styles.css`
+- `service-worker.js`
 
 ## QA
 
 - JavaScript syntax: OK
-- Test audio exists: True
-- Copied test audio from: audio/fa/62c46726a76093e4ce.mp3
-- Dari cards with audio: 2254
-- Unique Dari audio files: 2025
-- Missing card audio files: 0
+- Sprite entries: 2025
+- Dari cards covered: 2254 / 2254
+- Sprite size: 7.84 MB
+- Under 25 MB single-file upload limit: True
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=26
+https://kanoorzad.github.io/B2_Deutsch/?v=29
+
+On mobile, tap **Test Dari** once, then use Play.

@@ -1,25 +1,47 @@
 {
-  "version": "26.0",
-  "base": "v25 with audio 404 fix",
+  "version": "29.0",
+  "base": "v20 design with complete Dari/Farsi audio redesign",
+  "counts": {
+    "b2Entries": 1629,
+    "b1PlusEntries": 475,
+    "irregularVerbs": 150,
+    "totalCards": 2254,
+    "verbs": 650,
+    "nonVerbs": 1604,
+    "verbCardsWith3EnglishSynonyms": 650,
+    "verbCardsWith3GermanSynonyms": 650,
+    "verbCardsWith3DariSynonyms": 650,
+    "nonVerbCardsWithNoBottomSynonyms": 1604,
+    "dariCardsWithSpriteAudio": 2254,
+    "uniqueSpriteEntries": 2025,
+    "spriteBytes": 8219528
+  },
+  "sprite": {
+    "file": "dari-sprite.mp3",
+    "bytes": 8219528,
+    "mb": 7.84,
+    "duration_seconds": 4109.65,
+    "entries": 2025,
+    "under_25mb_single_file": true
+  },
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_present": true,
-    "cache_busting_v26": true,
-    "test_audio_file_exists": true,
-    "test_audio_pointer_in_data": true,
-    "test_button_uses_data_audio_path": true,
-    "404_message_includes_path": true,
-    "fallback_to_first_bundled_audio_on_404": true,
-    "card_audio_files_missing": 0,
-    "dari_cards_with_audio": 2254,
-    "unique_dari_audio_files": 2025
+    "cache_busting_v29": true,
+    "uses_single_local_audio_sprite": true,
+    "no_audio_folder_dependency": true,
+    "no_remote_tts": true,
+    "no_embedded_audio_chunks": true,
+    "test_button_uses_sprite": true,
+    "play_button_unlocks_sprite": true,
+    "service_worker_caches_sprite": true,
+    "dari_cards_with_sprite_audio": true
   },
   "node_check_stderr": "",
-  "copied_test_audio_from": "audio/fa/62c46726a76093e4ce.mp3",
-  "diagnosis": [
-    "audio-http-404 means the phone requested an audio URL but GitHub Pages did not find that file.",
-    "v25 test used ./audio/fa/_test.mp3 but that file was not guaranteed to exist.",
-    "v26 adds audio/fa/_test.mp3 to the package and data.js.",
-    "v26 also falls back to the first real card audio if the test path returns 404."
+  "design_summary": [
+    "One same-origin MP3 audio sprite plus one small JS index.",
+    "No mobile Web Speech dependency for Dari.",
+    "No remote TTS or CORS.",
+    "No thousands of MP3 files.",
+    "No large embedded JS audio chunks."
   ]
 }
