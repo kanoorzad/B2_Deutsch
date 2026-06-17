@@ -1,39 +1,41 @@
-# B2 + B1 Plus Flashcards v25
+# B2 + B1 Plus Flashcards v26
 
-## Root-cause fix
+## Fix
 
-v24 used bundled MP3 files but still used `HTMLAudioElement.play()` later in the automatic sequence.
+Your mobile test result was:
 
-On mobile, that later programmatic play call can be blocked by autoplay/user-gesture rules even when it works on PC.
+`Dari: Web Audio failed: audio-http-404`
 
-v25 changes only the Dari engine:
+That means the mobile browser requested an audio file, but GitHub Pages returned 404 Not Found.
 
-- Dari uses bundled local MP3 files.
-- Dari MP3 files are decoded and played through Web Audio API.
-- The Web Audio engine is unlocked directly from the Play/Test button tap.
-- HTML audio is kept only as a fallback.
-- German and English remain on browser Web Speech.
+v26 fixes that by:
 
-## Important
+- adding `audio/fa/_test.mp3`
+- adding `testAudioFa: "audio/fa/_test.mp3"` to `data.js`
+- making the Test Dari button use that data path
+- if `_test.mp3` still 404s, falling back to the first real bundled Dari audio file
+- showing the failed path in the error message if a file is missing
 
-Upload the full `audio/fa/` folder.
+## Important upload instruction
+
+Upload the **whole folder**, including:
+
+- `audio/fa/_test.mp3`
+- all other `audio/fa/*.mp3` files
+- `data.js`
+- `app.js`
+
+If GitHub Pages does not contain the `audio/fa/` folder, Dari cannot play.
 
 ## QA
 
 - JavaScript syntax: OK
-- Total cards: 2254
-- Dari cards with bundled audio: 2254
+- Test audio exists: True
+- Copied test audio from: audio/fa/62c46726a76093e4ce.mp3
+- Dari cards with audio: 2254
 - Unique Dari audio files: 2025
-- Missing Dari audio files: 0
-- Web Audio API path: enabled
-- Remote TTS: removed
-
-## GitHub update
-
-Replace all files with this v25 folder.
+- Missing card audio files: 0
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=25
-
-Delete old mobile Home Screen icons before testing.
+https://kanoorzad.github.io/B2_Deutsch/?v=26

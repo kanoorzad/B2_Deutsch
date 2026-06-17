@@ -1,42 +1,25 @@
 {
-  "version": "25.0",
-  "base": "v24/v20 design with bundled audio, Dari engine changed from HTMLAudioElement to Web Audio API",
-  "counts": {
-    "b2Entries": 1629,
-    "b1PlusEntries": 475,
-    "irregularVerbs": 150,
-    "totalCards": 2254,
-    "verbs": 650,
-    "nonVerbs": 1604,
-    "uniqueDariAudioFiles": 2025,
-    "dariCardsWithBundledAudio": 2254,
-    "verbCardsWith3EnglishSynonyms": 650,
-    "verbCardsWith3GermanSynonyms": 650,
-    "verbCardsWith3DariSynonyms": 650,
-    "nonVerbCardsWithNoBottomSynonyms": 1604
-  },
+  "version": "26.0",
+  "base": "v25 with audio 404 fix",
   "checks": {
     "javascript_syntax_ok": true,
     "version_badge_present": true,
-    "cache_busting_v25": true,
-    "dari_uses_webaudio_api": true,
-    "unlock_called_from_play_button_before_stop": true,
-    "test_dari_unlocks_before_play": true,
-    "html_audio_only_fallback": true,
-    "local_dari_audio_files_exist": true,
-    "no_remote_tts": true,
-    "german_english_still_web_speech": true,
-    "verb_cards_with_3_english_synonyms": true,
-    "verb_cards_with_3_german_synonyms": true,
-    "verb_cards_with_3_dari_synonyms": true,
-    "non_verbs_have_no_bottom_synonyms": true
+    "cache_busting_v26": true,
+    "test_audio_file_exists": true,
+    "test_audio_pointer_in_data": true,
+    "test_button_uses_data_audio_path": true,
+    "404_message_includes_path": true,
+    "fallback_to_first_bundled_audio_on_404": true,
+    "card_audio_files_missing": 0,
+    "dari_cards_with_audio": 2254,
+    "unique_dari_audio_files": 2025
   },
   "node_check_stderr": "",
-  "missing_audio_count": 0,
+  "copied_test_audio_from": "audio/fa/62c46726a76093e4ce.mp3",
   "diagnosis": [
-    "v24 used HTMLAudioElement.play() later in an automatic sequence.",
-    "Mobile browsers can block programmatic media playback unless the audio system is unlocked by a user gesture.",
-    "v25 unlocks a Web Audio AudioContext directly from Play/Test taps, then plays bundled MP3 buffers through that running context.",
-    "This removes mobile Web Speech and remote audio from the Dari path."
+    "audio-http-404 means the phone requested an audio URL but GitHub Pages did not find that file.",
+    "v25 test used ./audio/fa/_test.mp3 but that file was not guaranteed to exist.",
+    "v26 adds audio/fa/_test.mp3 to the package and data.js.",
+    "v26 also falls back to the first real card audio if the test path returns 404."
   ]
 }

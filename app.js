@@ -1,5 +1,5 @@
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v25';
+const STORE='b2-native-cards-extra-v26';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[]; let idx=0; let flipped=false; let lastFront=null; let playing=false; let paused=false; let playQueue=[]; let playIndex=0;
@@ -68,6 +68,15 @@ function pickVoice(lang){
   return vs.find(v=>v.lang==='fa-AF')||vs.find(v=>v.lang==='fa-IR')||vs.find(v=>v.lang&&v.lang.toLowerCase().startsWith('fa'));
 }
 function voiceLabel(v){return v?`${v.name} (${v.lang})`:'Browser default voice'}
+
+function firstBundledDariAudio(){
+  const c=(window.FLASHCARD_DATA.cards||[]).find(x=>x&&x.audio_fa);
+  return c?c.audio_fa:'';
+}
+function testDariAudioPath(){
+  return (window.FLASHCARD_DATA&&window.FLASHCARD_DATA.testAudioFa)||firstBundledDariAudio()||'';
+}
+
 function normalizeAudioPath(src){
   if(!src)return '';
   if(src.startsWith('http')||src.startsWith('data:')||src.startsWith('./'))return src;
@@ -107,7 +116,7 @@ async function loadDariBuffer(audioSrc){
   const ctx=getDariCtx();
   if(!ctx)throw new Error('no-audio-context');
   const res=await fetch(src,{cache:'force-cache'});
-  if(!res.ok)throw new Error('audio-http-'+res.status);
+  if(!res.ok)throw new Error('audio-http-'+res.status+' '+src);
   const arr=await res.arrayBuffer();
   const buf=await ctx.decodeAudioData(arr.slice(0));
   dariBuffers.set(src,buf);
@@ -158,7 +167,14 @@ function sayBundledDari(text,audioSrc,done=()=>{}){
       setDariStatus('Playing bundled Dari audio with Web Audio.');
       setTimeout(()=>{ if(!finished && currentDariSource===s){} },700);
     }catch(e){
-      setDariStatus('Web Audio failed: '+(e&&e.message?e.message:'fallback'));
+      const msg=(e&&e.message?e.message:'fallback');
+      const fb=firstBundledDariAudio();
+      if(msg.indexOf('audio-http-404')>=0 && fb && fb!==audioSrc){
+        setDariStatus('Test audio missing; trying first bundled Dari file.');
+        sayBundledDari(text,fb,done);
+        return;
+      }
+      setDariStatus('Web Audio failed: '+msg);
       sayHtmlAudioFallback(text,audioSrc,done);
     }
   })();
@@ -255,4 +271,4 @@ function stop(doRender=true){
 
 function addCard(e){e.preventDefault();const d=Object.fromEntries(new FormData(els.addForm).entries());const syns=String(d.synonyms||'').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);while(syns.length<3)syns.push(syns.length?'related verb':'verb meaning');const isVerb=d.category==='verb';const c={id:'custom-'+Date.now(),source:'user',list:'My cards',unit:d.unit||'My list',part:'',category:d.category||'other',german:d.german,english:d.english,dari:d.dari,article:d.article||'',singular:d.german,plural:d.plural||'',forms:{infinitive:d.infinitive||'',present3:'',past:d.past||'',perfect:d.perfect||'',plusquamperfekt:d.plusquamperfekt||''},synonyms:isVerb?syns:[],synonyms_en:isVerb?syns:[],synonyms_de:isVerb?syns:[],synonyms_fa:isVerb?syns:[],example:''};extra.push(c);localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];setup();apply();els.addForm.reset()}
 function exportBackup(){const blob=new Blob([JSON.stringify(extra,null,2)],{type:'application/json'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='my-flashcard-backup.json';a.click();URL.revokeObjectURL(u)}function importBackup(file){const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw Error('Backup must be an array.');extra=x;localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];setup();apply();alert('Backup imported.')}catch(e){alert(e.message)}};r.readAsText(file)}
-['list','unit','part','type','front'].forEach(k=>els[k]?.addEventListener('change',()=>{if(k==='list')updateUnits();if(k==='unit')updateParts();apply()}));els.search.addEventListener('input',apply);els.next.addEventListener('click',next);els.prev.addEventListener('click',prev);els.flip.addEventListener('click',flip);els.card.addEventListener('click',()=>{if(!playing)flip()});els.speakFront.addEventListener('click',speakFront);els.playList.addEventListener('click',playSelected);els.pauseList.addEventListener('click',pauseResume);els.stopList.addEventListener('click',()=>stop());els.addForm.addEventListener('submit',addCard);els.exportBtn.addEventListener('click',exportBackup);els.importJson.addEventListener('change',e=>e.target.files[0]&&importBackup(e.target.files[0]));els.unlockSpeech.addEventListener('click',unlockSpeech);els.testDe.addEventListener('click',()=>say('die Abteilung','de'));els.testEn.addEventListener('click',()=>say('department or division','en'));els.testFa.addEventListener('click',()=>{primeDariAudio();say('دیپارتمنت، بخش','fa',()=>{},'./audio/fa/_test.mp3')});document.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()=>{const c=filtered[idx];if(!c)return;if(b.dataset.say==='de')say(displayGerman(c),'de');if(b.dataset.say==='en')say(displayEnglish(c),'en');if(b.dataset.say==='fa'){primeDariAudio();say(displayDari(c),'fa',()=>{},c.audio_fa||'')}}));document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(e.code==='Space'){e.preventDefault();if(!playing)flip()}if(e.code==='ArrowRight')next();if(e.code==='ArrowLeft')prev()});if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=()=>updateVoiceStatus();setTimeout(updateVoiceStatus,500);setTimeout(updateVoiceStatus,1500)}if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js?v=25').catch(()=>{});setup();apply();
+['list','unit','part','type','front'].forEach(k=>els[k]?.addEventListener('change',()=>{if(k==='list')updateUnits();if(k==='unit')updateParts();apply()}));els.search.addEventListener('input',apply);els.next.addEventListener('click',next);els.prev.addEventListener('click',prev);els.flip.addEventListener('click',flip);els.card.addEventListener('click',()=>{if(!playing)flip()});els.speakFront.addEventListener('click',speakFront);els.playList.addEventListener('click',playSelected);els.pauseList.addEventListener('click',pauseResume);els.stopList.addEventListener('click',()=>stop());els.addForm.addEventListener('submit',addCard);els.exportBtn.addEventListener('click',exportBackup);els.importJson.addEventListener('change',e=>e.target.files[0]&&importBackup(e.target.files[0]));els.unlockSpeech.addEventListener('click',unlockSpeech);els.testDe.addEventListener('click',()=>say('die Abteilung','de'));els.testEn.addEventListener('click',()=>say('department or division','en'));els.testFa.addEventListener('click',()=>{primeDariAudio();say('دیپارتمنت، بخش','fa',()=>{},testDariAudioPath())});document.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()=>{const c=filtered[idx];if(!c)return;if(b.dataset.say==='de')say(displayGerman(c),'de');if(b.dataset.say==='en')say(displayEnglish(c),'en');if(b.dataset.say==='fa'){primeDariAudio();say(displayDari(c),'fa',()=>{},c.audio_fa||'')}}));document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(e.code==='Space'){e.preventDefault();if(!playing)flip()}if(e.code==='ArrowRight')next();if(e.code==='ArrowLeft')prev()});if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=()=>updateVoiceStatus();setTimeout(updateVoiceStatus,500);setTimeout(updateVoiceStatus,1500)}if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js?v=26').catch(()=>{});setup();apply();
