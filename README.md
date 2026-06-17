@@ -1,28 +1,30 @@
-# B2 + B1 Plus Flashcards v47 — Fully Automatic Audio
+# B2 + B1 Plus Flashcards v49 — v6 Direct Dari Mobile
 
 ## What changed
 
-v47 removes the visible Voice Status section completely.
+v49 removes the online TTS layer and restores direct browser SpeechSynthesis for Dari/Farsi.
 
-No user action is required for audio:
+This is focused on the exact issue:
 
-- no Refresh voices
-- no Run Dari voice search
-- no Try next Dari candidate
-- no manual voice dropdowns
-- no "No direct Persian voice..." message
+- PC has Dari voice.
+- Mobile has no direct Persian voice in the list.
+- Earlier v6-style `fa-AF` direct utterance had worked better.
 
-## Automatic audio behavior
+## v49 audio behavior
 
-- German: automatically selects best available German browser/device voice.
-- English: automatically selects best available English browser/device voice.
-- Dari/Farsi: automatically tries online speech when available.
-- If online Dari is unavailable or rate-limited, the app silently uses the automatic browser/tag fallback without stopping the lesson.
+- German: browser/device voice, direct speech.
+- English: browser/device voice, direct speech.
+- Dari/Farsi: direct SpeechSynthesisUtterance.
+- If no Persian/Farsi voice is listed, it uses the v6-style tag `fa-AF`.
+- No Puter.
+- No Google router.
+- No online rate-limit messages.
+- No visible Voice Status section.
 
 ## Open
 
-https://kanoorzad.github.io/B2_Deutsch/?v=47
+https://kanoorzad.github.io/B2_Deutsch/?v=49
 
 ## Test
 
-Just press Play or Speak. Do not open any voice section.
+Press Speak/Play. Do not open any voice section.

@@ -1,27 +1,23 @@
 {
-  "version": "47.0",
-  "base": "v46 with voice section fully hidden and automatic",
+  "version": "49.0",
+  "base": "v48 clean UI with v6-style direct Dari SpeechSynthesis restored",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v47": true,
-    "cache_busting_v47": true,
-    "visible_voice_status_removed": true,
-    "hidden_audio_elements_present": true,
-    "no_manual_refresh_visible": true,
-    "no_manual_search_visible": true,
-    "no_direct_persian_visible": true,
-    "auto_voice_init_present": true,
-    "voiceschanged_auto": true,
-    "dari_auto_candidate": true,
-    "german_english_browser_only": true,
+    "version_badge_v49": true,
+    "cache_busting_v49": true,
+    "puter_removed": true,
+    "google_router_removed": true,
+    "direct_speech_synthesis": true,
+    "dari_default_fa_af": true,
+    "no_visible_voice_status": true,
     "daria_exclusion_kept": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
   "notes": [
-    "The voice section is no longer visible to the user.",
-    "Voice selection is automatic on startup and on voiceschanged.",
-    "The old 'No direct Persian voice · 219 brute-force candidates available' message is hidden."
+    "This version is browser-only again.",
+    "Dari fallback tag is fa-AF, matching the earlier v6 approach.",
+    "No async online provider runs before mobile speech."
   ],
-  "zip_mb": 0.19
+  "zip_mb": 0.18
 }
