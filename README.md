@@ -1,19 +1,28 @@
-# B2 + B1 Plus Flashcards v20
+# B2 + B1 Plus Flashcards v22
 
-## Root-cause refinement
+## Purpose
 
-v19 used an online `<audio>` fallback, but the audio element had `crossOrigin='anonymous'`. Remote TTS endpoints often do not provide CORS headers, so mobile browsers can block playback.
+v22 is a clean rollback to the actual v6 app core, because the later experiments did not solve mobile Dari.
 
-v20 removes CORS mode completely.
+## Restored from v6
 
-## v20 Dari mobile changes
+- `say()` uses direct `SpeechSynthesisUtterance(text)`
+- Dari language is `fa-AF`
+- Playback order is German → English → Dari → forms
+- `renderPlaybackCard()` uses `flipped=true; render();`
+- `playNextPart()` calls `say(p.t,p.l,...)` directly
+- No online audio
+- No mobile hold timer
+- No retry loop
+- No unlock utterance
 
-- no `crossOrigin` on audio
-- multiple online TTS URL formats
-- `audio.load()` before `audio.play()`
-- Play button primes audio on mobile
-- fallback to browser TTS if online audio fails
-- German/English remain on stable v6-style Web Speech
+## Kept from latest requirements
+
+- Top-right `v22`
+- Initiative line
+- Latest data
+- Verb-only synonyms
+- No bottom synonym text for nouns/non-verbs
 
 ## QA
 
@@ -28,10 +37,10 @@ v20 removes CORS mode completely.
 
 ## GitHub update
 
-Replace all files with this v20 folder.
+Replace all files with this v22 folder.
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=20
+https://kanoorzad.github.io/B2_Deutsch/?v=22
 
-Delete old mobile Home Screen icons before testing.
+Delete old mobile Home Screen icons and clear browser cache before testing.
