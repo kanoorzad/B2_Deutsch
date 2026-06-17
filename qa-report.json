@@ -1,30 +1,29 @@
 {
-  "version": "11.0",
+  "version": "12.0",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
     "irregularVerbs": 150,
     "totalCards": 2254,
-    "cardsWithTwoSynonyms": 2254,
     "cardsWithEnglish": 2254,
-    "cardsWithDari": 2254
+    "cardsWithDari": 2254,
+    "cardsWith3EnglishChips": 2254,
+    "cardsWith3GermanChips": 2254,
+    "cardsWith3DariChips": 2254
   },
   "checks": {
-    "playback_steps_checked": 8392,
-    "english_slash_items_after_cleanup": 0,
-    "all_cards_have_english": true,
-    "all_cards_have_dari": true,
-    "all_cards_have_two_synonyms": true,
-    "top_has_no_install_or_audio_check_buttons": true,
-    "play_controls_directly_below_card": true,
-    "mobile_sticky_quick_controls": true,
-    "dari_fallbacks_in_code": true,
-    "clear_known_limit_warning_present": true
+    "cards_with_3_english_chips": true,
+    "cards_with_3_german_chips": true,
+    "cards_with_3_dari_chips": true,
+    "dynamic_language_chips_present": true,
+    "playback_renders_chips_for_current_language": true,
+    "mobile_dari_limitation_warning_present": true,
+    "dari_fallbacks_present": true
   },
   "lists": {
     "B2 all 12 units": 1629,
     "Irregular verbs": 150,
     "B1 Plus 7 Units": 475
   },
-  "known_limit": "If mobile browsers expose no Dari/Persian/Farsi voice, browser TTS cannot pronounce Dari. This package includes the strongest static-web fallback but true guaranteed mobile Dari audio requires bundled audio files or a cloud TTS service."
+  "known_limit": "Mobile Dari remains dependent on whether the phone/browser exposes a Dari/Persian/Farsi voice. This package has the strongest static fallback and is ready for bundled audio/cloud TTS, but cannot create a missing voice on a phone."
 }

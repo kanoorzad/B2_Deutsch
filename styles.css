@@ -35,3 +35,5 @@ details+details{margin-top:.8rem}
 .warning{background:var(--warn);color:var(--warnText);border:1px solid rgba(100,80,0,.2);border-radius:14px;padding:.7rem;font-weight:830;line-height:1.4}.voiceLine{font-size:.92rem;color:var(--muted);line-height:1.35}
 @media(max-width:900px){.shell{grid-template-columns:1fr;padding:.65rem}.settings{order:3}.study{order:1}.languageGrid,.infoGrid{grid-template-columns:1fr}.grid,.checks{grid-template-columns:1fr}.cardBottom{display:block}.tapHint{text-align:left}.quickControls{position:sticky;bottom:.35rem;z-index:3}.card{min-height:340px}.card h2{font-size:clamp(2.1rem,11vw,4.3rem)}}
 @media(max-width:420px){.playRow,.navRow,.testRow{grid-template-columns:1fr 1fr 1fr;gap:.4rem}button,.fileBtn{padding:.7rem .65rem}.quickControls,.settings,.answer{padding:.8rem;border-radius:20px}}
+
+.frontSynonyms[dir="rtl"],.synChips[dir="rtl"]{direction:rtl;text-align:right}.frontSynonyms[dir="rtl"] span,.synChips[dir="rtl"] span{font-size:1.05rem}

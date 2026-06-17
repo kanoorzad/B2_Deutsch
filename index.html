@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#17324d">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="DE Cards v11">
+  <meta name="apple-mobile-web-app-title" content="DE Cards v12">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=11">
-  <link rel="apple-touch-icon" href="icon.svg?v=11">
-  <link rel="stylesheet" href="styles.css?v=11">
-  <title>B2 + B1 Plus Flashcards v11</title>
+  <link rel="manifest" href="manifest.webmanifest?v=12">
+  <link rel="apple-touch-icon" href="icon.svg?v=12">
+  <link rel="stylesheet" href="styles.css?v=12">
+  <title>B2 + B1 Plus Flashcards v12</title>
 </head>
 <body>
 <header class="hero">
   <h1>B2 + B1 Plus Flashcards</h1>
-  <p>German · US English · Dari</p>
+  <p>German · English · Dari</p>
 </header>
 
 <main class="shell">
@@ -28,28 +28,17 @@
       </div>
       <footer class="cardBottom">
         <div>
-          <p class="bottomLabel">Synonyms / related meanings</p>
+          <p id="chipLabel" class="bottomLabel">Related meanings</p>
           <p id="frontSynonyms" class="frontSynonyms"></p>
         </div>
         <p class="tapHint">Tap to flip</p>
       </footer>
     </article>
 
-    <section class="quickControls" aria-label="Main controls">
-      <div class="progress">
-        <span id="count">0 / 0</span>
-        <div><b id="bar"></b></div>
-      </div>
-      <div class="playRow">
-        <button id="playList" class="primary">Play</button>
-        <button id="pauseList">Pause</button>
-        <button id="stopList">Stop</button>
-      </div>
-      <div class="navRow">
-        <button id="prev">Previous</button>
-        <button id="flip" class="primary ghost">Flip</button>
-        <button id="next">Next</button>
-      </div>
+    <section class="quickControls">
+      <div class="progress"><span id="count">0 / 0</span><div><b id="bar"></b></div></div>
+      <div class="playRow"><button id="playList" class="primary">Play</button><button id="pauseList">Pause</button><button id="stopList">Stop</button></div>
+      <div class="navRow"><button id="prev">Previous</button><button id="flip" class="primary ghost">Flip</button><button id="next">Next</button></div>
       <button id="speakFront" class="wide">Speak visible text</button>
       <p id="nowPlaying" class="now">Ready.</p>
       <p id="speechWarning" class="warning hidden"></p>
@@ -57,51 +46,16 @@
 
     <section id="answer" class="answer hidden">
       <div class="languageGrid">
-        <article class="langCard germanCard">
-          <header><h3>German</h3><button data-say="de">Speak</button></header>
-          <p id="de" class="langText deLang"></p>
-          <p id="dePluralLine" class="small strongLine"></p>
-        </article>
-        <article class="langCard englishCard">
-          <header><h3>US English</h3><button data-say="en">Speak</button></header>
-          <p id="en" class="langText"></p>
-        </article>
-        <article class="langCard dariCard">
-          <header><h3>Dari</h3><button data-say="fa">Speak</button></header>
-          <p id="fa" class="langText" dir="rtl"></p>
-        </article>
+        <article class="langCard germanCard"><header><h3>German</h3><button data-say="de">Speak</button></header><p id="de" class="langText deLang"></p><p id="dePluralLine" class="small strongLine"></p></article>
+        <article class="langCard englishCard"><header><h3>English</h3><button data-say="en">Speak</button></header><p id="en" class="langText"></p></article>
+        <article class="langCard dariCard"><header><h3>Dari</h3><button data-say="fa">Speak</button></header><p id="fa" class="langText" dir="rtl"></p></article>
       </div>
 
       <div class="infoGrid">
-        <article id="nounBox" class="miniCard hidden">
-          <h3>Noun forms</h3>
-          <dl>
-            <div><dt>Article</dt><dd id="article"></dd></div>
-            <div><dt>Singular</dt><dd id="singular"></dd></div>
-            <div><dt>Plural</dt><dd id="plural"></dd></div>
-          </dl>
-        </article>
-
-        <article id="verbBox" class="miniCard hidden">
-          <h3>Verb forms</h3>
-          <dl class="verbForms">
-            <div><dt>Infinitive</dt><dd id="inf"></dd></div>
-            <div><dt>3rd person present</dt><dd id="pres3"></dd></div>
-            <div><dt>Präteritum</dt><dd id="past"></dd></div>
-            <div><dt>Perfekt</dt><dd id="perf"></dd></div>
-            <div><dt>Plusquamperfekt</dt><dd id="plus"></dd></div>
-          </dl>
-        </article>
-
-        <article class="miniCard">
-          <h3>Synonyms / related meanings</h3>
-          <p id="syn" class="synChips"></p>
-        </article>
-
-        <article class="miniCard">
-          <h3>Example</h3>
-          <p id="ex"></p>
-        </article>
+        <article id="nounBox" class="miniCard hidden"><h3>Noun forms</h3><dl><div><dt>Article</dt><dd id="article"></dd></div><div><dt>Singular</dt><dd id="singular"></dd></div><div><dt>Plural</dt><dd id="plural"></dd></div></dl></article>
+        <article id="verbBox" class="miniCard hidden"><h3>Verb forms</h3><dl class="verbForms"><div><dt>Infinitive</dt><dd id="inf"></dd></div><div><dt>3rd person present</dt><dd id="pres3"></dd></div><div><dt>Präteritum</dt><dd id="past"></dd></div><div><dt>Perfekt</dt><dd id="perf"></dd></div><div><dt>Plusquamperfekt</dt><dd id="plus"></dd></div></dl></article>
+        <article class="miniCard"><h3>Related meanings</h3><p id="syn" class="synChips"></p></article>
+        <article class="miniCard"><h3>Example</h3><p id="ex"></p></article>
       </div>
     </section>
   </section>
@@ -109,115 +63,33 @@
   <section class="settings">
     <details>
       <summary>Choose cards</summary>
-      <label>List
-        <select id="listFilter"><option value="all">All lists</option></select>
-      </label>
-      <div class="grid">
-        <label>Unit
-          <select id="unitFilter"><option value="all">All units</option></select>
-        </label>
-        <label>Part
-          <select id="partFilter"><option value="all">All parts</option></select>
-        </label>
-      </div>
-      <div class="grid">
-        <label>Type
-          <select id="typeFilter">
-            <option value="all">All types</option>
-            <option value="noun">Nouns</option>
-            <option value="verb">Verbs</option>
-            <option value="adjective">Adjectives</option>
-            <option value="phrase">Phrases</option>
-            <option value="other">Other</option>
-          </select>
-        </label>
-        <label>Manual front
-          <select id="front">
-            <option value="german">German</option>
-            <option value="english">US English</option>
-            <option value="dari">Dari</option>
-            <option value="plural">Plural / verb forms</option>
-            <option value="random">Random</option>
-          </select>
-        </label>
-      </div>
-      <label>Search
-        <input id="search" type="search" placeholder="Search vocabulary...">
-      </label>
+      <label>List<select id="listFilter"><option value="all">All lists</option></select></label>
+      <div class="grid"><label>Unit<select id="unitFilter"><option value="all">All units</option></select></label><label>Part<select id="partFilter"><option value="all">All parts</option></select></label></div>
+      <div class="grid"><label>Type<select id="typeFilter"><option value="all">All types</option><option value="noun">Nouns</option><option value="verb">Verbs</option><option value="adjective">Adjectives</option><option value="phrase">Phrases</option><option value="other">Other</option></select></label><label>Manual front<select id="front"><option value="german">German</option><option value="english">English</option><option value="dari">Dari</option><option value="plural">Plural / verb forms</option><option value="random">Random</option></select></label></div>
+      <label>Search<input id="search" type="search" placeholder="Search vocabulary..."></label>
     </details>
-
     <details>
       <summary>Listening order</summary>
-      <p class="small">German word with article → plural or verb forms → US English → Dari → next card.</p>
-      <div class="checks">
-        <label><input type="checkbox" id="playDe" checked> German word</label>
-        <label><input type="checkbox" id="playForms" checked> Plural / forms</label>
-        <label><input type="checkbox" id="playEn" checked> US English</label>
-        <label><input type="checkbox" id="playFa" checked> Dari</label>
-      </div>
-      <label>Repeat
-        <select id="repeat"><option>1</option><option>2</option><option>3</option></select>
-      </label>
+      <p class="small">German word with article → plural or verb forms → English → Dari → next card.</p>
+      <div class="checks"><label><input type="checkbox" id="playDe" checked> German</label><label><input type="checkbox" id="playForms" checked> Plural/forms</label><label><input type="checkbox" id="playEn" checked> English</label><label><input type="checkbox" id="playFa" checked> Dari</label></div>
+      <label>Repeat<select id="repeat"><option>1</option><option>2</option><option>3</option></select></label>
     </details>
-
     <details>
-      <summary>Voice status</summary>
+      <summary>Voice fallback status</summary>
       <p id="deviceInfo" class="small">Checking device…</p>
       <p class="voiceLine"><strong>German:</strong> <span id="voiceDe">—</span></p>
       <p class="voiceLine"><strong>English:</strong> <span id="voiceEn">—</span></p>
       <p class="voiceLine"><strong>Dari:</strong> <span id="voiceFa">—</span></p>
       <button id="unlockSpeech" class="wide">Enable mobile speech</button>
-      <div class="testRow">
-        <button id="testDe">Test German</button>
-        <button id="testEn">Test English</button>
-        <button id="testFa">Test Dari</button>
-      </div>
-      <p class="small">The app automatically selects the best available device voice. If a mobile phone exposes no Dari/Persian/Farsi voice, static GitHub Pages cannot create one; guaranteed mobile Dari needs bundled audio or cloud TTS.</p>
+      <div class="testRow"><button id="testDe">Test German</button><button id="testEn">Test English</button><button id="testFa">Test Dari</button></div>
+      <p class="small">This free version uses device/browser voices. If mobile has no Dari/Persian/Farsi voice, guaranteed Dari audio requires bundled audio files or a cloud TTS service.</p>
     </details>
-
-    <details>
-      <summary>Add your own card</summary>
-      <form id="addForm">
-        <div class="grid">
-          <label>Type
-            <select name="category">
-              <option>noun</option><option>verb</option><option>adjective</option><option>phrase</option><option>other</option>
-            </select>
-          </label>
-          <label>Unit<input name="unit" placeholder="My list"></label>
-        </div>
-        <label>German<input name="german" required></label>
-        <div class="grid">
-          <label>Article<input name="article" placeholder="der/die/das"></label>
-          <label>Plural<input name="plural"></label>
-        </div>
-        <div class="grid">
-          <label>US English<input name="english" required></label>
-          <label>Dari<input name="dari" required dir="rtl"></label>
-        </div>
-        <details>
-          <summary>Verb forms</summary>
-          <label>Infinitive<input name="infinitive"></label>
-          <label>Past / Präteritum<input name="past"></label>
-          <label>Perfekt<input name="perfect"></label>
-          <label>Plusquamperfekt<input name="plusquamperfekt"></label>
-        </details>
-        <label>Synonyms / related meanings<input name="synonyms" placeholder="two synonyms, comma separated"></label>
-        <button class="primary">Add card</button>
-      </form>
-    </details>
-
-    <details>
-      <summary>Backup</summary>
-      <div class="testRow">
-        <button id="exportBtn">Export backup</button>
-        <label class="fileBtn">Import backup<input id="importJson" type="file" accept="application/json" hidden></label>
-      </div>
-    </details>
+    <details><summary>Add your own card</summary><form id="addForm"><div class="grid"><label>Type<select name="category"><option>noun</option><option>verb</option><option>adjective</option><option>phrase</option><option>other</option></select></label><label>Unit<input name="unit" placeholder="My list"></label></div><label>German<input name="german" required></label><div class="grid"><label>Article<input name="article" placeholder="der/die/das"></label><label>Plural<input name="plural"></label></div><div class="grid"><label>English<input name="english" required></label><label>Dari<input name="dari" required dir="rtl"></label></div><details><summary>Verb forms</summary><label>Infinitive<input name="infinitive"></label><label>Past / Präteritum<input name="past"></label><label>Perfekt<input name="perfect"></label><label>Plusquamperfekt<input name="plusquamperfekt"></label></details><label>Related meanings<input name="synonyms" placeholder="three items, comma separated"></label><button class="primary">Add card</button></form></details>
+    <details><summary>Backup</summary><div class="testRow"><button id="exportBtn">Export backup</button><label class="fileBtn">Import backup<input id="importJson" type="file" accept="application/json" hidden></label></div></details>
   </section>
 </main>
 
-<script src="data.js?v=11"></script>
-<script src="app.js?v=11"></script>
+<script src="data.js?v=12"></script>
+<script src="app.js?v=12"></script>
 </body>
 </html>
