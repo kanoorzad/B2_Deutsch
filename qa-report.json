@@ -1,24 +1,25 @@
 {
-  "version": "45.0",
-  "base": "v43 stable base with v44 router removed/repaired",
+  "version": "46.0",
+  "base": "v45 with automatic clean audio UI",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v45": true,
-    "cache_busting_v45": true,
+    "version_badge_v46": true,
+    "cache_busting_v46": true,
+    "top_stable_text_removed": true,
+    "manual_audio_source_removed": true,
+    "online_test_buttons_removed": true,
+    "automatic_status_present": true,
     "german_english_browser_only": true,
-    "puter_rate_limit_guard": true,
-    "playback_safety_timeout": true,
-    "google_router_removed": true,
+    "rate_limit_hidden": true,
+    "puter_guard_kept": true,
     "daria_exclusion_kept": true,
-    "online_dari_test_kept": true,
-    "no_api_key_in_app": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
   "notes": [
-    "v45 restores stable browser playback for German and English.",
-    "Dari online errors no longer break the queue.",
-    "Google direct TTS router from v44 is removed."
+    "UI no longer shows rate-limit errors.",
+    "Audio source selection is automatic.",
+    "German/English are stable browser voices; Dari tries online only when available."
   ],
   "zip_mb": 0.19
 }

@@ -1,33 +1,24 @@
-# B2 + B1 Plus Flashcards v45 — Stable Playback Repair
+# B2 + B1 Plus Flashcards v46 — Automatic Clean Audio
 
-## Why v45
+## Changes
 
-v44 broke playback by routing through an unstable online provider path.
+- Removed the top text: "Stable browser playback + protected Dari online test".
+- Removed manual audio-source selector.
+- Removed visible rate-limit messages from the voice panel.
+- German and English automatically use stable browser/device voices.
+- Dari/Farsi automatically tries online speech when available.
+- If online Dari is rate-limited, the app quietly falls back/skips without breaking playback.
+- Daria (bg-BG) remains excluded from Dari candidates.
 
-v45 rolls back to the safer v43 base and repairs playback:
+## Open
 
-- German always uses browser/device voice.
-- English always uses browser/device voice.
-- Dari can try online Puter TTS, but rate-limit errors no longer break playback.
-- If online Dari fails, the app falls back to browser Dari or skips Dari after a timeout.
-- Playback sequence continues instead of freezing.
-- Daria (bg-BG) remains removed.
+https://kanoorzad.github.io/B2_Deutsch/?v=46
 
 ## Test
 
-Open:
-
-https://kanoorzad.github.io/B2_Deutsch/?v=45
-
-Then test:
-
 1. Test German
 2. Test English
-3. Test Online Dari
+3. Test Dari
 4. Play selected
 
-German and English should play immediately again.
-
-## Important
-
-If Online Dari says rate exceeded, v45 disables it temporarily and continues playback.
+The voice area should show automatic mode, not rate-limit text.

@@ -1,5 +1,5 @@
 // v34: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v34AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh34=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh34='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+(function(){try{const key='v46AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh46=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh46='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
 const STORE='b2-native-cards-extra-v43';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
@@ -19,7 +19,7 @@ const els={
   count:$('count'),bar:$('bar'),playDe:$('playDe'),playEn:$('playEn'),playFa:$('playFa'),playForms:$('playForms'),repeat:$('repeat'),
   playList:$('playList'),pauseList:$('pauseList'),stopList:$('stopList'),now:$('nowPlaying'),speechWarning:$('speechWarning'),
   addForm:$('addForm'),exportBtn:$('exportBtn'),importJson:$('importJson'),deviceInfo:$('deviceInfo'),voiceDe:$('voiceDe'),voiceEn:$('voiceEn'),voiceFa:$('voiceFa'),
-  testDe:$('testDe'),testEn:$('testEn'),testFa:$('testFa'),unlockSpeech:$('unlockSpeech'),voiceSelectDe:$('voiceSelectDe'),voiceSelectEn:$('voiceSelectEn'),voiceSelectFa:$('voiceSelectFa'),scanDariVoices:$('scanDariVoices'),nextDariCandidate:$('nextDariCandidate'),dariCandidate:$('dariCandidate'),onlineStatus:$('onlineStatus'),audioSource:$('audioSource'),testOnlineFa:$('testOnlineFa'),testOnlineAll:$('testOnlineAll')
+  testDe:$('testDe'),testEn:$('testEn'),testFa:$('testFa'),unlockSpeech:$('unlockSpeech'),voiceSelectDe:$('voiceSelectDe'),voiceSelectEn:$('voiceSelectEn'),voiceSelectFa:$('voiceSelectFa'),scanDariVoices:$('scanDariVoices'),nextDariCandidate:$('nextDariCandidate'),dariCandidate:$('dariCandidate'),onlineStatus:$('onlineStatus')
 };
 function unique(a){return [...new Set(a.filter(Boolean))].sort((x,y)=>x.localeCompare(y,undefined,{numeric:true}))}
 function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
@@ -245,23 +245,22 @@ let onlineAudio=null;
 let puterBlockedUntil=0;
 const onlineCache=new Map();
 
-function audioSourceMode(){return els.audioSource?els.audioSource.value:'onlineDariFirst'}
-function saveAudioSource(){try{localStorage.setItem('audio-source-v43',audioSourceMode())}catch(e){}}
-function loadAudioSource(){try{const m=localStorage.getItem('audio-source-v43');if(m&&els.audioSource)els.audioSource.value=m}catch(e){}}
+function audioSourceMode(){return 'auto'}
+function saveAudioSource(){}
+function loadAudioSource(){}
 function onlineLocale(lang){
   if(lang==='de')return 'de-DE';
   if(lang==='en')return 'en-US';
   return 'fa-IR';
 }
 function updateOnlineStatus(msg){
-  if(els.onlineStatus)els.onlineStatus.textContent=msg || (window.puter&&puter.ai&&puter.ai.txt2speech?'Available':'Not loaded');
+  // v46: keep the voice panel clean. Do not show rate-limit errors to the learner.
+  if(els.onlineStatus)els.onlineStatus.textContent='Automatic';
 }
 function shouldUseOnline(lang){
-  const m=audioSourceMode();
-  if(m==='browserOnly')return false;
-  // v45 repair: never route German/English through online services.
-  // They must always remain stable browser/device voices.
-  return lang==='fa';
+  // German and English remain stable browser/device voices.
+  // Dari/Farsi tries online automatically only when not rate-limited.
+  return lang==='fa' && Date.now()>=puterBlockedUntil;
 }
 function stopOnlineAudio(){
   if(onlineAudio){try{onlineAudio.pause();onlineAudio.currentTime=0}catch(e){}}
@@ -269,20 +268,12 @@ function stopOnlineAudio(){
 }
 async function sayOnline(text, lang='fa', done=()=>{}, fallback=()=>{}){
   if(!text){done();return}
-  if(Date.now()<puterBlockedUntil){
-    updateOnlineStatus('Online Dari is temporarily rate-limited; using browser/skip fallback.');
-    fallback();
-    return;
-  }
-  if(!(window.puter&&puter.ai&&puter.ai.txt2speech)){
-    updateOnlineStatus('Online TTS not loaded; using browser/skip fallback.');
-    fallback();
-    return;
-  }
+  if(Date.now()<puterBlockedUntil){fallback();return}
+  if(!(window.puter&&puter.ai&&puter.ai.txt2speech)){fallback();return}
+
   const locale=onlineLocale(lang);
   const key=locale+'::'+text;
   try{
-    updateOnlineStatus('Generating '+locale+' audio…');
     let audio=onlineCache.get(key);
     if(!audio){
       audio=await puter.ai.txt2speech(text, locale);
@@ -290,18 +281,15 @@ async function sayOnline(text, lang='fa', done=()=>{}, fallback=()=>{}){
     }
     stopOnlineAudio();
     onlineAudio=audio;
-    audio.onended=()=>{updateOnlineStatus('Online TTS ready.');done()};
-    audio.onerror=()=>{updateOnlineStatus('Online audio error; using browser/skip fallback.');fallback()};
+    audio.onended=()=>{updateOnlineStatus('Automatic');done()};
+    audio.onerror=()=>{fallback()};
     try{audio.currentTime=0}catch(e){}
     const p=audio.play();
-    if(p&&p.catch)p.catch(()=>{updateOnlineStatus('Online playback blocked; using browser/skip fallback.');fallback()});
+    if(p&&p.catch)p.catch(()=>fallback());
   }catch(e){
     const msg=(e&&e.message?e.message:String(e||''));
     if(/rate|exceed|limit/i.test(msg)){
       puterBlockedUntil=Date.now()+10*60*1000;
-      updateOnlineStatus('Online AI TTS rate exceeded; disabled for 10 minutes. Playback continues.');
-    }else{
-      updateOnlineStatus('Online AI TTS failed; playback continues.');
     }
     fallback();
   }
@@ -324,7 +312,7 @@ function sayBrowserOnly(text, lang='de', done=()=>{}, allowSilentSkip=false){
   }
 
   if(lang==='fa'){
-    const saved=localStorage.getItem('dari-candidate-v45');
+    const saved=localStorage.getItem('dari-candidate-v46');
     if(saved){
       try{
         const parsed=JSON.parse(saved);
@@ -377,7 +365,7 @@ function unlockSpeech(){
 }
 function updateDariCandidateLabel(){
   if(!els.dariCandidate)return;
-  const saved=localStorage.getItem('dari-candidate-v45');
+  const saved=localStorage.getItem('dari-candidate-v46');
   if(saved){
     try{els.dariCandidate.textContent=JSON.parse(saved).label;return}catch(e){}
   }
@@ -399,7 +387,7 @@ function tryCurrentDariCandidate(){
   if(!dariCandidates.length)return;
   const c=dariCandidates[dariCandidateIndex % dariCandidates.length];
   if(els.dariCandidate)els.dariCandidate.textContent=`${dariCandidateIndex+1}/${dariCandidates.length}: ${c.label}`;
-  localStorage.setItem('dari-candidate-v45',JSON.stringify({label:c.label,lang:c.lang,voiceKey:c.voice?voiceKey(c.voice):''}));
+  localStorage.setItem('dari-candidate-v46',JSON.stringify({label:c.label,lang:c.lang,voiceKey:c.voice?voiceKey(c.voice):''}));
   els.now.textContent='Testing Dari candidate: '+c.label;
   speakWithCandidate(DARI_TEST_TEXT,c,()=>{});
 }
@@ -518,7 +506,4 @@ if(els.voiceSelectEn)els.voiceSelectEn.addEventListener('change',()=>saveVoiceCh
 if(els.voiceSelectFa)els.voiceSelectFa.addEventListener('change',()=>saveVoiceChoice('fa'));
 if(els.scanDariVoices)els.scanDariVoices.addEventListener('click',runDariVoiceSearch);
 if(els.nextDariCandidate)els.nextDariCandidate.addEventListener('click',nextDariCandidate);
-if(els.audioSource)els.audioSource.addEventListener('change',()=>{saveAudioSource();updateOnlineStatus()});
-if(els.testOnlineFa)els.testOnlineFa.addEventListener('click',()=>sayOnline(DARI_TEST_TEXT,'fa',()=>{},()=>sayBrowserOnly(DARI_TEST_TEXT,'fa',()=>{},true)));
-if(els.testOnlineAll)els.testOnlineAll.addEventListener('click',()=>{sayBrowserOnly('die Abteilung','de',()=>sayBrowserOnly('department or division','en',()=>sayOnline(DARI_TEST_TEXT,'fa',()=>{},()=>sayBrowserOnly(DARI_TEST_TEXT,'fa',()=>{},true))))});
 document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(e.code==='Space'){e.preventDefault();if(!playing)flip()}if(e.code==='ArrowRight')next();if(e.code==='ArrowLeft')prev()});if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=()=>updateVoiceStatus();setTimeout(updateVoiceStatus,500);setTimeout(updateVoiceStatus,1500)}loadAudioSource();populateAllVoiceSelects();setup();apply();updateOnlineStatus();
