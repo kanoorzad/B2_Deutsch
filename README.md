@@ -1,55 +1,44 @@
-# B2 + B1 Plus Flashcards v9 — clean speech + clean flip
+# B2 + B1 Plus Flashcards v10 — clean card + mobile Dari fallback
 
-## What v9 fixes
+## What v10 changes
 
-1. **German on flip card**
-   - German now always goes into the German flip section.
-   - US English now always goes into the English section.
-   - Dari now always goes into the Dari section.
+1. **Cleaner card and flip view**
+   - The main study card no longer shows unit/list/part/type chips.
+   - The flip answer no longer has extra unit/title text.
+   - The flip card focuses only on German, US English, Dari, forms, synonyms, and example.
 
-2. **No spoken/display label for plural**
-   - The plural step no longer shows or speaks `Plural:`.
-   - It shows only the plural form, e.g. `die Abteilungen`.
+2. **Mobile Dari voice fallback**
+   - Added a Mobile voice check section.
+   - Added an Unlock mobile speech button.
+   - Dari now tries:
+     - `fa-AF`
+     - `fa-IR`
+     - `fa`
+     - voice names containing Dari / Persian / Farsi
+     - Arabic fallback only if no Persian/Farsi/Dari voice exists
+   - If the mobile browser still has no usable voice, the app shows a warning instead of failing silently.
 
-3. **No English “slash” pronunciation**
-   - English alternatives such as `meaning / importance` are converted to `meaning or importance` for display/playback.
-   - The voice should not say “slash”.
+## Important limitation
 
-4. **Cleaner verb-form step**
-   - Verb forms remain in the flip view with labels.
-   - Playback/front-card form step uses clean form values, not noisy UI labels.
+The app is hosted on GitHub Pages, which is static hosting. It can use the device/browser speech voices, but it cannot install a Dari voice into someone’s phone.
 
-## Playback order
-
-1. German word with article — slow German
-2. Noun plural OR verb form values — slow German
-3. US English — medium
-4. Dari — medium
-5. Next card
+For guaranteed Dari pronunciation on every mobile device, the next step would be pre-generated audio files or a cloud text-to-speech service. This v10 package makes the strongest possible free/static-web fallback.
 
 ## QA
 
 - Total cards: 2254
 - Playback steps checked: 8392
-- English speech items containing `/`: 0
-- German playback items starting with UI labels like `Plural:`: 0
+- English slash items after cleanup: 0
 - Cards with English: 2254
 - Cards with Dari: 2254
 - Cards with 2 synonyms: 2254
 
-## Example: die Abteilung
-
-1. `die Abteilung`
-2. `die Abteilungen`
-3. `Department`
-4. `دیپارتمنت، بخش`
-
 ## GitHub update
 
-Replace all files in your GitHub repository with this v9 folder's files.
+Replace all files in your repository with this v10 folder.
 
-Then open:
+Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=9
+https://kanoorzad.github.io/B2_Deutsch/?v=10
 
-On iPhone or Android, remove the old Home Screen icon, open the `?v=9` link in Safari/Chrome, then add/install again.
+On mobile, delete the old Home Screen icon, open the `?v=10` link in Safari/Chrome/Edge, then add/install again.

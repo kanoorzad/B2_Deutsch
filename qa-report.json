@@ -1,5 +1,5 @@
 {
-  "version": "9.0",
+  "version": "10.0",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -10,43 +10,17 @@
     "cardsWithDari": 2254
   },
   "checks": {
+    "total_playback_steps_checked": 8392,
+    "english_slash_items_after_cleanup": 0,
     "all_cards_have_english": true,
     "all_cards_have_dari": true,
     "all_cards_have_two_synonyms": true,
-    "playback_steps_checked": 8392,
-    "english_speech_contains_slash": 0,
-    "german_step_contains_ui_label_like_plural": 0,
-    "flip_view_has_german_element": true,
-    "flip_render_assigns_german_to_de": true,
-    "flip_render_assigns_english_to_en": true,
-    "flip_render_assigns_dari_to_fa": true,
-    "german_slow": true,
-    "abteilung_sequence": [
-      {
-        "display": "die Abteilung",
-        "speech": "die Abteilung",
-        "lang": "de",
-        "label": "German word with article"
-      },
-      {
-        "display": "die Abteilungen",
-        "speech": "die Abteilungen",
-        "lang": "de",
-        "label": "German plural"
-      },
-      {
-        "display": "Department",
-        "speech": "Department",
-        "lang": "en",
-        "label": "US English"
-      },
-      {
-        "display": "دیپارتمنت، بخش",
-        "speech": "دیپارتمنت، بخش",
-        "lang": "fa",
-        "label": "Dari"
-      }
-    ]
+    "main_card_has_no_unit_title_chips": true,
+    "answer_area_has_no_unit_title_header": true,
+    "mobile_dari_fallbacks_present": true,
+    "unlock_mobile_speech_button_present": true,
+    "dari_warning_present": true,
+    "cache_busting_v10": true
   },
   "lists": {
     "B2 all 12 units": 1629,
@@ -54,12 +28,11 @@
     "B1 Plus 7 Units": 475
   },
   "fixes": [
-    "Flip view now explicitly maps German text to German only, English text to English only, and Dari text to Dari only.",
-    "Plural playback/display no longer uses the word 'Plural:' on the card or in speech; it shows only the plural form.",
-    "Verb-form playback/display no longer speaks UI labels; it speaks the form values.",
-    "English slash alternatives are converted to 'or' so TTS does not say 'slash'.",
-    "Manual front and playback are separated, and playback uses its own clean display/speech fields."
+    "Removed list/unit/part/type chips from the study card.",
+    "Removed the extra flip-answer header so only learning content remains in the flip card.",
+    "Added mobile speech unlock button.",
+    "Dari speech now tries fa-AF, fa-IR, fa, Persian/Farsi/Dari voice-name matches, then Arabic fallback if no Persian voice exists.",
+    "If mobile provides no compatible voice, the app shows a clear warning instead of failing silently."
   ],
-  "bad_slash_english_examples": [],
-  "bad_plural_label_examples": []
+  "known_limit": "A static GitHub Pages app cannot force a Dari voice if the phone/browser does not expose any Dari/Persian/Farsi voice. Guaranteed mobile Dari audio would require pre-generated audio files or a cloud text-to-speech service."
 }

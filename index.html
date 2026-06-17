@@ -5,19 +5,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#17324d">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="DE Cards v9">
+  <meta name="apple-mobile-web-app-title" content="DE Cards v10">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=9">
-  <link rel="apple-touch-icon" href="icon.svg?v=9">
-  <link rel="stylesheet" href="styles.css?v=9">
-  <title>B2 + B1 Plus Flashcards v9</title>
+  <link rel="manifest" href="manifest.webmanifest?v=10">
+  <link rel="apple-touch-icon" href="icon.svg?v=10">
+  <link rel="stylesheet" href="styles.css?v=10">
+  <title>B2 + B1 Plus Flashcards v10</title>
 </head>
 <body>
 <header class="top">
   <div>
     <p class="eyebrow">Universal PWA · iPhone · Android · Desktop</p>
-    <h1>B2 + B1 Plus Flashcards <span class="version">v9</span></h1>
-    <p>Clean German-first playback, correct flip view, plural/forms, US English, Dari, and visible synonyms.</p>
+    <h1>B2 + B1 Plus Flashcards <span class="version">v10</span></h1>
+    <p>Clean study card, clean flip answer, German-first playback, and stronger mobile Dari voice fallback.</p>
   </div>
   <div class="topBtns">
     <button id="installBtn">Install help</button>
@@ -29,7 +29,7 @@
 <main class="app">
   <section class="panel controls">
     <details open>
-      <summary>Study filters</summary>
+      <summary>Choose cards</summary>
       <label>List
         <select id="listFilter"><option value="all">All lists</option></select>
       </label>
@@ -52,7 +52,7 @@
             <option value="other">Other</option>
           </select>
         </label>
-        <label>Manual card front
+        <label>Manual front
           <select id="front">
             <option value="german">German</option>
             <option value="english">US English</option>
@@ -63,7 +63,7 @@
         </label>
       </div>
       <label>Search
-        <input id="search" type="search" placeholder="Search German, English, Dari, plural, forms...">
+        <input id="search" type="search" placeholder="Search vocabulary...">
       </label>
     </details>
 
@@ -77,17 +77,11 @@
       <button id="flip" class="primary">Flip</button>
       <button id="next">Next</button>
     </div>
-    <button id="speakFront" class="wide">Speak visible card text</button>
+    <button id="speakFront" class="wide">Speak visible text</button>
   </section>
 
   <section class="study">
     <article id="card" class="card" tabindex="0">
-      <div class="chips">
-        <span id="chipList"></span>
-        <span id="chipUnit"></span>
-        <span id="chipPart"></span>
-        <span id="chipType"></span>
-      </div>
       <div class="cardMain">
         <p id="frontHint" class="frontHint"></p>
         <h2 id="frontText">Loading…</h2>
@@ -95,22 +89,17 @@
       </div>
       <footer class="cardBottom">
         <div>
-          <p class="bottomLabel">2 synonyms / related meanings</p>
+          <p class="bottomLabel">Synonyms / related meanings</p>
           <p id="frontSynonyms" class="frontSynonyms"></p>
         </div>
-        <p class="tapHint">Tap card or press Space to flip.</p>
+        <p class="tapHint">Tap to flip</p>
       </footer>
     </article>
 
     <section id="answer" class="answer hidden">
-      <div class="answerHead">
-        <h2>Flip answer</h2>
-        <p>German, US English, and Dari are separated clearly.</p>
-      </div>
-
       <div class="languageGrid">
         <article class="langCard germanCard">
-          <header><h3>German</h3><button data-say="de">Speak slow</button></header>
+          <header><h3>German</h3><button data-say="de">Speak</button></header>
           <p id="de" class="langText deLang"></p>
           <p id="dePluralLine" class="small strongLine"></p>
         </article>
@@ -139,15 +128,14 @@
           <dl class="verbForms">
             <div><dt>Infinitive</dt><dd id="inf"></dd></div>
             <div><dt>3rd person present</dt><dd id="pres3"></dd></div>
-            <div><dt>Präteritum / Past</dt><dd id="past"></dd></div>
+            <div><dt>Präteritum</dt><dd id="past"></dd></div>
             <div><dt>Perfekt</dt><dd id="perf"></dd></div>
             <div><dt>Plusquamperfekt</dt><dd id="plus"></dd></div>
           </dl>
-          <p id="verbQuality" class="note"></p>
         </article>
 
         <article class="miniCard">
-          <h3>2 synonyms / related meanings</h3>
+          <h3>Synonyms / related meanings</h3>
           <p id="syn" class="synChips"></p>
         </article>
 
@@ -161,8 +149,8 @@
 
   <section class="panel tools">
     <details open>
-      <summary>Listen to selected cards</summary>
-      <p class="small"><strong>Playback:</strong> German word with article → plural or verb forms → US English → Dari → next card. No spoken “slash”; no spoken “plural” label.</p>
+      <summary>Listen</summary>
+      <p class="small"><strong>Order:</strong> German word with article → plural or verb forms → US English → Dari → next card.</p>
       <div class="checks">
         <label><input type="checkbox" id="playDe" checked> German word + article</label>
         <label><input type="checkbox" id="playForms" checked> Plural / verb forms</label>
@@ -178,17 +166,19 @@
         <button id="stopList">Stop</button>
       </div>
       <p id="nowPlaying" class="now">Not playing.</p>
+      <p id="speechWarning" class="warning hidden"></p>
     </details>
 
     <details>
-      <summary>Device & voice check</summary>
+      <summary>Mobile voice check</summary>
       <p id="deviceInfo" class="small">Checking device…</p>
       <div class="voiceGrid">
         <article><h4>German</h4><p id="voiceDe">—</p><button id="testDe">Test German</button></article>
         <article><h4>US English</h4><p id="voiceEn">—</p><button id="testEn">Test English</button></article>
         <article><h4>Dari</h4><p id="voiceFa">—</p><button id="testFa">Test Dari</button></article>
       </div>
-      <p class="small">German is intentionally slow. English and Dari use medium speed. If Dari is unavailable, the browser may use a Persian/Farsi fallback.</p>
+      <button id="unlockSpeech" class="wide">Unlock mobile speech</button>
+      <p class="small">For mobile Dari the app tries Dari/Persian/Farsi voice fallbacks: fa-AF, fa-IR, fa, and any installed Persian/Farsi/Dari voice. If the phone has no compatible voice, the app will still show text but cannot force audio from static GitHub Pages.</p>
     </details>
 
     <details>
@@ -244,7 +234,7 @@
   <button id="closeHelp" class="primary">OK</button>
 </dialog>
 
-<script src="data.js?v=9"></script>
-<script src="app.js?v=9"></script>
+<script src="data.js?v=10"></script>
+<script src="app.js?v=10"></script>
 </body>
 </html>
