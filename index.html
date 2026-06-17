@@ -5,22 +5,23 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#17324d">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="DE Cards v6">
+  <meta name="apple-mobile-web-app-title" content="DE Cards v7">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="stylesheet" href="styles.css">
-  <title>B2 + B1 Plus Flashcards v6</title>
+  <title>B2 + B1 Plus Flashcards v7</title>
 </head>
 <body>
 <header class="top">
   <div>
-    <p class="eyebrow">German · US English · Dari</p>
+    <p class="eyebrow">Universal PWA · iPhone · Android · Desktop</p>
     <h1>B2 + B1 Plus Flashcards</h1>
-    <p>Cleaner study view, readable flip cards, synced listening, visible synonyms.</p>
+    <p>German · US English · Dari — readable cards, synced listening, plural/forms, and visible synonyms.</p>
   </div>
   <div class="topBtns">
-    <button id="installBtn">iPhone help</button>
+    <button id="installBtn">Install help</button>
+    <button id="voiceBtn">Voice check</button>
     <button id="themeBtn">Theme</button>
   </div>
 </header>
@@ -56,7 +57,7 @@
             <option value="german">German</option>
             <option value="english">US English</option>
             <option value="dari">Dari</option>
-            <option value="plural">Noun plural / verb past</option>
+            <option value="plural">Plural / verb forms</option>
             <option value="random">Random</option>
           </select>
         </label>
@@ -90,19 +91,26 @@
       <div class="cardMain">
         <p id="frontHint" class="frontHint"></p>
         <h2 id="frontText">Loading…</h2>
-        <p class="tapHint">Tap card or press Space to flip.</p>
+        <p id="frontSub" class="frontSub"></p>
       </div>
+      <footer class="cardBottom">
+        <div>
+          <p class="bottomLabel">2 synonyms / related meanings</p>
+          <p id="frontSynonyms" class="frontSynonyms"></p>
+        </div>
+        <p class="tapHint">Tap card or press Space to flip.</p>
+      </footer>
     </article>
 
     <section id="answer" class="answer hidden">
       <div class="answerHead">
         <h2>All languages</h2>
-        <p>Everything is shown together after flipping.</p>
+        <p>After flipping, German, US English, Dari, synonyms, and forms are shown together.</p>
       </div>
 
       <div class="languageGrid">
         <article class="langCard germanCard">
-          <header><h3>German</h3><button data-say="de">Speak</button></header>
+          <header><h3>German</h3><button data-say="de">Speak slow</button></header>
           <p id="de" class="langText"></p>
         </article>
         <article class="langCard englishCard">
@@ -153,12 +161,12 @@
   <section class="panel tools">
     <details open>
       <summary>Listen to selected cards</summary>
-      <p class="small">Uses the filters. Playback order is: German → US English → Dari, then the next card.</p>
+      <p class="small">Default playback order: German word with article → plural or verb forms → US English → Dari → next card.</p>
       <div class="checks">
-        <label><input type="checkbox" id="playDe" checked> German</label>
+        <label><input type="checkbox" id="playDe" checked> German word + article</label>
+        <label><input type="checkbox" id="playForms" checked> Plural / verb forms</label>
         <label><input type="checkbox" id="playEn" checked> US English</label>
         <label><input type="checkbox" id="playFa" checked> Dari</label>
-        <label><input type="checkbox" id="playForms"> Include forms</label>
       </div>
       <label>Repeat
         <select id="repeat"><option>1</option><option>2</option><option>3</option></select>
@@ -169,6 +177,17 @@
         <button id="stopList">Stop</button>
       </div>
       <p id="nowPlaying" class="now">Not playing.</p>
+    </details>
+
+    <details>
+      <summary>Device & voice check</summary>
+      <p id="deviceInfo" class="small">Checking device…</p>
+      <div class="voiceGrid">
+        <article><h4>German</h4><p id="voiceDe">—</p><button id="testDe">Test German</button></article>
+        <article><h4>US English</h4><p id="voiceEn">—</p><button id="testEn">Test English</button></article>
+        <article><h4>Dari</h4><p id="voiceFa">—</p><button id="testFa">Test Dari</button></article>
+      </div>
+      <p class="small">The app chooses the best device voice available. German is intentionally slower. English and Dari use medium speed. If a device has no Dari voice, it may use a Persian/Farsi fallback.</p>
     </details>
 
     <details>
@@ -214,9 +233,13 @@
 </main>
 
 <dialog id="help">
-  <h2>Install on iPhone</h2>
-  <p>Open the GitHub Pages link in Safari, tap Share, then Add to Home Screen.</p>
-  <p>For best sound, install German, English, and Persian/Dari-related voices in iPhone Settings. The app asks for German slower, US English medium, and Dari using fa-AF when available.</p>
+  <h2>Install on your device</h2>
+  <p id="installText">Open the link in your browser. The app works in Safari, Chrome, Edge, and most modern browsers.</p>
+  <ul>
+    <li><strong>iPhone/iPad:</strong> Safari → Share → Add to Home Screen.</li>
+    <li><strong>Android:</strong> Chrome → ⋮ menu → Install app or Add to Home screen.</li>
+    <li><strong>Windows/Mac/Chromebook:</strong> open in Chrome/Edge/Safari; install if your browser shows the install icon.</li>
+  </ul>
   <button id="closeHelp" class="primary">OK</button>
 </dialog>
 

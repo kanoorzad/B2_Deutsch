@@ -1,5 +1,5 @@
 {
-  "version": "6.0",
+  "version": "7.0",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -13,23 +13,33 @@
     "all_cards_have_english": true,
     "all_cards_have_dari": true,
     "all_cards_have_two_synonyms": true,
-    "flip_view_contains_three_language_cards": true,
-    "dari_flip_card_is_rtl": true,
-    "pause_resume_function_defined": true,
-    "strict_playback_order": true
+    "front_card_has_synonym_area": true,
+    "default_playback_includes_plural_forms": true,
+    "strict_playback_sequence": true,
+    "german_slow_rate": true,
+    "universal_device_detection": true,
+    "voice_check_screen": true
   },
   "lists": {
     "B2 all 12 units": 1629,
     "Irregular verbs": 150,
     "B1 Plus 7 Units": 475
   },
+  "playback_order": [
+    "German word with article, slow",
+    "Noun plural or verb forms, slow",
+    "US English, medium",
+    "Dari, medium",
+    "Next card"
+  ],
   "improvements": [
-    "Less crowded layout: filters, listening, add-card, and backup sections are grouped with collapsible panels.",
-    "Flip view shows German, US English, and Dari in three large readable language cards.",
-    "Dari answer card uses RTL direction and larger line height.",
-    "Two synonyms are rendered as visible chips.",
-    "Pause/Resume function is defined and safe.",
-    "Listening playback changes the visible card before the voice starts.",
-    "Manual Dari fixes added for the 24 entries that were missing Dari in the B1 Plus source parse."
+    "Universal PWA design for iPhone, Android, desktop, tablets, and modern browsers.",
+    "Device-specific install help.",
+    "Voice check panel for German, US English, and Dari.",
+    "German speech rate reduced to slow.",
+    "English and Dari remain medium speed.",
+    "Synonyms are visible on the front of the card at the bottom.",
+    "Playback sequence now includes plural/forms between German and English by default.",
+    "Verb forms remain visible in the flip/answer view."
   ]
 }
