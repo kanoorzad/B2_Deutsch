@@ -15,10 +15,56 @@ function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=f
 function voices(){return speechSynthesis.getVoices()||[]}function pickVoice(lang){const vs=voices(); const exact= lang==='de'?'de-DE':lang==='en'?'en-US':'fa-AF'; const prefix=exact.slice(0,2); return vs.find(v=>v.lang===exact&&/premium|enhanced|natural|siri|google|microsoft/i.test(v.name))||vs.find(v=>v.lang===exact)||vs.find(v=>v.lang&&v.lang.startsWith(prefix))}
 function say(text, lang='de', done=()=>{}){if(!text){done();return} if(!('speechSynthesis'in window)){alert('Speech is not supported in this browser.');done();return} const u=new SpeechSynthesisUtterance(text); u.lang=lang==='de'?'de-DE':lang==='en'?'en-US':'fa-AF'; u.rate=lang==='de'?0.78:0.92; u.pitch=1; const v=pickVoice(lang); if(v)u.voice=v; u.onend=done; u.onerror=done; speechSynthesis.speak(u)}
 function speakFront(){if(lastFront)say(lastFront.txt,lastFront.lang)}
-function cardScript(c){let a=[]; if(els.playDe.checked)a.push({t:displayGerman(c),l:'de'}); if(els.playForms.checked&&c.category==='noun'&&c.plural)a.push({t:'Plural: '+c.plural,l:'de'}); if(els.playForms.checked&&c.category==='verb'){const f=c.forms||{}; if(f.infinitive)a.push({t:'Infinitiv: '+f.infinitive,l:'de'}); if(f.past)a.push({t:'Präteritum: '+f.past,l:'de'}); if(f.perfect)a.push({t:'Perfekt: '+f.perfect,l:'de'}); if(f.plusquamperfekt)a.push({t:'Plusquamperfekt: '+f.plusquamperfekt,l:'de'})} if(els.playEn.checked)a.push({t:c.english,l:'en'}); if(els.playFa.checked)a.push({t:c.dari,l:'fa'}); return a}
-function playSelected(){if(!filtered.length)return; stop(); playing=true; playQueue=[]; const rep=Number(els.repeat.value)||1; filtered.forEach((c,i)=>{for(let r=0;r<rep;r++)playQueue.push({card:c,parts:cardScript(c),n:i+1})}); playIndex=0; playNextPart(0)}
-function playNextPart(partIdx){if(!playing||playIndex>=playQueue.length){stop();return} const item=playQueue[playIndex]; if(partIdx>=item.parts.length){playIndex++; playNextPart(0);return} const p=item.parts[partIdx]; els.now.textContent=`Playing ${playIndex+1}/${playQueue.length}: ${item.card.unit} ${item.card.part} — ${displayGerman(item.card)}`; say(p.t,p.l,()=>setTimeout(()=>playNextPart(partIdx+1),250))}
-function pauseResume(){if(!('speechSynthesis'in window))return; if(speechSynthesis.paused)speechSynthesis.resume(); else speechSynthesis.pause()}function stop(){playing=false; playQueue=[]; playIndex=0; if('speechSynthesis'in window)speechSynthesis.cancel(); els.now.textContent='Not playing.'}
+function cardScript(c){
+  let a=[];
+  if(els.playDe.checked)a.push({t:displayGerman(c),l:'de',label:'German'});
+  if(els.playForms.checked&&c.category==='noun'&&c.plural)a.push({t:'Plural: '+c.plural,l:'de',label:'German plural'});
+  if(els.playForms.checked&&c.category==='verb'){
+    const f=c.forms||{};
+    if(f.infinitive)a.push({t:'Infinitiv: '+f.infinitive,l:'de',label:'Infinitiv'});
+    if(f.present3)a.push({t:'Präsens: '+f.present3,l:'de',label:'3rd person present'});
+    if(f.past)a.push({t:'Präteritum: '+f.past,l:'de',label:'Präteritum'});
+    if(f.perfect)a.push({t:'Perfekt: '+f.perfect,l:'de',label:'Perfekt'});
+    if(f.plusquamperfekt)a.push({t:'Plusquamperfekt: '+f.plusquamperfekt,l:'de',label:'Plusquamperfekt'});
+  }
+  if(els.playEn.checked&&c.english)a.push({t:c.english,l:'en',label:'US English'});
+  if(els.playFa.checked&&c.dari)a.push({t:c.dari,l:'fa',label:'Dari'});
+  return a.filter(x=>x.t&&String(x.t).trim()&&String(x.t).trim()!=='—')
+}
+function playSelected(){
+  if(!filtered.length)return;
+  stop();
+  playing=true;
+  playQueue=[];
+  const rep=Number(els.repeat.value)||1;
+  filtered.forEach((c,i)=>{
+    for(let r=0;r<rep;r++){
+      const parts=cardScript(c);
+      if(parts.length)playQueue.push({card:c,parts:parts,n:i+1,repeat:r+1});
+    }
+  });
+  playIndex=0;
+  playNextPart(0);
+}
+function showPlayingPart(item,p,partIdx){
+  idx=item.n-1;
+  flipped=true;
+  render();
+  els.frontText.textContent=p.t||'—';
+  const langName=p.l==='de'?'German':p.l==='en'?'US English':'Dari';
+  els.frontHint.textContent=`Now playing: ${p.label||langName}`;
+  els.now.textContent=`Playing card ${playIndex+1}/${playQueue.length}, part ${partIdx+1}/${item.parts.length}: ${item.card.unit} ${item.card.part||''} — ${displayGerman(item.card)}`;
+  els.card.classList.add('playing');
+}
+function playNextPart(partIdx){
+  if(!playing||playIndex>=playQueue.length){stop();return}
+  const item=playQueue[playIndex];
+  if(partIdx>=item.parts.length){playIndex++; playNextPart(0);return}
+  const p=item.parts[partIdx];
+  showPlayingPart(item,p,partIdx);
+  setTimeout(()=>say(p.t,p.l,()=>setTimeout(()=>playNextPart(partIdx+1),300)),90);
+}
+function pauseResume(){if(!('speechSynthesis'in window))return; if(speechSynthesis.paused)speechSynthesis.resume(); else speechSynthesis.pause()}function stop(){playing=false; playQueue=[]; playIndex=0; if('speechSynthesis'in window)speechSynthesis.cancel(); els.now.textContent='Not playing.'; if(els.card)els.card.classList.remove('playing'); render()}
 function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function addCard(e){e.preventDefault(); const d=Object.fromEntries(new FormData(els.addForm).entries()); const c={id:'custom-'+Date.now(),source:'user',list:'My cards',unit:d.unit||'My list',part:'',category:d.category||'other',german:d.german,english:d.english,dari:d.dari,article:d.article||'',singular:d.german,plural:d.plural||'',forms:{infinitive:d.infinitive||'',present3:'',past:d.past||'',perfect:d.perfect||'',plusquamperfekt:d.plusquamperfekt||''},synonyms:String(d.synonyms||'').split(',').map(s=>s.trim()).filter(Boolean),example:'',quality:{verbForms:'user-entered',translation:'user-entered'}}; extra.push(c); localStorage.setItem(STORE,JSON.stringify(extra)); cards=[...initialData,...extra]; setup();apply();els.addForm.reset()}
 function exportBackup(){const blob=new Blob([JSON.stringify(extra,null,2)],{type:'application/json'}); const u=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=u; a.download='my-b2-flashcard-backup.json'; a.click(); URL.revokeObjectURL(u)}

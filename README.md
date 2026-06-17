@@ -1,49 +1,42 @@
-# B2 + B1 Plus Native Flashcards iPhone App
+# B2 + B1 Plus Native Flashcards v4
 
-Ready-to-host PWA for GitHub Pages.
+This is the corrected version.
+
+## Fixed in v4
+
+1. **Screen/audio synchronization**
+   - During "Play selected list", the card on screen now changes at the same time as the audio.
+   - The big card text also changes to the exact part being spoken: German, plural, verb form, US English, or Dari.
+
+2. **Irregular verbs translations**
+   - The irregular verb reference list now has US English and Dari meanings.
+   - Irregular verbs also have related meanings/synonyms.
+
+3. **Cache refresh**
+   - Service worker version changed to `v40-screen-sync`, so GitHub Pages/iPhone can load the corrected files.
 
 ## Included data
 
-- B2 all 12 units: 1629 entries
-- B1 Plus 7 Units: 475 entries
-- Irregular verb reference list: 150 verbs
+- B2 all 12 units: 1629
+- B1 Plus 7 units: 475
+- Irregular verbs: 150
 - Total cards: 2254
 
-## What changed in this build
+## Important GitHub update instruction
 
-The previous pack did not include the B1 Plus list. This corrected pack adds **B1 Plus 7 Units** as its own selectable list in the app.
+Upload and replace **all files** in your GitHub repository with the files from this folder.
 
-## iPhone installation
-
-1. Upload/replace all files in this folder in your GitHub repository.
-2. Enable or keep Settings > Pages > Deploy from branch > main > root.
-3. Open the GitHub Pages URL in Safari on iPhone.
-4. Tap Share > Add to Home Screen.
-
-## Updating an existing GitHub Pages upload
-
-In your GitHub repository, delete or replace the old files with the files from this folder. The most important changed files are:
-
+Most important changed files:
+- `app.js`
 - `data.js`
-- `index.html`
-- `manifest.webmanifest`
 - `service-worker.js`
-- `README.md`
+- `index.html`
+- `styles.css`
 - `qa-report.json`
+- `README.md`
 
-## Audio quality
+After uploading, open your app with:
 
-The app uses iOS/browser speech voices and requests:
+`https://kanoorzad.github.io/B2_Deutsch/?v=4`
 
-- German: `de-DE`, slower rate
-- English: `en-US`
-- Dari: `fa-AF`, with fallback depending on iOS voices installed
-
-True AI voices require a paid TTS service or pre-generated MP3 files. This pack is designed for browser-native voices and GitHub Pages without a server.
-
-## Data quality notes
-
-- B2 translations come from your supplied B2 all 12 units list.
-- B1 Plus translations come from your supplied B1 Plus 7 Units list.
-- Irregular verb forms come from the uploaded Akademie Deutsch irregular verb source.
-- Synonyms are shown where supplied as alternatives or related meanings.
+If the iPhone Home Screen app still shows the old behavior, delete the old Home Screen icon and add it again from Safari.

@@ -1,55 +1,27 @@
 {
+  "version": "4.0",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
     "irregularVerbs": 150,
-    "totalCards": 2254
+    "totalCards": 2254,
+    "irregularVerbsWithEnglish": 150,
+    "irregularVerbsWithDari": 150
   },
   "lists": {
     "B2 all 12 units": 1629,
     "Irregular verbs": 150,
     "B1 Plus 7 Units": 475
   },
-  "b1PlusByUnit": {
-    "B1 Plus Unit 1": 52,
-    "B1 Plus Unit 2": 76,
-    "B1 Plus Unit 3": 66,
-    "B1 Plus Unit 4": 73,
-    "B1 Plus Unit 5": 70,
-    "B1 Plus Unit 6": 74,
-    "B1 Plus Unit 7": 64
-  },
-  "b1PlusByCategory": {
-    "noun": 309,
-    "verb": 108,
-    "other": 13,
-    "adjective": 34,
-    "phrase": 11
-  },
-  "b2ByUnit": {
-    "Unit 1": 140,
-    "Unit 2": 144,
-    "Unit 3": 134,
-    "Unit 4": 124,
-    "Unit 5": 126,
-    "Unit 6": 142,
-    "Unit 7": 145,
-    "Unit 8": 136,
-    "Unit 9": 124,
-    "Unit 10": 128,
-    "Unit 11": 148,
-    "Unit 12": 138
-  },
-  "b2ByCategory": {
-    "noun": 971,
-    "verb": 392,
-    "phrase": 42,
-    "adjective": 224
-  },
-  "irregularVerbCount": 150,
-  "notes": [
-    "B1 Plus 7 Units list has been added as a separate selectable list.",
-    "B1 Plus entries are parsed from the uploaded B1 Plus source text.",
-    "Verb forms are populated from the verified irregular list when matched, otherwise from a conservative generated regular pattern or manual verified map."
-  ]
+  "fixes": [
+    "Playback now updates the visual card for each spoken card and each spoken part.",
+    "The currently spoken part is displayed in the big card area before audio starts.",
+    "Irregular verbs now include US English and Dari meanings.",
+    "Irregular verbs now include curated related meanings/synonyms.",
+    "Service worker cache version changed to force a new GitHub Pages/iPhone refresh."
+  ],
+  "checks": {
+    "irregular_verbs_missing_english": [],
+    "irregular_verbs_missing_dari": []
+  }
 }
