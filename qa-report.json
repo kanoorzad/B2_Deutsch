@@ -1,25 +1,15 @@
 {
-  "version": "40.0",
-  "base": "v39 browser voice selector with brute-force Dari/Farsi mobile candidates",
+  "version": "41.0",
+  "type": "Expo React Native native mobile speech app",
+  "cards": 2254,
   "checks": {
-    "javascript_syntax_ok": true,
-    "version_badge_v40": true,
-    "cache_busting_v40": true,
-    "bruteforce_buttons_present": true,
+    "uses_expo_speech": true,
+    "not_browser_web_speech": true,
     "dari_tags_present": true,
-    "persian_farsi_dari_name_matching": true,
-    "tag_only_modes_present": true,
-    "all_voice_manual_modes_present": true,
-    "selected_candidate_saved": true,
-    "no_local_sprite_or_webaudio": true,
-    "no_remote_tts": true,
-    "service_worker_not_registered": true
+    "manual_all_native_voices": true,
+    "full_cards_embedded": true,
+    "package_json_present": true,
+    "app_json_present": true
   },
-  "node_check_stderr": "",
-  "notes": [
-    "v40 tests language-tag-only speech as well as selected voice+tag combinations.",
-    "Includes fa-IR, fa-AF, fa, prs-AF, prs, fas, per, fa-Arab variants, plus last-resort manual modes.",
-    "If every candidate is silent on a phone, that browser/device exposes no usable Persian/Dari speech engine."
-  ],
-  "zip_mb": 0.19
+  "note": "This package requires npm/expo to run. It is not a GitHub Pages website."
 }

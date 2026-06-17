@@ -1,51 +1,58 @@
-# B2 + B1 Plus Flashcards v40
+# B2 + B1 Plus Flashcards v41 — Native Mobile Speech App
 
-## What v40 does
+This is a different logic from the browser/PWA.
 
-v40 keeps the browser voice app structure, but adds a brute-force mobile Dari/Farsi tester.
+The previous mobile problem is that browser Web Speech does not expose a usable Dari/Farsi voice on the phone. v41 uses native mobile speech through `expo-speech`, which calls the phone's native speech system instead of the browser Web Speech API.
 
-It tries:
+## What this version tests
 
-- `fa-IR`
-- `fa-AF`
-- `fa`
-- `prs-AF`
-- `prs`
-- `fa-Arab`
-- `fa-Arab-IR`
-- `fa-Arab-AF`
-- `fas`
-- `per`
-- Persian / Farsi / Dari voice names
-- Afghanistan / Afghan / Iran / Iranian voice names
-- tag-only mode with no selected voice
-- selected voice + forced tag combinations
-- last-resort manual test through every installed voice
+- iOS native speech engine
+- Android native speech engine
+- Native voice list scanning
+- Dari/Farsi candidate voice buttons
+- Dari/Farsi tag-only tests:
+  - fa-IR
+  - fa-AF
+  - fa
+  - prs-AF
+  - prs
+  - fa-Arab-IR
+  - fa-Arab-AF
 
-## How to test on mobile
+## Run on iPhone without building an App Store app
 
-1. Open:
+You need a computer once.
 
-   https://kanoorzad.github.io/B2_Deutsch/?v=40
+1. Install Node.js.
+2. Install Expo Go on your iPhone from the App Store.
+3. Extract this folder.
+4. In Terminal / PowerShell:
 
-2. Tap **Refresh voices**.
-3. Tap **Run Dari voice search**.
-4. Listen.
-5. If silent, tap **Try next Dari candidate**.
-6. Continue until you hear a clear Dari/Farsi voice.
-7. Then normal card playback will use the selected candidate.
+```bash
+npm install
+npx expo start
+```
 
-## Important
+5. Scan the QR code with Expo Go.
+6. In the app tap **Refresh native voices**.
+7. Tap **Show voices**.
+8. Test the Dari/Farsi candidates.
 
-If every candidate is silent, then the mobile browser/device is not exposing a usable Persian/Dari speech engine to JavaScript. In that case, browser-only voice cannot be fixed by code.
+## Why this may work when browser failed
 
-## QA
+Chrome/Safari/Edge on iPhone are browser apps and can expose a different, smaller speech API voice list. Expo/native uses the mobile native speech interface.
 
-- JavaScript syntax: OK
-- Version badge: v40
-- Brute-force Dari controls: yes
-- Language tags included: fa-IR, fa-AF, fa, prs-AF, prs, fas, per, fa-Arab variants
-- Tag-only modes: yes
-- Manual all-voices test: yes
-- No local sprite / WebAudio: yes
-- No remote TTS: yes
+## If Dari is still missing
+
+Then the iPhone itself has no usable Persian/Dari native speech voice installed/exposed. Try:
+
+iPhone Settings → Accessibility → Spoken Content → Voices → Persian/Farsi → download an enhanced voice if available.
+
+Then reopen Expo Go and tap Refresh native voices.
+
+## Files
+
+- `App.js` — mobile app
+- `data/cards.json` — all flashcards
+- `package.json` — Expo dependencies
+- `app.json` — Expo app config

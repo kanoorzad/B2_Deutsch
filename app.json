@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "B2 B1Plus Flashcards v41",
+    "slug": "b2-b1plus-flashcards-v41",
+    "version": "41.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.khalidnoorzad.b2b1plusflashcards"
+    },
+    "android": {
+      "package": "com.khalidnoorzad.b2b1plusflashcards"
+    },
+    "extra": {
+      "build": "native-mobile-speech-v41"
+    }
+  }
+}
