@@ -1,24 +1,24 @@
 {
-  "version": "50.0",
-  "base": "v48 clean UI with Dari speech restored to v4-style direct browser TTS",
+  "version": "51.0",
+  "base": "v50 with full v4 voice engine for all languages and duplicate initiative removed",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v50": true,
-    "cache_busting_v50": true,
-    "v4_source_available": true,
-    "direct_speech_synthesis": true,
-    "dari_default_fa_af": true,
+    "version_badge_v51": true,
+    "cache_busting_v51": true,
+    "initiative_only_once": true,
+    "v4_voices_function_exact_style": true,
+    "v4_pickvoice_exact_languages": true,
+    "v4_say_direct_speak": true,
     "online_tts_removed": true,
-    "no_local_sprite": true,
-    "voice_section_hidden": true,
-    "daria_exclusion_kept": true,
+    "local_sprite_removed": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
+  "initiative_count": 1,
   "notes": [
-    "Dari voice logic is now direct v4-style browser TTS.",
-    "No online provider runs before speech.",
-    "Default Dari tag is fa-AF."
+    "The v4 voice engine pattern is applied to German, English, and Dari.",
+    "Duplicate initiative banner removed.",
+    "Compatibility wrappers are present only to keep the newer UI buttons from breaking."
   ],
   "zip_mb": 0.18
 }
