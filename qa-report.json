@@ -1,30 +1,23 @@
 {
-  "version": "35.0",
-  "base": "v34, browser-first Dari/Farsi voice with local sprite only as backup",
+  "version": "36.0",
+  "base": "v35 structure with audio reverted to classic v3-v6 browser SpeechSynthesis for all languages",
   "checks": {
     "javascript_syntax_ok": true,
-    "visible_version_badge_v35": true,
-    "cache_busting_v35": true,
-    "dari_source_selector_present": true,
-    "browser_first_no_early_fallback": true,
-    "fallback_only_error_or_timeout": true,
-    "browser_only_mode": true,
-    "local_only_mode": true,
-    "old_cache_clearing_kept": true,
-    "no_service_worker_register": true,
-    "sprite_entries": 2025,
-    "sprite_files": 4
-  },
-  "sizes": {
-    "zip_mb": 17.33,
-    "total_sprite_mb": 25.17,
-    "largest_sprite_mb": 6.31
+    "version_badge_v36": true,
+    "cache_busting_v36": true,
+    "classic_v6_say_engine": true,
+    "no_local_sprite_or_webaudio": true,
+    "no_remote_tts": true,
+    "dari_source_selector_removed": true,
+    "playnext_classic_say": true,
+    "service_worker_not_registered": true,
+    "no_leftover_prime_or_auto": true
   },
   "node_check_stderr": "",
   "notes": [
-    "Default is Browser first — best quality.",
-    "Local robot-like sprite is now only used if no browser Dari/Farsi voice exists, an explicit error occurs, or timeout occurs.",
-    "Browser only mode disables the local backup completely.",
-    "Local backup only mode is available for devices with no browser Farsi voice."
-  ]
+    "All three languages use the same v3-v6 browser SpeechSynthesis pattern.",
+    "Removed local sprite / WebAudio / remote TTS complexity from the app.",
+    "Kept the current card structure, filters, synonyms, layout, version badge, and cache reset behavior."
+  ],
+  "zip_mb": 0.18
 }

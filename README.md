@@ -1,38 +1,35 @@
-# B2 + B1 Plus Flashcards v35
+# B2 + B1 Plus Flashcards v36
 
-## Dari/Farsi redesign
+## What changed
 
-v35 keeps v34 but changes the Dari logic:
+v36 keeps the current app structure, but reverses the voice system for **all languages** back to the simple v3-v6 browser voice logic.
 
-- **Default:** Browser first — best quality.
-- Local sprite audio is only a backup.
-- The app no longer switches to local backup just because browser `onend` happens quickly.
-- Local backup is used only if:
-  - there is no browser Farsi/Persian/Dari voice,
-  - browser voice returns an explicit error,
-  - browser voice times out.
+Removed from the audio path:
 
-## New control
+- local sprite audio
+- WebAudio
+- remote TTS
+- Dari source selector
+- automatic fallback switching
 
-In **Voice status**, there is a new **Dari source** selector:
+Restored for all languages:
 
-1. Browser first — best quality
-2. Browser only — no robotic backup
-3. Local backup only
-
-Try **Browser only** on the phone if the local voice sounds robotic.
+- `SpeechSynthesisUtterance(text)`
+- German: `de-DE`
+- English: `en-US`
+- Dari/Farsi: `fa-AF`
+- simple voice picker by exact language then prefix
+- classic v6 playback timing
 
 ## QA
 
 - JavaScript syntax: OK
-- Version badge: v35
-- Dari source selector: yes
-- Browser-first no early fallback: yes
-- Local fallback only on error/timeout/no voice: yes
-- Old cache clearing kept: yes
-- Service worker registration disabled: yes
-- ZIP size: 17.33 MB
+- Version badge: v36
+- Classic v6 voice engine: yes
+- No local sprite / WebAudio: yes
+- No remote TTS: yes
+- ZIP size: about 0.18 MB
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=35
+https://kanoorzad.github.io/B2_Deutsch/?v=36
