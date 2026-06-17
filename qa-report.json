@@ -1,28 +1,24 @@
 {
-  "version": "37.0",
-  "base": "v36 structure with new unit-based high-quality local audio pack engine",
+  "version": "39.0",
+  "base": "v36 structure with improved mobile browser voice selector",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v37": true,
-    "cache_busting_v37": true,
-    "audio_manifest_loaded_before_app": true,
-    "audio_pack_engine_present": true,
-    "browser_fallback_present": true,
-    "audio_mode_selector_present": true,
-    "no_remote_tts_in_browser": true,
-    "tools_export_jobs": true,
-    "tools_generate_azure": true,
-    "tools_build_packs": true,
-    "audio_jobs_included": true,
-    "planned_audio_jobs": 8392,
-    "planned_unit_language_packs": 60,
+    "version_badge_v39": true,
+    "cache_busting_v39": true,
+    "voice_selectors_present": true,
+    "uses_selected_voice_lang": true,
+    "does_not_force_fa_af_when_voice_selected": true,
+    "persian_farsi_dari_detection": true,
+    "manual_voice_testing_available": true,
+    "no_local_sprite_or_webaudio": true,
+    "no_remote_tts": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
   "notes": [
-    "No cloud API key is exposed to the static website.",
-    "The website will use local generated packs once audio-manifest.js and audio/packs/*.mp3 are generated.",
-    "Until packs are generated, it falls back to browser SpeechSynthesis."
+    "This keeps browser SpeechSynthesis, but fixes the forced fa-AF problem.",
+    "The selected Dari/Farsi voice language is used exactly, e.g. fa-IR.",
+    "The mobile user can manually test all voices if no Persian/Farsi voice is auto-detected."
   ],
-  "zip_mb": 0.47
+  "zip_mb": 0.18
 }

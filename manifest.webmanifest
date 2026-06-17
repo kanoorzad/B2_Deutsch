@@ -1,13 +1,13 @@
 {
-  "name": "B2 B1 Plus Flashcards v37",
-  "short_name": "DE Cards v37",
-  "start_url": "./index.html?v=37",
+  "name": "B2 B1 Plus Flashcards v39",
+  "short_name": "DE Cards v39",
+  "start_url": "./index.html?v=39",
   "display": "standalone",
   "background_color": "#f3f7fb",
   "theme_color": "#17324d",
   "icons": [
     {
-      "src": "icon.svg?v=37",
+      "src": "icon.svg?v=39",
       "sizes": "any",
       "type": "image/svg+xml"
     }

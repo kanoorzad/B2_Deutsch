@@ -5,20 +5,20 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#17324d">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="DE Cards v37">
+  <meta name="apple-mobile-web-app-title" content="DE Cards v39">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=37">
-  <link rel="apple-touch-icon" href="icon.svg?v=37">
-  <link rel="stylesheet" href="styles.css?v=37">
-  <title>B2 + B1 Plus Flashcards v37</title>
+  <link rel="manifest" href="manifest.webmanifest?v=39">
+  <link rel="apple-touch-icon" href="icon.svg?v=39">
+  <link rel="stylesheet" href="styles.css?v=39">
+  <title>B2 + B1 Plus Flashcards v39</title>
 </head>
 <body>
 <header class="hero">
-  <em class="versionBadge">v37</em>
+  <em class="versionBadge">v39</em>
   <h1>B2 + B1 Plus Flashcards</h1>
   <p>German · English · Dari</p>
   <p class="initiative"><em>Initiative by Khalid Noorzad for Afghan Students</em></p>
-  <p class="initiative"><em>High-quality local audio packs first · browser voice fallback</em></p>
+  <p class="initiative"><em>Browser voices with manual voice selector</em></p>
 </header>
 
 <main class="shell">
@@ -83,25 +83,20 @@
       <p class="voiceLine"><strong>German:</strong> <span id="voiceDe">—</span></p>
       <p class="voiceLine"><strong>English:</strong> <span id="voiceEn">—</span></p>
       <p class="voiceLine"><strong>Dari:</strong> <span id="voiceFa">—</span></p>
-      <p class="voiceLine"><strong>Audio packs:</strong> <span id="packStatus">Checking…</span></p>
-      <label class="voiceSelect">Audio mode
-        <select id="audioMode">
-          <option value="packsFirst" selected>High-quality packs first</option>
-          <option value="packsOnly">High-quality packs only</option>
-          <option value="browserOnly">Browser voice only</option>
-        </select>
-      </label>
+      <label class="voiceSelect">German voice <select id="voiceSelectDe"></select></label>
+      <label class="voiceSelect">English voice <select id="voiceSelectEn"></select></label>
+      <label class="voiceSelect">Dari/Farsi voice <select id="voiceSelectFa"></select></label>
+      <p class="hint smallHint">For mobile Dari: try every Persian/Farsi/Dari option in the dropdown. v39 uses the exact selected voice language, not forced fa-AF.</p>
       <button id="unlockSpeech" class="wide">Refresh voices</button>
       <div class="testRow"><button id="testDe">Test German</button><button id="testEn">Test English</button><button id="testFa">Test Dari</button></div>
-      <p class="small">v37 uses generated local audio packs first. Browser speech is only a fallback when a pack is missing.</p>
+      <p class="small">Dari/Farsi uses detected phone/browser voices. Select Persian/Farsi/Dari manually if Auto is silent.</p>
     </details>
     <details><summary>Add your own card</summary><form id="addForm"><div class="grid"><label>Type<select name="category"><option>noun</option><option>verb</option><option>adjective</option><option>phrase</option><option>other</option></select></label><label>Unit<input name="unit" placeholder="My list"></label></div><label>German<input name="german" required></label><div class="grid"><label>Article<input name="article" placeholder="der/die/das"></label><label>Plural<input name="plural"></label></div><div class="grid"><label>English<input name="english" required></label><label>Dari<input name="dari" required dir="rtl"></label></div><details><summary>Verb forms</summary><label>Infinitive<input name="infinitive"></label><label>Past / Präteritum<input name="past"></label><label>Perfekt<input name="perfect"></label><label>Plusquamperfekt<input name="plusquamperfekt"></label></details><label>Related meanings<input name="synonyms" placeholder="three verb synonyms, comma separated"></label><button class="primary">Add card</button></form></details>
     <details><summary>Backup</summary><div class="testRow"><button id="exportBtn">Export backup</button><label class="fileBtn">Import backup<input id="importJson" type="file" accept="application/json" hidden></label></div></details>
   </section>
 </main>
 
-<script src="data.js?v=37"></script>
-<script src="audio-manifest.js?v=37"></script>
-<script src="app.js?v=37"></script>
+<script src="data.js?v=39"></script>
+<script src="app.js?v=39"></script>
 </body>
 </html>
