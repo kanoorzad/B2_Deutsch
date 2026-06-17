@@ -1,6 +1,6 @@
 {
-  "version": "29.0",
-  "base": "v20 design with complete Dari/Farsi audio redesign",
+  "version": "30.0",
+  "base": "v29 working audio, rebuilt with lossless source-quality multi-sprite mapping fix",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -14,34 +14,46 @@
     "nonVerbCardsWithNoBottomSynonyms": 1604,
     "dariCardsWithSpriteAudio": 2254,
     "uniqueSpriteEntries": 2025,
-    "spriteBytes": 8219528
+    "spriteFiles": 4,
+    "largestSpriteBytes": 6615671,
+    "totalSpriteBytes": 26389954
   },
   "sprite": {
-    "file": "dari-sprite.mp3",
-    "bytes": 8219528,
-    "mb": 7.84,
-    "duration_seconds": 4109.65,
+    "files": [
+      "dari-sprite-1.mp3",
+      "dari-sprite-2.mp3",
+      "dari-sprite-3.mp3",
+      "dari-sprite-4.mp3"
+    ],
+    "file_sizes_mb": [
+      6.28,
+      6.3,
+      6.28,
+      6.31
+    ],
+    "total_mb": 25.17,
     "entries": 2025,
-    "under_25mb_single_file": true
+    "source_audio_bitrate": "kept from original MP3 files using ffmpeg -c copy, no re-encoding"
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "cache_busting_v29": true,
-    "uses_single_local_audio_sprite": true,
-    "no_audio_folder_dependency": true,
-    "no_remote_tts": true,
-    "no_embedded_audio_chunks": true,
-    "test_button_uses_sprite": true,
-    "play_button_unlocks_sprite": true,
-    "service_worker_caches_sprite": true,
-    "dari_cards_with_sprite_audio": true
+    "version_badge_present": true,
+    "cache_busting_v30": true,
+    "uses_multi_sprite_index": true,
+    "no_reencoded_low_bitrate_single_sprite": true,
+    "card_script_passes_audio_ref": true,
+    "play_next_passes_audio_ref_to_say": true,
+    "last_front_keeps_audio_ref": true,
+    "tap_dari_passes_audio_ref": true,
+    "service_worker_caches_all_sprites": true,
+    "dari_cards_with_sprite_audio": true,
+    "audio_index_loaded_before_app": true,
+    "all_sprites_exist": true
   },
   "node_check_stderr": "",
-  "design_summary": [
-    "One same-origin MP3 audio sprite plus one small JS index.",
-    "No mobile Web Speech dependency for Dari.",
-    "No remote TTS or CORS.",
-    "No thousands of MP3 files.",
-    "No large embedded JS audio chunks."
+  "diagnosis": [
+    "v29 finally proved the mobile audio path works, but it used one very low-bitrate 16 kbps sprite.",
+    "v29 playback also did not pass each card audio_fa reference into the playback call, so many cards could play the wrong segment.",
+    "v30 fixes both: source-quality MP3 sprites with no re-encoding, and correct audio_fa mapping for every card."
   ]
 }
