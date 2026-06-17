@@ -1,51 +1,45 @@
-# B2 + B1 Plus Flashcards v32 — Upload-safe clarity audio
+# B2 + B1 Plus Flashcards v33
 
-## Why v32
+## Fixes
 
-v31 improved clarity, but the downloaded ZIP was about 38 MB. GitHub web upload rejected it as too large.
+1. **Dari/Farsi clarity**
+   - Restores the clearer v30 mapped sprite audio.
+   - Removes the over-compressed v32 Dari audio.
+   - Keeps the working mobile sprite method.
 
-v32 keeps the working sprite design and improves clarity as much as possible while staying practical for GitHub web upload.
+2. **Version badge**
+   - Forces the top-right badge to show `v33`.
+   - Updates all cache-busting references to `?v=33`.
+   - Updates the service worker cache to v33.
 
-## Audio settings
+3. **German / English clarity**
+   - Keeps the improved native voice ranking.
+   - Uses slower clarity rates for German/English.
 
-- Dari/Farsi: 4 sprite MP3 files
-- 56 kbps mono MP3
-- 44.1 kHz
-- Same card-to-audio mapping as v30/v31
-- German/English: improved native voice ranking and slower clarity rates from v31
+## Upload files
 
-## File sizes
+Upload the extracted files, especially:
 
-- Largest sprite file: 7.36 MB
-- Total Dari sprite audio: 29.36 MB
-- All sprite files under 10 MB: True
-
-## Important upload instruction
-
-Extract the ZIP first. Do **not** upload the ZIP file itself to GitHub Pages.
-
-Upload these extracted root files:
-
-- dari-sprite-1.mp3
-- dari-sprite-2.mp3
-- dari-sprite-3.mp3
-- dari-sprite-4.mp3
-- audio-index.js
-- app.js
-- data.js
-- index.html
-- styles.css
-- service-worker.js
-- manifest.webmanifest
-- icon.svg
-
-Open:
-
-https://kanoorzad.github.io/B2_Deutsch/?v=32
+- `dari-sprite-1.mp3`
+- `dari-sprite-2.mp3`
+- `dari-sprite-3.mp3`
+- `dari-sprite-4.mp3`
+- `audio-index.js`
+- `app.js`
+- `data.js`
+- `index.html`
+- `service-worker.js`
 
 ## QA
 
 - JavaScript syntax: OK
-- Sprite files: 4
-- Largest sprite: 7.36 MB
-- Total sprite audio: 29.36 MB
+- Visible version badge: v33
+- ZIP size: 17.33 MB
+- Total Dari sprite audio: 25.17 MB
+- Largest sprite: 6.31 MB
+- Audio entries: 2025
+- Cards: 2254
+
+Open:
+
+https://kanoorzad.github.io/B2_Deutsch/?v=33
