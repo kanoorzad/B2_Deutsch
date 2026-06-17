@@ -1,5 +1,5 @@
 {
-  "version": "14.0",
+  "version": "15.0",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -13,29 +13,25 @@
     "nonVerbCardsWithNoBottomSynonyms": 1604
   },
   "checks": {
-    "dari_uses_exact_v6_style_direct_utterance": true,
-    "no_dari_cleanup_before_tts": true,
-    "no_arabic_or_cloud_fallback_in_voice_path": true,
-    "no_mobile_unlock_utterance": true,
+    "everything_else_kept_from_v14": true,
+    "mobile_dari_minimum_hold_present": true,
+    "mobile_dari_retry_fa_af_fa_ir_fa_present": true,
+    "active_utterance_global_keeps_tts_alive": true,
+    "speech_resume_nudge_present": true,
     "verb_cards_with_3_english_synonyms": true,
     "verb_cards_with_3_german_synonyms": true,
     "verb_cards_with_3_dari_synonyms": true,
     "non_verbs_have_no_bottom_synonyms": true,
     "initiative_line_present": true,
-    "edge_mobile_overlap_mitigation": true,
-    "cache_busting_v14": true
-  },
-  "lists": {
-    "B2 all 12 units": 1629,
-    "Irregular verbs": 150,
-    "B1 Plus 7 Units": 475
+    "edge_mobile_fit_rules_present": true,
+    "cache_busting_v15": true
   },
   "fixes": [
-    "Dari TTS restored to exact v6-style direct SpeechSynthesisUtterance path.",
-    "Dari text is passed raw to browser TTS without cleanup or transformation.",
-    "Removed mobile unlock utterance and later fallback loops from the voice path.",
-    "Kept verb-only synonyms: 3 German, 3 English, 3 Dari; non-verbs show no bottom synonym text.",
-    "Added top initiative line.",
-    "Changed mobile CSS to avoid Edge overlap and horizontal overflow."
+    "Keeps all v14 layout/synonym behavior.",
+    "Fixes mobile Dari disappearing too fast by delaying progression for Dari on mobile.",
+    "Keeps the utterance object alive globally to avoid mobile browser garbage-collection audio loss.",
+    "Retries mobile Dari using fa-AF, fa-IR, and fa if the browser ends immediately.",
+    "Adds speechSynthesis.resume nudge for mobile browsers.",
+    "Adds extra mobile fit rules for Edge/Chrome width handling."
   ]
 }

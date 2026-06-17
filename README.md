@@ -1,26 +1,25 @@
-# B2 + B1 Plus Flashcards v14
+# B2 + B1 Plus Flashcards v15
 
-## Fixes in v14
+## Purpose
 
-1. **Dari pronunciation restored to exact v6-style engine**
-   - Direct `SpeechSynthesisUtterance(text)`
-   - `fa-AF` for Dari
-   - no Arabic fallback
-   - no mobile unlock utterance
-   - no fallback loop
-   - no cleanup/transformation of Dari text before pronunciation
+This version keeps everything from v14, but fixes the mobile Dari behavior you reported: the Dari text disappeared very fast with no voice.
 
-2. **Verb-only synonyms remain**
-   - Verb cards: 3 German, 3 English, 3 Dari synonym/related-meaning chips.
-   - Nouns and non-verbs: no bottom synonym text.
+## Dari mobile fix
 
-3. **Mobile browser layout**
-   - Added Edge mobile overlap mitigation.
-   - Removed sticky control behavior that can overlap in some mobile browsers.
-   - Added stronger width/overflow rules.
+v15 changes only the speech engine behavior:
 
-4. **Initiative line**
-   - Added: *Initiative by Khalid Noorzad for Afghan Students*
+- keeps the spoken Dari text visible for a minimum time on mobile
+- keeps the utterance object alive globally so mobile browsers do not drop the audio
+- retries Dari on mobile with `fa-AF`, then `fa-IR`, then `fa` if the browser ends immediately
+- nudges `speechSynthesis.resume()` for iOS/Android browser speech queues
+- keeps the same medium speed for Dari
+
+## Everything else remains
+
+- Verb-only synonym chips remain.
+- Nouns and non-verbs still show no bottom synonym text.
+- Edge/mobile fit rules remain.
+- Initiative line remains.
 
 ## QA
 
@@ -32,12 +31,6 @@
 - Verb cards with 3 Dari synonyms: 650
 - Non-verbs with no bottom synonym text: 1604
 
-## GitHub update
+## Open
 
-Replace all files with this v14 folder.
-
-Open:
-
-https://kanoorzad.github.io/B2_Deutsch/?v=14
-
-On mobile, delete the old Home Screen icon, open the `?v=14` link, then add/install again.
+https://kanoorzad.github.io/B2_Deutsch/?v=15
