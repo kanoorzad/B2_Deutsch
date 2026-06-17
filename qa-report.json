@@ -1,0 +1,32 @@
+{
+  "counts": {
+    "b2Entries": 1629,
+    "irregularVerbs": 150
+  },
+  "b2ByUnit": {
+    "Unit 1": 140,
+    "Unit 2": 144,
+    "Unit 3": 134,
+    "Unit 4": 124,
+    "Unit 5": 126,
+    "Unit 6": 142,
+    "Unit 7": 145,
+    "Unit 8": 136,
+    "Unit 9": 124,
+    "Unit 10": 128,
+    "Unit 11": 148,
+    "Unit 12": 138
+  },
+  "b2ByCategory": {
+    "noun": 971,
+    "verb": 392,
+    "phrase": 42,
+    "adjective": 224
+  },
+  "verbFormQuality": {
+    "regular-estimate": 294,
+    "source-pdf-exact": 21,
+    "derived-from-irregular-root": 74,
+    "missing": 3
+  }
+}
