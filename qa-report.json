@@ -1,7 +1,30 @@
 {
   "counts": {
     "b2Entries": 1629,
-    "irregularVerbs": 150
+    "b1PlusEntries": 475,
+    "irregularVerbs": 150,
+    "totalCards": 2254
+  },
+  "lists": {
+    "B2 all 12 units": 1629,
+    "Irregular verbs": 150,
+    "B1 Plus 7 Units": 475
+  },
+  "b1PlusByUnit": {
+    "B1 Plus Unit 1": 52,
+    "B1 Plus Unit 2": 76,
+    "B1 Plus Unit 3": 66,
+    "B1 Plus Unit 4": 73,
+    "B1 Plus Unit 5": 70,
+    "B1 Plus Unit 6": 74,
+    "B1 Plus Unit 7": 64
+  },
+  "b1PlusByCategory": {
+    "noun": 309,
+    "verb": 108,
+    "other": 13,
+    "adjective": 34,
+    "phrase": 11
   },
   "b2ByUnit": {
     "Unit 1": 140,
@@ -23,10 +46,10 @@
     "phrase": 42,
     "adjective": 224
   },
-  "verbFormQuality": {
-    "regular-estimate": 294,
-    "source-pdf-exact": 21,
-    "derived-from-irregular-root": 74,
-    "missing": 3
-  }
+  "irregularVerbCount": 150,
+  "notes": [
+    "B1 Plus 7 Units list has been added as a separate selectable list.",
+    "B1 Plus entries are parsed from the uploaded B1 Plus source text.",
+    "Verb forms are populated from the verified irregular list when matched, otherwise from a conservative generated regular pattern or manual verified map."
+  ]
 }
