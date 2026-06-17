@@ -1,27 +1,25 @@
-# B2 + B1 Plus Flashcards v18
+# B2 + B1 Plus Flashcards v19
 
-## Main fix
+## Root cause addressed
 
-v18 restores the playback kernel from the working v5/v6 versions.
+Desktop browsers can expose a usable Dari/Persian/Farsi voice to Web Speech, so Dari works on the computer.
 
-I compared the later versions against v5/v6 and changed the playback path back to:
+Mobile browsers can accept `fa-AF` but end the utterance immediately or expose no usable Dari voice. That is why the text disappears and no audio is heard.
 
-- `cardScript()` uses v6-style command objects: `{t, l, label}`
-- `playNextPart()` calls: `say(p.t, p.l, ...)`
-- `say()` uses direct `new SpeechSynthesisUtterance(text)`
-- Dari uses `fa-AF`
-- no mobile hold timer
-- no retry loop
-- no unlock utterance
-- no cleanup/transformation of Dari text before speech
+## v19 solution
 
-## Kept from the current version
+- German and English stay on the stable v6-style Web Speech playback.
+- Desktop Dari stays on Web Speech.
+- Mobile Dari now uses an online `<audio>` fallback.
+- If online audio fails, the app falls back to browser TTS and keeps the text visible.
 
-- Verb-only synonyms
-- No bottom synonym text for nouns/non-verbs
-- Initiative line
-- Edge/mobile fit
-- Top-right version marker
+## Kept unchanged
+
+- Verb-only synonyms.
+- No bottom synonyms for nouns/non-verbs.
+- Initiative line.
+- Edge/mobile layout fit.
+- Top-right version marker.
 
 ## QA
 
@@ -36,10 +34,10 @@ I compared the later versions against v5/v6 and changed the playback path back t
 
 ## GitHub update
 
-Replace all files with this v18 folder.
+Replace all files with this v19 folder.
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=18
+https://kanoorzad.github.io/B2_Deutsch/?v=19
 
-Delete old mobile Home Screen icons before testing.
+Delete the old mobile Home Screen icon before testing.

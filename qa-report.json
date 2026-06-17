@@ -1,6 +1,6 @@
 {
-  "version": "18.0",
-  "base": "v14 UI/data with v6 playback kernel restored",
+  "version": "19.0",
+  "base": "v18 with mobile-Dari online audio fallback",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -16,23 +16,22 @@
   "checks": {
     "javascript_syntax_ok": true,
     "version_badge_present": true,
-    "cache_busting_v18": true,
-    "say_matches_v6_pattern": true,
-    "play_next_matches_v6_pattern": true,
-    "card_script_uses_v6_t_l_commands": true,
-    "no_mobile_hold_timer": true,
-    "no_unlock_utterance": true,
+    "cache_busting_v19": true,
+    "german_english_still_use_web_speech": true,
+    "mobile_dari_uses_online_audio": true,
+    "dari_audio_unlocked_from_play_button": true,
+    "fallback_to_browser_tts_if_online_audio_fails": true,
+    "stop_pauses_dari_audio": true,
     "verb_cards_with_3_english_synonyms": true,
     "verb_cards_with_3_german_synonyms": true,
     "verb_cards_with_3_dari_synonyms": true,
     "non_verbs_have_no_bottom_synonyms": true
   },
   "node_check_stderr": "",
-  "comparison_summary": [
-    "v5/v6 used command objects {t,l,label}; later versions used {display,speech,lang}. v18 restores {t,l,label}.",
-    "v5/v6 called say(p.t,p.l,...) directly; v18 restores that direct call.",
-    "v5/v6 used new SpeechSynthesisUtterance(text) with fa-AF; v18 restores that exact path.",
-    "v15-v17 introduced mobile hold/retry/alternate callback logic; v18 removes it.",
-    "v18 keeps later UI, version marker, initiative line, Edge fit, and verb-only synonyms."
+  "root_cause_summary": [
+    "Desktop has a usable Web Speech voice for fa-AF/fa, so Dari works.",
+    "Mobile browsers can accept fa-AF but return end/error without audio or no usable voice.",
+    "v19 stops relying on mobile Web Speech for Dari and uses HTMLAudioElement online audio fallback on mobile only.",
+    "German/English remain on the stable v6-style Web Speech path."
   ]
 }
