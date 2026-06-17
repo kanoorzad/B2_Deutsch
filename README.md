@@ -1,32 +1,38 @@
-# B2 + B1 Plus Flashcards v34
+# B2 + B1 Plus Flashcards v35
 
-## What v34 fixes differently
+## Dari/Farsi redesign
 
-v34 is based on the v30 working audio sprite, but changes the audio system around it:
+v35 keeps v34 but changes the Dari logic:
 
-1. It automatically unregisters old service workers and clears old caches once.
-2. It does not register a new service worker.
-3. German and English use native browser/device voices with better voice ranking.
-4. Dari/Farsi uses Auto mode:
-   - try real device Farsi/Persian voice if available and not silent
-   - otherwise use the local sprite audio that worked in v30
-5. Top-right version is forced to v34.
+- **Default:** Browser first — best quality.
+- Local sprite audio is only a backup.
+- The app no longer switches to local backup just because browser `onend` happens quickly.
+- Local backup is used only if:
+  - there is no browser Farsi/Persian/Dari voice,
+  - browser voice returns an explicit error,
+  - browser voice times out.
 
-## Why this matters
+## New control
 
-If the page still showed v20 or all voices stopped, the likely cause is stale service-worker/cache state or blocked audio activation, not the data itself. v34 resets that.
+In **Voice status**, there is a new **Dari source** selector:
+
+1. Browser first — best quality
+2. Browser only — no robotic backup
+3. Local backup only
+
+Try **Browser only** on the phone if the local voice sounds robotic.
 
 ## QA
 
 - JavaScript syntax: OK
+- Version badge: v35
+- Dari source selector: yes
+- Browser-first no early fallback: yes
+- Local fallback only on error/timeout/no voice: yes
+- Old cache clearing kept: yes
+- Service worker registration disabled: yes
 - ZIP size: 17.33 MB
-- Total sprite audio: 25.17 MB
-- Sprite entries: 2025
-- Old service workers unregistered: yes
-- New service worker registered: no
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=34
-
-On first load, v34 may reload once with `fresh34=...`. Then tap **Refresh voices**, **Test German**, **Test English**, and **Test Dari**.
+https://kanoorzad.github.io/B2_Deutsch/?v=35

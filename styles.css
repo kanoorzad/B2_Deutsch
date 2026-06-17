@@ -62,3 +62,6 @@ button,.fileBtn{min-width:0;white-space:normal}
 .versionBadge{position:absolute;top:.55rem;right:.75rem;font-size:.78rem;font-weight:500;opacity:.84}
 .top,.hero{position:relative}
 .versionBadge{position:absolute;top:.55rem;right:.75rem;font-size:.78rem;font-style:italic;font-weight:600;opacity:.95;z-index:20}
+.voiceSelect{display:block;margin:.55rem 0;font-size:.9rem}
+.voiceSelect select{width:100%;margin-top:.25rem}
+.versionBadge{font-style:italic}

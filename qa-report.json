@@ -1,26 +1,30 @@
 {
-  "version": "34.0",
-  "base": "v30 working sprite with cache reset and Auto Dari engine",
+  "version": "35.0",
+  "base": "v34, browser-first Dari/Farsi voice with local sprite only as backup",
   "checks": {
     "javascript_syntax_ok": true,
-    "badge_v34": true,
-    "cache_busting_v34": true,
-    "unregisters_old_service_workers": true,
-    "does_not_register_service_worker": true,
-    "dari_auto_native_then_sprite": true,
-    "sprite_files_exist": true,
+    "visible_version_badge_v35": true,
+    "cache_busting_v35": true,
+    "dari_source_selector_present": true,
+    "browser_first_no_early_fallback": true,
+    "fallback_only_error_or_timeout": true,
+    "browser_only_mode": true,
+    "local_only_mode": true,
+    "old_cache_clearing_kept": true,
+    "no_service_worker_register": true,
     "sprite_entries": 2025,
-    "zip_under_25mb": true
+    "sprite_files": 4
   },
   "sizes": {
     "zip_mb": 17.33,
     "total_sprite_mb": 25.17,
     "largest_sprite_mb": 6.31
   },
-  "node_stderr": "",
-  "diagnosis": [
-    "Old service workers/caches can keep loading broken v20/v33 files even after upload; v34 unregisters them and reloads once.",
-    "Chrome 71+ and mobile browsers require user activation for speech/audio; v34 unlocks audio from Test/Play taps.",
-    "Dari Auto uses a device Farsi/Persian voice only if it really plays; otherwise it falls back to the working local sprite."
+  "node_check_stderr": "",
+  "notes": [
+    "Default is Browser first — best quality.",
+    "Local robot-like sprite is now only used if no browser Dari/Farsi voice exists, an explicit error occurs, or timeout occurs.",
+    "Browser only mode disables the local backup completely.",
+    "Local backup only mode is available for devices with no browser Farsi voice."
   ]
 }
