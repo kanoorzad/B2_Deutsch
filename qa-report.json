@@ -1,59 +1,26 @@
 {
-  "version": "30.0",
-  "base": "v29 working audio, rebuilt with lossless source-quality multi-sprite mapping fix",
-  "counts": {
-    "b2Entries": 1629,
-    "b1PlusEntries": 475,
-    "irregularVerbs": 150,
-    "totalCards": 2254,
-    "verbs": 650,
-    "nonVerbs": 1604,
-    "verbCardsWith3EnglishSynonyms": 650,
-    "verbCardsWith3GermanSynonyms": 650,
-    "verbCardsWith3DariSynonyms": 650,
-    "nonVerbCardsWithNoBottomSynonyms": 1604,
-    "dariCardsWithSpriteAudio": 2254,
-    "uniqueSpriteEntries": 2025,
-    "spriteFiles": 4,
-    "largestSpriteBytes": 6615671,
-    "totalSpriteBytes": 26389954
-  },
-  "sprite": {
-    "files": [
-      "dari-sprite-1.mp3",
-      "dari-sprite-2.mp3",
-      "dari-sprite-3.mp3",
-      "dari-sprite-4.mp3"
-    ],
-    "file_sizes_mb": [
-      6.28,
-      6.3,
-      6.28,
-      6.31
-    ],
-    "total_mb": 25.17,
-    "entries": 2025,
-    "source_audio_bitrate": "kept from original MP3 files using ffmpeg -c copy, no re-encoding"
-  },
+  "version": "34.0",
+  "base": "v30 working sprite with cache reset and Auto Dari engine",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_present": true,
-    "cache_busting_v30": true,
-    "uses_multi_sprite_index": true,
-    "no_reencoded_low_bitrate_single_sprite": true,
-    "card_script_passes_audio_ref": true,
-    "play_next_passes_audio_ref_to_say": true,
-    "last_front_keeps_audio_ref": true,
-    "tap_dari_passes_audio_ref": true,
-    "service_worker_caches_all_sprites": true,
-    "dari_cards_with_sprite_audio": true,
-    "audio_index_loaded_before_app": true,
-    "all_sprites_exist": true
+    "badge_v34": true,
+    "cache_busting_v34": true,
+    "unregisters_old_service_workers": true,
+    "does_not_register_service_worker": true,
+    "dari_auto_native_then_sprite": true,
+    "sprite_files_exist": true,
+    "sprite_entries": 2025,
+    "zip_under_25mb": true
   },
-  "node_check_stderr": "",
+  "sizes": {
+    "zip_mb": 17.33,
+    "total_sprite_mb": 25.17,
+    "largest_sprite_mb": 6.31
+  },
+  "node_stderr": "",
   "diagnosis": [
-    "v29 finally proved the mobile audio path works, but it used one very low-bitrate 16 kbps sprite.",
-    "v29 playback also did not pass each card audio_fa reference into the playback call, so many cards could play the wrong segment.",
-    "v30 fixes both: source-quality MP3 sprites with no re-encoding, and correct audio_fa mapping for every card."
+    "Old service workers/caches can keep loading broken v20/v33 files even after upload; v34 unregisters them and reloads once.",
+    "Chrome 71+ and mobile browsers require user activation for speech/audio; v34 unlocks audio from Test/Play taps.",
+    "Dari Auto uses a device Farsi/Persian voice only if it really plays; otherwise it falls back to the working local sprite."
   ]
 }

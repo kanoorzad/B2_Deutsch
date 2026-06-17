@@ -1,55 +1,32 @@
-# B2 + B1 Plus Flashcards v30 — High-quality mapped Dari/Farsi audio
+# B2 + B1 Plus Flashcards v34
 
-## What was wrong in v29
+## What v34 fixes differently
 
-v29 proved the mobile audio path works, but two things made the Dari audio hard to understand:
+v34 is based on the v30 working audio sprite, but changes the audio system around it:
 
-1. The single sprite was compressed to very low bitrate audio.
-2. The playback call did not pass the card's `audio_fa` reference, so the wrong audio segment could play.
+1. It automatically unregisters old service workers and clears old caches once.
+2. It does not register a new service worker.
+3. German and English use native browser/device voices with better voice ranking.
+4. Dari/Farsi uses Auto mode:
+   - try real device Farsi/Persian voice if available and not silent
+   - otherwise use the local sprite audio that worked in v30
+5. Top-right version is forced to v34.
 
-## v30 fix
+## Why this matters
 
-v30 keeps the working mobile sprite design but rebuilds it for quality and accuracy:
-
-- uses the original MP3 clips without re-encoding (`ffmpeg -c copy`)
-- splits audio into 4 smaller high-quality sprite MP3 files
-- each sprite is about 6.28 MB, 6.3 MB, 6.28 MB, 6.31 MB
-- every Dari card now passes its own `audio_fa` reference into playback
-- no mobile Web Speech for Dari
-- no remote TTS
-- no audio/fa folder
-- no huge embedded JS audio chunks
-
-## Required upload files
-
-Upload all root files, especially:
-
-- dari-sprite-1.mp3
-- dari-sprite-2.mp3
-- dari-sprite-3.mp3
-- dari-sprite-4.mp3
-- audio-index.js
-- app.js
-- data.js
-- index.html
-- styles.css
-- service-worker.js
+If the page still showed v20 or all voices stopped, the likely cause is stale service-worker/cache state or blocked audio activation, not the data itself. v34 resets that.
 
 ## QA
 
 - JavaScript syntax: OK
-- Sprite files: 4
-- Total sprite audio size: 25.17 MB
-- Entries: 2025
-- Dari cards mapped: 2254 / 2254
-- Card audio reference passed to playback: yes
-- Source MP3 quality preserved: yes, no re-encoding
+- ZIP size: 17.33 MB
+- Total sprite audio: 25.17 MB
+- Sprite entries: 2025
+- Old service workers unregistered: yes
+- New service worker registered: no
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=30
+https://kanoorzad.github.io/B2_Deutsch/?v=34
 
-
-## Extra fix in final v30 build
-
-The page now loads `audio-index.js?v=30` before `app.js?v=30`, and every Dari playback step passes the card-specific `audio_fa` reference. This prevents the app from playing the wrong sprite segment.
+On first load, v34 may reload once with `fresh34=...`. Then tap **Refresh voices**, **Test German**, **Test English**, and **Test Dari**.
