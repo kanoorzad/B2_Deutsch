@@ -1,28 +1,28 @@
-# B2 + B1 Plus Flashcards v10 — clean card + mobile Dari fallback
+# B2 + B1 Plus Flashcards v11 — mobile-first clean layout
 
-## What v10 changes
+## What changed
 
-1. **Cleaner card and flip view**
-   - The main study card no longer shows unit/list/part/type chips.
-   - The flip answer no longer has extra unit/title text.
-   - The flip card focuses only on German, US English, Dari, forms, synonyms, and example.
+- Removed top-page Audio check / Install buttons.
+- Play / Pause / Stop now sit directly below the flashcard.
+- On mobile, the controls are sticky near the bottom and easier to reach.
+- The theme is simpler and less crowded.
+- Voice selection is automatic and hidden by default.
+- A small Voice status section remains inside settings for troubleshooting only.
 
-2. **Mobile Dari voice fallback**
-   - Added a Mobile voice check section.
-   - Added an Unlock mobile speech button.
-   - Dari now tries:
-     - `fa-AF`
-     - `fa-IR`
-     - `fa`
-     - voice names containing Dari / Persian / Farsi
-     - Arabic fallback only if no Persian/Farsi/Dari voice exists
-   - If the mobile browser still has no usable voice, the app shows a warning instead of failing silently.
+## Dari pronunciation
 
-## Important limitation
+This version tries the strongest free/static fallback:
 
-The app is hosted on GitHub Pages, which is static hosting. It can use the device/browser speech voices, but it cannot install a Dari voice into someone’s phone.
+- fa-AF
+- fa-IR
+- fa
+- voice names containing Dari / Persian / Farsi
+- Arabic fallback only if no Persian/Farsi/Dari voice exists
 
-For guaranteed Dari pronunciation on every mobile device, the next step would be pre-generated audio files or a cloud text-to-speech service. This v10 package makes the strongest possible free/static-web fallback.
+If the phone/browser exposes no compatible Dari/Persian/Farsi voice, the app cannot force one from GitHub Pages. Guaranteed mobile Dari pronunciation requires either:
+
+1. bundled pre-generated audio files, or
+2. a cloud text-to-speech service.
 
 ## QA
 
@@ -35,10 +35,10 @@ For guaranteed Dari pronunciation on every mobile device, the next step would be
 
 ## GitHub update
 
-Replace all files in your repository with this v10 folder.
+Replace all files with this v11 folder.
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=10
+https://kanoorzad.github.io/B2_Deutsch/?v=11
 
-On mobile, delete the old Home Screen icon, open the `?v=10` link in Safari/Chrome/Edge, then add/install again.
+On mobile, remove the old Home Screen icon, open the `?v=11` link, then add/install again.

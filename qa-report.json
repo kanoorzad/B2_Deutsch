@@ -1,5 +1,5 @@
 {
-  "version": "10.0",
+  "version": "11.0",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -10,29 +10,21 @@
     "cardsWithDari": 2254
   },
   "checks": {
-    "total_playback_steps_checked": 8392,
+    "playback_steps_checked": 8392,
     "english_slash_items_after_cleanup": 0,
     "all_cards_have_english": true,
     "all_cards_have_dari": true,
     "all_cards_have_two_synonyms": true,
-    "main_card_has_no_unit_title_chips": true,
-    "answer_area_has_no_unit_title_header": true,
-    "mobile_dari_fallbacks_present": true,
-    "unlock_mobile_speech_button_present": true,
-    "dari_warning_present": true,
-    "cache_busting_v10": true
+    "top_has_no_install_or_audio_check_buttons": true,
+    "play_controls_directly_below_card": true,
+    "mobile_sticky_quick_controls": true,
+    "dari_fallbacks_in_code": true,
+    "clear_known_limit_warning_present": true
   },
   "lists": {
     "B2 all 12 units": 1629,
     "Irregular verbs": 150,
     "B1 Plus 7 Units": 475
   },
-  "fixes": [
-    "Removed list/unit/part/type chips from the study card.",
-    "Removed the extra flip-answer header so only learning content remains in the flip card.",
-    "Added mobile speech unlock button.",
-    "Dari speech now tries fa-AF, fa-IR, fa, Persian/Farsi/Dari voice-name matches, then Arabic fallback if no Persian voice exists.",
-    "If mobile provides no compatible voice, the app shows a clear warning instead of failing silently."
-  ],
-  "known_limit": "A static GitHub Pages app cannot force a Dari voice if the phone/browser does not expose any Dari/Persian/Farsi voice. Guaranteed mobile Dari audio would require pre-generated audio files or a cloud text-to-speech service."
+  "known_limit": "If mobile browsers expose no Dari/Persian/Farsi voice, browser TTS cannot pronounce Dari. This package includes the strongest static-web fallback but true guaranteed mobile Dari audio requires bundled audio files or a cloud TTS service."
 }
