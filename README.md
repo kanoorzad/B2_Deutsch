@@ -1,42 +1,41 @@
-# B2 + B1 Plus Flashcards v12 — final dynamic chips + audio-ready
+# B2 + B1 Plus Flashcards v13
 
-## What v12 fixes
+## Fix 1 — Dari pronunciation restored
 
-- The chips at the bottom of the card now change with the current language:
-  - German step: German related meanings/forms
-  - English step: English related meanings
-  - Dari step: Dari related meanings
-- Every card has 3 German chips, 3 English chips, and 3 Dari chips.
-- During playback, the chip language follows the current spoken language.
+The Dari speech path has been restored to the same simple browser speech logic used around v6:
 
-## Dari mobile pronunciation
+- `fa-AF` language tag
+- first exact `fa-AF` voice if available
+- then any `fa` voice exposed by the phone/browser
+- no Arabic fallback
+- no mobile unlock utterance before playback
+- no extra fallback loop
 
-The app still tries the strongest free/static browser fallback:
-- fa-AF
-- fa-IR
-- fa
-- Persian/Farsi/Dari voice names
-- Arabic fallback
+This directly addresses the issue where later versions changed the Dari path and the same phone became silent.
 
-But if Safari/Chrome/Edge on a phone exposes no Dari/Persian/Farsi voice, static GitHub Pages cannot create that voice. For guaranteed mobile Dari pronunciation, the next technical solution must be:
-1. bundled pre-generated audio files, or
-2. cloud text-to-speech.
+## Fix 2 — verb synonyms only
 
-This package is structured so that bundled audio can be added later without redesigning the app.
+Only verbs now show synonym chips at the bottom of the flashcard.
+
+- German verb step: 3 German verb synonyms
+- English step: 3 English verb synonyms
+- Dari step: 3 Dari verb synonyms
+- Nouns and non-verbs: no bottom synonym text
 
 ## QA
 
 - Total cards: 2254
-- Cards with English: 2254
-- Cards with Dari: 2254
-- Cards with 3 English chips: 2254
-- Cards with 3 German chips: 2254
-- Cards with 3 Dari chips: 2254
+- Verb cards: 650
+- Non-verb cards: 1604
+- Verb cards with 3 German synonyms: 650
+- Verb cards with 3 English synonyms: 650
+- Verb cards with 3 Dari synonyms: 650
+- Non-verb cards with no bottom synonym text: 1604
 
 ## GitHub update
 
-Replace all files with this v12 folder.
+Replace all files with this v13 folder.
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=12
+https://kanoorzad.github.io/B2_Deutsch/?v=13

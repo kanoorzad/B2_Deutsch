@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#17324d">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="DE Cards v12">
+  <meta name="apple-mobile-web-app-title" content="DE Cards v13">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.webmanifest?v=12">
   <link rel="apple-touch-icon" href="icon.svg?v=12">
-  <link rel="stylesheet" href="styles.css?v=12">
-  <title>B2 + B1 Plus Flashcards v12</title>
+  <link rel="stylesheet" href="styles.css?v=13">
+  <title>B2 + B1 Plus Flashcards v13</title>
 </head>
 <body>
 <header class="hero">
@@ -26,7 +26,7 @@
         <h2 id="frontText">Loading…</h2>
         <p id="frontSub" class="frontSub"></p>
       </div>
-      <footer class="cardBottom">
+      <footer id="cardBottom" class="cardBottom">
         <div>
           <p id="chipLabel" class="bottomLabel">Related meanings</p>
           <p id="frontSynonyms" class="frontSynonyms"></p>
@@ -54,7 +54,7 @@
       <div class="infoGrid">
         <article id="nounBox" class="miniCard hidden"><h3>Noun forms</h3><dl><div><dt>Article</dt><dd id="article"></dd></div><div><dt>Singular</dt><dd id="singular"></dd></div><div><dt>Plural</dt><dd id="plural"></dd></div></dl></article>
         <article id="verbBox" class="miniCard hidden"><h3>Verb forms</h3><dl class="verbForms"><div><dt>Infinitive</dt><dd id="inf"></dd></div><div><dt>3rd person present</dt><dd id="pres3"></dd></div><div><dt>Präteritum</dt><dd id="past"></dd></div><div><dt>Perfekt</dt><dd id="perf"></dd></div><div><dt>Plusquamperfekt</dt><dd id="plus"></dd></div></dl></article>
-        <article class="miniCard"><h3>Related meanings</h3><p id="syn" class="synChips"></p></article>
+        <article id="synBox" class="miniCard hidden"><h3>Verb synonyms</h3><p id="syn" class="synChips"></p></article>
         <article class="miniCard"><h3>Example</h3><p id="ex"></p></article>
       </div>
     </section>
@@ -84,12 +84,12 @@
       <div class="testRow"><button id="testDe">Test German</button><button id="testEn">Test English</button><button id="testFa">Test Dari</button></div>
       <p class="small">This free version uses device/browser voices. If mobile has no Dari/Persian/Farsi voice, guaranteed Dari audio requires bundled audio files or a cloud TTS service.</p>
     </details>
-    <details><summary>Add your own card</summary><form id="addForm"><div class="grid"><label>Type<select name="category"><option>noun</option><option>verb</option><option>adjective</option><option>phrase</option><option>other</option></select></label><label>Unit<input name="unit" placeholder="My list"></label></div><label>German<input name="german" required></label><div class="grid"><label>Article<input name="article" placeholder="der/die/das"></label><label>Plural<input name="plural"></label></div><div class="grid"><label>English<input name="english" required></label><label>Dari<input name="dari" required dir="rtl"></label></div><details><summary>Verb forms</summary><label>Infinitive<input name="infinitive"></label><label>Past / Präteritum<input name="past"></label><label>Perfekt<input name="perfect"></label><label>Plusquamperfekt<input name="plusquamperfekt"></label></details><label>Related meanings<input name="synonyms" placeholder="three items, comma separated"></label><button class="primary">Add card</button></form></details>
+    <details><summary>Add your own card</summary><form id="addForm"><div class="grid"><label>Type<select name="category"><option>noun</option><option>verb</option><option>adjective</option><option>phrase</option><option>other</option></select></label><label>Unit<input name="unit" placeholder="My list"></label></div><label>German<input name="german" required></label><div class="grid"><label>Article<input name="article" placeholder="der/die/das"></label><label>Plural<input name="plural"></label></div><div class="grid"><label>English<input name="english" required></label><label>Dari<input name="dari" required dir="rtl"></label></div><details><summary>Verb forms</summary><label>Infinitive<input name="infinitive"></label><label>Past / Präteritum<input name="past"></label><label>Perfekt<input name="perfect"></label><label>Plusquamperfekt<input name="plusquamperfekt"></label></details><label>Related meanings<input name="synonyms" placeholder="three verb synonyms, comma separated"></label><button class="primary">Add card</button></form></details>
     <details><summary>Backup</summary><div class="testRow"><button id="exportBtn">Export backup</button><label class="fileBtn">Import backup<input id="importJson" type="file" accept="application/json" hidden></label></div></details>
   </section>
 </main>
 
-<script src="data.js?v=12"></script>
-<script src="app.js?v=12"></script>
+<script src="data.js?v=13"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>

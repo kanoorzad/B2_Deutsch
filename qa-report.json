@@ -1,29 +1,38 @@
 {
-  "version": "12.0",
+  "version": "13.0",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
     "irregularVerbs": 150,
     "totalCards": 2254,
-    "cardsWithEnglish": 2254,
-    "cardsWithDari": 2254,
-    "cardsWith3EnglishChips": 2254,
-    "cardsWith3GermanChips": 2254,
-    "cardsWith3DariChips": 2254
+    "verbs": 650,
+    "nonVerbs": 1604,
+    "verbCardsWith3EnglishSynonyms": 650,
+    "verbCardsWith3GermanSynonyms": 650,
+    "verbCardsWith3DariSynonyms": 650,
+    "nonVerbCardsWithNoBottomSynonyms": 1604
   },
   "checks": {
-    "cards_with_3_english_chips": true,
-    "cards_with_3_german_chips": true,
-    "cards_with_3_dari_chips": true,
-    "dynamic_language_chips_present": true,
-    "playback_renders_chips_for_current_language": true,
-    "mobile_dari_limitation_warning_present": true,
-    "dari_fallbacks_present": true
+    "verb_cards_with_3_english_synonyms": true,
+    "verb_cards_with_3_german_synonyms": true,
+    "verb_cards_with_3_dari_synonyms": true,
+    "non_verbs_have_no_bottom_synonyms": true,
+    "v6_voice_engine_restored": true,
+    "no_cloud_or_arabic_fallback_in_dari_path": true,
+    "card_bottom_hidden_for_non_verbs": true,
+    "playback_chips_follow_current_language": true,
+    "cache_busting_v13": true
   },
   "lists": {
     "B2 all 12 units": 1629,
     "Irregular verbs": 150,
     "B1 Plus 7 Units": 475
   },
-  "known_limit": "Mobile Dari remains dependent on whether the phone/browser exposes a Dari/Persian/Farsi voice. This package has the strongest static fallback and is ready for bundled audio/cloud TTS, but cannot create a missing voice on a phone."
+  "fixes": [
+    "Dari pronunciation path restored to the simpler v6-compatible speechSynthesis logic.",
+    "Removed Arabic/mobile fallback path added in later versions that could break Dari on the user phone.",
+    "Only verb cards show bottom synonym chips.",
+    "Noun and non-verb cards show no bottom synonym text.",
+    "Verb chips switch by spoken/front language: German chips, English chips, Dari chips."
+  ]
 }

@@ -37,3 +37,5 @@ details+details{margin-top:.8rem}
 @media(max-width:420px){.playRow,.navRow,.testRow{grid-template-columns:1fr 1fr 1fr;gap:.4rem}button,.fileBtn{padding:.7rem .65rem}.quickControls,.settings,.answer{padding:.8rem;border-radius:20px}}
 
 .frontSynonyms[dir="rtl"],.synChips[dir="rtl"]{direction:rtl;text-align:right}.frontSynonyms[dir="rtl"] span,.synChips[dir="rtl"] span{font-size:1.05rem}
+
+.cardBottom.hidden{display:none}.miniCard.hidden{display:none!important}
