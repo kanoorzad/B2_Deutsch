@@ -1,5 +1,5 @@
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v7';
+const STORE='b2-native-cards-extra-v8';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[];
@@ -10,6 +10,7 @@ let playing=false;
 let paused=false;
 let playQueue=[];
 let playIndex=0;
+let currentPlaybackPart=0;
 
 const $=id=>document.getElementById(id);
 const els={
@@ -27,22 +28,28 @@ const els={
 };
 
 function unique(arr){return [...new Set(arr.filter(Boolean))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}))}
-function norm(s){return String(s||'').toLowerCase().trim()}
 function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function norm(s){return String(s||'').toLowerCase().trim()}
 function textOf(c){return [c.list,c.unit,c.part,c.category,c.german,c.english,c.dari,c.article,c.singular,c.plural,c.example,...Object.values(c.forms||{}),...(c.synonyms||[])].join(' ').toLowerCase()}
 function displayGerman(c){return [c.article,c.singular||c.german].filter(Boolean).join(' ')||c.german||'—'}
 function twoSynonyms(c){return ((c.synonyms_en&&c.synonyms_en.length?c.synonyms_en:c.synonyms)||[]).filter(Boolean).slice(0,2)}
-function setDirForFront(lang){if(lang==='fa')els.frontText.setAttribute('dir','rtl'); else els.frontText.removeAttribute('dir')}
+function setDirForLang(lang){if(lang==='fa')els.frontText.setAttribute('dir','rtl'); else els.frontText.removeAttribute('dir')}
 
-function formsText(c){
+function formStep(c){
   const f=c.forms||{};
-  if(c.category==='noun' && c.plural) return {txt:'Plural: '+c.plural, sub:'German plural', lang:'de'};
+  if(c.category==='noun' && c.plural){
+    return {text:c.plural, label:'German plural', sub:'Slow German pronunciation', lang:'de'};
+  }
   if(c.category==='verb'){
     const parts=[];
     if(f.infinitive) parts.push('Infinitiv: '+f.infinitive);
     if(f.past) parts.push('Präteritum: '+f.past);
     if(f.perfect) parts.push('Perfekt: '+f.perfect);
-    if(parts.length) return {txt:parts.join(' · '), sub:'German verb forms', lang:'de'};
+    if(f.plusquamperfekt) parts.push('Plusquamperfekt: '+f.plusquamperfekt);
+    if(parts.length){
+      const text=parts.join(' · ');
+      return {text, label:'German verb forms', sub:'Slow German pronunciation', lang:'de'};
+    }
   }
   return null;
 }
@@ -71,48 +78,31 @@ function apply(){
   flipped=false;
   render();
 }
-function getFront(c){
+function getManualFront(c){
   let mode=els.front.value;
   if(mode==='random')mode=['german','english','dari','plural'][Math.floor(Math.random()*4)];
-  if(mode==='english')return {txt:c.english||'—',h:'US English',sub:'Medium speed',lang:'en'};
-  if(mode==='dari')return {txt:c.dari||'—',h:'Dari',sub:'Medium speed',lang:'fa'};
+  if(mode==='english')return {text:c.english||'—',label:'US English',sub:'Medium speed',lang:'en'};
+  if(mode==='dari')return {text:c.dari||'—',label:'Dari',sub:'Medium speed',lang:'fa'};
   if(mode==='plural'){
-    const ft=formsText(c);
-    return ft ? {txt:ft.txt,h:ft.sub,sub:'German slow speed',lang:'de'} : {txt:'No plural/forms for this card',h:'Plural / forms',sub:'',lang:'de'};
+    const fs=formStep(c);
+    return fs || {text:'No plural/forms for this card',label:'Plural / forms',sub:'',lang:'de'};
   }
-  return {txt:displayGerman(c),h:'German word with article',sub:'Slow German pronunciation',lang:'de'};
+  return {text:displayGerman(c),label:'German word with article',sub:'Slow German pronunciation',lang:'de'};
 }
 
 function renderSynonyms(c){
   const syns=twoSynonyms(c);
-  const html=syns.map(s=>`<span>${esc(s)}</span>`).join('');
-  els.syn.innerHTML=html || '—';
-  els.frontSyn.innerHTML=html || '<span>—</span>';
+  const html=syns.map(s=>`<span>${esc(s)}</span>`).join('') || '<span>—</span>';
+  els.frontSyn.innerHTML=html;
+  els.syn.innerHTML=html;
 }
-
-function render(){
-  const c=filtered[idx];
-  if(!c){
-    els.frontText.textContent='No cards';
-    els.frontHint.textContent='Change filters or add cards.';
-    els.frontSub.textContent='';
-    els.frontSyn.innerHTML='<span>—</span>';
-    els.answer.classList.add('hidden');
-    els.count.textContent='0 / 0';
-    els.bar.style.width='0';
-    return;
-  }
-
-  lastFront=getFront(c);
-  setDirForFront(lastFront.lang);
-  els.frontText.textContent=lastFront.txt||'—';
-  els.frontHint.textContent=lastFront.h;
-  els.frontSub.textContent=lastFront.sub||'';
+function renderChips(c){
   els.chipList.textContent=c.list||'—';
   els.chipUnit.textContent=c.unit||'—';
   els.chipPart.textContent=c.part||'—';
   els.chipType.textContent=c.category||'—';
-
+}
+function renderDetails(c){
   els.de.textContent=displayGerman(c)+(c.plural?` · plural: ${c.plural}`:'');
   els.en.textContent=c.english||'—';
   els.fa.textContent=c.dari||'—';
@@ -131,12 +121,36 @@ function render(){
   els.perf.textContent=f.perfect||'—';
   els.plus.textContent=f.plusquamperfekt||'—';
   els.verbQuality.textContent=(c.quality&&c.quality.verbForms)?`Form source: ${c.quality.verbForms}`:'';
-
   renderSynonyms(c);
   els.ex.textContent=c.example||'—';
+}
+function renderProgress(){
+  els.count.textContent=filtered.length?`${idx+1} / ${filtered.length}`:'0 / 0';
+  els.bar.style.width=filtered.length?`${((idx+1)/filtered.length)*100}%`:'0';
+}
+
+function render(){
+  const c=filtered[idx];
+  if(!c){
+    els.frontText.textContent='No cards';
+    els.frontHint.textContent='Change filters or add cards.';
+    els.frontSub.textContent='';
+    els.frontSyn.innerHTML='<span>—</span>';
+    els.answer.classList.add('hidden');
+    renderProgress();
+    return;
+  }
+  const f=getManualFront(c);
+  lastFront=f;
+  renderChips(c);
+  renderDetails(c);
+  setDirForLang(f.lang);
+  els.frontText.textContent=f.text||'—';
+  els.frontHint.textContent=f.label;
+  els.frontSub.textContent=f.sub||'';
   els.answer.classList.toggle('hidden',!flipped);
-  els.count.textContent=`${idx+1} / ${filtered.length}`;
-  els.bar.style.width=`${((idx+1)/filtered.length)*100}%`;
+  els.card.classList.toggle('playing',playing);
+  renderProgress();
 }
 
 function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=false;render()}
@@ -154,9 +168,7 @@ function pickVoice(lang){
          vs.find(v=>v.lang&&v.lang.startsWith(prefix))||
          (lang==='fa'?vs.find(v=>v.lang&&v.lang.startsWith('fa')):null);
 }
-function say(text, lang='de', done=()=>{}){
-  if(!text){done();return}
-  if(!('speechSynthesis'in window)){alert('Speech is not supported in this browser.');done();return}
+function makeUtterance(text,lang,done){
   const u=new SpeechSynthesisUtterance(text);
   u.lang=lang==='de'?'de-DE':lang==='en'?'en-US':'fa-AF';
   u.rate=lang==='de'?0.64:0.92;
@@ -165,50 +177,61 @@ function say(text, lang='de', done=()=>{}){
   if(v)u.voice=v;
   u.onend=done;
   u.onerror=done;
+  return u;
+}
+function say(text,lang='de',done=()=>{}){
+  if(!text){done();return}
+  if(!('speechSynthesis'in window)){alert('Speech is not supported in this browser.');done();return}
   speechSynthesis.cancel();
-  speechSynthesis.speak(u);
+  speechSynthesis.speak(makeUtterance(text,lang,done));
 }
-function queueSay(text, lang='de', done=()=>{}){
+function queueSay(text,lang='de',done=()=>{}){
   if(!text){done();return}
   if(!('speechSynthesis'in window)){alert('Speech is not supported in this browser.');done();return}
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang=lang==='de'?'de-DE':lang==='en'?'en-US':'fa-AF';
-  u.rate=lang==='de'?0.64:0.92;
-  u.pitch=1;
-  const v=pickVoice(lang);
-  if(v)u.voice=v;
-  u.onend=done;
-  u.onerror=done;
-  speechSynthesis.speak(u);
+  speechSynthesis.speak(makeUtterance(text,lang,done));
 }
-function speakFront(){if(lastFront)say(lastFront.txt,lastFront.lang)}
+function speakFront(){if(lastFront)say(lastFront.text,lastFront.lang)}
 
 function cardScript(c){
   const steps=[];
-  if(els.playDe.checked) steps.push({t:displayGerman(c),l:'de',label:'German word with article',sub:'Slow German'});
+  if(els.playDe.checked) steps.push({text:displayGerman(c), lang:'de', label:'German word with article', sub:'Slow German pronunciation'});
   if(els.playForms.checked){
-    const ft=formsText(c);
-    if(ft) steps.push({t:ft.txt,l:'de',label:ft.sub,sub:'Slow German'});
+    const fs=formStep(c);
+    if(fs) steps.push(fs);
   }
-  if(els.playEn.checked&&c.english) steps.push({t:c.english,l:'en',label:'US English',sub:'Medium speed'});
-  if(els.playFa.checked&&c.dari) steps.push({t:c.dari,l:'fa',label:'Dari',sub:'Medium speed'});
-  return steps.filter(x=>x.t&&String(x.t).trim()&&String(x.t).trim()!=='—');
+  if(els.playEn.checked&&c.english) steps.push({text:c.english, lang:'en', label:'US English', sub:'Medium pronunciation'});
+  if(els.playFa.checked&&c.dari) steps.push({text:c.dari, lang:'fa', label:'Dari', sub:'Medium pronunciation'});
+  return steps.filter(x=>x.text&&String(x.text).trim()&&String(x.text).trim()!=='—');
 }
-function renderPlaybackCard(item, partIdx){
+
+function renderPlaybackStep(item, partIdx){
   const c=item.card;
   const p=item.parts[partIdx];
+
+  // Critical fix: during playback, do NOT call normal render() after setting the step.
+  // Normal render is affected by the manual "Card front" dropdown.
+  // This function writes the visible text directly from the same object sent to TTS.
   idx=Math.max(0,filtered.indexOf(c));
   flipped=false;
-  render();
+  playing=true;
+  currentPlaybackPart=partIdx;
+
+  renderChips(c);
+  renderDetails(c);
+  renderProgress();
+
+  setDirForLang(p.lang);
   els.card.classList.add('playing');
-  setDirForFront(p.l);
-  els.frontText.textContent=p.t||'—';
-  els.frontHint.textContent=`Card ${item.cardNo}/${item.totalCards} · ${p.label}`;
+  els.answer.classList.add('hidden');
+  els.frontText.textContent=p.text;
+  els.frontHint.textContent=`Card ${item.cardNo}/${item.totalCards} · Step ${partIdx+1}/${item.parts.length} · ${p.label}`;
   els.frontSub.textContent=p.sub||'';
-  renderSynonyms(c);
-  const langName=p.l==='de'?'German':p.l==='en'?'US English':'Dari';
-  els.now.textContent=`Playing card ${item.cardNo}/${item.totalCards}, step ${partIdx+1}/${item.parts.length}: ${displayGerman(c)} → ${langName}`;
+  lastFront={text:p.text,lang:p.lang,label:p.label,sub:p.sub};
+
+  const langName=p.lang==='de'?'German':p.lang==='en'?'US English':'Dari';
+  els.now.textContent=`Playing card ${item.cardNo}/${item.totalCards}: ${langName} — ${p.text}`;
 }
+
 function playSelected(){
   if(!filtered.length)return;
   stop(false);
@@ -232,9 +255,9 @@ function playNextPart(partIdx){
   if(paused)return;
   const item=playQueue[playIndex];
   if(partIdx>=item.parts.length){playIndex++;playNextPart(0);return}
-  renderPlaybackCard(item,partIdx);
-  const p=item.parts[partIdx];
-  setTimeout(()=>queueSay(p.t,p.l,()=>setTimeout(()=>playNextPart(partIdx+1),520)),150);
+  const part=item.parts[partIdx];
+  renderPlaybackStep(item,partIdx);
+  setTimeout(()=>queueSay(part.text,part.lang,()=>setTimeout(()=>playNextPart(partIdx+1),520)),170);
 }
 function pauseResume(){
   if(!playing||!('speechSynthesis'in window))return;
@@ -254,6 +277,7 @@ function stop(doRender=true){
   paused=false;
   playQueue=[];
   playIndex=0;
+  currentPlaybackPart=0;
   if('speechSynthesis'in window)speechSynthesis.cancel();
   els.pauseList.textContent='Pause';
   els.now.textContent='Not playing.';
@@ -287,10 +311,9 @@ function updateVoiceStatus(){
     els.voiceDe.textContent=els.voiceEn.textContent=els.voiceFa.textContent='Speech not supported';
     return;
   }
-  const de=pickVoice('de'), en=pickVoice('en'), fa=pickVoice('fa');
-  els.voiceDe.textContent=voiceLabel(de);
-  els.voiceEn.textContent=voiceLabel(en);
-  els.voiceFa.textContent=voiceLabel(fa);
+  els.voiceDe.textContent=voiceLabel(pickVoice('de'));
+  els.voiceEn.textContent=voiceLabel(pickVoice('en'));
+  els.voiceFa.textContent=voiceLabel(pickVoice('fa'));
 }
 
 function addCard(e){
@@ -340,7 +363,7 @@ els.search.addEventListener('input',apply);
 els.next.addEventListener('click',next);
 els.prev.addEventListener('click',prev);
 els.flip.addEventListener('click',flip);
-els.card.addEventListener('click',flip);
+els.card.addEventListener('click',()=>{if(!playing)flip()});
 els.speakFront.addEventListener('click',speakFront);
 els.playList.addEventListener('click',playSelected);
 els.pauseList.addEventListener('click',pauseResume);
@@ -352,9 +375,9 @@ els.theme.addEventListener('click',()=>document.body.classList.toggle('dark'));
 els.install.addEventListener('click',()=>els.help.showModal());
 els.closeHelp.addEventListener('click',()=>els.help.close());
 els.voiceBtn.addEventListener('click',()=>document.querySelector('.tools details:nth-of-type(2)').open=true);
-els.testDe.addEventListener('click',()=>say('der Beruf, die Berufe','de'));
-els.testEn.addEventListener('click',()=>say('career, profession','en'));
-els.testFa.addEventListener('click',()=>say('مسلک؛ شغل','fa'));
+els.testDe.addEventListener('click',()=>say('die Abteilung','de'));
+els.testEn.addEventListener('click',()=>say('department','en'));
+els.testFa.addEventListener('click',()=>say('بخش؛ دیپارتمنت','fa'));
 document.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()=>{
   const c=filtered[idx];if(!c)return;
   if(b.dataset.say==='de')say(displayGerman(c),'de');
@@ -363,7 +386,7 @@ document.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()
 }));
 document.addEventListener('keydown',e=>{
   if(e.target.matches('input,select,textarea'))return;
-  if(e.code==='Space'){e.preventDefault();flip()}
+  if(e.code==='Space'){e.preventDefault();if(!playing)flip()}
   if(e.code==='ArrowRight')next();
   if(e.code==='ArrowLeft')prev();
 });
@@ -371,6 +394,6 @@ if('speechSynthesis'in window){
   speechSynthesis.onvoiceschanged=()=>updateVoiceStatus();
   setTimeout(updateVoiceStatus,500);
 }
-if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js?v=8').catch(()=>{});
 setup();
 apply();

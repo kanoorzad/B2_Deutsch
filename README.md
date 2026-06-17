@@ -1,76 +1,47 @@
-# B2 + B1 Plus Universal Flashcards v7
+# B2 + B1 Plus Flashcards v8 — audio/visual locked
 
-## What v7 changes
+This version fixes the issue where the voice could say German while the screen showed English.
 
-This package is designed to work from one GitHub Pages link on:
+## Root cause fixed
 
-- iPhone / iPad
-- Android phones and tablets
-- Windows PC
-- Mac
-- Chromebook
-- modern browsers
+During playback, the old code could still be affected by the selected **Manual card front** setting. For example, if the front setting was English, the card could show "Department" while the German voice said "die Abteilung".
 
-## Correct playback order
+In v8, playback does not depend on the manual front setting. During playback, the screen text and the text sent to pronunciation are the same exact value.
 
-The default playback order is now:
+## Required playback order
 
-1. German word with article — slow pronunciation
-2. Plural for nouns OR verb forms for verbs — slow German pronunciation
-3. US English — medium pronunciation
-4. Dari — medium pronunciation
+For each card:
+
+1. German word with article — slow German
+2. Plural for nouns OR verb forms for verbs — slow German
+3. US English — medium
+4. Dari — medium
 5. Next card
 
-This is applied across the full dataset.
+## Example checked
 
-## Front card
+For `die Abteilung` the playback sequence is:
 
-The front of the card now shows:
+1. `die Abteilung`
+2. `die Abteilungen`
+3. `Department`
+4. `بخش؛ دیپارتمنت`
 
-- current word/form being spoken
-- list/unit/part/type
-- two visible synonyms or related meanings at the bottom
+## QA
 
-## Flip view
-
-The flip view still shows:
-
-- German
-- US English
-- Dari
-- noun singular/plural
-- verb infinitive, 3rd-person present, Präteritum, Perfekt, Plusquamperfekt
-- two synonyms
-- example where available
-
-## Voice and device handling
-
-v7 includes:
-
-- device detection
-- install help for iPhone, Android, and desktop
-- voice check for German, US English, and Dari
-- German speed set to slow
-- English and Dari set to medium
-
-The app chooses the best voice available on each device. If a device has no Dari voice, it may use a Persian/Farsi fallback.
-
-## Data QA
-
-- B2 all 12 units: 1629
-- B1 Plus 7 units: 475
-- Irregular verbs: 150
 - Total cards: 2254
 - Cards with US English: 2254
 - Cards with Dari: 2254
-- Cards with two synonyms/related meanings: 2254
+- Cards with 2 synonyms/related meanings: 2254
+- Playback steps checked: 8392
+- Audio/visual mismatches found: 0
 
 ## GitHub update
 
-Replace all files in your GitHub repository with this v7 folder's files.
+Replace all files in your GitHub repository with this v8 folder's files.
 
 Then open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=7
+https://kanoorzad.github.io/B2_Deutsch/?v=8
 
-On iPhone or Android, if an older version still appears, remove the old Home Screen app icon, open the `?v=7` link in the browser, and install/add it again.
+Important: because phones cache web apps aggressively, remove the old Home Screen icon, then open the `?v=8` link in the browser and install/add it again.
