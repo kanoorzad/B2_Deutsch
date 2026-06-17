@@ -1,19 +1,23 @@
-# B2 + B1 Plus Native Flashcards v4
+# B2 + B1 Plus Flashcards v6
 
-This is the corrected version.
+This version is the cleaner, more readable version.
 
-## Fixed in v4
+## Main improvements
 
-1. **Screen/audio synchronization**
-   - During "Play selected list", the card on screen now changes at the same time as the audio.
-   - The big card text also changes to the exact part being spoken: German, plural, verb form, US English, or Dari.
-
-2. **Irregular verbs translations**
-   - The irregular verb reference list now has US English and Dari meanings.
-   - Irregular verbs also have related meanings/synonyms.
-
-3. **Cache refresh**
-   - Service worker version changed to `v40-screen-sync`, so GitHub Pages/iPhone can load the corrected files.
+- The interface is less crowded.
+- Study filters, listening controls, add-card form, and backup are grouped into collapsible sections.
+- When you flip a card, all three languages are clearly visible:
+  - German
+  - US English
+  - Dari
+- Dari is displayed right-to-left and with larger line spacing.
+- Synonyms are now visible as chips.
+- Playback order is strict:
+  1. German appears and is spoken
+  2. US English appears and is spoken
+  3. Dari appears and is spoken
+  4. Then the next card starts
+- Pause/Resume is now properly defined.
 
 ## Included data
 
@@ -21,22 +25,21 @@ This is the corrected version.
 - B1 Plus 7 units: 475
 - Irregular verbs: 150
 - Total cards: 2254
+- Cards with English: 2254
+- Cards with Dari: 2254
+- Cards with 2 synonyms/related meanings: 2254
 
-## Important GitHub update instruction
+## GitHub update
 
-Upload and replace **all files** in your GitHub repository with the files from this folder.
+Replace all files in your GitHub repository with this folder's files.
 
-Most important changed files:
-- `app.js`
-- `data.js`
-- `service-worker.js`
-- `index.html`
-- `styles.css`
-- `qa-report.json`
-- `README.md`
+Then open:
 
-After uploading, open your app with:
+https://kanoorzad.github.io/B2_Deutsch/?v=6
 
-`https://kanoorzad.github.io/B2_Deutsch/?v=4`
+On iPhone, if the old app still appears, delete the Home Screen icon, open the `?v=6` link in Safari, then add it to Home Screen again.
 
-If the iPhone Home Screen app still shows the old behavior, delete the old Home Screen icon and add it again from Safari.
+
+## v6 QA correction
+
+All cards now have German, US English, Dari, and two synonyms/related meanings.
