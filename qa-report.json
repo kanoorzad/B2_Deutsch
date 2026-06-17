@@ -1,5 +1,6 @@
 {
-  "version": "15.0",
+  "version": "16.0",
+  "base_source": "/mnt/data/b2_b1plus_flashcards_v15_mobile_dari_hold_retry",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -13,25 +14,24 @@
     "nonVerbCardsWithNoBottomSynonyms": 1604
   },
   "checks": {
-    "everything_else_kept_from_v14": true,
+    "version_badge_present": true,
+    "cache_busting_v16": true,
     "mobile_dari_minimum_hold_present": true,
-    "mobile_dari_retry_fa_af_fa_ir_fa_present": true,
-    "active_utterance_global_keeps_tts_alive": true,
-    "speech_resume_nudge_present": true,
+    "dari_ignores_early_onend": true,
+    "active_utterance_kept_alive": true,
+    "speech_resume_nudges": true,
+    "callbacks_invalidated_on_stop": true,
     "verb_cards_with_3_english_synonyms": true,
     "verb_cards_with_3_german_synonyms": true,
     "verb_cards_with_3_dari_synonyms": true,
-    "non_verbs_have_no_bottom_synonyms": true,
-    "initiative_line_present": true,
-    "edge_mobile_fit_rules_present": true,
-    "cache_busting_v15": true
+    "non_verbs_have_no_bottom_synonyms": true
   },
   "fixes": [
-    "Keeps all v14 layout/synonym behavior.",
-    "Fixes mobile Dari disappearing too fast by delaying progression for Dari on mobile.",
-    "Keeps the utterance object alive globally to avoid mobile browser garbage-collection audio loss.",
-    "Retries mobile Dari using fa-AF, fa-IR, and fa if the browser ends immediately.",
-    "Adds speechSynthesis.resume nudge for mobile browsers.",
-    "Adds extra mobile fit rules for Edge/Chrome width handling."
+    "Added small italic v16 marker at top right.",
+    "Dari on mobile now has a hard minimum visible hold before the app can advance.",
+    "Early mobile onend/onerror for Dari no longer immediately advances to the next text/card.",
+    "The active utterance object is kept globally to avoid mobile garbage-collection drops.",
+    "Stop invalidates old callbacks so old speech events cannot jump the card later.",
+    "Everything else from the previous version is preserved."
   ]
 }

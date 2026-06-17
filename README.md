@@ -1,25 +1,24 @@
-# B2 + B1 Plus Flashcards v15
+# B2 + B1 Plus Flashcards v16
 
-## Purpose
+## What v16 fixes
 
-This version keeps everything from v14, but fixes the mobile Dari behavior you reported: the Dari text disappeared very fast with no voice.
+This version keeps the previous behavior and focuses only on the mobile Dari timing issue.
 
-## Dari mobile fix
+### Dari mobile issue
 
-v15 changes only the speech engine behavior:
+On mobile browsers, `speechSynthesis` can fire `onend` or `onerror` immediately for `fa-AF` even when no sound is produced. That made the Dari text disappear faster than German/English.
 
-- keeps the spoken Dari text visible for a minimum time on mobile
-- keeps the utterance object alive globally so mobile browsers do not drop the audio
-- retries Dari on mobile with `fa-AF`, then `fa-IR`, then `fa` if the browser ends immediately
-- nudges `speechSynthesis.resume()` for iOS/Android browser speech queues
-- keeps the same medium speed for Dari
+v16 changes this:
 
-## Everything else remains
+- Dari text has a hard minimum visible hold on mobile.
+- Early Dari `onend` / `onerror` cannot advance the card immediately.
+- The active utterance object is kept globally.
+- The app sends small `speechSynthesis.resume()` nudges on mobile.
+- Stop invalidates old callbacks.
 
-- Verb-only synonym chips remain.
-- Nouns and non-verbs still show no bottom synonym text.
-- Edge/mobile fit rules remain.
-- Initiative line remains.
+### Version marker
+
+A small italic `v16` appears at the top right of the app.
 
 ## QA
 
@@ -31,6 +30,12 @@ v15 changes only the speech engine behavior:
 - Verb cards with 3 Dari synonyms: 650
 - Non-verbs with no bottom synonym text: 1604
 
-## Open
+## GitHub update
 
-https://kanoorzad.github.io/B2_Deutsch/?v=15
+Replace all files with this v16 folder.
+
+Open:
+
+https://kanoorzad.github.io/B2_Deutsch/?v=16
+
+Delete old mobile Home Screen icons before testing.
