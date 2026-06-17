@@ -1,25 +1,19 @@
-# B2 + B1 Plus Flashcards v19
+# B2 + B1 Plus Flashcards v20
 
-## Root cause addressed
+## Root-cause refinement
 
-Desktop browsers can expose a usable Dari/Persian/Farsi voice to Web Speech, so Dari works on the computer.
+v19 used an online `<audio>` fallback, but the audio element had `crossOrigin='anonymous'`. Remote TTS endpoints often do not provide CORS headers, so mobile browsers can block playback.
 
-Mobile browsers can accept `fa-AF` but end the utterance immediately or expose no usable Dari voice. That is why the text disappears and no audio is heard.
+v20 removes CORS mode completely.
 
-## v19 solution
+## v20 Dari mobile changes
 
-- German and English stay on the stable v6-style Web Speech playback.
-- Desktop Dari stays on Web Speech.
-- Mobile Dari now uses an online `<audio>` fallback.
-- If online audio fails, the app falls back to browser TTS and keeps the text visible.
-
-## Kept unchanged
-
-- Verb-only synonyms.
-- No bottom synonyms for nouns/non-verbs.
-- Initiative line.
-- Edge/mobile layout fit.
-- Top-right version marker.
+- no `crossOrigin` on audio
+- multiple online TTS URL formats
+- `audio.load()` before `audio.play()`
+- Play button primes audio on mobile
+- fallback to browser TTS if online audio fails
+- German/English remain on stable v6-style Web Speech
 
 ## QA
 
@@ -34,10 +28,10 @@ Mobile browsers can accept `fa-AF` but end the utterance immediately or expose n
 
 ## GitHub update
 
-Replace all files with this v19 folder.
+Replace all files with this v20 folder.
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=19
+https://kanoorzad.github.io/B2_Deutsch/?v=20
 
-Delete the old mobile Home Screen icon before testing.
+Delete old mobile Home Screen icons before testing.

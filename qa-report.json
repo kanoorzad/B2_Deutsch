@@ -1,6 +1,6 @@
 {
-  "version": "19.0",
-  "base": "v18 with mobile-Dari online audio fallback",
+  "version": "20.0",
+  "base": "v18 with no-CORS multi-source mobile Dari audio",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -16,22 +16,22 @@
   "checks": {
     "javascript_syntax_ok": true,
     "version_badge_present": true,
-    "cache_busting_v19": true,
-    "german_english_still_use_web_speech": true,
-    "mobile_dari_uses_online_audio": true,
+    "cache_busting_v20": true,
+    "no_crossorigin_on_audio": true,
+    "mobile_dari_multi_audio_urls": true,
+    "mobile_dari_audio_load_before_play": true,
     "dari_audio_unlocked_from_play_button": true,
-    "fallback_to_browser_tts_if_online_audio_fails": true,
-    "stop_pauses_dari_audio": true,
+    "fallback_to_browser_tts": true,
+    "german_english_still_web_speech": true,
     "verb_cards_with_3_english_synonyms": true,
     "verb_cards_with_3_german_synonyms": true,
     "verb_cards_with_3_dari_synonyms": true,
     "non_verbs_have_no_bottom_synonyms": true
   },
   "node_check_stderr": "",
-  "root_cause_summary": [
-    "Desktop has a usable Web Speech voice for fa-AF/fa, so Dari works.",
-    "Mobile browsers can accept fa-AF but return end/error without audio or no usable voice.",
-    "v19 stops relying on mobile Web Speech for Dari and uses HTMLAudioElement online audio fallback on mobile only.",
-    "German/English remain on the stable v6-style Web Speech path."
+  "root_cause_refinement": [
+    "v19 used HTMLAudio but set crossOrigin='anonymous'; remote TTS often lacks CORS headers, so mobile can block the load.",
+    "v20 removes crossOrigin completely and uses a normal media element load, which is allowed without CORS for playback.",
+    "v20 tries several TTS URL formats before falling back to browser Web Speech."
   ]
 }
