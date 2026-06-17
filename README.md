@@ -1,32 +1,39 @@
-# B2 + B1 Plus Flashcards v24
+# B2 + B1 Plus Flashcards v25
 
-v24 keeps v20 as the base and changes the Dari voice solution only.
+## Root-cause fix
 
-## Main change
+v24 used bundled MP3 files but still used `HTMLAudioElement.play()` later in the automatic sequence.
 
-Dari now uses bundled local MP3 files in `audio/fa/`.
+On mobile, that later programmatic play call can be blocked by autoplay/user-gesture rules even when it works on PC.
 
-This avoids mobile browser Web Speech limitations and avoids remote/online TTS blocking. German and English still use the existing browser voice playback.
+v25 changes only the Dari engine:
 
-## Important upload note
+- Dari uses bundled local MP3 files.
+- Dari MP3 files are decoded and played through Web Audio API.
+- The Web Audio engine is unlocked directly from the Play/Test button tap.
+- HTML audio is kept only as a fallback.
+- German and English remain on browser Web Speech.
 
-You must upload the full `audio/fa/` folder together with the other files. If the audio folder is missing, Dari cannot play.
+## Important
+
+Upload the full `audio/fa/` folder.
 
 ## QA
 
 - JavaScript syntax: OK
 - Total cards: 2254
+- Dari cards with bundled audio: 2254
 - Unique Dari audio files: 2025
-- MP3 files including test/silence: 2027
-- Audio folder size: 23.8 MB
 - Missing Dari audio files: 0
-- Verb cards with 3 German synonyms: 650
-- Verb cards with 3 English synonyms: 650
-- Verb cards with 3 Dari synonyms: 650
-- Non-verbs with no bottom synonym text: 1604
+- Web Audio API path: enabled
+- Remote TTS: removed
 
-Open after upload:
+## GitHub update
 
-```text
-https://kanoorzad.github.io/B2_Deutsch/?v=24
-```
+Replace all files with this v25 folder.
+
+Open:
+
+https://kanoorzad.github.io/B2_Deutsch/?v=25
+
+Delete old mobile Home Screen icons before testing.

@@ -1,6 +1,6 @@
 {
-  "version": "24.0",
-  "base": "v20 layout/features with bundled local Dari MP3 audio files",
+  "version": "25.0",
+  "base": "v24/v20 design with bundled audio, Dari engine changed from HTMLAudioElement to Web Audio API",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -15,23 +15,16 @@
     "verbCardsWith3DariSynonyms": 650,
     "nonVerbCardsWithNoBottomSynonyms": 1604
   },
-  "audio": {
-    "unique_dari_texts": 2025,
-    "mp3_files_including_silence_and_test": 2027,
-    "audio_folder_mb": 23.8,
-    "missing_audio_for_dari_cards": 0
-  },
   "checks": {
     "javascript_syntax_ok": true,
     "version_badge_present": true,
-    "cache_busting_v24": true,
-    "cards_have_audio_fa": true,
-    "all_unique_audio_files_exist": true,
-    "dari_uses_bundled_local_audio": true,
+    "cache_busting_v25": true,
+    "dari_uses_webaudio_api": true,
+    "unlock_called_from_play_button_before_stop": true,
+    "test_dari_unlocks_before_play": true,
+    "html_audio_only_fallback": true,
+    "local_dari_audio_files_exist": true,
     "no_remote_tts": true,
-    "no_audio_cors": true,
-    "playnext_passes_audio": true,
-    "speak_buttons_pass_dari_audio": true,
     "german_english_still_web_speech": true,
     "verb_cards_with_3_english_synonyms": true,
     "verb_cards_with_3_german_synonyms": true,
@@ -39,9 +32,11 @@
     "non_verbs_have_no_bottom_synonyms": true
   },
   "node_check_stderr": "",
-  "root_cause_resolution": [
-    "Mobile Web Speech is not dependable for Dari/Farsi even when desktop works.",
-    "Remote online TTS can be blocked on mobile.",
-    "v24 bundles local MP3 files and plays them from the same GitHub Pages site."
+  "missing_audio_count": 0,
+  "diagnosis": [
+    "v24 used HTMLAudioElement.play() later in an automatic sequence.",
+    "Mobile browsers can block programmatic media playback unless the audio system is unlocked by a user gesture.",
+    "v25 unlocks a Web Audio AudioContext directly from Play/Test taps, then plays bundled MP3 buffers through that running context.",
+    "This removes mobile Web Speech and remote audio from the Dari path."
   ]
 }
