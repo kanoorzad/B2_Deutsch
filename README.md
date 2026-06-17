@@ -1,22 +1,31 @@
-# B2 + B1 Plus Flashcards v17
+# B2 + B1 Plus Flashcards v18
 
-## What v17 does
+## Main fix
 
-This version rolls back the broken v16 playback rewrite and returns to the stable v14 playback structure.
+v18 restores the playback kernel from the working v5/v6 versions.
 
-Only one targeted change is added:
+I compared the later versions against v5/v6 and changed the playback path back to:
 
-- On mobile Dari, early `onend` / `onerror` events cannot immediately advance the card.
-- The Dari text remains visible for a minimum reading time.
-- German and English playback are handled by the stable engine.
+- `cardScript()` uses v6-style command objects: `{t, l, label}`
+- `playNextPart()` calls: `say(p.t, p.l, ...)`
+- `say()` uses direct `new SpeechSynthesisUtterance(text)`
+- Dari uses `fa-AF`
+- no mobile hold timer
+- no retry loop
+- no unlock utterance
+- no cleanup/transformation of Dari text before speech
 
-## Version marker
+## Kept from the current version
 
-A small italic `v17` is visible at the top right.
+- Verb-only synonyms
+- No bottom synonym text for nouns/non-verbs
+- Initiative line
+- Edge/mobile fit
+- Top-right version marker
 
 ## QA
 
-- JavaScript syntax check: OK
+- JavaScript syntax: OK
 - Total cards: 2254
 - Verb cards: 650
 - Non-verb cards: 1604
@@ -27,10 +36,10 @@ A small italic `v17` is visible at the top right.
 
 ## GitHub update
 
-Replace all files with this v17 folder.
+Replace all files with this v18 folder.
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=17
+https://kanoorzad.github.io/B2_Deutsch/?v=18
 
-Delete the old mobile Home Screen icon before testing.
+Delete old mobile Home Screen icons before testing.

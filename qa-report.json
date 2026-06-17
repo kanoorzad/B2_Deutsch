@@ -1,6 +1,6 @@
 {
-  "version": "17.0",
-  "base_source": "v14 stable rollback",
+  "version": "18.0",
+  "base": "v14 UI/data with v6 playback kernel restored",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -16,23 +16,23 @@
   "checks": {
     "javascript_syntax_ok": true,
     "version_badge_present": true,
-    "cache_busting_v17": true,
-    "stable_playback_engine_restored": true,
-    "mobile_dari_hold_present": true,
-    "mobile_dari_early_events_do_not_advance": true,
-    "active_utterance_kept_alive": true,
+    "cache_busting_v18": true,
+    "say_matches_v6_pattern": true,
+    "play_next_matches_v6_pattern": true,
+    "card_script_uses_v6_t_l_commands": true,
+    "no_mobile_hold_timer": true,
+    "no_unlock_utterance": true,
     "verb_cards_with_3_english_synonyms": true,
     "verb_cards_with_3_german_synonyms": true,
     "verb_cards_with_3_dari_synonyms": true,
     "non_verbs_have_no_bottom_synonyms": true
   },
   "node_check_stderr": "",
-  "fixes": [
-    "Rolled back the v16 playback rewrite.",
-    "Restored the stable v14 play/queue structure so German and English playback are not broken.",
-    "For mobile Dari only, early onend/onerror events no longer advance the card.",
-    "Dari text is held on screen for a readable minimum time on mobile.",
-    "Added small italic v17 marker at the top right.",
-    "Kept verb-only synonym behavior and non-verb empty bottom area."
+  "comparison_summary": [
+    "v5/v6 used command objects {t,l,label}; later versions used {display,speech,lang}. v18 restores {t,l,label}.",
+    "v5/v6 called say(p.t,p.l,...) directly; v18 restores that direct call.",
+    "v5/v6 used new SpeechSynthesisUtterance(text) with fa-AF; v18 restores that exact path.",
+    "v15-v17 introduced mobile hold/retry/alternate callback logic; v18 removes it.",
+    "v18 keeps later UI, version marker, initiative line, Edge fit, and verb-only synonyms."
   ]
 }
