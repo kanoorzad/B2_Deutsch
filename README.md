@@ -1,28 +1,30 @@
-# B2 + B1 Plus Flashcards v30 — High-quality mapped Dari/Farsi audio
+# B2 + B1 Plus Flashcards v32 — Upload-safe clarity audio
 
-## What was wrong in v29
+## Why v32
 
-v29 proved the mobile audio path works, but two things made the Dari audio hard to understand:
+v31 improved clarity, but the downloaded ZIP was about 38 MB. GitHub web upload rejected it as too large.
 
-1. The single sprite was compressed to very low bitrate audio.
-2. The playback call did not pass the card's `audio_fa` reference, so the wrong audio segment could play.
+v32 keeps the working sprite design and improves clarity as much as possible while staying practical for GitHub web upload.
 
-## v30 fix
+## Audio settings
 
-v30 keeps the working mobile sprite design but rebuilds it for quality and accuracy:
+- Dari/Farsi: 4 sprite MP3 files
+- 56 kbps mono MP3
+- 44.1 kHz
+- Same card-to-audio mapping as v30/v31
+- German/English: improved native voice ranking and slower clarity rates from v31
 
-- uses the original MP3 clips without re-encoding (`ffmpeg -c copy`)
-- splits audio into 4 smaller high-quality sprite MP3 files
-- each sprite is about 6.28 MB, 6.3 MB, 6.28 MB, 6.31 MB
-- every Dari card now passes its own `audio_fa` reference into playback
-- no mobile Web Speech for Dari
-- no remote TTS
-- no audio/fa folder
-- no huge embedded JS audio chunks
+## File sizes
 
-## Required upload files
+- Largest sprite file: 7.36 MB
+- Total Dari sprite audio: 29.36 MB
+- All sprite files under 10 MB: True
 
-Upload all root files, especially:
+## Important upload instruction
+
+Extract the ZIP first. Do **not** upload the ZIP file itself to GitHub Pages.
+
+Upload these extracted root files:
 
 - dari-sprite-1.mp3
 - dari-sprite-2.mp3
@@ -34,22 +36,16 @@ Upload all root files, especially:
 - index.html
 - styles.css
 - service-worker.js
+- manifest.webmanifest
+- icon.svg
+
+Open:
+
+https://kanoorzad.github.io/B2_Deutsch/?v=32
 
 ## QA
 
 - JavaScript syntax: OK
 - Sprite files: 4
-- Total sprite audio size: 25.17 MB
-- Entries: 2025
-- Dari cards mapped: 2254 / 2254
-- Card audio reference passed to playback: yes
-- Source MP3 quality preserved: yes, no re-encoding
-
-Open:
-
-https://kanoorzad.github.io/B2_Deutsch/?v=30
-
-
-## Extra fix in final v30 build
-
-The page now loads `audio-index.js?v=30` before `app.js?v=30`, and every Dari playback step passes the card-specific `audio_fa` reference. This prevents the app from playing the wrong sprite segment.
+- Largest sprite: 7.36 MB
+- Total sprite audio: 29.36 MB

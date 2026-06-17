@@ -7,14 +7,14 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Cards v20">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=30">
-  <link rel="apple-touch-icon" href="icon.svg?v=30">
-  <link rel="stylesheet" href="styles.css?v=30">
+  <link rel="manifest" href="manifest.webmanifest?v=32">
+  <link rel="apple-touch-icon" href="icon.svg?v=32">
+  <link rel="stylesheet" href="styles.css?v=32">
   <title>B2 + B1 Plus Flashcards v20</title>
 </head>
 <body>
 <header class="hero">
-  <em class="versionBadge">v30</em>
+  <em class="versionBadge">v20</em>
   <h1>B2 + B1 Plus Flashcards</h1>
   <p>German · English · Dari</p>
   <p class="initiative"><em>Initiative by Khalid Noorzad for Afghan Students</em></p>
@@ -84,15 +84,15 @@
       <p class="voiceLine"><strong>Dari:</strong> <span id="voiceFa">—</span></p>
       <button id="unlockSpeech" class="wide">Refresh voices</button>
       <div class="testRow"><button id="testDe">Test German</button><button id="testEn">Test English</button><button id="testFa">Test Dari</button></div>
-      <p class="small">Dari/Farsi uses high-quality local MP3 sprite audio.</p>
+      <p class="small">Dari pronunciation uses the same direct browser voice method as the earlier working version.</p>
     </details>
     <details><summary>Add your own card</summary><form id="addForm"><div class="grid"><label>Type<select name="category"><option>noun</option><option>verb</option><option>adjective</option><option>phrase</option><option>other</option></select></label><label>Unit<input name="unit" placeholder="My list"></label></div><label>German<input name="german" required></label><div class="grid"><label>Article<input name="article" placeholder="der/die/das"></label><label>Plural<input name="plural"></label></div><div class="grid"><label>English<input name="english" required></label><label>Dari<input name="dari" required dir="rtl"></label></div><details><summary>Verb forms</summary><label>Infinitive<input name="infinitive"></label><label>Past / Präteritum<input name="past"></label><label>Perfekt<input name="perfect"></label><label>Plusquamperfekt<input name="plusquamperfekt"></label></details><label>Related meanings<input name="synonyms" placeholder="three verb synonyms, comma separated"></label><button class="primary">Add card</button></form></details>
     <details><summary>Backup</summary><div class="testRow"><button id="exportBtn">Export backup</button><label class="fileBtn">Import backup<input id="importJson" type="file" accept="application/json" hidden></label></div></details>
   </section>
 </main>
 
-<script src="data.js?v=30"></script>
-<script src="audio-index.js?v=30"></script>
-<script src="app.js?v=30"></script>
+<script src="data.js?v=32"></script>
+<script src="audio-index.js?v=32"></script>
+<script src="app.js?v=32"></script>
 </body>
 </html>

@@ -1,59 +1,20 @@
 {
-  "version": "30.0",
-  "base": "v29 working audio, rebuilt with lossless source-quality multi-sprite mapping fix",
-  "counts": {
-    "b2Entries": 1629,
-    "b1PlusEntries": 475,
-    "irregularVerbs": 150,
-    "totalCards": 2254,
-    "verbs": 650,
-    "nonVerbs": 1604,
-    "verbCardsWith3EnglishSynonyms": 650,
-    "verbCardsWith3GermanSynonyms": 650,
-    "verbCardsWith3DariSynonyms": 650,
-    "nonVerbCardsWithNoBottomSynonyms": 1604,
-    "dariCardsWithSpriteAudio": 2254,
-    "uniqueSpriteEntries": 2025,
-    "spriteFiles": 4,
-    "largestSpriteBytes": 6615671,
-    "totalSpriteBytes": 26389954
-  },
-  "sprite": {
-    "files": [
-      "dari-sprite-1.mp3",
-      "dari-sprite-2.mp3",
-      "dari-sprite-3.mp3",
-      "dari-sprite-4.mp3"
-    ],
-    "file_sizes_mb": [
-      6.28,
-      6.3,
-      6.28,
-      6.31
-    ],
-    "total_mb": 25.17,
-    "entries": 2025,
-    "source_audio_bitrate": "kept from original MP3 files using ffmpeg -c copy, no re-encoding"
-  },
+  "version": "32.0",
+  "base": "v31 audio quality design, recompressed to GitHub-web-upload-safe clarity",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_present": true,
-    "cache_busting_v30": true,
-    "uses_multi_sprite_index": true,
-    "no_reencoded_low_bitrate_single_sprite": true,
-    "card_script_passes_audio_ref": true,
-    "play_next_passes_audio_ref_to_say": true,
-    "last_front_keeps_audio_ref": true,
-    "tap_dari_passes_audio_ref": true,
-    "service_worker_caches_all_sprites": true,
-    "dari_cards_with_sprite_audio": true,
+    "sprite_files": 4,
+    "largest_sprite_mb": 7.36,
+    "total_sprite_mb": 29.36,
+    "all_sprite_files_under_10mb": true,
     "audio_index_loaded_before_app": true,
-    "all_sprites_exist": true
+    "cache_busting_v32": true,
+    "zip_mb": 22.45
   },
   "node_check_stderr": "",
-  "diagnosis": [
-    "v29 finally proved the mobile audio path works, but it used one very low-bitrate 16 kbps sprite.",
-    "v29 playback also did not pass each card audio_fa reference into the playback call, so many cards could play the wrong segment.",
-    "v30 fixes both: source-quality MP3 sprites with no re-encoding, and correct audio_fa mapping for every card."
+  "notes": [
+    "v31 ZIP was about 38 MB and failed GitHub web upload when uploaded as a single file.",
+    "v32 keeps the working sprite system with smaller, upload-safe 56 kbps MP3 sprites.",
+    "German/English high-quality device voice ranking from v31 is kept."
   ]
 }
