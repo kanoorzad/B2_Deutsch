@@ -1,5 +1,5 @@
 // v34: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v49AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh46=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh46='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+(function(){try{const key='v50AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh46=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh46='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
 const STORE='b2-native-cards-extra-v43';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
@@ -61,10 +61,9 @@ function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=f
 // v43 browser voice engine with brute-force Dari/Farsi mobile candidates.
 // Keeps v3-v6 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
 // No local sprite/WebAudio/remote TTS.
-// v49 direct browser speech engine.
-// Purpose: restore v6-style direct SpeechSynthesis for mobile Dari.
-// No online TTS, no provider router, no promise before speaking.
-// German/English use browser voices; Dari uses fa-AF tag first when no direct Persian voice is exposed.
+// v50 Dari voice restored to version-4 style.
+// Keep direct browser SpeechSynthesis. No online TTS, no audio sprites, no provider router.
+// The key v4-style behavior is direct utterance creation and direct speechSynthesis.speak().
 let activeUtterance=null;
 
 function voices(){
@@ -77,66 +76,57 @@ function voiceByKey(k){
   const [name,lang]=k.split('|||');
   return voices().find(v=>v.name===name && v.lang===lang) || null;
 }
-function isPremiumVoice(v){
-  return /premium|enhanced|natural|neural|online|siri|google|microsoft|compact/i.test((v&&v.name)||'');
-}
 function isFalseDariVoice(v){
   const name=((v&&v.name)||'').toLowerCase();
   const code=((v&&v.lang)||'').toLowerCase();
   return code==='bg-bg' || code.startsWith('bg') || /\bdaria\b|bulgarian|българ/i.test(name);
 }
-function scoreVoice(v, lang){
-  if(!v)return -9999;
-  const name=(v.name||'').toLowerCase();
-  const code=(v.lang||'').toLowerCase();
-  let score=0;
-  if(isPremiumVoice(v))score+=20;
+function isPremiumVoice(v){
+  return /premium|enhanced|natural|siri|google|microsoft|compact/i.test((v&&v.name)||'');
+}
 
+// v4-style voice picker: exact language first, then prefix.
+// For Dari/Farsi, still accept mobile Persian/Farsi variants if present, but do not use online fallback.
+function pickVoiceV4(lang){
+  const vs=voices();
   if(lang==='de'){
-    if(code==='de-de')score+=100;
-    else if(code.startsWith('de'))score+=70;
-    if(/german|deutsch/i.test(v.name))score+=20;
-  }else if(lang==='en'){
-    if(code==='en-us')score+=100;
-    else if(code.startsWith('en'))score+=70;
-    if(/english|us/i.test(v.name))score+=20;
-  }else if(lang==='fa'){
-    if(isFalseDariVoice(v))return -9999;
-    if(code==='fa-af')score+=160;      // v6-style Dari/Afghan tag preference
-    else if(code==='fa-ir')score+=150;
-    else if(code==='fa')score+=130;
-    else if(code.startsWith('fa'))score+=120;
-    else if(code==='prs-af'||code==='prs')score+=110;
-    if(/persian|farsi|\bdari\b|afghan|afghanistan|iran|iranian|فارسی|دری/i.test(v.name))score+=100;
-    if(code.startsWith('ar')||code.startsWith('ur')||code.startsWith('ps'))score-=100;
+    return vs.find(v=>v.lang==='de-DE'&&isPremiumVoice(v))||
+           vs.find(v=>v.lang==='de-DE')||
+           vs.find(v=>v.lang&&v.lang.startsWith('de'))||
+           null;
   }
-  return score;
+  if(lang==='en'){
+    return vs.find(v=>v.lang==='en-US'&&isPremiumVoice(v))||
+           vs.find(v=>v.lang==='en-US')||
+           vs.find(v=>v.lang&&v.lang.startsWith('en'))||
+           null;
+  }
+  // Dari/Farsi: version 4 direct browser method, with safer candidate ordering.
+  const faCandidates=vs.filter(v=>!isFalseDariVoice(v)).filter(v=>{
+    const s=((v.name||'')+' '+(v.lang||'')).toLowerCase();
+    return v.lang==='fa-AF' || v.lang==='fa-IR' || v.lang==='fa' ||
+           (v.lang&&v.lang.startsWith('fa')) ||
+           v.lang==='prs-AF' || v.lang==='prs' ||
+           /persian|farsi|\bdari\b|afghan|afghanistan|iranian|iran|فارسی|دری/i.test(s);
+  });
+  return faCandidates.find(v=>v.lang==='fa-AF'&&isPremiumVoice(v))||
+         faCandidates.find(v=>v.lang==='fa-AF')||
+         faCandidates.find(v=>v.lang==='fa-IR'&&isPremiumVoice(v))||
+         faCandidates.find(v=>v.lang==='fa-IR')||
+         faCandidates.find(v=>v.lang==='fa')||
+         faCandidates.find(v=>v.lang&&v.lang.startsWith('fa'))||
+         faCandidates[0]||
+         null;
 }
-function candidates(lang){
-  return voices().map(v=>({v,score:scoreVoice(v,lang)}))
-    .filter(x=>x.score>0)
-    .sort((a,b)=>b.score-a.score)
-    .map(x=>x.v);
-}
-function selectedVoice(lang){
-  // Fully automatic; no visible voice section required.
-  return candidates(lang)[0] || null;
-}
+function selectedVoice(lang){return pickVoiceV4(lang)}
 function populateVoiceSelect(lang){
   const select = lang==='de' ? els.voiceSelectDe : lang==='en' ? els.voiceSelectEn : els.voiceSelectFa;
   if(!select)return;
   select.innerHTML='';
-  const list=candidates(lang);
-  const auto=document.createElement('option');
-  auto.value='';
-  auto.textContent='Automatic';
-  select.appendChild(auto);
-  list.forEach(v=>{
-    const opt=document.createElement('option');
-    opt.value=voiceKey(v);
-    opt.textContent=voiceLabel(v);
-    select.appendChild(opt);
-  });
+  const opt=document.createElement('option');
+  opt.value='';
+  opt.textContent='Automatic';
+  select.appendChild(opt);
 }
 function populateAllVoiceSelects(){
   populateVoiceSelect('de');
@@ -149,41 +139,37 @@ function updateOnlineStatus(msg){
 }
 function stopOnlineAudio(){}
 
-function baseLang(lang){
-  if(lang==='de')return 'de-DE';
-  if(lang==='en')return 'en-US';
-  // Critical v49 change: use v6 mobile-style Dari tag by default.
-  return 'fa-AF';
-}
+// Direct v4-style speech function.
+// For Dari/Farsi, u.lang defaults to fa-AF exactly as the older app line did.
+// If a real fa voice exists, v50 sets u.voice but keeps direct speak().
 function say(text, lang='de', done=()=>{}){
   if(!text){done();return}
   if(!('speechSynthesis' in window)){
-    setTimeout(done,300);
+    setTimeout(done,250);
     return;
   }
 
   const u=new SpeechSynthesisUtterance(String(text));
-  const v=selectedVoice(lang);
+  const target = lang==='de'?'de-DE':lang==='en'?'en-US':'fa-AF';
+  u.lang=target;
+  u.rate=lang==='de'?0.78:lang==='en'?0.92:0.92;
+  u.pitch=1;
 
+  const v=pickVoiceV4(lang);
   if(v){
     u.voice=v;
-    u.lang=v.lang;
-  }else{
-    u.lang=baseLang(lang);
+    // v4-like direct mode: if a Farsi voice is selected, let the utterance use its real language.
+    if(lang==='fa')u.lang=v.lang||target;
   }
-
-  u.rate = lang==='de'?0.78:lang==='en'?0.88:0.88;
-  u.pitch = 1;
 
   let finished=false;
   activeUtterance=u;
-
   const safety=setTimeout(()=>{
     if(finished)return;
     finished=true;
     activeUtterance=null;
     done();
-  }, lang==='fa'?6500:12000);
+  }, lang==='fa'?7000:12000);
 
   function finish(){
     if(finished)return;
@@ -192,13 +178,14 @@ function say(text, lang='de', done=()=>{}){
     activeUtterance=null;
     done();
   }
+
   u.onend=finish;
   u.onerror=finish;
 
-  // Keep this direct and synchronous. Mobile browsers are stricter after async/promise work.
+  // v4-style: no async provider, no audio fetch, no router.
+  try{speechSynthesis.cancel()}catch(e){}
   try{speechSynthesis.resume()}catch(e){}
   speechSynthesis.speak(u);
-  try{speechSynthesis.resume()}catch(e){}
 }
 function sayBrowserOnly(text,lang='de',done=()=>{}){say(text,lang,done)}
 function queueSay(t,l='de',d=()=>{}){say(t,l,d)}
@@ -230,7 +217,7 @@ function updateVoiceStatus(){
   populateAllVoiceSelects();
   if(els.voiceDe)els.voiceDe.textContent=voiceLabel(selectedVoice('de'));
   if(els.voiceEn)els.voiceEn.textContent=voiceLabel(selectedVoice('en'));
-  if(els.voiceFa)els.voiceFa.textContent=voiceLabel(selectedVoice('fa')) || 'Automatic';
+  if(els.voiceFa)els.voiceFa.textContent=voiceLabel(selectedVoice('fa'));
   updateDariCandidateLabel();
   updateOnlineStatus('Automatic');
 }

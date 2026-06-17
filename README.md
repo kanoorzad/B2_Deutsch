@@ -1,30 +1,26 @@
-# B2 + B1 Plus Flashcards v49 — v6 Direct Dari Mobile
+# B2 + B1 Plus Flashcards v50 — Dari Voice Reverted to Version 4 Style
 
 ## What changed
 
-v49 removes the online TTS layer and restores direct browser SpeechSynthesis for Dari/Farsi.
+v50 restores the Dari/Farsi speech logic to a version-4 style direct browser speech method:
 
-This is focused on the exact issue:
+- Direct `SpeechSynthesisUtterance`
+- Direct `speechSynthesis.speak(u)`
+- Default Dari/Farsi language tag: `fa-AF`
+- No online TTS
+- No Puter
+- No Google router
+- No local audio sprite
+- No visible voice section
 
-- PC has Dari voice.
-- Mobile has no direct Persian voice in the list.
-- Earlier v6-style `fa-AF` direct utterance had worked better.
-
-## v49 audio behavior
-
-- German: browser/device voice, direct speech.
-- English: browser/device voice, direct speech.
-- Dari/Farsi: direct SpeechSynthesisUtterance.
-- If no Persian/Farsi voice is listed, it uses the v6-style tag `fa-AF`.
-- No Puter.
-- No Google router.
-- No online rate-limit messages.
-- No visible Voice Status section.
+German and English remain direct browser speech as well.
 
 ## Open
 
-https://kanoorzad.github.io/B2_Deutsch/?v=49
+https://kanoorzad.github.io/B2_Deutsch/?v=50
 
 ## Test
 
-Press Speak/Play. Do not open any voice section.
+1. Put a Dari card on the front.
+2. Press Speak visible text.
+3. Press Play one card.

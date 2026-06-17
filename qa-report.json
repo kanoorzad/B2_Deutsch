@@ -1,23 +1,24 @@
 {
-  "version": "49.0",
-  "base": "v48 clean UI with v6-style direct Dari SpeechSynthesis restored",
+  "version": "50.0",
+  "base": "v48 clean UI with Dari speech restored to v4-style direct browser TTS",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v49": true,
-    "cache_busting_v49": true,
-    "puter_removed": true,
-    "google_router_removed": true,
+    "version_badge_v50": true,
+    "cache_busting_v50": true,
+    "v4_source_available": true,
     "direct_speech_synthesis": true,
     "dari_default_fa_af": true,
-    "no_visible_voice_status": true,
+    "online_tts_removed": true,
+    "no_local_sprite": true,
+    "voice_section_hidden": true,
     "daria_exclusion_kept": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
   "notes": [
-    "This version is browser-only again.",
-    "Dari fallback tag is fa-AF, matching the earlier v6 approach.",
-    "No async online provider runs before mobile speech."
+    "Dari voice logic is now direct v4-style browser TTS.",
+    "No online provider runs before speech.",
+    "Default Dari tag is fa-AF."
   ],
   "zip_mb": 0.18
 }
