@@ -1,7 +1,7 @@
 // v34: remove old service workers/caches once so old broken versions cannot control audio.
 (function(){try{const key='v34AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh34=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh34='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v42';
+const STORE='b2-native-cards-extra-v43';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[]; let idx=0; let flipped=false; let lastFront=null; let playing=false; let paused=false; let playQueue=[]; let playIndex=0;
@@ -58,7 +58,7 @@ function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=f
 
 
 // v34 audio engine: native best-quality voices for German/English; Dari Auto = native Farsi/Persian voice if it truly works, otherwise local high-quality sprite fallback.
-// v42 browser voice engine with brute-force Dari/Farsi mobile candidates.
+// v43 browser voice engine with brute-force Dari/Farsi mobile candidates.
 // Keeps v3-v6 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
 // No local sprite/WebAudio/remote TTS.
 let activeUtterance=null;
@@ -70,6 +70,13 @@ const DARI_TAGS=[
   'fa-IR','fa-AF','fa','prs-AF','prs','fa-Arab','fa-Arab-IR','fa-Arab-AF',
   'fas','fas-IR','per','per-IR','ira','ira-IR','ps-AF','ur-PK','ar','ar-SA'
 ];
+
+function isFalseDariVoice(v){
+  const name=((v&&v.name)||'').toLowerCase();
+  const code=((v&&v.lang)||'').toLowerCase();
+  // Daria (bg-BG) is Bulgarian, not Dari/Farsi. Do not match it from the substring "Dari".
+  return code==='bg-bg' || code.startsWith('bg') || /\bdaria\b|bulgarian|българ/i.test(name);
+}
 
 function voices(){
   return ('speechSynthesis' in window) ? (speechSynthesis.getVoices() || []) : [];
@@ -85,8 +92,9 @@ function isPremiumVoice(v){
   return /premium|enhanced|natural|neural|online|siri|google|microsoft|compact/i.test((v&&v.name)||'');
 }
 function looksPersianVoice(v){
+  if(isFalseDariVoice(v))return false;
   const s=((v&&v.name)||'')+' '+((v&&v.lang)||'');
-  return /fa[-_]?ir|fa[-_]?af|\bfa\b|farsi|persian|dari|afghan|afghanistan|iran|iranian|فارسی|دری|ایران|افغان/i.test(s);
+  return /fa[-_]?ir|fa[-_]?af|fa|farsi|persian|dari|afghan|afghanistan|iran|iranian|فارسی|دری|ایران|افغان/i.test(s);
 }
 function scoreVoice(v, lang){
   const name=(v.name||'').toLowerCase();
@@ -103,7 +111,7 @@ function scoreVoice(v, lang){
     else if(code==='fa')score+=120;
     else if(code.startsWith('fa'))score+=110;
     else if(code==='prs-af'||code==='prs')score+=105;
-    if(/persian|farsi|dari|afghan|afghanistan|iran|iranian|فارسی|دری/i.test(name))score+=90;
+    if(/persian|farsi|\bdari\b|afghan|afghanistan|iran|iranian|فارسی|دری/i.test(name))score+=90;
     // Arabic/Urdu/Pashto are only last-resort test candidates, not auto choices.
     if(code.startsWith('ar')||code.startsWith('ur')||code.startsWith('ps'))score-=100;
   }
@@ -136,10 +144,10 @@ function buildDariCandidates(){
   candidates('fa').forEach(v=>add(`Detected: ${voiceLabel(v)} using ${v.lang}`, v, v.lang, 'detected'));
 
   // 2. All voices whose name/lang looks Persian, even if score did not catch them.
-  voices().filter(looksPersianVoice).forEach(v=>add(`Name match: ${voiceLabel(v)} using ${v.lang}`, v, v.lang, 'name-match'));
+  voices().filter(v=>!isFalseDariVoice(v)).filter(looksPersianVoice).forEach(v=>add(`Name match: ${voiceLabel(v)} using ${v.lang}`, v, v.lang, 'name-match'));
 
   // 3. Same selected/detected voice forced through all realistic tags.
-  const baseVoices=[...candidates('fa'), ...voices().filter(looksPersianVoice)];
+  const baseVoices=[...candidates('fa'), ...voices().filter(v=>!isFalseDariVoice(v)).filter(looksPersianVoice)];
   baseVoices.forEach(v=>{
     DARI_TAGS.forEach(tag=>add(`Voice ${v.name} forced tag ${tag}`, v, tag, 'voice+tag'));
   });
@@ -148,7 +156,7 @@ function buildDariCandidates(){
   DARI_TAGS.forEach(tag=>add(`No selected voice · language tag ${tag}`, null, tag, 'tag-only'));
 
   // 5. Absolute last resort: every installed voice with fa-IR/fa-AF/fa tags for manual discovery.
-  voices().forEach(v=>{
+  voices().filter(v=>!isFalseDariVoice(v)).forEach(v=>{
     ['fa-IR','fa-AF','fa'].forEach(tag=>add(`Manual all voices: ${voiceLabel(v)} + ${tag}`, v, tag, 'manual-all'));
   });
 
@@ -163,7 +171,7 @@ function selectedVoice(lang){
 function populateVoiceSelect(lang){
   const select = lang==='de' ? els.voiceSelectDe : lang==='en' ? els.voiceSelectEn : els.voiceSelectFa;
   if(!select)return;
-  const old = localStorage.getItem(`voice-choice-v42-${lang}`) || select.value || '';
+  const old = localStorage.getItem(`voice-choice-v43-${lang}`) || select.value || '';
   const list = candidates(lang);
   select.innerHTML = '';
 
@@ -180,7 +188,7 @@ function populateVoiceSelect(lang){
   });
 
   if(lang==='fa'){
-    const named=voices().filter(looksPersianVoice).filter(v=>!list.some(x=>voiceKey(x)===voiceKey(v)));
+    const named=voices().filter(v=>!isFalseDariVoice(v)).filter(looksPersianVoice).filter(v=>!list.some(x=>voiceKey(x)===voiceKey(v)));
     named.forEach(v=>{
       const opt=document.createElement('option');
       opt.value=voiceKey(v);
@@ -205,7 +213,7 @@ function populateAllVoiceSelects(){
 }
 function saveVoiceChoice(lang){
   const select = lang==='de' ? els.voiceSelectDe : lang==='en' ? els.voiceSelectEn : els.voiceSelectFa;
-  if(select)localStorage.setItem(`voice-choice-v42-${lang}`, select.value || '');
+  if(select)localStorage.setItem(`voice-choice-v43-${lang}`, select.value || '');
   updateVoiceStatus();
 }
 function speakWithCandidate(text, candidate, done=()=>{}){
@@ -230,15 +238,15 @@ function speakWithCandidate(text, candidate, done=()=>{}){
   setTimeout(()=>speechSynthesis.speak(u),80);
 }
 
-// v42 online AI TTS layer.
+// v43 online AI TTS layer.
 // Uses Puter.js txt2speech when available. No API key is stored in this app.
 // Browser/device SpeechSynthesis remains the fallback.
 let onlineAudio=null;
 const onlineCache=new Map();
 
 function audioSourceMode(){return els.audioSource?els.audioSource.value:'onlineDariFirst'}
-function saveAudioSource(){try{localStorage.setItem('audio-source-v42',audioSourceMode())}catch(e){}}
-function loadAudioSource(){try{const m=localStorage.getItem('audio-source-v42');if(m&&els.audioSource)els.audioSource.value=m}catch(e){}}
+function saveAudioSource(){try{localStorage.setItem('audio-source-v43',audioSourceMode())}catch(e){}}
+function loadAudioSource(){try{const m=localStorage.getItem('audio-source-v43');if(m&&els.audioSource)els.audioSource.value=m}catch(e){}}
 function onlineLocale(lang){
   if(lang==='de')return 'de-DE';
   if(lang==='en')return 'en-US';
@@ -300,7 +308,7 @@ function sayBrowserOnly(text, lang='de', done=()=>{}){
 
   if(lang==='fa'){
     // If the user has run/selected a candidate, use it exactly.
-    const saved=localStorage.getItem('dari-candidate-v42');
+    const saved=localStorage.getItem('dari-candidate-v43');
     if(saved){
       try{
         const parsed=JSON.parse(saved);
@@ -337,7 +345,7 @@ function unlockSpeech(){
 }
 function updateDariCandidateLabel(){
   if(!els.dariCandidate)return;
-  const saved=localStorage.getItem('dari-candidate-v42');
+  const saved=localStorage.getItem('dari-candidate-v43');
   if(saved){
     try{els.dariCandidate.textContent=JSON.parse(saved).label;return}catch(e){}
   }
@@ -359,7 +367,7 @@ function tryCurrentDariCandidate(){
   if(!dariCandidates.length)return;
   const c=dariCandidates[dariCandidateIndex % dariCandidates.length];
   if(els.dariCandidate)els.dariCandidate.textContent=`${dariCandidateIndex+1}/${dariCandidates.length}: ${c.label}`;
-  localStorage.setItem('dari-candidate-v42',JSON.stringify({label:c.label,lang:c.lang,voiceKey:c.voice?voiceKey(c.voice):''}));
+  localStorage.setItem('dari-candidate-v43',JSON.stringify({label:c.label,lang:c.lang,voiceKey:c.voice?voiceKey(c.voice):''}));
   els.now.textContent='Testing Dari candidate: '+c.label;
   speakWithCandidate(DARI_TEST_TEXT,c,()=>{});
 }
@@ -376,7 +384,7 @@ function detectDevice(){
   else if(/Android/i.test(ua))d='Android';
   else if(/Windows/i.test(ua))d='Windows PC';
   else if(/Macintosh/i.test(ua))d='Mac';
-  els.deviceInfo.textContent=`Detected: ${d}. v42 uses online AI TTS for Dari/Farsi first, then browser fallback.`;
+  els.deviceInfo.textContent=`Detected: ${d}. v43 uses online AI TTS for Dari/Farsi first, then browser fallback.`;
 }
 function updateVoiceStatus(){
   if(!('speechSynthesis'in window)){

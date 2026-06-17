@@ -1,23 +1,22 @@
 {
-  "version": "42.0",
-  "base": "v40 + online no-key AI TTS layer",
+  "version": "43.0",
+  "base": "v42 with Bulgarian Daria false-positive removed",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v42": true,
-    "puter_script_loaded": true,
-    "online_tts_layer_present": true,
-    "dari_online_first_default": true,
-    "all_languages_online_option": true,
-    "browser_fallback_still_present": true,
+    "version_badge_v43": true,
+    "cache_busting_v43": true,
+    "daria_bg_exclusion_present": true,
+    "dari_word_boundary_match": true,
+    "online_tts_still_present": true,
     "no_api_key_in_app": true,
     "no_local_sprite_or_webaudio": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
   "notes": [
-    "This is an online fallback, not device/browser speech.",
-    "It requires internet because Puter.js generates audio externally.",
-    "No API key is stored in the static app."
+    "Daria (bg-BG) is explicitly excluded.",
+    "Bulgarian bg-* voices are excluded from Dari/Farsi matching.",
+    "The v42 online AI TTS layer is preserved."
   ],
   "zip_mb": 0.19
 }
