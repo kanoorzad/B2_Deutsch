@@ -1,15 +1,23 @@
 {
-  "version": "41.0",
-  "type": "Expo React Native native mobile speech app",
-  "cards": 2254,
+  "version": "42.0",
+  "base": "v40 + online no-key AI TTS layer",
   "checks": {
-    "uses_expo_speech": true,
-    "not_browser_web_speech": true,
-    "dari_tags_present": true,
-    "manual_all_native_voices": true,
-    "full_cards_embedded": true,
-    "package_json_present": true,
-    "app_json_present": true
+    "javascript_syntax_ok": true,
+    "version_badge_v42": true,
+    "puter_script_loaded": true,
+    "online_tts_layer_present": true,
+    "dari_online_first_default": true,
+    "all_languages_online_option": true,
+    "browser_fallback_still_present": true,
+    "no_api_key_in_app": true,
+    "no_local_sprite_or_webaudio": true,
+    "service_worker_not_registered": true
   },
-  "note": "This package requires npm/expo to run. It is not a GitHub Pages website."
+  "node_check_stderr": "",
+  "notes": [
+    "This is an online fallback, not device/browser speech.",
+    "It requires internet because Puter.js generates audio externally.",
+    "No API key is stored in the static app."
+  ],
+  "zip_mb": 0.19
 }
