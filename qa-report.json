@@ -1,6 +1,6 @@
 {
-  "version": "23.0",
-  "base": "v20 layout/features, Dari voice path only changed",
+  "version": "24.0",
+  "base": "v20 layout/features with bundled local Dari MP3 audio files",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -8,18 +8,30 @@
     "totalCards": 2254,
     "verbs": 650,
     "nonVerbs": 1604,
+    "uniqueDariAudioFiles": 2025,
+    "dariCardsWithBundledAudio": 2254,
     "verbCardsWith3EnglishSynonyms": 650,
     "verbCardsWith3GermanSynonyms": 650,
     "verbCardsWith3DariSynonyms": 650,
     "nonVerbCardsWithNoBottomSynonyms": 1604
   },
+  "audio": {
+    "unique_dari_texts": 2025,
+    "mp3_files_including_silence_and_test": 2027,
+    "audio_folder_mb": 23.8,
+    "missing_audio_for_dari_cards": 0
+  },
   "checks": {
     "javascript_syntax_ok": true,
     "version_badge_present": true,
-    "cache_busting_v23": true,
-    "v20_online_audio_removed": true,
-    "mobile_prefers_fa_ir": true,
-    "utterance_lang_uses_selected_voice_lang": true,
+    "cache_busting_v24": true,
+    "cards_have_audio_fa": true,
+    "all_unique_audio_files_exist": true,
+    "dari_uses_bundled_local_audio": true,
+    "no_remote_tts": true,
+    "no_audio_cors": true,
+    "playnext_passes_audio": true,
+    "speak_buttons_pass_dari_audio": true,
     "german_english_still_web_speech": true,
     "verb_cards_with_3_english_synonyms": true,
     "verb_cards_with_3_german_synonyms": true,
@@ -27,11 +39,9 @@
     "non_verbs_have_no_bottom_synonyms": true
   },
   "node_check_stderr": "",
-  "fix_summary": [
-    "Started from v20 package.",
-    "Kept layout, cards, synonyms, initiative line, and version badge behavior.",
-    "Removed only the v20 online-audio Dari experiment.",
-    "Changed Dari Web Speech selection so mobile prefers fa-IR/Persian/Farsi voice, then fa-AF.",
-    "Utterance language now matches the actual selected voice language."
+  "root_cause_resolution": [
+    "Mobile Web Speech is not dependable for Dari/Farsi even when desktop works.",
+    "Remote online TTS can be blocked on mobile.",
+    "v24 bundles local MP3 files and plays them from the same GitHub Pages site."
   ]
 }

@@ -1,40 +1,32 @@
-# B2 + B1 Plus Flashcards v23
+# B2 + B1 Plus Flashcards v24
 
-## Base
+v24 keeps v20 as the base and changes the Dari voice solution only.
 
-v23 is based on v20. Everything is kept the same except the Dari voice path.
+## Main change
 
-## Dari-only change
+Dari now uses bundled local MP3 files in `audio/fa/`.
 
-The v20 online audio experiment is removed.
+This avoids mobile browser Web Speech limitations and avoids remote/online TTS blocking. German and English still use the existing browser voice playback.
 
-Dari now uses browser/device Web Speech again, but with mobile-aware voice selection:
+## Important upload note
 
-- mobile prefers `fa-IR` first
-- then `fa-AF`
-- then generic `fa`
-- then any Persian/Farsi/Dari named voice
-- the utterance language is set to the actual selected voice language
-
-This targets the likely mobile issue: many phones expose Persian/Farsi as `fa-IR`, not `fa-AF`.
+You must upload the full `audio/fa/` folder together with the other files. If the audio folder is missing, Dari cannot play.
 
 ## QA
 
 - JavaScript syntax: OK
 - Total cards: 2254
-- Verb cards: 650
-- Non-verb cards: 1604
+- Unique Dari audio files: 2025
+- MP3 files including test/silence: 2027
+- Audio folder size: 23.8 MB
+- Missing Dari audio files: 0
 - Verb cards with 3 German synonyms: 650
 - Verb cards with 3 English synonyms: 650
 - Verb cards with 3 Dari synonyms: 650
 - Non-verbs with no bottom synonym text: 1604
 
-## GitHub update
+Open after upload:
 
-Replace all files with this v23 folder.
-
-Open:
-
-https://kanoorzad.github.io/B2_Deutsch/?v=23
-
-Delete old mobile Home Screen icons before testing.
+```text
+https://kanoorzad.github.io/B2_Deutsch/?v=24
+```
