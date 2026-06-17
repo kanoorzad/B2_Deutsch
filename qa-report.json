@@ -1,5 +1,5 @@
 {
-  "version": "13.0",
+  "version": "14.0",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -13,15 +13,17 @@
     "nonVerbCardsWithNoBottomSynonyms": 1604
   },
   "checks": {
+    "dari_uses_exact_v6_style_direct_utterance": true,
+    "no_dari_cleanup_before_tts": true,
+    "no_arabic_or_cloud_fallback_in_voice_path": true,
+    "no_mobile_unlock_utterance": true,
     "verb_cards_with_3_english_synonyms": true,
     "verb_cards_with_3_german_synonyms": true,
     "verb_cards_with_3_dari_synonyms": true,
     "non_verbs_have_no_bottom_synonyms": true,
-    "v6_voice_engine_restored": true,
-    "no_cloud_or_arabic_fallback_in_dari_path": true,
-    "card_bottom_hidden_for_non_verbs": true,
-    "playback_chips_follow_current_language": true,
-    "cache_busting_v13": true
+    "initiative_line_present": true,
+    "edge_mobile_overlap_mitigation": true,
+    "cache_busting_v14": true
   },
   "lists": {
     "B2 all 12 units": 1629,
@@ -29,10 +31,11 @@
     "B1 Plus 7 Units": 475
   },
   "fixes": [
-    "Dari pronunciation path restored to the simpler v6-compatible speechSynthesis logic.",
-    "Removed Arabic/mobile fallback path added in later versions that could break Dari on the user phone.",
-    "Only verb cards show bottom synonym chips.",
-    "Noun and non-verb cards show no bottom synonym text.",
-    "Verb chips switch by spoken/front language: German chips, English chips, Dari chips."
+    "Dari TTS restored to exact v6-style direct SpeechSynthesisUtterance path.",
+    "Dari text is passed raw to browser TTS without cleanup or transformation.",
+    "Removed mobile unlock utterance and later fallback loops from the voice path.",
+    "Kept verb-only synonyms: 3 German, 3 English, 3 Dari; non-verbs show no bottom synonym text.",
+    "Added top initiative line.",
+    "Changed mobile CSS to avoid Edge overlap and horizontal overflow."
   ]
 }
