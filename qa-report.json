@@ -1,5 +1,5 @@
 {
-  "version": "8.0",
+  "version": "9.0",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -13,51 +13,53 @@
     "all_cards_have_english": true,
     "all_cards_have_dari": true,
     "all_cards_have_two_synonyms": true,
-    "audio_visual_lock_for_all_playback_steps": true,
     "playback_steps_checked": 8392,
-    "mismatches": [],
-    "abteilung_sequence_example": [
+    "english_speech_contains_slash": 0,
+    "german_step_contains_ui_label_like_plural": 0,
+    "flip_view_has_german_element": true,
+    "flip_render_assigns_german_to_de": true,
+    "flip_render_assigns_english_to_en": true,
+    "flip_render_assigns_dari_to_fa": true,
+    "german_slow": true,
+    "abteilung_sequence": [
       {
-        "text": "die Abteilung",
+        "display": "die Abteilung",
+        "speech": "die Abteilung",
         "lang": "de",
         "label": "German word with article"
       },
       {
-        "text": "die Abteilungen",
+        "display": "die Abteilungen",
+        "speech": "die Abteilungen",
         "lang": "de",
         "label": "German plural"
       },
       {
-        "text": "Department",
+        "display": "Department",
+        "speech": "Department",
         "lang": "en",
         "label": "US English"
       },
       {
-        "text": "دیپارتمنت، بخش",
+        "display": "دیپارتمنت، بخش",
+        "speech": "دیپارتمنت، بخش",
         "lang": "fa",
         "label": "Dari"
       }
-    ],
-    "normal_render_not_called_after_playback_text_is_set": true,
-    "cache_busting_asset_urls": true
+    ]
   },
   "lists": {
     "B2 all 12 units": 1629,
     "Irregular verbs": 150,
     "B1 Plus 7 Units": 475
   },
-  "playback_order": [
-    "German word with article, slow",
-    "Noun plural or verb forms, slow",
-    "US English, medium",
-    "Dari, medium",
-    "Next card"
-  ],
   "fixes": [
-    "Playback screen text and pronunciation now use the same exact p.text object.",
-    "Playback no longer calls normal card rendering after setting a spoken step, so the Card front dropdown cannot overwrite the screen.",
-    "Cache-busting v8 URLs were added for app.js, data.js, styles.css, manifest, icon, and service worker.",
-    "Card tapping is disabled during playback so it cannot flip to another side while audio is running.",
-    "The Abteilung test sequence now displays and speaks: die Abteilung, then die Abteilungen, then department, then بخش؛ دیپارتمنت."
-  ]
+    "Flip view now explicitly maps German text to German only, English text to English only, and Dari text to Dari only.",
+    "Plural playback/display no longer uses the word 'Plural:' on the card or in speech; it shows only the plural form.",
+    "Verb-form playback/display no longer speaks UI labels; it speaks the form values.",
+    "English slash alternatives are converted to 'or' so TTS does not say 'slash'.",
+    "Manual front and playback are separated, and playback uses its own clean display/speech fields."
+  ],
+  "bad_slash_english_examples": [],
+  "bad_plural_label_examples": []
 }

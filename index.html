@@ -5,19 +5,19 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#17324d">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="DE Cards v8">
+  <meta name="apple-mobile-web-app-title" content="DE Cards v9">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=8">
-  <link rel="apple-touch-icon" href="icon.svg?v=8">
-  <link rel="stylesheet" href="styles.css?v=8">
-  <title>B2 + B1 Plus Flashcards v8</title>
+  <link rel="manifest" href="manifest.webmanifest?v=9">
+  <link rel="apple-touch-icon" href="icon.svg?v=9">
+  <link rel="stylesheet" href="styles.css?v=9">
+  <title>B2 + B1 Plus Flashcards v9</title>
 </head>
 <body>
 <header class="top">
   <div>
     <p class="eyebrow">Universal PWA · iPhone · Android · Desktop</p>
-    <h1>B2 + B1 Plus Flashcards <span class="version">v8</span></h1>
-    <p>Audio-visual locked playback: the text on screen is the exact text being pronounced.</p>
+    <h1>B2 + B1 Plus Flashcards <span class="version">v9</span></h1>
+    <p>Clean German-first playback, correct flip view, plural/forms, US English, Dari, and visible synonyms.</p>
   </div>
   <div class="topBtns">
     <button id="installBtn">Install help</button>
@@ -104,14 +104,15 @@
 
     <section id="answer" class="answer hidden">
       <div class="answerHead">
-        <h2>All languages</h2>
-        <p>After flipping, German, US English, Dari, synonyms, and forms are shown together.</p>
+        <h2>Flip answer</h2>
+        <p>German, US English, and Dari are separated clearly.</p>
       </div>
 
       <div class="languageGrid">
         <article class="langCard germanCard">
           <header><h3>German</h3><button data-say="de">Speak slow</button></header>
-          <p id="de" class="langText"></p>
+          <p id="de" class="langText deLang"></p>
+          <p id="dePluralLine" class="small strongLine"></p>
         </article>
         <article class="langCard englishCard">
           <header><h3>US English</h3><button data-say="en">Speak</button></header>
@@ -161,7 +162,7 @@
   <section class="panel tools">
     <details open>
       <summary>Listen to selected cards</summary>
-      <p class="small"><strong>Locked order:</strong> German word with article → plural or verb forms → US English → Dari → next card.</p>
+      <p class="small"><strong>Playback:</strong> German word with article → plural or verb forms → US English → Dari → next card. No spoken “slash”; no spoken “plural” label.</p>
       <div class="checks">
         <label><input type="checkbox" id="playDe" checked> German word + article</label>
         <label><input type="checkbox" id="playForms" checked> Plural / verb forms</label>
@@ -187,7 +188,7 @@
         <article><h4>US English</h4><p id="voiceEn">—</p><button id="testEn">Test English</button></article>
         <article><h4>Dari</h4><p id="voiceFa">—</p><button id="testFa">Test Dari</button></article>
       </div>
-      <p class="small">German is intentionally slow. English and Dari use medium speed. If Dari is unavailable on a device, the browser may use a Persian/Farsi fallback.</p>
+      <p class="small">German is intentionally slow. English and Dari use medium speed. If Dari is unavailable, the browser may use a Persian/Farsi fallback.</p>
     </details>
 
     <details>
@@ -243,7 +244,7 @@
   <button id="closeHelp" class="primary">OK</button>
 </dialog>
 
-<script src="data.js?v=8"></script>
-<script src="app.js?v=8"></script>
+<script src="data.js?v=9"></script>
+<script src="app.js?v=9"></script>
 </body>
 </html>

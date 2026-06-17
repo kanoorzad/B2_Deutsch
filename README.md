@@ -1,47 +1,55 @@
-# B2 + B1 Plus Flashcards v8 — audio/visual locked
+# B2 + B1 Plus Flashcards v9 — clean speech + clean flip
 
-This version fixes the issue where the voice could say German while the screen showed English.
+## What v9 fixes
 
-## Root cause fixed
+1. **German on flip card**
+   - German now always goes into the German flip section.
+   - US English now always goes into the English section.
+   - Dari now always goes into the Dari section.
 
-During playback, the old code could still be affected by the selected **Manual card front** setting. For example, if the front setting was English, the card could show "Department" while the German voice said "die Abteilung".
+2. **No spoken/display label for plural**
+   - The plural step no longer shows or speaks `Plural:`.
+   - It shows only the plural form, e.g. `die Abteilungen`.
 
-In v8, playback does not depend on the manual front setting. During playback, the screen text and the text sent to pronunciation are the same exact value.
+3. **No English “slash” pronunciation**
+   - English alternatives such as `meaning / importance` are converted to `meaning or importance` for display/playback.
+   - The voice should not say “slash”.
 
-## Required playback order
+4. **Cleaner verb-form step**
+   - Verb forms remain in the flip view with labels.
+   - Playback/front-card form step uses clean form values, not noisy UI labels.
 
-For each card:
+## Playback order
 
 1. German word with article — slow German
-2. Plural for nouns OR verb forms for verbs — slow German
+2. Noun plural OR verb form values — slow German
 3. US English — medium
 4. Dari — medium
 5. Next card
 
-## Example checked
+## QA
 
-For `die Abteilung` the playback sequence is:
+- Total cards: 2254
+- Playback steps checked: 8392
+- English speech items containing `/`: 0
+- German playback items starting with UI labels like `Plural:`: 0
+- Cards with English: 2254
+- Cards with Dari: 2254
+- Cards with 2 synonyms: 2254
+
+## Example: die Abteilung
 
 1. `die Abteilung`
 2. `die Abteilungen`
 3. `Department`
-4. `بخش؛ دیپارتمنت`
-
-## QA
-
-- Total cards: 2254
-- Cards with US English: 2254
-- Cards with Dari: 2254
-- Cards with 2 synonyms/related meanings: 2254
-- Playback steps checked: 8392
-- Audio/visual mismatches found: 0
+4. `دیپارتمنت، بخش`
 
 ## GitHub update
 
-Replace all files in your GitHub repository with this v8 folder's files.
+Replace all files in your GitHub repository with this v9 folder's files.
 
 Then open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=8
+https://kanoorzad.github.io/B2_Deutsch/?v=9
 
-Important: because phones cache web apps aggressively, remove the old Home Screen icon, then open the `?v=8` link in the browser and install/add it again.
+On iPhone or Android, remove the old Home Screen icon, open the `?v=9` link in Safari/Chrome, then add/install again.

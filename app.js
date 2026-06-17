@@ -1,5 +1,5 @@
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v8';
+const STORE='b2-native-cards-extra-v9';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[];
@@ -10,7 +10,6 @@ let playing=false;
 let paused=false;
 let playQueue=[];
 let playIndex=0;
-let currentPlaybackPart=0;
 
 const $=id=>document.getElementById(id);
 const els={
@@ -18,7 +17,7 @@ const els={
   prev:$('prev'),next:$('next'),flip:$('flip'),speakFront:$('speakFront'),card:$('card'),answer:$('answer'),
   frontText:$('frontText'),frontHint:$('frontHint'),frontSub:$('frontSub'),frontSyn:$('frontSynonyms'),
   chipList:$('chipList'),chipUnit:$('chipUnit'),chipPart:$('chipPart'),chipType:$('chipType'),
-  de:$('de'),en:$('en'),fa:$('fa'),nounBox:$('nounBox'),article:$('article'),singular:$('singular'),plural:$('plural'),
+  de:$('de'),dePluralLine:$('dePluralLine'),en:$('en'),fa:$('fa'),nounBox:$('nounBox'),article:$('article'),singular:$('singular'),plural:$('plural'),
   verbBox:$('verbBox'),inf:$('inf'),pres3:$('pres3'),past:$('past'),perf:$('perf'),plus:$('plus'),verbQuality:$('verbQuality'),
   syn:$('syn'),ex:$('ex'),count:$('count'),bar:$('bar'),playDe:$('playDe'),playEn:$('playEn'),playFa:$('playFa'),playForms:$('playForms'),
   repeat:$('repeat'),playList:$('playList'),pauseList:$('pauseList'),stopList:$('stopList'),now:$('nowPlaying'),
@@ -32,23 +31,46 @@ function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&l
 function norm(s){return String(s||'').toLowerCase().trim()}
 function textOf(c){return [c.list,c.unit,c.part,c.category,c.german,c.english,c.dari,c.article,c.singular,c.plural,c.example,...Object.values(c.forms||{}),...(c.synonyms||[])].join(' ').toLowerCase()}
 function displayGerman(c){return [c.article,c.singular||c.german].filter(Boolean).join(' ')||c.german||'—'}
+function displayEnglish(c){return cleanEnglish(c.english||'—')}
+function displayDari(c){return c.dari||'—'}
 function twoSynonyms(c){return ((c.synonyms_en&&c.synonyms_en.length?c.synonyms_en:c.synonyms)||[]).filter(Boolean).slice(0,2)}
 function setDirForLang(lang){if(lang==='fa')els.frontText.setAttribute('dir','rtl'); else els.frontText.removeAttribute('dir')}
+
+// English cleanup: do not show/speak "slash". For playback/manual English, "x / y" becomes "x or y".
+function cleanEnglish(text){
+  return String(text||'')
+    .replace(/\s*\/\s*/g,' or ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+// German/Dari speech cleanup avoids reading UI punctuation too harshly but keeps the learning text.
+function cleanSpeechText(text, lang){
+  let t=String(text||'').replace(/\s+/g,' ').trim();
+  if(lang==='en') t=cleanEnglish(t);
+  if(lang==='de') t=t.replace(/\s*\/\s*/g,' oder ');
+  return t;
+}
 
 function formStep(c){
   const f=c.forms||{};
   if(c.category==='noun' && c.plural){
-    return {text:c.plural, label:'German plural', sub:'Slow German pronunciation', lang:'de'};
+    return {display:c.plural, speech:c.plural, lang:'de', label:'German plural', sub:'Slow German pronunciation'};
   }
   if(c.category==='verb'){
-    const parts=[];
-    if(f.infinitive) parts.push('Infinitiv: '+f.infinitive);
-    if(f.past) parts.push('Präteritum: '+f.past);
-    if(f.perfect) parts.push('Perfekt: '+f.perfect);
-    if(f.plusquamperfekt) parts.push('Plusquamperfekt: '+f.plusquamperfekt);
-    if(parts.length){
-      const text=parts.join(' · ');
-      return {text, label:'German verb forms', sub:'Slow German pronunciation', lang:'de'};
+    const visible=[];
+    const spoken=[];
+    if(f.infinitive){ visible.push(f.infinitive); spoken.push(f.infinitive); }
+    if(f.past){ visible.push(f.past); spoken.push(f.past); }
+    if(f.perfect){ visible.push(f.perfect); spoken.push(f.perfect); }
+    if(f.plusquamperfekt){ visible.push(f.plusquamperfekt); spoken.push(f.plusquamperfekt); }
+    if(visible.length){
+      return {
+        display:visible.join(' · '),
+        speech:spoken.join('. '),
+        lang:'de',
+        label:'German verb forms',
+        sub:'Infinitive · past · perfect · plusquamperfekt'
+      };
     }
   }
   return null;
@@ -81,18 +103,18 @@ function apply(){
 function getManualFront(c){
   let mode=els.front.value;
   if(mode==='random')mode=['german','english','dari','plural'][Math.floor(Math.random()*4)];
-  if(mode==='english')return {text:c.english||'—',label:'US English',sub:'Medium speed',lang:'en'};
-  if(mode==='dari')return {text:c.dari||'—',label:'Dari',sub:'Medium speed',lang:'fa'};
+  if(mode==='english')return {display:displayEnglish(c),speech:cleanSpeechText(c.english,'en'),label:'US English',sub:'Medium speed',lang:'en'};
+  if(mode==='dari')return {display:displayDari(c),speech:displayDari(c),label:'Dari',sub:'Medium speed',lang:'fa'};
   if(mode==='plural'){
     const fs=formStep(c);
-    return fs || {text:'No plural/forms for this card',label:'Plural / forms',sub:'',lang:'de'};
+    return fs || {display:'No plural/forms for this card',speech:'',label:'Plural / forms',sub:'',lang:'de'};
   }
-  return {text:displayGerman(c),label:'German word with article',sub:'Slow German pronunciation',lang:'de'};
+  return {display:displayGerman(c),speech:displayGerman(c),label:'German word with article',sub:'Slow German pronunciation',lang:'de'};
 }
 
 function renderSynonyms(c){
   const syns=twoSynonyms(c);
-  const html=syns.map(s=>`<span>${esc(s)}</span>`).join('') || '<span>—</span>';
+  const html=syns.map(s=>`<span>${esc(cleanEnglish(s))}</span>`).join('') || '<span>—</span>';
   els.frontSyn.innerHTML=html;
   els.syn.innerHTML=html;
 }
@@ -103,9 +125,11 @@ function renderChips(c){
   els.chipType.textContent=c.category||'—';
 }
 function renderDetails(c){
-  els.de.textContent=displayGerman(c)+(c.plural?` · plural: ${c.plural}`:'');
-  els.en.textContent=c.english||'—';
-  els.fa.textContent=c.dari||'—';
+  // Critical clean flip mapping: German id receives German only, English id receives English only, Dari id receives Dari only.
+  els.de.textContent=displayGerman(c);
+  els.dePluralLine.textContent=(c.category==='noun'&&c.plural)?`Plural: ${c.plural}`:'';
+  els.en.textContent=displayEnglish(c);
+  els.fa.textContent=displayDari(c);
 
   els.nounBox.classList.toggle('hidden',c.category!=='noun');
   els.article.textContent=c.article||'—';
@@ -145,7 +169,7 @@ function render(){
   renderChips(c);
   renderDetails(c);
   setDirForLang(f.lang);
-  els.frontText.textContent=f.text||'—';
+  els.frontText.textContent=f.display||'—';
   els.frontHint.textContent=f.label;
   els.frontSub.textContent=f.sub||'';
   els.answer.classList.toggle('hidden',!flipped);
@@ -169,7 +193,7 @@ function pickVoice(lang){
          (lang==='fa'?vs.find(v=>v.lang&&v.lang.startsWith('fa')):null);
 }
 function makeUtterance(text,lang,done){
-  const u=new SpeechSynthesisUtterance(text);
+  const u=new SpeechSynthesisUtterance(cleanSpeechText(text,lang));
   u.lang=lang==='de'?'de-DE':lang==='en'?'en-US':'fa-AF';
   u.rate=lang==='de'?0.64:0.92;
   u.pitch=1;
@@ -190,31 +214,35 @@ function queueSay(text,lang='de',done=()=>{}){
   if(!('speechSynthesis'in window)){alert('Speech is not supported in this browser.');done();return}
   speechSynthesis.speak(makeUtterance(text,lang,done));
 }
-function speakFront(){if(lastFront)say(lastFront.text,lastFront.lang)}
+function speakFront(){if(lastFront)say(lastFront.speech||lastFront.display,lastFront.lang)}
 
 function cardScript(c){
   const steps=[];
-  if(els.playDe.checked) steps.push({text:displayGerman(c), lang:'de', label:'German word with article', sub:'Slow German pronunciation'});
+  if(els.playDe.checked){
+    const g=displayGerman(c);
+    steps.push({display:g,speech:g,lang:'de',label:'German word with article',sub:'Slow German pronunciation'});
+  }
   if(els.playForms.checked){
     const fs=formStep(c);
-    if(fs) steps.push(fs);
+    if(fs)steps.push(fs);
   }
-  if(els.playEn.checked&&c.english) steps.push({text:c.english, lang:'en', label:'US English', sub:'Medium pronunciation'});
-  if(els.playFa.checked&&c.dari) steps.push({text:c.dari, lang:'fa', label:'Dari', sub:'Medium pronunciation'});
-  return steps.filter(x=>x.text&&String(x.text).trim()&&String(x.text).trim()!=='—');
+  if(els.playEn.checked&&c.english){
+    steps.push({display:displayEnglish(c),speech:cleanSpeechText(c.english,'en'),lang:'en',label:'US English',sub:'Medium pronunciation'});
+  }
+  if(els.playFa.checked&&c.dari){
+    const d=displayDari(c);
+    steps.push({display:d,speech:d,lang:'fa',label:'Dari',sub:'Medium pronunciation'});
+  }
+  return steps.filter(x=>x.display&&String(x.display).trim()&&String(x.display).trim()!=='—');
 }
 
 function renderPlaybackStep(item, partIdx){
   const c=item.card;
   const p=item.parts[partIdx];
 
-  // Critical fix: during playback, do NOT call normal render() after setting the step.
-  // Normal render is affected by the manual "Card front" dropdown.
-  // This function writes the visible text directly from the same object sent to TTS.
   idx=Math.max(0,filtered.indexOf(c));
   flipped=false;
   playing=true;
-  currentPlaybackPart=partIdx;
 
   renderChips(c);
   renderDetails(c);
@@ -223,13 +251,13 @@ function renderPlaybackStep(item, partIdx){
   setDirForLang(p.lang);
   els.card.classList.add('playing');
   els.answer.classList.add('hidden');
-  els.frontText.textContent=p.text;
+  els.frontText.textContent=p.display;
   els.frontHint.textContent=`Card ${item.cardNo}/${item.totalCards} · Step ${partIdx+1}/${item.parts.length} · ${p.label}`;
   els.frontSub.textContent=p.sub||'';
-  lastFront={text:p.text,lang:p.lang,label:p.label,sub:p.sub};
+  lastFront=p;
 
   const langName=p.lang==='de'?'German':p.lang==='en'?'US English':'Dari';
-  els.now.textContent=`Playing card ${item.cardNo}/${item.totalCards}: ${langName} — ${p.text}`;
+  els.now.textContent=`Playing card ${item.cardNo}/${item.totalCards}: ${langName} — ${p.display}`;
 }
 
 function playSelected(){
@@ -257,7 +285,7 @@ function playNextPart(partIdx){
   if(partIdx>=item.parts.length){playIndex++;playNextPart(0);return}
   const part=item.parts[partIdx];
   renderPlaybackStep(item,partIdx);
-  setTimeout(()=>queueSay(part.text,part.lang,()=>setTimeout(()=>playNextPart(partIdx+1),520)),170);
+  setTimeout(()=>queueSay(part.speech||part.display,part.lang,()=>setTimeout(()=>playNextPart(partIdx+1),520)),170);
 }
 function pauseResume(){
   if(!playing||!('speechSynthesis'in window))return;
@@ -277,7 +305,6 @@ function stop(doRender=true){
   paused=false;
   playQueue=[];
   playIndex=0;
-  currentPlaybackPart=0;
   if('speechSynthesis'in window)speechSynthesis.cancel();
   els.pauseList.textContent='Pause';
   els.now.textContent='Not playing.';
@@ -376,13 +403,13 @@ els.install.addEventListener('click',()=>els.help.showModal());
 els.closeHelp.addEventListener('click',()=>els.help.close());
 els.voiceBtn.addEventListener('click',()=>document.querySelector('.tools details:nth-of-type(2)').open=true);
 els.testDe.addEventListener('click',()=>say('die Abteilung','de'));
-els.testEn.addEventListener('click',()=>say('department','en'));
-els.testFa.addEventListener('click',()=>say('بخش؛ دیپارتمنت','fa'));
+els.testEn.addEventListener('click',()=>say('department or division','en'));
+els.testFa.addEventListener('click',()=>say('دیپارتمنت، بخش','fa'));
 document.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()=>{
   const c=filtered[idx];if(!c)return;
   if(b.dataset.say==='de')say(displayGerman(c),'de');
-  if(b.dataset.say==='en')say(c.english,'en');
-  if(b.dataset.say==='fa')say(c.dari,'fa');
+  if(b.dataset.say==='en')say(displayEnglish(c),'en');
+  if(b.dataset.say==='fa')say(displayDari(c),'fa');
 }));
 document.addEventListener('keydown',e=>{
   if(e.target.matches('input,select,textarea'))return;
@@ -394,6 +421,6 @@ if('speechSynthesis'in window){
   speechSynthesis.onvoiceschanged=()=>updateVoiceStatus();
   setTimeout(updateVoiceStatus,500);
 }
-if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js?v=8').catch(()=>{});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./service-worker.js?v=9').catch(()=>{});
 setup();
 apply();
