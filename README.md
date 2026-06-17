@@ -1,38 +1,33 @@
-# B2 + B1 Plus Flashcards v44
+# B2 + B1 Plus Flashcards v45 — Stable Playback Repair
 
-## Fix for "Online AI TTS failed: Rate exceeded"
+## Why v45
 
-v43 used Puter AI TTS. That can return a public rate-limit error.
+v44 broke playback by routing through an unstable online provider path.
 
-v44 does not depend on Puter only. It adds a multi-provider online TTS router:
+v45 rolls back to the safer v43 base and repairs playback:
 
-1. Google Translate TTS direct audio first for Dari/Farsi
-2. Puter AI TTS only as backup
-3. Browser/device voice as last fallback
-
-## Audio source options
-
-- Google online Dari/Farsi first
-- Google first, Puter backup
-- Puter first, Google backup
-- Google online for all three languages
-- Browser/device voices only
+- German always uses browser/device voice.
+- English always uses browser/device voice.
+- Dari can try online Puter TTS, but rate-limit errors no longer break playback.
+- If online Dari fails, the app falls back to browser Dari or skips Dari after a timeout.
+- Playback sequence continues instead of freezing.
+- Daria (bg-BG) remains removed.
 
 ## Test
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=44
+https://kanoorzad.github.io/B2_Deutsch/?v=45
 
-Then tap:
+Then test:
 
-- Test Online Dari
+1. Test German
+2. Test English
+3. Test Online Dari
+4. Play selected
 
-If Puter is rate-limited, the app will not keep hammering it. It will temporarily disable Puter and try the next provider.
+German and English should play immediately again.
 
-## Notes
+## Important
 
-- Google online TTS requires internet.
-- It is live online audio, not downloaded local MP3.
-- No API key is stored in the app.
-- If the provider blocks traffic, browser fallback still exists.
+If Online Dari says rate exceeded, v45 disables it temporarily and continues playback.
