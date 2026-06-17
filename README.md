@@ -1,27 +1,22 @@
-# B2 + B1 Plus Flashcards v16
+# B2 + B1 Plus Flashcards v17
 
-## What v16 fixes
+## What v17 does
 
-This version keeps the previous behavior and focuses only on the mobile Dari timing issue.
+This version rolls back the broken v16 playback rewrite and returns to the stable v14 playback structure.
 
-### Dari mobile issue
+Only one targeted change is added:
 
-On mobile browsers, `speechSynthesis` can fire `onend` or `onerror` immediately for `fa-AF` even when no sound is produced. That made the Dari text disappear faster than German/English.
+- On mobile Dari, early `onend` / `onerror` events cannot immediately advance the card.
+- The Dari text remains visible for a minimum reading time.
+- German and English playback are handled by the stable engine.
 
-v16 changes this:
+## Version marker
 
-- Dari text has a hard minimum visible hold on mobile.
-- Early Dari `onend` / `onerror` cannot advance the card immediately.
-- The active utterance object is kept globally.
-- The app sends small `speechSynthesis.resume()` nudges on mobile.
-- Stop invalidates old callbacks.
-
-### Version marker
-
-A small italic `v16` appears at the top right of the app.
+A small italic `v17` is visible at the top right.
 
 ## QA
 
+- JavaScript syntax check: OK
 - Total cards: 2254
 - Verb cards: 650
 - Non-verb cards: 1604
@@ -32,10 +27,10 @@ A small italic `v16` appears at the top right of the app.
 
 ## GitHub update
 
-Replace all files with this v16 folder.
+Replace all files with this v17 folder.
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=16
+https://kanoorzad.github.io/B2_Deutsch/?v=17
 
-Delete old mobile Home Screen icons before testing.
+Delete the old mobile Home Screen icon before testing.

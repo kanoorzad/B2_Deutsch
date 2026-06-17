@@ -1,6 +1,6 @@
 {
-  "version": "16.0",
-  "base_source": "/mnt/data/b2_b1plus_flashcards_v15_mobile_dari_hold_retry",
+  "version": "17.0",
+  "base_source": "v14 stable rollback",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -14,24 +14,25 @@
     "nonVerbCardsWithNoBottomSynonyms": 1604
   },
   "checks": {
+    "javascript_syntax_ok": true,
     "version_badge_present": true,
-    "cache_busting_v16": true,
-    "mobile_dari_minimum_hold_present": true,
-    "dari_ignores_early_onend": true,
+    "cache_busting_v17": true,
+    "stable_playback_engine_restored": true,
+    "mobile_dari_hold_present": true,
+    "mobile_dari_early_events_do_not_advance": true,
     "active_utterance_kept_alive": true,
-    "speech_resume_nudges": true,
-    "callbacks_invalidated_on_stop": true,
     "verb_cards_with_3_english_synonyms": true,
     "verb_cards_with_3_german_synonyms": true,
     "verb_cards_with_3_dari_synonyms": true,
     "non_verbs_have_no_bottom_synonyms": true
   },
+  "node_check_stderr": "",
   "fixes": [
-    "Added small italic v16 marker at top right.",
-    "Dari on mobile now has a hard minimum visible hold before the app can advance.",
-    "Early mobile onend/onerror for Dari no longer immediately advances to the next text/card.",
-    "The active utterance object is kept globally to avoid mobile garbage-collection drops.",
-    "Stop invalidates old callbacks so old speech events cannot jump the card later.",
-    "Everything else from the previous version is preserved."
+    "Rolled back the v16 playback rewrite.",
+    "Restored the stable v14 play/queue structure so German and English playback are not broken.",
+    "For mobile Dari only, early onend/onerror events no longer advance the card.",
+    "Dari text is held on screen for a readable minimum time on mobile.",
+    "Added small italic v17 marker at the top right.",
+    "Kept verb-only synonym behavior and non-verb empty bottom area."
   ]
 }

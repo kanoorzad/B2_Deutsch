@@ -58,19 +58,5 @@ button,.fileBtn{min-width:0;white-space:normal}
   .card h2{font-size:clamp(1.8rem,10vw,3.6rem)}
 }
 
-
-html{height:100%;width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}
-body{min-height:100dvh;width:100%;overflow-x:hidden;touch-action:manipulation}
-.shell{box-sizing:border-box;width:min(1180px,100%);max-width:100%;overflow-x:hidden}
-.card,.quickControls,.answer,.settings{max-width:100%;overflow-wrap:anywhere}
-@media(max-width:900px){
-  .shell{display:block;width:100%;max-width:100%;padding:.65rem;overflow-x:hidden}
-  .study{width:100%;max-width:100%;display:block}
-  .card{width:100%;max-width:100%;margin:0 0 .75rem 0}
-  .quickControls{width:100%;max-width:100%;margin:.75rem 0;position:static!important;bottom:auto!important}
-  .answer{width:100%;max-width:100%;margin:.75rem 0}
-  .settings{width:100%;max-width:100%;margin:.75rem 0;overflow-x:hidden}
-}
-
 .hero{position:relative}
 .versionBadge{position:absolute;top:.55rem;right:.75rem;font-size:.78rem;font-weight:500;opacity:.84}
