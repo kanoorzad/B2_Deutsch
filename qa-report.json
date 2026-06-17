@@ -1,6 +1,6 @@
 {
-  "version": "22.0",
-  "base": "actual v6 app baseline, minimal additions only",
+  "version": "23.0",
+  "base": "v20 layout/features, Dari voice path only changed",
   "counts": {
     "b2Entries": 1629,
     "b1PlusEntries": 475,
@@ -16,22 +16,22 @@
   "checks": {
     "javascript_syntax_ok": true,
     "version_badge_present": true,
-    "cache_busting_v22": true,
-    "exact_v6_say_function_pattern": true,
-    "v6_order_german_english_dari_before_forms": true,
-    "v6_render_flipped_true_then_render": true,
-    "v6_play_next_direct_say": true,
-    "no_online_audio_or_hold_patch": true,
+    "cache_busting_v23": true,
+    "v20_online_audio_removed": true,
+    "mobile_prefers_fa_ir": true,
+    "utterance_lang_uses_selected_voice_lang": true,
+    "german_english_still_web_speech": true,
     "verb_cards_with_3_english_synonyms": true,
     "verb_cards_with_3_german_synonyms": true,
     "verb_cards_with_3_dari_synonyms": true,
     "non_verbs_have_no_bottom_synonyms": true
   },
   "node_check_stderr": "",
-  "changes": [
-    "Built from actual v6 app folder.",
-    "Kept v6 say/cardScript/renderPlaybackCard/playNextPart core.",
-    "Added only latest data, version marker, initiative line, and verb-only synonym filtering.",
-    "Removed all online audio, hold timers, retries, unlock utterances, and mobile-specific experiments."
+  "fix_summary": [
+    "Started from v20 package.",
+    "Kept layout, cards, synonyms, initiative line, and version badge behavior.",
+    "Removed only the v20 online-audio Dari experiment.",
+    "Changed Dari Web Speech selection so mobile prefers fa-IR/Persian/Farsi voice, then fa-AF.",
+    "Utterance language now matches the actual selected voice language."
   ]
 }

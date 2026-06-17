@@ -1,28 +1,22 @@
-# B2 + B1 Plus Flashcards v22
+# B2 + B1 Plus Flashcards v23
 
-## Purpose
+## Base
 
-v22 is a clean rollback to the actual v6 app core, because the later experiments did not solve mobile Dari.
+v23 is based on v20. Everything is kept the same except the Dari voice path.
 
-## Restored from v6
+## Dari-only change
 
-- `say()` uses direct `SpeechSynthesisUtterance(text)`
-- Dari language is `fa-AF`
-- Playback order is German → English → Dari → forms
-- `renderPlaybackCard()` uses `flipped=true; render();`
-- `playNextPart()` calls `say(p.t,p.l,...)` directly
-- No online audio
-- No mobile hold timer
-- No retry loop
-- No unlock utterance
+The v20 online audio experiment is removed.
 
-## Kept from latest requirements
+Dari now uses browser/device Web Speech again, but with mobile-aware voice selection:
 
-- Top-right `v22`
-- Initiative line
-- Latest data
-- Verb-only synonyms
-- No bottom synonym text for nouns/non-verbs
+- mobile prefers `fa-IR` first
+- then `fa-AF`
+- then generic `fa`
+- then any Persian/Farsi/Dari named voice
+- the utterance language is set to the actual selected voice language
+
+This targets the likely mobile issue: many phones expose Persian/Farsi as `fa-IR`, not `fa-AF`.
 
 ## QA
 
@@ -37,10 +31,10 @@ v22 is a clean rollback to the actual v6 app core, because the later experiments
 
 ## GitHub update
 
-Replace all files with this v22 folder.
+Replace all files with this v23 folder.
 
 Open:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=22
+https://kanoorzad.github.io/B2_Deutsch/?v=23
 
-Delete old mobile Home Screen icons and clear browser cache before testing.
+Delete old mobile Home Screen icons before testing.
