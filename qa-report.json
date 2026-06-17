@@ -1,25 +1,27 @@
 {
-  "version": "46.0",
-  "base": "v45 with automatic clean audio UI",
+  "version": "47.0",
+  "base": "v46 with voice section fully hidden and automatic",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v46": true,
-    "cache_busting_v46": true,
-    "top_stable_text_removed": true,
-    "manual_audio_source_removed": true,
-    "online_test_buttons_removed": true,
-    "automatic_status_present": true,
+    "version_badge_v47": true,
+    "cache_busting_v47": true,
+    "visible_voice_status_removed": true,
+    "hidden_audio_elements_present": true,
+    "no_manual_refresh_visible": true,
+    "no_manual_search_visible": true,
+    "no_direct_persian_visible": true,
+    "auto_voice_init_present": true,
+    "voiceschanged_auto": true,
+    "dari_auto_candidate": true,
     "german_english_browser_only": true,
-    "rate_limit_hidden": true,
-    "puter_guard_kept": true,
     "daria_exclusion_kept": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
   "notes": [
-    "UI no longer shows rate-limit errors.",
-    "Audio source selection is automatic.",
-    "German/English are stable browser voices; Dari tries online only when available."
+    "The voice section is no longer visible to the user.",
+    "Voice selection is automatic on startup and on voiceschanged.",
+    "The old 'No direct Persian voice · 219 brute-force candidates available' message is hidden."
   ],
   "zip_mb": 0.19
 }

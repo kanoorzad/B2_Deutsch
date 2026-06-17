@@ -1,24 +1,28 @@
-# B2 + B1 Plus Flashcards v46 — Automatic Clean Audio
+# B2 + B1 Plus Flashcards v47 — Fully Automatic Audio
 
-## Changes
+## What changed
 
-- Removed the top text: "Stable browser playback + protected Dari online test".
-- Removed manual audio-source selector.
-- Removed visible rate-limit messages from the voice panel.
-- German and English automatically use stable browser/device voices.
-- Dari/Farsi automatically tries online speech when available.
-- If online Dari is rate-limited, the app quietly falls back/skips without breaking playback.
-- Daria (bg-BG) remains excluded from Dari candidates.
+v47 removes the visible Voice Status section completely.
+
+No user action is required for audio:
+
+- no Refresh voices
+- no Run Dari voice search
+- no Try next Dari candidate
+- no manual voice dropdowns
+- no "No direct Persian voice..." message
+
+## Automatic audio behavior
+
+- German: automatically selects best available German browser/device voice.
+- English: automatically selects best available English browser/device voice.
+- Dari/Farsi: automatically tries online speech when available.
+- If online Dari is unavailable or rate-limited, the app silently uses the automatic browser/tag fallback without stopping the lesson.
 
 ## Open
 
-https://kanoorzad.github.io/B2_Deutsch/?v=46
+https://kanoorzad.github.io/B2_Deutsch/?v=47
 
 ## Test
 
-1. Test German
-2. Test English
-3. Test Dari
-4. Play selected
-
-The voice area should show automatic mode, not rate-limit text.
+Just press Play or Speak. Do not open any voice section.

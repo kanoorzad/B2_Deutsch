@@ -1,5 +1,5 @@
 // v34: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v46AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh46=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh46='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+(function(){try{const key='v47AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh46=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh46='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
 const STORE='b2-native-cards-extra-v43';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
@@ -94,7 +94,7 @@ function isPremiumVoice(v){
 function looksPersianVoice(v){
   if(isFalseDariVoice(v))return false;
   const s=((v&&v.name)||'')+' '+((v&&v.lang)||'');
-  return /fa[-_]?ir|fa[-_]?af|fa|farsi|persian|dari|afghan|afghanistan|iran|iranian|فارسی|دری|ایران|افغان/i.test(s);
+  return /fa[-_]?ir|fa[-_]?af|\bfa\b|farsi|persian|\bdari\b|afghan|afghanistan|iran|iranian|فارسی|دری|ایران|افغان/i.test(s);
 }
 function scoreVoice(v, lang){
   const name=(v.name||'').toLowerCase();
@@ -171,7 +171,7 @@ function selectedVoice(lang){
 function populateVoiceSelect(lang){
   const select = lang==='de' ? els.voiceSelectDe : lang==='en' ? els.voiceSelectEn : els.voiceSelectFa;
   if(!select)return;
-  const old = localStorage.getItem(`voice-choice-v43-${lang}`) || select.value || '';
+  const old = localStorage.getItem(`voice-choice-v47-${lang}`) || select.value || '';
   const list = candidates(lang);
   select.innerHTML = '';
 
@@ -213,7 +213,7 @@ function populateAllVoiceSelects(){
 }
 function saveVoiceChoice(lang){
   const select = lang==='de' ? els.voiceSelectDe : lang==='en' ? els.voiceSelectEn : els.voiceSelectFa;
-  if(select)localStorage.setItem(`voice-choice-v43-${lang}`, select.value || '');
+  if(select)localStorage.setItem(`voice-choice-v47-${lang}`, select.value || '');
   updateVoiceStatus();
 }
 function speakWithCandidate(text, candidate, done=()=>{}){
@@ -254,7 +254,7 @@ function onlineLocale(lang){
   return 'fa-IR';
 }
 function updateOnlineStatus(msg){
-  // v46: keep the voice panel clean. Do not show rate-limit errors to the learner.
+  // v47: keep the voice panel clean. Do not show rate-limit errors to the learner.
   if(els.onlineStatus)els.onlineStatus.textContent='Automatic';
 }
 function shouldUseOnline(lang){
@@ -312,7 +312,7 @@ function sayBrowserOnly(text, lang='de', done=()=>{}, allowSilentSkip=false){
   }
 
   if(lang==='fa'){
-    const saved=localStorage.getItem('dari-candidate-v46');
+    const saved=localStorage.getItem('dari-candidate-v47');
     if(saved){
       try{
         const parsed=JSON.parse(saved);
@@ -339,7 +339,7 @@ function sayBrowserOnly(text, lang='de', done=()=>{}, allowSilentSkip=false){
     if(finished)return;
     finished=true;
     activeUtterance=null;
-    if(lang==='fa' && allowSilentSkip)updateOnlineStatus('No Dari browser voice available; skipped without breaking playback.');
+    if(lang==='fa' && allowSilentSkip)updateOnlineStatus('Dari audio handled automatically.');
     done();
   }, lang==='fa'?5000:12000);
 
@@ -358,67 +358,88 @@ function sayBrowserOnly(text, lang='de', done=()=>{}, allowSilentSkip=false){
 function queueSay(t,l='de',d=()=>{}){say(t,l,d)}
 function speakFront(){if(lastFront)say(lastFront.speech||lastFront.display||lastFront.txt,lastFront.lang)}
 function unlockSpeech(){
-  populateAllVoiceSelects();
-  updateVoiceStatus();
+  autoInitVoices();
   try{speechSynthesis.cancel();speechSynthesis.resume()}catch(e){}
-  els.now.textContent='Voices refreshed. Run Dari voice search on mobile if Dari is still silent.';
+  els.now.textContent='Audio is automatic.';
 }
 function updateDariCandidateLabel(){
   if(!els.dariCandidate)return;
-  const saved=localStorage.getItem('dari-candidate-v46');
+  const saved=localStorage.getItem('dari-candidate-v47');
   if(saved){
     try{els.dariCandidate.textContent=JSON.parse(saved).label;return}catch(e){}
   }
   els.dariCandidate.textContent='Not selected yet';
 }
 function runDariVoiceSearch(){
-  populateAllVoiceSelects();
-  dariCandidates=buildDariCandidates();
-  dariCandidateIndex=0;
-  if(!dariCandidates.length){
-    if(els.dariCandidate)els.dariCandidate.textContent='No candidates found';
-    els.now.textContent='No speech voices were exposed by this mobile browser.';
-    return;
-  }
-  tryCurrentDariCandidate();
+  autoSelectDariCandidate();
+  updateVoiceStatus();
 }
 function tryCurrentDariCandidate(){
-  if(!dariCandidates.length)dariCandidates=buildDariCandidates();
-  if(!dariCandidates.length)return;
-  const c=dariCandidates[dariCandidateIndex % dariCandidates.length];
-  if(els.dariCandidate)els.dariCandidate.textContent=`${dariCandidateIndex+1}/${dariCandidates.length}: ${c.label}`;
-  localStorage.setItem('dari-candidate-v46',JSON.stringify({label:c.label,lang:c.lang,voiceKey:c.voice?voiceKey(c.voice):''}));
-  els.now.textContent='Testing Dari candidate: '+c.label;
-  speakWithCandidate(DARI_TEST_TEXT,c,()=>{});
+  autoSelectDariCandidate();
+  updateVoiceStatus();
 }
 function nextDariCandidate(){
-  if(!dariCandidates.length)dariCandidates=buildDariCandidates();
-  if(!dariCandidates.length){runDariVoiceSearch();return}
-  dariCandidateIndex=(dariCandidateIndex+1)%dariCandidates.length;
-  tryCurrentDariCandidate();
+  autoSelectDariCandidate();
+  updateVoiceStatus();
 }
 function detectDevice(){
-  let d='Desktop/laptop';
-  const ua=navigator.userAgent||'';
-  if(/iPhone|iPad|iPod/i.test(ua))d='iPhone/iPad';
-  else if(/Android/i.test(ua))d='Android';
-  else if(/Windows/i.test(ua))d='Windows PC';
-  else if(/Macintosh/i.test(ua))d='Mac';
-  els.deviceInfo.textContent=`Detected: ${d}. v43 uses online AI TTS for Dari/Farsi first, then browser fallback.`;
+  if(els.deviceInfo)els.deviceInfo.textContent='Automatic audio mode.';
 }
 function updateVoiceStatus(){
   if(!('speechSynthesis'in window)){
-    els.voiceDe.textContent=els.voiceEn.textContent=els.voiceFa.textContent='Speech not supported';
+    if(els.voiceDe)els.voiceDe.textContent='Automatic';
+    if(els.voiceEn)els.voiceEn.textContent='Automatic';
+    if(els.voiceFa)els.voiceFa.textContent='Automatic';
     return;
   }
   populateAllVoiceSelects();
-  els.voiceDe.textContent=voiceLabel(selectedVoice('de'));
-  els.voiceEn.textContent=voiceLabel(selectedVoice('en'));
-  const fv=selectedVoice('fa');
-  const count=buildDariCandidates().length;
-  els.voiceFa.textContent=fv ? `${voiceLabel(fv)} · ${count} Dari candidates available` : `No direct Persian voice · ${count} brute-force candidates available`;
+  const de=selectedVoice('de');
+  const en=selectedVoice('en');
+  const fa=selectedVoice('fa');
+  if(els.voiceDe)els.voiceDe.textContent=de?voiceLabel(de):'Automatic';
+  if(els.voiceEn)els.voiceEn.textContent=en?voiceLabel(en):'Automatic';
+  if(els.voiceFa)els.voiceFa.textContent=fa?voiceLabel(fa):'Automatic online/browser fallback';
   updateDariCandidateLabel();
 }
+
+function autoChooseSelect(lang){
+  const select = lang==='de' ? els.voiceSelectDe : lang==='en' ? els.voiceSelectEn : els.voiceSelectFa;
+  if(!select)return;
+  populateVoiceSelect(lang);
+  const best=candidates(lang)[0];
+  if(best){
+    select.value=voiceKey(best);
+    localStorage.setItem(`voice-choice-v47-${lang}`, select.value || '');
+  }else{
+    select.value='';
+  }
+}
+function autoSelectDariCandidate(){
+  const direct=candidates('fa')[0];
+  let candidate=null;
+  if(direct){
+    candidate={label:`Automatic: ${voiceLabel(direct)}`,lang:direct.lang,voiceKey:voiceKey(direct)};
+  }else{
+    // No direct Persian/Farsi voice was exposed. Use the best tag-only fallback automatically.
+    candidate={label:'Automatic: fa-IR tag-only fallback',lang:'fa-IR',voiceKey:''};
+  }
+  localStorage.setItem('dari-candidate-v47',JSON.stringify(candidate));
+  if(els.dariCandidate)els.dariCandidate.textContent='Automatic';
+}
+function autoInitVoices(){
+  populateAllVoiceSelects();
+  autoChooseSelect('de');
+  autoChooseSelect('en');
+  autoChooseSelect('fa');
+  autoSelectDariCandidate();
+  updateVoiceStatus();
+  updateOnlineStatus('Automatic');
+}
+function scheduleAutoVoiceInit(){
+  autoInitVoices();
+  [250,750,1500,3000,5000].forEach(ms=>setTimeout(autoInitVoices,ms));
+}
+
 function cardScript(c){
   const steps=[];
   if(els.playDe.checked){
@@ -499,11 +520,11 @@ function stop(doRender=true){
   if(doRender)render();
 }
 
-function addCard(e){e.preventDefault();const d=Object.fromEntries(new FormData(els.addForm).entries());const syns=String(d.synonyms||'').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);while(syns.length<3)syns.push(syns.length?'related verb':'verb meaning');const isVerb=d.category==='verb';const c={id:'custom-'+Date.now(),source:'user',list:'My cards',unit:d.unit||'My list',part:'',category:d.category||'other',german:d.german,english:d.english,dari:d.dari,article:d.article||'',singular:d.german,plural:d.plural||'',forms:{infinitive:d.infinitive||'',present3:'',past:d.past||'',perfect:d.perfect||'',plusquamperfekt:d.plusquamperfekt||''},synonyms:isVerb?syns:[],synonyms_en:isVerb?syns:[],synonyms_de:isVerb?syns:[],synonyms_fa:isVerb?syns:[],example:''};extra.push(c);localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];loadAudioSource();populateAllVoiceSelects();setup();apply();updateOnlineStatus();els.addForm.reset()}
-function exportBackup(){const blob=new Blob([JSON.stringify(extra,null,2)],{type:'application/json'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='my-flashcard-backup.json';a.click();URL.revokeObjectURL(u)}function importBackup(file){const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw Error('Backup must be an array.');extra=x;localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];loadAudioSource();populateAllVoiceSelects();setup();apply();updateOnlineStatus();alert('Backup imported.')}catch(e){alert(e.message)}};r.readAsText(file)}
+function addCard(e){e.preventDefault();const d=Object.fromEntries(new FormData(els.addForm).entries());const syns=String(d.synonyms||'').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);while(syns.length<3)syns.push(syns.length?'related verb':'verb meaning');const isVerb=d.category==='verb';const c={id:'custom-'+Date.now(),source:'user',list:'My cards',unit:d.unit||'My list',part:'',category:d.category||'other',german:d.german,english:d.english,dari:d.dari,article:d.article||'',singular:d.german,plural:d.plural||'',forms:{infinitive:d.infinitive||'',present3:'',past:d.past||'',perfect:d.perfect||'',plusquamperfekt:d.plusquamperfekt||''},synonyms:isVerb?syns:[],synonyms_en:isVerb?syns:[],synonyms_de:isVerb?syns:[],synonyms_fa:isVerb?syns:[],example:''};extra.push(c);localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];loadAudioSource();setup();apply();scheduleAutoVoiceInit();els.addForm.reset()}
+function exportBackup(){const blob=new Blob([JSON.stringify(extra,null,2)],{type:'application/json'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='my-flashcard-backup.json';a.click();URL.revokeObjectURL(u)}function importBackup(file){const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw Error('Backup must be an array.');extra=x;localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];loadAudioSource();setup();apply();scheduleAutoVoiceInit();alert('Backup imported.')}catch(e){alert(e.message)}};r.readAsText(file)}
 ['list','unit','part','type','front'].forEach(k=>els[k]?.addEventListener('change',()=>{if(k==='list')updateUnits();if(k==='unit')updateParts();apply()}));els.search.addEventListener('input',apply);els.next.addEventListener('click',next);els.prev.addEventListener('click',prev);els.flip.addEventListener('click',flip);els.card.addEventListener('click',()=>{if(!playing)flip()});els.speakFront.addEventListener('click',speakFront);els.playList.addEventListener('click',playSelected);els.pauseList.addEventListener('click',pauseResume);els.stopList.addEventListener('click',()=>stop());els.addForm.addEventListener('submit',addCard);els.exportBtn.addEventListener('click',exportBackup);els.importJson.addEventListener('change',e=>e.target.files[0]&&importBackup(e.target.files[0]));els.unlockSpeech.addEventListener('click',unlockSpeech);els.testDe.addEventListener('click',()=>say('die Abteilung. die Abteilungen.','de'));els.testEn.addEventListener('click',()=>say('department or division','en'));els.testFa.addEventListener('click',()=>say(DARI_TEST_TEXT,'fa'));document.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()=>{const c=filtered[idx];if(!c)return;if(b.dataset.say==='de')say(displayGerman(c),'de');if(b.dataset.say==='en')say(displayEnglish(c),'en');if(b.dataset.say==='fa')say(displayDari(c),'fa')}));if(els.voiceSelectDe)els.voiceSelectDe.addEventListener('change',()=>saveVoiceChoice('de'));
 if(els.voiceSelectEn)els.voiceSelectEn.addEventListener('change',()=>saveVoiceChoice('en'));
 if(els.voiceSelectFa)els.voiceSelectFa.addEventListener('change',()=>saveVoiceChoice('fa'));
 if(els.scanDariVoices)els.scanDariVoices.addEventListener('click',runDariVoiceSearch);
 if(els.nextDariCandidate)els.nextDariCandidate.addEventListener('click',nextDariCandidate);
-document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(e.code==='Space'){e.preventDefault();if(!playing)flip()}if(e.code==='ArrowRight')next();if(e.code==='ArrowLeft')prev()});if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=()=>updateVoiceStatus();setTimeout(updateVoiceStatus,500);setTimeout(updateVoiceStatus,1500)}loadAudioSource();populateAllVoiceSelects();setup();apply();updateOnlineStatus();
+document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(e.code==='Space'){e.preventDefault();if(!playing)flip()}if(e.code==='ArrowRight')next();if(e.code==='ArrowLeft')prev()});if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=()=>scheduleAutoVoiceInit()}loadAudioSource();setup();apply();scheduleAutoVoiceInit();
