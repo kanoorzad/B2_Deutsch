@@ -1,22 +1,23 @@
 {
-  "version": "43.0",
-  "base": "v42 with Bulgarian Daria false-positive removed",
+  "version": "44.0",
+  "base": "v43 with multi-provider online TTS router",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v43": true,
-    "cache_busting_v43": true,
-    "daria_bg_exclusion_present": true,
-    "dari_word_boundary_match": true,
-    "online_tts_still_present": true,
+    "version_badge_v44": true,
+    "cache_busting_v44": true,
+    "google_tts_provider_present": true,
+    "puter_rate_limit_protection": true,
+    "provider_router_present": true,
+    "browser_fallback_present": true,
     "no_api_key_in_app": true,
     "no_local_sprite_or_webaudio": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
   "notes": [
-    "Daria (bg-BG) is explicitly excluded.",
-    "Bulgarian bg-* voices are excluded from Dari/Farsi matching.",
-    "The v42 online AI TTS layer is preserved."
+    "Google Translate TTS direct audio is tried before Puter in default mode.",
+    "Puter is temporarily disabled for 10 minutes after a rate-limit error.",
+    "Browser speech remains the fallback."
   ],
   "zip_mb": 0.19
 }

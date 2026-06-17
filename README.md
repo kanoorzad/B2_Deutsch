@@ -1,34 +1,38 @@
-# B2 + B1 Plus Flashcards v43
+# B2 + B1 Plus Flashcards v44
 
-## Fix
+## Fix for "Online AI TTS failed: Rate exceeded"
 
-v43 removes the false Dari/Farsi voice candidate:
+v43 used Puter AI TTS. That can return a public rate-limit error.
 
-- `Daria (bg-BG)`
+v44 does not depend on Puter only. It adds a multi-provider online TTS router:
 
-This voice is Bulgarian (`bg-BG`), not Dari/Farsi. It was incorrectly appearing because the name `Daria` contains the letters `Dari`.
+1. Google Translate TTS direct audio first for Dari/Farsi
+2. Puter AI TTS only as backup
+3. Browser/device voice as last fallback
 
-## What changed in the filter
+## Audio source options
 
-The Dari/Farsi candidate scanner now excludes:
+- Google online Dari/Farsi first
+- Google first, Puter backup
+- Puter first, Google backup
+- Google online for all three languages
+- Browser/device voices only
 
-- `bg-BG`
-- any language code beginning with `bg`
-- voice name `Daria`
-- Bulgarian voice names
+## Test
 
-It also matches `Dari` as a full word only, not inside another name.
+Open:
 
-## Upload
+https://kanoorzad.github.io/B2_Deutsch/?v=44
 
-Upload v43 and open:
+Then tap:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=43
+- Test Online Dari
 
-Then test:
+If Puter is rate-limited, the app will not keep hammering it. It will temporarily disable Puter and try the next provider.
 
-1. Test Online Dari
-2. Run Dari voice search
-3. Try next Dari candidate
+## Notes
 
-Daria (bg-BG) should no longer appear as a Dari/Farsi candidate.
+- Google online TTS requires internet.
+- It is live online audio, not downloaded local MP3.
+- No API key is stored in the app.
+- If the provider blocks traffic, browser fallback still exists.
