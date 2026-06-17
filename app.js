@@ -1,7 +1,7 @@
 // v34: remove old service workers/caches once so old broken versions cannot control audio.
 (function(){try{const key='v34AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh34=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh34='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v39';
+const STORE='b2-native-cards-extra-v40';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[]; let idx=0; let flipped=false; let lastFront=null; let playing=false; let paused=false; let playQueue=[]; let playIndex=0;
@@ -19,7 +19,7 @@ const els={
   count:$('count'),bar:$('bar'),playDe:$('playDe'),playEn:$('playEn'),playFa:$('playFa'),playForms:$('playForms'),repeat:$('repeat'),
   playList:$('playList'),pauseList:$('pauseList'),stopList:$('stopList'),now:$('nowPlaying'),speechWarning:$('speechWarning'),
   addForm:$('addForm'),exportBtn:$('exportBtn'),importJson:$('importJson'),deviceInfo:$('deviceInfo'),voiceDe:$('voiceDe'),voiceEn:$('voiceEn'),voiceFa:$('voiceFa'),
-  testDe:$('testDe'),testEn:$('testEn'),testFa:$('testFa'),unlockSpeech:$('unlockSpeech'),voiceSelectDe:$('voiceSelectDe'),voiceSelectEn:$('voiceSelectEn'),voiceSelectFa:$('voiceSelectFa')
+  testDe:$('testDe'),testEn:$('testEn'),testFa:$('testFa'),unlockSpeech:$('unlockSpeech'),voiceSelectDe:$('voiceSelectDe'),voiceSelectEn:$('voiceSelectEn'),voiceSelectFa:$('voiceSelectFa'),scanDariVoices:$('scanDariVoices'),nextDariCandidate:$('nextDariCandidate'),dariCandidate:$('dariCandidate')
 };
 function unique(a){return [...new Set(a.filter(Boolean))].sort((x,y)=>x.localeCompare(y,undefined,{numeric:true}))}
 function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
@@ -58,21 +58,23 @@ function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=f
 
 
 // v34 audio engine: native best-quality voices for German/English; Dari Auto = native Farsi/Persian voice if it truly works, otherwise local high-quality sprite fallback.
+// v40 browser voice engine with brute-force Dari/Farsi mobile candidates.
+// Keeps v3-v6 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
+// No local sprite/WebAudio/remote TTS.
 let activeUtterance=null;
-// v39 classic v3-v6 voice engine for all languages.
-// No WebAudio, no local sprite, no remote TTS, no automatic fallback switching.
-// v39 browser voice engine.
-// Keeps v3-v6 browser SpeechSynthesis, but improves mobile by:
-// 1) detecting all voices,
-// 2) letting the user select exact voices,
-// 3) using selected voice.lang instead of forcing fa-AF,
-// 4) prioritizing Persian/Farsi/Dari voices by name and fa-IR/fa-AF/fa code.
+let dariCandidates=[];
+let dariCandidateIndex=0;
 
+const DARI_TEST_TEXT='دیپارتمنت، بخش. سلام، این یک تست صدای دری و فارسی است.';
+const DARI_TAGS=[
+  'fa-IR','fa-AF','fa','prs-AF','prs','fa-Arab','fa-Arab-IR','fa-Arab-AF',
+  'fas','fas-IR','per','per-IR','ira','ira-IR','ps-AF','ur-PK','ar','ar-SA'
+];
 
 function voices(){
   return ('speechSynthesis' in window) ? (speechSynthesis.getVoices() || []) : [];
 }
-function voiceLabel(v){return v ? `${v.name} (${v.lang})` : 'No matching voice found'}
+function voiceLabel(v){return v ? `${v.name} (${v.lang})` : 'No specific voice'}
 function voiceKey(v){return v ? `${v.name}|||${v.lang}` : ''}
 function voiceByKey(k){
   if(!k)return null;
@@ -82,43 +84,75 @@ function voiceByKey(k){
 function isPremiumVoice(v){
   return /premium|enhanced|natural|neural|online|siri|google|microsoft|compact/i.test((v&&v.name)||'');
 }
+function looksPersianVoice(v){
+  const s=((v&&v.name)||'')+' '+((v&&v.lang)||'');
+  return /fa[-_]?ir|fa[-_]?af|\bfa\b|farsi|persian|dari|afghan|afghanistan|iran|iranian|فارسی|دری|ایران|افغان/i.test(s);
+}
 function scoreVoice(v, lang){
   const name=(v.name||'').toLowerCase();
   const code=(v.lang||'').toLowerCase();
-
   let score=0;
   if(isPremiumVoice(v))score+=20;
-
   if(lang==='de'){
-    if(code==='de-de')score+=100;
-    else if(code.startsWith('de'))score+=70;
+    if(code==='de-de')score+=100; else if(code.startsWith('de'))score+=70;
   }else if(lang==='en'){
-    if(code==='en-us')score+=100;
-    else if(code.startsWith('en'))score+=70;
+    if(code==='en-us')score+=100; else if(code.startsWith('en'))score+=70;
   }else if(lang==='fa'){
-    if(code==='fa-ir')score+=120;       // most phones expose Persian as fa-IR
-    else if(code==='fa-af')score+=115;  // ideal if available
-    else if(code==='fa')score+=100;
-    else if(code.startsWith('fa'))score+=90;
-    if(/persian|farsi|dari|فارسی|دری/i.test(v.name))score+=80;
-    if(code.startsWith('ar'))score-=100; // do not silently pick Arabic unless user manually chooses it
+    if(code==='fa-ir')score+=140;
+    else if(code==='fa-af')score+=135;
+    else if(code==='fa')score+=120;
+    else if(code.startsWith('fa'))score+=110;
+    else if(code==='prs-af'||code==='prs')score+=105;
+    if(/persian|farsi|dari|afghan|afghanistan|iran|iranian|فارسی|دری/i.test(name))score+=90;
+    // Arabic/Urdu/Pashto are only last-resort test candidates, not auto choices.
+    if(code.startsWith('ar')||code.startsWith('ur')||code.startsWith('ps'))score-=100;
   }
   return score;
 }
 function candidates(lang){
   const vs=voices();
   if(lang==='fa'){
-    return vs
-      .map(v=>({v,score:scoreVoice(v,'fa')}))
+    return vs.map(v=>({v,score:scoreVoice(v,'fa')}))
       .filter(x=>x.score>0)
       .sort((a,b)=>b.score-a.score)
       .map(x=>x.v);
   }
-  return vs
-    .map(v=>({v,score:scoreVoice(v,lang)}))
+  return vs.map(v=>({v,score:scoreVoice(v,lang)}))
     .filter(x=>x.score>0)
     .sort((a,b)=>b.score-a.score)
     .map(x=>x.v);
+}
+function buildDariCandidates(){
+  const out=[];
+  const seen=new Set();
+  function add(label, voice, lang, note){
+    const key=(voice?voiceKey(voice):'noVoice')+'||'+lang+'||'+label;
+    if(seen.has(key))return;
+    seen.add(key);
+    out.push({label,voice,lang,note});
+  }
+
+  // 1. Detected Persian/Farsi/Dari voices with their own lang.
+  candidates('fa').forEach(v=>add(`Detected: ${voiceLabel(v)} using ${v.lang}`, v, v.lang, 'detected'));
+
+  // 2. All voices whose name/lang looks Persian, even if score did not catch them.
+  voices().filter(looksPersianVoice).forEach(v=>add(`Name match: ${voiceLabel(v)} using ${v.lang}`, v, v.lang, 'name-match'));
+
+  // 3. Same selected/detected voice forced through all realistic tags.
+  const baseVoices=[...candidates('fa'), ...voices().filter(looksPersianVoice)];
+  baseVoices.forEach(v=>{
+    DARI_TAGS.forEach(tag=>add(`Voice ${v.name} forced tag ${tag}`, v, tag, 'voice+tag'));
+  });
+
+  // 4. Tag-only modes: no selected voice, just u.lang. Some mobile browsers work only this way.
+  DARI_TAGS.forEach(tag=>add(`No selected voice · language tag ${tag}`, null, tag, 'tag-only'));
+
+  // 5. Absolute last resort: every installed voice with fa-IR/fa-AF/fa tags for manual discovery.
+  voices().forEach(v=>{
+    ['fa-IR','fa-AF','fa'].forEach(tag=>add(`Manual all voices: ${voiceLabel(v)} + ${tag}`, v, tag, 'manual-all'));
+  });
+
+  return out;
 }
 function selectedVoice(lang){
   const select = lang==='de' ? els.voiceSelectDe : lang==='en' ? els.voiceSelectEn : els.voiceSelectFa;
@@ -129,7 +163,7 @@ function selectedVoice(lang){
 function populateVoiceSelect(lang){
   const select = lang==='de' ? els.voiceSelectDe : lang==='en' ? els.voiceSelectEn : els.voiceSelectFa;
   if(!select)return;
-  const old = localStorage.getItem(`voice-choice-v39-${lang}`) || select.value || '';
+  const old = localStorage.getItem(`voice-choice-v40-${lang}`) || select.value || '';
   const list = candidates(lang);
   select.innerHTML = '';
 
@@ -145,18 +179,21 @@ function populateVoiceSelect(lang){
     select.appendChild(opt);
   });
 
-  // If no matching Farsi voice is exposed, show all voices so the user can test manually.
-  if(lang==='fa' && list.length===0){
-    const group = document.createElement('option');
-    group.value='';
-    group.textContent='No fa voice found — install Persian/Farsi voice or test all voices below';
-    select.appendChild(group);
-    voices().forEach(v=>{
+  if(lang==='fa'){
+    const named=voices().filter(looksPersianVoice).filter(v=>!list.some(x=>voiceKey(x)===voiceKey(v)));
+    named.forEach(v=>{
       const opt=document.createElement('option');
       opt.value=voiceKey(v);
-      opt.textContent='Manual test: '+voiceLabel(v);
+      opt.textContent='Name match: '+voiceLabel(v);
       select.appendChild(opt);
     });
+
+    if(list.length===0 && named.length===0){
+      const opt=document.createElement('option');
+      opt.value='';
+      opt.textContent='No fa/prs/Persian/Farsi/Dari voice detected — use Run Dari voice search';
+      select.appendChild(opt);
+    }
   }
 
   if(old && [...select.options].some(o=>o.value===old))select.value=old;
@@ -168,32 +205,19 @@ function populateAllVoiceSelects(){
 }
 function saveVoiceChoice(lang){
   const select = lang==='de' ? els.voiceSelectDe : lang==='en' ? els.voiceSelectEn : els.voiceSelectFa;
-  if(select)localStorage.setItem(`voice-choice-v39-${lang}`, select.value || '');
+  if(select)localStorage.setItem(`voice-choice-v40-${lang}`, select.value || '');
   updateVoiceStatus();
 }
-function say(text, lang='de', done=()=>{}){
-  if(!text){done();return}
+function speakWithCandidate(text, candidate, done=()=>{}){
   if(!('speechSynthesis'in window)){alert('Speech is not supported in this browser.');done();return}
-
   speechSynthesis.cancel();
-
-  const v = selectedVoice(lang);
-  const u = new SpeechSynthesisUtterance(text);
-
-  // Critical mobile fix:
-  // If we selected fa-IR, speak as fa-IR. Do not force fa-AF.
-  if(v){
-    u.voice = v;
-    u.lang = v.lang;
-  }else{
-    u.lang = lang==='de'?'de-DE':lang==='en'?'en-US':'fa-IR';
-  }
-
-  u.rate = lang==='de'?0.78:lang==='en'?0.88:0.90;
-  u.pitch = 1;
-
-  let finished=false;
+  const u=new SpeechSynthesisUtterance(text);
+  if(candidate&&candidate.voice)u.voice=candidate.voice;
+  u.lang=(candidate&&candidate.lang)||'fa-IR';
+  u.rate=0.88;
+  u.pitch=1;
   activeUtterance=u;
+  let finished=false;
   function finish(){
     if(finished)return;
     finished=true;
@@ -202,9 +226,41 @@ function say(text, lang='de', done=()=>{}){
   }
   u.onend=finish;
   u.onerror=finish;
-
   try{speechSynthesis.resume()}catch(e){}
-  setTimeout(()=>speechSynthesis.speak(u), 60);
+  setTimeout(()=>speechSynthesis.speak(u),80);
+}
+function say(text, lang='de', done=()=>{}){
+  if(!text){done();return}
+  if(!('speechSynthesis'in window)){alert('Speech is not supported in this browser.');done();return}
+
+  if(lang==='fa'){
+    // If the user has run/selected a candidate, use it exactly.
+    const saved=localStorage.getItem('dari-candidate-v40');
+    if(saved){
+      try{
+        const parsed=JSON.parse(saved);
+        const voice=parsed.voiceKey?voiceByKey(parsed.voiceKey):null;
+        speakWithCandidate(text,{voice,lang:parsed.lang,label:parsed.label},done);
+        return;
+      }catch(e){}
+    }
+  }
+
+  speechSynthesis.cancel();
+  const v = selectedVoice(lang);
+  const u = new SpeechSynthesisUtterance(text);
+
+  if(v){u.voice=v;u.lang=v.lang}
+  else{u.lang = lang==='de'?'de-DE':lang==='en'?'en-US':'fa-IR'}
+
+  u.rate = lang==='de'?0.78:lang==='en'?0.88:0.88;
+  u.pitch = 1;
+  activeUtterance=u;
+  let finished=false;
+  function finish(){if(finished)return;finished=true;activeUtterance=null;done();}
+  u.onend=finish;u.onerror=finish;
+  try{speechSynthesis.resume()}catch(e){}
+  setTimeout(()=>speechSynthesis.speak(u),60);
 }
 function queueSay(t,l='de',d=()=>{}){say(t,l,d)}
 function speakFront(){if(lastFront)say(lastFront.speech||lastFront.display||lastFront.txt,lastFront.lang)}
@@ -212,7 +268,41 @@ function unlockSpeech(){
   populateAllVoiceSelects();
   updateVoiceStatus();
   try{speechSynthesis.cancel();speechSynthesis.resume()}catch(e){}
-  els.now.textContent='Voices refreshed. Choose a Dari/Farsi voice, then tap Test Dari.';
+  els.now.textContent='Voices refreshed. Run Dari voice search on mobile if Dari is still silent.';
+}
+function updateDariCandidateLabel(){
+  if(!els.dariCandidate)return;
+  const saved=localStorage.getItem('dari-candidate-v40');
+  if(saved){
+    try{els.dariCandidate.textContent=JSON.parse(saved).label;return}catch(e){}
+  }
+  els.dariCandidate.textContent='Not selected yet';
+}
+function runDariVoiceSearch(){
+  populateAllVoiceSelects();
+  dariCandidates=buildDariCandidates();
+  dariCandidateIndex=0;
+  if(!dariCandidates.length){
+    if(els.dariCandidate)els.dariCandidate.textContent='No candidates found';
+    els.now.textContent='No speech voices were exposed by this mobile browser.';
+    return;
+  }
+  tryCurrentDariCandidate();
+}
+function tryCurrentDariCandidate(){
+  if(!dariCandidates.length)dariCandidates=buildDariCandidates();
+  if(!dariCandidates.length)return;
+  const c=dariCandidates[dariCandidateIndex % dariCandidates.length];
+  if(els.dariCandidate)els.dariCandidate.textContent=`${dariCandidateIndex+1}/${dariCandidates.length}: ${c.label}`;
+  localStorage.setItem('dari-candidate-v40',JSON.stringify({label:c.label,lang:c.lang,voiceKey:c.voice?voiceKey(c.voice):''}));
+  els.now.textContent='Testing Dari candidate: '+c.label;
+  speakWithCandidate(DARI_TEST_TEXT,c,()=>{});
+}
+function nextDariCandidate(){
+  if(!dariCandidates.length)dariCandidates=buildDariCandidates();
+  if(!dariCandidates.length){runDariVoiceSearch();return}
+  dariCandidateIndex=(dariCandidateIndex+1)%dariCandidates.length;
+  tryCurrentDariCandidate();
 }
 function detectDevice(){
   let d='Desktop/laptop';
@@ -221,7 +311,7 @@ function detectDevice(){
   else if(/Android/i.test(ua))d='Android';
   else if(/Windows/i.test(ua))d='Windows PC';
   else if(/Macintosh/i.test(ua))d='Mac';
-  els.deviceInfo.textContent=`Detected: ${d}. v39 uses browser voices with exact selected language code.`;
+  els.deviceInfo.textContent=`Detected: ${d}. v40 brute-forces fa-IR, fa-AF, fa, prs-AF, prs, Persian/Farsi/Dari, and tag-only speech.`;
 }
 function updateVoiceStatus(){
   if(!('speechSynthesis'in window)){
@@ -232,7 +322,9 @@ function updateVoiceStatus(){
   els.voiceDe.textContent=voiceLabel(selectedVoice('de'));
   els.voiceEn.textContent=voiceLabel(selectedVoice('en'));
   const fv=selectedVoice('fa');
-  els.voiceFa.textContent=fv ? voiceLabel(fv) : 'No Persian/Farsi/Dari voice exposed by this browser';
+  const count=buildDariCandidates().length;
+  els.voiceFa.textContent=fv ? `${voiceLabel(fv)} · ${count} Dari candidates available` : `No direct Persian voice · ${count} brute-force candidates available`;
+  updateDariCandidateLabel();
 }
 function cardScript(c){
   const steps=[];
@@ -315,7 +407,9 @@ function stop(doRender=true){
 
 function addCard(e){e.preventDefault();const d=Object.fromEntries(new FormData(els.addForm).entries());const syns=String(d.synonyms||'').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);while(syns.length<3)syns.push(syns.length?'related verb':'verb meaning');const isVerb=d.category==='verb';const c={id:'custom-'+Date.now(),source:'user',list:'My cards',unit:d.unit||'My list',part:'',category:d.category||'other',german:d.german,english:d.english,dari:d.dari,article:d.article||'',singular:d.german,plural:d.plural||'',forms:{infinitive:d.infinitive||'',present3:'',past:d.past||'',perfect:d.perfect||'',plusquamperfekt:d.plusquamperfekt||''},synonyms:isVerb?syns:[],synonyms_en:isVerb?syns:[],synonyms_de:isVerb?syns:[],synonyms_fa:isVerb?syns:[],example:''};extra.push(c);localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];populateAllVoiceSelects();setup();apply();els.addForm.reset()}
 function exportBackup(){const blob=new Blob([JSON.stringify(extra,null,2)],{type:'application/json'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='my-flashcard-backup.json';a.click();URL.revokeObjectURL(u)}function importBackup(file){const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw Error('Backup must be an array.');extra=x;localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];populateAllVoiceSelects();setup();apply();alert('Backup imported.')}catch(e){alert(e.message)}};r.readAsText(file)}
-['list','unit','part','type','front'].forEach(k=>els[k]?.addEventListener('change',()=>{if(k==='list')updateUnits();if(k==='unit')updateParts();apply()}));els.search.addEventListener('input',apply);els.next.addEventListener('click',next);els.prev.addEventListener('click',prev);els.flip.addEventListener('click',flip);els.card.addEventListener('click',()=>{if(!playing)flip()});els.speakFront.addEventListener('click',speakFront);els.playList.addEventListener('click',playSelected);els.pauseList.addEventListener('click',pauseResume);els.stopList.addEventListener('click',()=>stop());els.addForm.addEventListener('submit',addCard);els.exportBtn.addEventListener('click',exportBackup);els.importJson.addEventListener('change',e=>e.target.files[0]&&importBackup(e.target.files[0]));els.unlockSpeech.addEventListener('click',unlockSpeech);els.testDe.addEventListener('click',()=>say('die Abteilung. die Abteilungen.','de'));els.testEn.addEventListener('click',()=>say('department or division','en'));els.testFa.addEventListener('click',()=>say('دیپارتمنت، بخش. لطفاً این صدا را امتحان کنید.','fa'));document.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()=>{const c=filtered[idx];if(!c)return;if(b.dataset.say==='de')say(displayGerman(c),'de');if(b.dataset.say==='en')say(displayEnglish(c),'en');if(b.dataset.say==='fa')say(displayDari(c),'fa')}));if(els.voiceSelectDe)els.voiceSelectDe.addEventListener('change',()=>saveVoiceChoice('de'));
+['list','unit','part','type','front'].forEach(k=>els[k]?.addEventListener('change',()=>{if(k==='list')updateUnits();if(k==='unit')updateParts();apply()}));els.search.addEventListener('input',apply);els.next.addEventListener('click',next);els.prev.addEventListener('click',prev);els.flip.addEventListener('click',flip);els.card.addEventListener('click',()=>{if(!playing)flip()});els.speakFront.addEventListener('click',speakFront);els.playList.addEventListener('click',playSelected);els.pauseList.addEventListener('click',pauseResume);els.stopList.addEventListener('click',()=>stop());els.addForm.addEventListener('submit',addCard);els.exportBtn.addEventListener('click',exportBackup);els.importJson.addEventListener('change',e=>e.target.files[0]&&importBackup(e.target.files[0]));els.unlockSpeech.addEventListener('click',unlockSpeech);els.testDe.addEventListener('click',()=>say('die Abteilung. die Abteilungen.','de'));els.testEn.addEventListener('click',()=>say('department or division','en'));els.testFa.addEventListener('click',()=>say(DARI_TEST_TEXT,'fa'));document.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()=>{const c=filtered[idx];if(!c)return;if(b.dataset.say==='de')say(displayGerman(c),'de');if(b.dataset.say==='en')say(displayEnglish(c),'en');if(b.dataset.say==='fa')say(displayDari(c),'fa')}));if(els.voiceSelectDe)els.voiceSelectDe.addEventListener('change',()=>saveVoiceChoice('de'));
 if(els.voiceSelectEn)els.voiceSelectEn.addEventListener('change',()=>saveVoiceChoice('en'));
 if(els.voiceSelectFa)els.voiceSelectFa.addEventListener('change',()=>saveVoiceChoice('fa'));
+if(els.scanDariVoices)els.scanDariVoices.addEventListener('click',runDariVoiceSearch);
+if(els.nextDariCandidate)els.nextDariCandidate.addEventListener('click',nextDariCandidate);
 document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(e.code==='Space'){e.preventDefault();if(!playing)flip()}if(e.code==='ArrowRight')next();if(e.code==='ArrowLeft')prev()});if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=()=>updateVoiceStatus();setTimeout(updateVoiceStatus,500);setTimeout(updateVoiceStatus,1500)}populateAllVoiceSelects();setup();apply();

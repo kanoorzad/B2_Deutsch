@@ -1,42 +1,51 @@
-# B2 + B1 Plus Flashcards v39
+# B2 + B1 Plus Flashcards v40
 
-## Goal
+## What v40 does
 
-v39 goes back to the last real app structure and improves the browser voice logic, especially for mobile Dari/Farsi.
+v40 keeps the browser voice app structure, but adds a brute-force mobile Dari/Farsi tester.
 
-## What changed
+It tries:
 
-- Kept the current flashcard structure.
-- Kept browser SpeechSynthesis.
-- Removed local/audio-pack experiments.
-- Added voice dropdowns for German, English, and Dari/Farsi.
-- Fixed the mobile Dari issue where the app forced `fa-AF`.
-- v39 now uses the exact selected voice language, for example `fa-IR`.
+- `fa-IR`
+- `fa-AF`
+- `fa`
+- `prs-AF`
+- `prs`
+- `fa-Arab`
+- `fa-Arab-IR`
+- `fa-Arab-AF`
+- `fas`
+- `per`
+- Persian / Farsi / Dari voice names
+- Afghanistan / Afghan / Iran / Iranian voice names
+- tag-only mode with no selected voice
+- selected voice + forced tag combinations
+- last-resort manual test through every installed voice
 
 ## How to test on mobile
 
 1. Open:
 
-   https://kanoorzad.github.io/B2_Deutsch/?v=39
+   https://kanoorzad.github.io/B2_Deutsch/?v=40
 
 2. Tap **Refresh voices**.
-3. Open the **Dari/Farsi voice** dropdown.
-4. Try any option with:
-   - `fa-IR`
-   - `fa-AF`
-   - `fa`
-   - Persian
-   - Farsi
-   - Dari
-5. Tap **Test Dari** after choosing each option.
+3. Tap **Run Dari voice search**.
+4. Listen.
+5. If silent, tap **Try next Dari candidate**.
+6. Continue until you hear a clear Dari/Farsi voice.
+7. Then normal card playback will use the selected candidate.
 
-If no Persian/Farsi/Dari voice appears on the phone, the browser does not expose one. In that case no browser-only JavaScript version can create the missing mobile voice.
+## Important
+
+If every candidate is silent, then the mobile browser/device is not exposing a usable Persian/Dari speech engine to JavaScript. In that case, browser-only voice cannot be fixed by code.
 
 ## QA
 
-- JavaScript syntax: FAILED
-- Version badge: v39
-- Voice selectors: yes
-- Uses selected voice language exactly: yes
+- JavaScript syntax: OK
+- Version badge: v40
+- Brute-force Dari controls: yes
+- Language tags included: fa-IR, fa-AF, fa, prs-AF, prs, fas, per, fa-Arab variants
+- Tag-only modes: yes
+- Manual all-voices test: yes
 - No local sprite / WebAudio: yes
 - No remote TTS: yes

@@ -1,24 +1,25 @@
 {
-  "version": "39.0",
-  "base": "v36 structure with improved mobile browser voice selector",
+  "version": "40.0",
+  "base": "v39 browser voice selector with brute-force Dari/Farsi mobile candidates",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v39": true,
-    "cache_busting_v39": true,
-    "voice_selectors_present": true,
-    "uses_selected_voice_lang": true,
-    "does_not_force_fa_af_when_voice_selected": true,
-    "persian_farsi_dari_detection": true,
-    "manual_voice_testing_available": true,
+    "version_badge_v40": true,
+    "cache_busting_v40": true,
+    "bruteforce_buttons_present": true,
+    "dari_tags_present": true,
+    "persian_farsi_dari_name_matching": true,
+    "tag_only_modes_present": true,
+    "all_voice_manual_modes_present": true,
+    "selected_candidate_saved": true,
     "no_local_sprite_or_webaudio": true,
     "no_remote_tts": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
   "notes": [
-    "This keeps browser SpeechSynthesis, but fixes the forced fa-AF problem.",
-    "The selected Dari/Farsi voice language is used exactly, e.g. fa-IR.",
-    "The mobile user can manually test all voices if no Persian/Farsi voice is auto-detected."
+    "v40 tests language-tag-only speech as well as selected voice+tag combinations.",
+    "Includes fa-IR, fa-AF, fa, prs-AF, prs, fas, per, fa-Arab variants, plus last-resort manual modes.",
+    "If every candidate is silent on a phone, that browser/device exposes no usable Persian/Dari speech engine."
   ],
-  "zip_mb": 0.18
+  "zip_mb": 0.19
 }
