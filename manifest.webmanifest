@@ -1,7 +1,7 @@
 {
-  "name": "Deutsch Sprache – Wichtige Wörter – telc System – A1-B2",
-  "short_name": "Deutsch Wörter",
-  "start_url": "./index.html?v=84",
+  "name": "Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v1.0.0",
+  "short_name": "Deutsch Wörter v1",
+  "start_url": "./index.html?v=1",
   "display": "standalone",
   "background_color": "#f3f7fb",
   "theme_color": "#17324d",

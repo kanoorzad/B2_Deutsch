@@ -1,6 +1,6 @@
 {
   "presentation_version": "1.0.0",
-  "internal_build": "84",
+  "internal_build": "public-v1",
   "implemented": [
     "Removed voice mapping from options and UI.",
     "Removed extra voice/watermark block under POS filter.",
@@ -55,9 +55,14 @@
     "exact_synonym_counts_all_cards": true,
     "a1_normal_verbs_only_infinitive": true,
     "translations_complete": true,
-    "cache_busting_build84": true
+    "cache_busting_build84": true,
+    "actual_public_v1": true,
+    "cache_busting_public_v1": true,
+    "manifest_start_url_v1": true,
+    "service_worker_cache_v1": true,
+    "visible_version_v1_0_0": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=84",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=1",
   "zip_mb": 1.79
 }
