@@ -1,8 +1,21 @@
-# Deutsch A1-B2 telc System – wichtige Wörter v82
+# Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v83
 
-Added: options language switch during playback/paused closes menu and updates current card; extended German TTS preprocessing; synonyms directly under headword; headword single-line auto-fit.
+Final addendum implementation.
 
-Limits: exact Azure voice and 99% semantic synonym verification require backend/API support.
+Added:
+- German TTS priority sanitization for (von + Dat.), (für + Akk.), and (jdn./etw.).
+- Options language switch closes drawer and updates current card immediately.
+- Dedicated clean voice mapping card in options.
+- Wortart filtern dropdown.
+- Branding hierarchy.
+- PWA install banner.
+- Headword single-line fit.
+- Synonyms directly under headword.
+
+Limits:
+- True 99% semantic synonym verification needs an API.
+- Native install prompt depends on browser beforeinstallprompt support.
+- Exact Azure voice output requires browser-exposed voices or backend audio.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=82
+https://kanoorzad.github.io/B2_Deutsch/?v=83
