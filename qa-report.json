@@ -1,30 +1,39 @@
 {
-  "version": "61.0",
-  "base": "v60 converted to Persian/Farsi voice mode test",
+  "version": "63.0-final-clean",
+  "counts": {
+    "cards": 2254,
+    "cards_with_translation_object": 2254,
+    "missing_by_language": {
+      "en": 0,
+      "fa": 0,
+      "ru": 2254,
+      "uk": 2254,
+      "tr": 2254,
+      "es": 2254
+    },
+    "translation_template_rows": 2254
+  },
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v61": true,
-    "cache_busting_v61": true,
+    "version_badge_v63": true,
+    "cache_busting_v63": true,
     "initiative_only_once": true,
-    "ui_persian_farsi_label": true,
-    "data_not_retranslated": true,
-    "no_invalid_identifier_slash": true,
-    "no_dari_name_search_in_pickvoice": true,
-    "fa_ir_preferred": true,
-    "generic_fa_fallback": true,
-    "debug_voices_persian": true,
+    "target_language_selector": true,
+    "german_interface": true,
+    "no_fake_missing_translations": true,
+    "english_farsi_available": true,
+    "translation_pack_included": true,
+    "voice_codes_all_languages": true,
     "wake_lock_kept": true,
-    "direct_speech_synthesis": true,
     "online_tts_removed": true,
-    "local_sprite_removed": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
   "initiative_count": 1,
   "notes": [
-    "Created Persian/Farsi voice-mode test without rewriting translations.",
-    "Removed Dari/fa-AF preference from the voice picker.",
-    "Persian/Farsi mode tries explicit voice, fa-IR, fa, then English fallback."
+    "No unverified translations were inserted for ru/uk/tr/es.",
+    "The app is final-clean for current reviewed English/Farsi data and ready for verified translation expansion.",
+    "Translation review pack is included."
   ],
-  "zip_mb": 0.18
+  "zip_mb": 0.38
 }

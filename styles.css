@@ -69,3 +69,50 @@ button,.fileBtn{min-width:0;white-space:normal}
 .smallHint{font-size:.82rem;opacity:.8;margin-top:.4rem}
 .miniControls{display:flex;gap:.5rem;flex-wrap:wrap;margin:.55rem 0}
 .miniControls button{font-size:.82rem;padding:.55rem .7rem}
+
+/* v63 multilingual German UI polish */
+.targetLangField select {
+  font-weight: 700;
+}
+.languageBadge {
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
+  border-radius:999px;
+  padding:.3rem .65rem;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+}
+.pendingTranslation {
+  color: var(--muted, #7a7f8f);
+  font-style: italic;
+}
+.translationPanel {
+  border-radius: 18px;
+  padding: 1rem;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+}
+[dir="rtl"] {
+  font-family: inherit;
+}
+
+
+/* v63 final clean polish */
+.pendingTranslation {
+  display: inline-block;
+  color: var(--muted, #73798a);
+  font-style: italic;
+  line-height: 1.45;
+}
+.langStatusNote {
+  margin-top:.45rem;
+  font-size:.86rem;
+  color:var(--muted, #73798a);
+}
+select#targetLang option {
+  font-weight: 600;
+}
+.translationReady {
+  color: inherit;
+}

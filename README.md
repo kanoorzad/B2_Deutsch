@@ -1,28 +1,39 @@
-# B2 + B1 Plus Flashcards v61 — Persian/Farsi Voice Mode Test
+# Deutsch-Karteikarten v63 — Final Clean Multilingual
 
-## Purpose
+## Inhalt
 
-This version tests whether the mobile voice problem is caused by Dari/`fa-AF` routing.
+- Deutsche Benutzeroberfläche
+- Zielsprache-Auswahl
+- Eine Übersetzungssprache gleichzeitig
+- 2.254 Karten
+- Englisch und Farsi aus bestehenden geprüften Daten
+- Russisch/Ukrainisch/Türkisch/Spanisch vorbereitet, aber nicht ungeprüft automatisch gefüllt
 
-The card translation text is not rewritten yet. The app now treats the third language as Persian/Farsi for voice routing.
+## Unterstützte Zielsprache-Auswahl
 
-## Changes
+- Englisch
+- Farsi
+- Russisch — in Vorbereitung
+- Ukrainisch — in Vorbereitung
+- Türkisch — in Vorbereitung
+- Spanisch — in Vorbereitung
 
-- Visible UI label: Dari → Persian/Farsi
-- Voice route: prefer Persian/Farsi, not Dari
-- `pickVoice('fa')` searches:
-  1. Persian/Farsi voice names
-  2. `fa-IR`
-  3. generic `fa`
-  4. other `fa*`
-- `say(..., 'fa')` tries:
-  1. selected Persian/Farsi voice
-  2. `u.lang = 'fa-IR'`
-  3. `u.lang = 'fa'`
-  4. English fallback on error
-- `debugVoices()` now reports Persian/Farsi candidates.
-- Screen Wake Lock remains active during playback.
+## Sprachausgabe
 
-## Open
+Die App nutzt die beste im Browser verfügbare Stimme:
 
-https://kanoorzad.github.io/B2_Deutsch/?v=61
+- Deutsch: de-DE
+- Englisch: en-US
+- Farsi: fa-IR / fa
+- Russisch: ru-RU
+- Ukrainisch: uk-UA
+- Türkisch: tr-TR
+- Spanisch: es-ES
+
+## Review-Pack
+
+Im Ordner `translation-pack` liegen CSV/JSON-Dateien für die saubere Erweiterung der fehlenden Übersetzungen.
+
+## Öffnen
+
+https://kanoorzad.github.io/B2_Deutsch/?v=63
