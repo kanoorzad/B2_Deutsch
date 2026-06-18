@@ -7,10 +7,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=74">
-  <link rel="apple-touch-icon" href="icon.svg?v=74">
-  <link rel="stylesheet" href="styles.css?v=74">
-  <title>German A1-B2 telc system Important words v74</title>
+  <link rel="manifest" href="manifest.webmanifest?v=75">
+  <link rel="apple-touch-icon" href="icon.svg?v=75">
+  <link rel="stylesheet" href="styles.css?v=75">
+  <title>German A1-B2 telc system Important words v75</title>
 </head>
 <body class="wizardMode">
 <select id="targetLang" hidden>
@@ -24,7 +24,7 @@
 <section id="startWizard" class="startWizard" aria-live="polite">
   <section id="wizardLang" class="wizardStep active">
     <div class="wizardCard languageStartCard">
-      <em class="startVersionTag">v74</em>
+      <em class="startVersionTag">v75</em>
       <h1 class="startTitle">German A1-B2 telc system Important words</h1>
       <p class="startSubtitle">Bitte wählen Sie zuerst die Übersetzungssprache.</p>
       <div class="choiceGrid languageChoices compactLangGrid">
@@ -41,7 +41,7 @@
 
   <section id="wizardMaterial" class="wizardStep">
     <div class="wizardCard">
-      <em class="startVersionTag">v74</em>
+      <em class="startVersionTag">v75</em>
       <h2>Lernmaterial wählen</h2>
       <p class="startSubtitle">Wählen Sie den Bereich.</p>
       <div class="choiceGrid materialChoices">
@@ -60,7 +60,7 @@
 
   <section id="wizardUnit" class="wizardStep">
     <div class="wizardCard">
-      <em class="startVersionTag">v74</em>
+      <em class="startVersionTag">v75</em>
       <h2>Einheit wählen</h2>
       <p class="startSubtitle">Standard: alle Einheiten.</p>
       <label class="wizardSelectLabel">Einheit
@@ -75,7 +75,7 @@
 </section>
 <button id="optionsToggle" type="button" class="optionsToggle" hidden>Optionen</button>
 <header class="hero">
-  <em class="versionBadge">v74</em>
+  <em class="versionBadge">v75</em>
   <h1>Deutsch-Karteikarten</h1>
   <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
   <p class="initiative"><em>Initiative by: Khalid Noorzad</em></p>
@@ -222,11 +222,11 @@
   </section>
 </main>
 
-<script src="data.js?v=74"></script>
-<script src="app.js?v=74"></script>
-<script id="v74-controller">
+<script src="data.js?v=75"></script>
+<script src="app.js?v=75"></script>
+<script id="v75-controller">
 (function(){
-  window.__v74Controller = true;
+  window.__v75Controller = true;
   const $ = id => document.getElementById(id);
   const LANG_META = {
     en:{label:'Englisch', code:'en-US', dir:'ltr'},
@@ -237,7 +237,15 @@
     tr:{label:'Türkisch', code:'tr-TR', dir:'ltr'},
     de:{label:'Deutsch', code:'de-DE', dir:'ltr'}
   };
-  let selectedLang='en', selectedList='all', selectedUnit='all', filtered=[], pos=0;
+
+  let selectedLang='en';
+  let selectedList='all';
+  let selectedUnit='all';
+  let filtered=[];
+  let pos=0;
+  let autoplay=false;
+  let stopped=false;
+  let speakingToken=0;
 
   function cards(){ return (window.FLASHCARD_DATA && window.FLASHCARD_DATA.cards) || []; }
   function showStep(id){
@@ -254,8 +262,11 @@
     const el=$(id);
     if(el) try{el.value=val}catch(e){}
   }
+  function materialPool(list){
+    return cards().filter(c=>list==='all'||c.list===list);
+  }
   function populateUnits(){
-    const pool=cards().filter(c=>selectedList==='all'||c.list===selectedList);
+    const pool=materialPool(selectedList);
     const units=[...new Set(pool.map(c=>c.unit).filter(Boolean))];
     const sel=$('wizardUnitSelect');
     if(sel){
@@ -282,31 +293,42 @@
     });
     pos=0;
   }
-  function current(){ return filtered[pos] || cards()[0] || null; }
+  function current(){ return filtered[pos] || null; }
   window.current=current;
 
-  function renderCard(){
+  function setText(id,val){
+    const el=$(id);
+    if(el) el.textContent=val||'—';
+  }
+  function renderCard(stageLabel){
     const c=current();
-    if(!c) return;
+    if(!c){
+      setText('front','Keine Karten');
+      setText('frontText','Keine Karten');
+      setText('en','Für dieses Material gibt es noch keine Karten.');
+      setText('count','0 / 0');
+      setText('nowPlaying','Keine Karten');
+      return;
+    }
     const meta=LANG_META[selectedLang]||LANG_META.en;
-    const set=(id,val)=>{const el=$(id); if(el) el.textContent=val||'—';};
-    set('front',displayGerman(c));
-    set('frontText',displayGerman(c));
-    set('targetTitle',meta.label);
-    const en=$('en'); if(en){ en.textContent=targetText(c)||'—'; en.dir=meta.dir; }
-    set('de',displayGerman(c));
-    set('count',`${filtered.length?pos+1:0} / ${filtered.length}`);
-    set('nowPlaying',`${displayGerman(c)} — ${meta.label}`);
+    setText('front',displayGerman(c));
+    setText('frontText',displayGerman(c));
+    setText('targetTitle',meta.label);
+    const en=$('en');
+    if(en){ en.textContent=targetText(c)||'—'; en.dir=meta.dir; }
+    setText('de',displayGerman(c));
+    setText('count',`${pos+1} / ${filtered.length}`);
+    setText('nowPlaying',stageLabel ? `${stageLabel}: ${displayGerman(c)}` : `${displayGerman(c)} — ${meta.label}`);
     const f=c.forms||{};
-    set('inf',f.infinitive);
-    set('pres3',f.present3);
-    set('past',f.past);
-    set('perf',f.perfect);
-    set('plus',f.plusquamperfekt);
-    set('article',c.article);
-    set('singular',c.singular||c.german);
-    set('plural',c.plural);
-    set('ex',c.example);
+    setText('inf',f.infinitive);
+    setText('pres3',f.present3);
+    setText('past',f.past);
+    setText('perf',f.perfect);
+    setText('plus',f.plusquamperfekt);
+    setText('article',c.article);
+    setText('singular',c.singular||c.german);
+    setText('plural',c.plural);
+    setText('ex',c.example);
     const syn=$('multiSynContent'), synBox=$('multiSynBox');
     if(syn && c.synonyms_multi){
       const deSyn=(c.synonyms_multi.de||[]).join(' · ');
@@ -317,38 +339,107 @@
   }
   window.renderCard=renderCard;
 
+  function estimateDuration(text){
+    const len=String(text||'').length;
+    return Math.max(900, Math.min(7000, 450 + len*55));
+  }
   function pickVoice(lang){
     if(!('speechSynthesis' in window)) return null;
     const code=(LANG_META[lang]||LANG_META.de).code;
     const base=code.split('-')[0].toLowerCase();
     const vs=speechSynthesis.getVoices()||[];
-    return vs.find(v=>(v.lang||'').toLowerCase()===code.toLowerCase()) || vs.find(v=>(v.lang||'').toLowerCase().startsWith(base)) || null;
+    const good=vs.filter(v=>{
+      const l=(v.lang||'').toLowerCase();
+      const n=((v.name||'')+' '+(v.voiceURI||'')).toLowerCase();
+      if(/novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/.test(n)) return false;
+      return l===code.toLowerCase() || l.startsWith(base);
+    });
+    const premium=good.find(v=>/google|microsoft|apple|siri|enhanced|premium|natural|neural/i.test((v.name||'')+' '+(v.voiceURI||'')));
+    return premium || good[0] || null;
   }
-  function sayText(text,lang){
+  function speakOnce(text, lang, token){
     return new Promise(resolve=>{
-      if(!text || !('speechSynthesis' in window)){ resolve(); return; }
-      try{speechSynthesis.cancel()}catch(e){}
+      if(!text || stopped || token!==speakingToken){ resolve(); return; }
+      if(!('speechSynthesis' in window)){ resolve(); return; }
+      let done=false;
+      const finish=()=>{ if(!done){ done=true; clearTimeout(timer); resolve(); } };
       const meta=LANG_META[lang]||LANG_META.de;
       const u=new SpeechSynthesisUtterance(String(text));
       u.lang=meta.code;
       const v=pickVoice(lang);
-      if(v){u.voice=v;u.lang=v.lang||meta.code}
-      u.rate=lang==='de'?.78:.88; u.pitch=1; u.volume=1;
-      u.onend=resolve; u.onerror=resolve;
-      try{speechSynthesis.resume&&speechSynthesis.resume(); speechSynthesis.speak(u)}catch(e){resolve()}
+      if(v){ u.voice=v; u.lang=v.lang||meta.code; }
+      u.rate=lang==='de' ? .78 : .88;
+      u.pitch=1; u.volume=1;
+      u.onend=finish;
+      u.onerror=finish;
+      const timer=setTimeout(finish, estimateDuration(text)+1200);
+      try{
+        speechSynthesis.resume&&speechSynthesis.resume();
+        speechSynthesis.speak(u);
+      }catch(e){ finish(); }
     });
   }
-  async function playCurrent(){
-    const c=current();
-    if(!c) return;
-    renderCard();
-    const f=c.forms||{};
-    const forms=[f.infinitive,f.present3,f.past,f.perfect].filter(Boolean).join('. ');
-    await sayText(displayGerman(c),'de');
-    if(forms) await sayText(forms,'de');
-    await sayText(targetText(c),selectedLang);
+  function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+  function formText(c){
+    const f=(c&&c.forms)||{};
+    return [f.infinitive,f.present3,f.past,f.perfect].filter(Boolean).join('. ');
   }
-  window.playSelected=playCurrent;
+
+  async function playOneCard(token){
+    const c=current();
+    if(!c || stopped || token!==speakingToken) return;
+    renderCard('Deutsch');
+    try{ speechSynthesis.cancel(); }catch(e){}
+    await sleep(120);
+    await speakOnce(displayGerman(c),'de',token);
+    if(stopped || token!==speakingToken) return;
+    const forms=formText(c);
+    if(forms){
+      renderCard('Formen');
+      await sleep(180);
+      await speakOnce(forms,'de',token);
+    }
+    if(stopped || token!==speakingToken) return;
+    renderCard((LANG_META[selectedLang]||LANG_META.en).label);
+    await sleep(180);
+    await speakOnce(targetText(c),selectedLang,token);
+  }
+
+  async function playLoop(){
+    if(!filtered.length){ renderCard(); return; }
+    autoplay=true;
+    stopped=false;
+    const token=++speakingToken;
+    while(autoplay && !stopped && token===speakingToken && filtered.length){
+      await playOneCard(token);
+      if(!autoplay || stopped || token!==speakingToken) break;
+      pos=(pos+1)%filtered.length;
+      renderCard('Nächste Karte');
+      await sleep(650);
+    }
+  }
+  function playSelected(){
+    autoplay=false;
+    stopped=false;
+    const token=++speakingToken;
+    playOneCard(token);
+  }
+  window.playSelected=playSelected;
+  window.playList=playLoop;
+
+  function pausePlayback(){
+    autoplay=false;
+    speakingToken++;
+    try{ speechSynthesis.pause&&speechSynthesis.pause(); speechSynthesis.cancel(); }catch(e){}
+    setText('nowPlaying','Pause');
+  }
+  function stopPlayback(){
+    autoplay=false;
+    stopped=true;
+    speakingToken++;
+    try{ speechSynthesis.cancel(); }catch(e){}
+    setText('nowPlaying','Gestoppt');
+  }
 
   function enterApp(){
     selectedUnit=$('wizardUnitSelect')?$('wizardUnitSelect').value:'all';
@@ -363,7 +454,7 @@
     if(opt){ opt.hidden=false; opt.style.display='inline-flex'; }
     try{ if(typeof window.apply==='function') window.apply(); }catch(e){}
     renderCard();
-    setTimeout(playCurrent,120);
+    playLoop();
   }
   function boot(){
     document.body.classList.add('wizardMode');
@@ -409,9 +500,11 @@
       if(drawer) drawer.hidden=true;
       if(back) back.hidden=true;
     }
-    if(ev.target.closest&&ev.target.closest('#playList')){ ev.preventDefault(); playCurrent(); }
-    if(ev.target.closest&&ev.target.closest('#next')){ ev.preventDefault(); if(filtered.length){pos=(pos+1)%filtered.length;renderCard();} }
-    if(ev.target.closest&&ev.target.closest('#prev')){ ev.preventDefault(); if(filtered.length){pos=(pos-1+filtered.length)%filtered.length;renderCard();} }
+    if(ev.target.closest&&ev.target.closest('#playList')){ ev.preventDefault(); stopped=false; playLoop(); }
+    if(ev.target.closest&&ev.target.closest('#pauseList')){ ev.preventDefault(); pausePlayback(); }
+    if(ev.target.closest&&ev.target.closest('#stopList')){ ev.preventDefault(); stopPlayback(); }
+    if(ev.target.closest&&ev.target.closest('#next')){ ev.preventDefault(); stopPlayback(); if(filtered.length){pos=(pos+1)%filtered.length;renderCard();} }
+    if(ev.target.closest&&ev.target.closest('#prev')){ ev.preventDefault(); stopPlayback(); if(filtered.length){pos=(pos-1+filtered.length)%filtered.length;renderCard();} }
   },true);
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});

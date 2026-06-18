@@ -1,31 +1,22 @@
-# German A1-B2 telc system Important words v74
+# German A1-B2 telc system Important words v75
 
-Full flow repair after deep review.
+Autoplay sequence repair.
 
-## Fixed user-reported issues
+## Fixed
 
-- Option button was missing.
-- Language could be selected, but the card did not play.
+- Card now reads:
+  1. German
+  2. forms
+  3. selected translation
+  4. next card
+  5. repeats until pause/stop
 
-## Root causes found
+## Additional safety
 
-- `optionsToggle` did not exist in the HTML.
-- `app.js` did not expose `playSelected()` or `current()`.
-- The previous wizard repair moved screens but still relied on missing playback/render functions.
-
-## v74 repair
-
-- Added a guaranteed options button.
-- Added an independent controller after data.js and app.js.
-- Controller handles:
-  - language selection
-  - material selection
-  - unit selection
-  - card rendering
-  - card playback
-  - next / previous
-  - options drawer open / close
-- A1 words and all previous data are kept.
+- Added timeout fallback if mobile browser does not fire speech `onend`.
+- Pause and stop buttons are wired.
+- Play button starts the continuous loop.
+- Checked all languages and all reading materials.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=74
+https://kanoorzad.github.io/B2_Deutsch/?v=75

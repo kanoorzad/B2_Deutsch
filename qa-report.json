@@ -1,85 +1,7 @@
 {
-  "version": "74.0-full-flow-repair",
-  "problem_reported_by_user": [
-    "Options button missing.",
-    "Can select language, but card does not play."
-  ],
-  "root_causes_found": [
-    "v73 package had no optionsToggle button in index.html.",
-    "app.js had no playSelected() function and no current() function, so the wizard could not reliably start playback.",
-    "The previous inline wizard only moved the screens; it still depended on missing app playback/render functions."
-  ],
-  "before": {
-    "id_counts": {
-      "startWizard": 1,
-      "wizardLang": 1,
-      "wizardMaterial": 1,
-      "wizardUnit": 1,
-      "targetLang": 1,
-      "wizardUnitSelect": 1,
-      "wizardStart": 1,
-      "optionsToggle": 0,
-      "optionsDrawer": 1,
-      "card": 1,
-      "front": 1,
-      "frontText": 1,
-      "answer": 1,
-      "en": 1,
-      "de": 1,
-      "playList": 1,
-      "pauseList": 1,
-      "stopList": 1,
-      "listFilter": 1,
-      "unitFilter": 1,
-      "partFilter": 1,
-      "typeFilter": 1,
-      "search": 1,
-      "nowPlaying": 1
-    },
-    "function_counts": {
-      "bootApp": 1,
-      "initStartWizard": 1,
-      "setup": 1,
-      "apply": 1,
-      "playSelected": 0,
-      "current": 0,
-      "cardScript": 1,
-      "say": 1,
-      "renderDetails": 1,
-      "targetText": 1,
-      "targetLang": 1
-    },
-    "options_button_missing": true,
-    "playSelected_missing": true,
-    "current_missing": true,
-    "node_syntax_ok": true
-  },
-  "after_id_counts": {
-    "startWizard": 1,
-    "wizardLang": 1,
-    "wizardMaterial": 1,
-    "wizardUnit": 1,
-    "targetLang": 1,
-    "wizardUnitSelect": 1,
-    "wizardStart": 1,
-    "optionsToggle": 1,
-    "optionsDrawer": 1,
-    "card": 1,
-    "front": 1,
-    "frontText": 1,
-    "answer": 1,
-    "en": 1,
-    "de": 1,
-    "playList": 1,
-    "pauseList": 1,
-    "stopList": 1,
-    "listFilter": 1,
-    "unitFilter": 1,
-    "partFilter": 1,
-    "typeFilter": 1,
-    "search": 1,
-    "nowPlaying": 1
-  },
+  "version": "75.0-autoplay-sequence-fixed",
+  "user_reported_issue": "Card reads German but does not continue to translation and then next card.",
+  "root_cause": "v74 playCurrent only played one card; it did not run an autoplay loop that advances after German/forms/translation. Some mobile browsers can also fail to fire speech onend reliably, so v75 adds timeout fallback.",
   "cards": 3171,
   "list_counts": {
     "B2 all 12 units": 1629,
@@ -87,6 +9,91 @@
     "B1 Plus 7 Units": 475,
     "A1 Irregular Verbs": 76,
     "A1": 841
+  },
+  "material_counts": {
+    "A1": 841,
+    "A1 Irregular Verbs": 76,
+    "A2": 0,
+    "A2 Irregular Verbs": 0,
+    "B1": 0,
+    "B1 Irregular Verbs": 0,
+    "B1 Plus 7 Units": 475,
+    "B2 all 12 units": 1629,
+    "B2 Irregular Verbs": 150
+  },
+  "material_language_missing": {
+    "A1": {
+      "en": 0,
+      "fa": 0,
+      "es": 0,
+      "ru": 0,
+      "uk": 0,
+      "tr": 0
+    },
+    "A1 Irregular Verbs": {
+      "en": 0,
+      "fa": 0,
+      "es": 0,
+      "ru": 0,
+      "uk": 0,
+      "tr": 0
+    },
+    "A2": {
+      "en": 0,
+      "fa": 0,
+      "es": 0,
+      "ru": 0,
+      "uk": 0,
+      "tr": 0
+    },
+    "A2 Irregular Verbs": {
+      "en": 0,
+      "fa": 0,
+      "es": 0,
+      "ru": 0,
+      "uk": 0,
+      "tr": 0
+    },
+    "B1": {
+      "en": 0,
+      "fa": 0,
+      "es": 0,
+      "ru": 0,
+      "uk": 0,
+      "tr": 0
+    },
+    "B1 Irregular Verbs": {
+      "en": 0,
+      "fa": 0,
+      "es": 0,
+      "ru": 0,
+      "uk": 0,
+      "tr": 0
+    },
+    "B1 Plus 7 Units": {
+      "en": 0,
+      "fa": 0,
+      "es": 0,
+      "ru": 0,
+      "uk": 0,
+      "tr": 0
+    },
+    "B2 all 12 units": {
+      "en": 0,
+      "fa": 0,
+      "es": 0,
+      "ru": 0,
+      "uk": 0,
+      "tr": 0
+    },
+    "B2 Irregular Verbs": {
+      "en": 0,
+      "fa": 0,
+      "es": 0,
+      "ru": 0,
+      "uk": 0,
+      "tr": 0
+    }
   },
   "translation_coverage": {
     "en": 3171,
@@ -106,24 +113,22 @@
   },
   "checks": {
     "javascript_syntax_ok": true,
+    "v75_controller_present": true,
+    "german_forms_translation_sequence_present": true,
+    "autoplay_advances_to_next_card": true,
+    "play_loop_defined": true,
+    "pause_stop_defined": true,
+    "play_pause_stop_buttons_wired": true,
+    "timeout_fallback_for_onend": true,
     "options_button_present": true,
-    "options_button_forced_visible_after_app": true,
-    "v74_controller_present": true,
-    "language_click_advances": true,
-    "material_click_advances": true,
-    "start_enters_app_and_plays": true,
-    "card_render_fallback_present": true,
-    "playSelected_defined": true,
-    "current_defined": true,
-    "speech_fallback_present": true,
-    "single_startWizard": true,
-    "single_targetLang": true,
     "a1_kept": true,
-    "a1_irregular_kept": true,
+    "all_existing_materials_have_complete_translations": true,
+    "empty_placeholder_materials_safe": true,
     "translations_complete": true,
-    "cache_busting_v74": true
+    "cache_busting_v75": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=74",
+  "sequence_now": "German → forms → selected translation → next card → repeat until pause/stop.",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=75",
   "zip_mb": 1.75
 }
