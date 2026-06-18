@@ -1,17 +1,24 @@
 {
-  "presentation_version": "1.0.0",
-  "internal_build": "public-v1",
+  "version": "84.0-from-v83-problem-report",
+  "base": "v83_final_addendum",
   "implemented": [
-    "Removed voice mapping from options and UI.",
-    "Removed extra voice/watermark block under POS filter.",
-    "POS filter closes options, refreshes deck, and autoplays first filtered card.",
-    "Unit replaced with Einheit in UI contexts.",
-    "Visible version set to v1.0.0 and APP_VERSION variable added.",
-    "Best-effort PWA background audio support via Service Worker, AudioContext, and MediaSession."
+    "Voice mapping removed from UI.",
+    "Watermark/placeholder under Wortart filter removed.",
+    "POS filter auto-closes options, refreshes deck, and autoplays.",
+    "Unit visible labels changed to Einheit.",
+    "Best-effort background audio support retained.",
+    "Problem melden workflow added with state restoration."
+  ],
+  "problem_report_flow": [
+    "Problem melden closes options.",
+    "Flashcard card/player hidden and centered form displayed.",
+    "Textarea + Absenden shown.",
+    "Absenden hides textarea/button and shows thank-you message plus Zurück.",
+    "Zurück restores selected language, material, unit, filter, index, and playback state."
   ],
   "limitations": [
-    "Mobile web/PWA background TTS cannot be guaranteed on all iOS/Android browsers after screen lock or app switch; the code now uses best-effort AudioContext + MediaSession, but native background audio needs a native wrapper/foreground service.",
-    "Exact 99% synonym verification still requires a semantic API."
+    "Browser/PWA background TTS remains best-effort; guaranteed screen-off playback requires native audio/background service or bundled/backend audio.",
+    "True 99% synonym verification requires a semantic API."
   ],
   "cards": 3171,
   "list_counts": {
@@ -42,27 +49,26 @@
   "a1_normal_verb_cards_only_infinitive": 179,
   "checks": {
     "javascript_syntax_ok": true,
-    "display_version_v1_0_0": true,
+    "built_from_v83_to_v84": true,
     "voice_mapping_removed_from_options_ui": true,
     "no_voice_map_card": true,
-    "pos_filter_has_no_watermark_below": true,
+    "problem_report_button_present": true,
+    "problem_report_form_present": true,
+    "problem_report_closes_options": true,
+    "problem_report_confirmation": true,
+    "problem_report_restore_state_logic": true,
     "filter_auto_closes_and_autoplays": true,
-    "unit_replaced_in_ui": true,
+    "unit_replaced_in_visible_ui": true,
     "background_audio_best_effort": true,
-    "service_worker_registered_files_present": true,
+    "service_worker_present": true,
     "tts_priority_rules_still_present": true,
     "headword_single_line_fit": true,
     "exact_synonym_counts_all_cards": true,
     "a1_normal_verbs_only_infinitive": true,
     "translations_complete": true,
-    "cache_busting_build84": true,
-    "actual_public_v1": true,
-    "cache_busting_public_v1": true,
-    "manifest_start_url_v1": true,
-    "service_worker_cache_v1": true,
-    "visible_version_v1_0_0": true
+    "cache_busting_v84": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=1",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=84",
   "zip_mb": 1.79
 }
