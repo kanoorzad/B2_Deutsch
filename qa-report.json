@@ -1,27 +1,22 @@
 {
-  "version": "54.0",
-  "base": "v51 restored + screen wake lock during playback",
+  "version": "55.0",
+  "base": "v54 restored base with user-provided pickVoice(lang) script",
   "checks": {
-    "javascript_syntax_ok": true,
-    "version_badge_v54": true,
-    "cache_busting_v54": true,
+    "version_badge_v55": true,
+    "cache_busting_v55": true,
     "initiative_only_once": true,
-    "v51_full_v4_voice_engine": true,
+    "user_pickvoice_fa_candidates": true,
+    "user_pickvoice_fallback_default": true,
+    "false_dari_filter_present": true,
+    "wake_lock_kept": true,
     "direct_speech_synthesis": true,
-    "wake_lock_present": true,
-    "wake_lock_on_play": true,
-    "wake_lock_release_on_stop": true,
     "online_tts_removed": true,
     "local_sprite_removed": true,
     "service_worker_not_registered": true
   },
-  "node_check_stderr": "",
-  "initiative_count": 1,
   "notes": [
-    "v54 restores v51 as the base.",
-    "Screen Wake Lock is requested when playback starts.",
-    "Screen Wake Lock is released on stop/finish through stop().",
-    "Browser pages generally cannot keep JS speech running after actual screen lock; this prevents the lock while playing."
-  ],
-  "zip_mb": 0.18
+    "Only pickVoice(lang) was changed according to the provided script.",
+    "v54 wake lock and v51 stable structure are preserved.",
+    "Daria/bg-BG false positive exclusion is retained."
+  ]
 }

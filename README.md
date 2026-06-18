@@ -1,30 +1,26 @@
-# B2 + B1 Plus Flashcards v54 — Restore v51 + Screen Wake Lock
+# B2 + B1 Plus Flashcards v55 — User pickVoice Patch
 
 ## What changed
 
-v54 restores the stable v51 app and adds only one feature:
+v55 restores the v54/v51 base and applies the `pickVoice(lang)` logic requested by the user.
 
-- Screen Wake Lock during playback.
+For Dari/Farsi it tries:
 
-This is intended to keep the phone screen awake while the lesson is playing, because mobile browsers usually stop or throttle JavaScript/audio when the screen locks.
+1. `fa-AF`, `fa-IR`, `fa` with quality voice names
+2. exact `fa-AF`, `fa-IR`, `fa`
+3. any `fa*` voice, excluding false Dari voices
+4. names containing Persian, Farsi, or Dari
+5. fallback to the browser default voice
 
-## Voice engine
+## Kept from v54
 
-Same as v51:
-
-- full version-4 voice engine
-- German: de-DE
-- English: en-US
-- Dari/Farsi: fa-AF
-- direct SpeechSynthesisUtterance
+- v51 stable app base
+- full direct browser SpeechSynthesis engine
+- screen wake lock during playback
+- initiative line once
 - no online TTS
-- no local sprite
-- no router
-
-## Screen-off behavior
-
-A web page cannot reliably continue JavaScript speech after the phone screen is actually locked. v54 instead requests a screen wake lock when Play starts, and releases it when playback stops or finishes.
+- no local audio sprite
 
 ## Open
 
-https://kanoorzad.github.io/B2_Deutsch/?v=54
+https://kanoorzad.github.io/B2_Deutsch/?v=55
