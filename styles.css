@@ -70,7 +70,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 .miniControls{display:flex;gap:.5rem;flex-wrap:wrap;margin:.55rem 0}
 .miniControls button{font-size:.82rem;padding:.55rem .7rem}
 
-/* v63 multilingual German UI polish */
+/* v64 multilingual German UI polish */
 .targetLangField select {
   font-weight: 700;
 }
@@ -98,7 +98,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 }
 
 
-/* v63 final clean polish */
+/* v64 final clean polish */
 .pendingTranslation {
   display: inline-block;
   color: var(--muted, #73798a);
@@ -115,4 +115,35 @@ select#targetLang option {
 }
 .translationReady {
   color: inherit;
+}
+
+
+/* v64 start-flow polish */
+.startPanel {
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 22px;
+  background: rgba(255,255,255,.08);
+}
+.startPanel summary {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+.twoLang {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 720px) {
+  .twoLang { grid-template-columns: 1fr; }
+}
+.targetCard h3::before {
+  content: "🌐 ";
+}
+.settings select#targetLang,
+.settings select#listFilter {
+  font-size: 1.02rem;
+  font-weight: 800;
+}
+.hidden { display: none !important; }
+.pendingTranslation {
+  color: var(--muted, #73798a);
+  font-style: italic;
 }

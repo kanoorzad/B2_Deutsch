@@ -1,5 +1,5 @@
 {
-  "version": "63.0-final-clean",
+  "version": "64.0-german-start-flow",
   "counts": {
     "cards": 2254,
     "cards_with_translation_object": 2254,
@@ -10,19 +10,21 @@
       "uk": 2254,
       "tr": 2254,
       "es": 2254
-    },
-    "translation_template_rows": 2254
+    }
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v63": true,
-    "cache_busting_v63": true,
+    "version_badge_v64": true,
+    "cache_busting_v64": true,
     "initiative_only_once": true,
-    "target_language_selector": true,
-    "german_interface": true,
-    "no_fake_missing_translations": true,
-    "english_farsi_available": true,
-    "translation_pack_included": true,
+    "start_panel_open": true,
+    "target_language_first": true,
+    "learning_area_options": true,
+    "german_interface_flow": true,
+    "now_playing_id_fixed": true,
+    "target_title_present": true,
+    "autoplay_functions_present": true,
+    "target_translation_speaker": true,
     "voice_codes_all_languages": true,
     "wake_lock_kept": true,
     "online_tts_removed": true,
@@ -31,9 +33,9 @@
   "node_check_stderr": "",
   "initiative_count": 1,
   "notes": [
-    "No unverified translations were inserted for ru/uk/tr/es.",
-    "The app is final-clean for current reviewed English/Farsi data and ready for verified translation expansion.",
-    "Translation review pack is included."
+    "Interface flow changed to target language first, then B1+/B2/Irregular verbs.",
+    "Autoplay card queue remains active: playSelected -> playNextPart -> next card.",
+    "Only selected translation language is displayed."
   ],
   "zip_mb": 0.38
 }

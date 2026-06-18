@@ -1,8 +1,8 @@
-// v61: full user-provided script applied; Persian/Persian/Farsi debug helper included.
-// v34: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v63AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh63=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh63='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+// v64: full user-provided script applied; Persian/Persian/Farsi debug helper included.
+// v64: remove old service workers/caches once so old broken versions cannot control audio.
+(function(){try{const key='v64AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh64=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh64='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v63';
+const STORE='b2-native-cards-extra-v64';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[]; let idx=0; let flipped=false; let lastFront=null; let playing=false; let paused=false; let playQueue=[]; let playIndex=0;
@@ -15,7 +15,7 @@ const els={
   list:$('listFilter'),unit:$('unitFilter'),part:$('partFilter'),type:$('typeFilter'),search:$('search'),front:$('front'),targetLang:$('targetLang'),
   prev:$('prev'),next:$('next'),flip:$('flip'),speakFront:$('speakFront'),card:$('card'),cardBottom:$('cardBottom'),answer:$('answer'),
   frontText:$('frontText'),frontHint:$('frontHint'),frontSub:$('frontSub'),frontSyn:$('frontSynonyms'),chipLabel:$('chipLabel'),
-  de:$('de'),dePluralLine:$('dePluralLine'),en:$('en'),fa:$('fa'),nounBox:$('nounBox'),article:$('article'),singular:$('singular'),plural:$('plural'),
+  targetTitle:$('targetTitle'),de:$('de'),dePluralLine:$('dePluralLine'),en:$('en'),fa:$('fa'),nounBox:$('nounBox'),article:$('article'),singular:$('singular'),plural:$('plural'),
   verbBox:$('verbBox'),inf:$('inf'),pres3:$('pres3'),past:$('past'),perf:$('perf'),plus:$('plus'),syn:$('syn'),synBox:$('synBox'),ex:$('ex'),
   count:$('count'),bar:$('bar'),playDe:$('playDe'),playEn:$('playEn'),playFa:$('playFa'),playForms:$('playForms'),repeat:$('repeat'),
   playList:$('playList'),pauseList:$('pauseList'),stopList:$('stopList'),now:$('nowPlaying'),speechWarning:$('speechWarning'),
@@ -69,15 +69,36 @@ function renderChips(c,lang='en'){
   if(lang==='fa'){els.frontSyn.setAttribute('dir','rtl');els.syn.setAttribute('dir','rtl');}else{els.frontSyn.removeAttribute('dir');els.syn.removeAttribute('dir');}
 }
 function cleanSpeechText(text,lang){let t=String(text||'').replace(/\s+/g,' ').trim(); if(lang==='en')t=cleanEnglish(t); if(lang==='de')t=t.replace(/\s*\/\s*/g,' oder '); return t;}
-function formStep(c){const f=c.forms||{}; if(c.category==='noun'&&c.plural)return{display:c.plural,speech:c.plural,lang:'de',label:'German plural',sub:'Slow'}; if(c.category==='verb'){const visible=[],spoken=[]; for(const k of ['infinitive','past','perfect','plusquamperfekt'])if(f[k]){visible.push(f[k]);spoken.push(f[k]);} if(visible.length)return{display:visible.join(' · '),speech:spoken.join('. '),lang:'de',label:'German forms',sub:'Slow'};} return null;}
-function setup(){els.list.innerHTML='<option value="all">Alle Listen</option>'+unique(cards.map(c=>c.list)).map(x=>`<option>${esc(x)}</option>`).join('');updateUnits();detectDevice();updateVoiceStatus();}
-function updateUnits(){const l=els.list.value,pool=l==='all'?cards:cards.filter(c=>c.list===l);els.unit.innerHTML='<option value="all">Alle Einheiten</option>'+unique(pool.map(c=>c.unit)).map(x=>`<option>${esc(x)}</option>`).join('');updateParts();}
-function updateParts(){const l=els.list.value,u=els.unit.value,pool=cards.filter(c=>(l==='all'||c.list===l)&&(u==='all'||c.unit===u));els.part.innerHTML='<option value="all">Alle Teile</option>'+unique(pool.map(c=>c.part)).map(x=>`<option>${esc(x)}</option>`).join('');}
+function formStep(c){
+  const f=c.forms||{};
+  if(c.category==='noun'&&c.plural)return{display:c.plural,speech:c.plural,lang:'de',label:'Deutscher Plural',sub:'Langsam'};
+  if(c.category==='verb'){
+    const visible=[],spoken=[];
+    for(const k of ['infinitive','past','perfect','plusquamperfekt'])if(f[k]){visible.push(f[k]);spoken.push(f[k]);}
+    if(visible.length)return{display:visible.join(' · '),speech:spoken.join('. '),lang:'de',label:'Deutsche Formen',sub:'Langsam'};
+  }
+  return null;
+}
+function setup(){
+  els.list.innerHTML='<option value="all">Alle Karten</option><option value="B1 Plus 7 Units">B1+</option><option value="B2 all 12 units">B2</option><option value="Irregular verbs">Unregelmäßige Verben</option>';
+  updateUnits();
+  detectDevice();
+  updateVoiceStatus();
+}
+function updateUnits(){
+  const l=els.list.value,pool=l==='all'?cards:cards.filter(c=>c.list===l);
+  els.unit.innerHTML='<option value="all">Alle Einheiten</option>'+unique(pool.map(c=>c.unit)).map(x=>`<option>${esc(x)}</option>`).join('');
+  updateParts();
+}
+function updateParts(){
+  const l=els.list.value,u=els.unit.value,pool=cards.filter(c=>(l==='all'||c.list===l)&&(u==='all'||c.unit===u));
+  els.part.innerHTML='<option value="all">Alle Teile</option>'+unique(pool.map(c=>c.part)).map(x=>`<option>${esc(x)}</option>`).join('');
+}
 function apply(){const l=els.list.value,u=els.unit.value,p=els.part.value,t=els.type.value,q=norm(els.search.value);filtered=cards.filter(c=>(l==='all'||c.list===l)&&(u==='all'||c.unit===u)&&(p==='all'||c.part===p)&&(t==='all'||c.category===t)&&(!q||textOf(c).includes(q)));idx=Math.min(idx,Math.max(filtered.length-1,0));flipped=false;render();}
 function getManualFront(c){
   let m=els.front.value;
   if(m==='random')m=['german','translation','plural'][Math.floor(Math.random()*3)];
-  if(m==='english'||m==='dari'||m==='translation'){
+  if(m==='english'||m==='dari'||m==='persian'||m==='translation'){
     const lang=targetLang();
     const meta=targetMeta(lang);
     const display=displayTarget(c,lang);
@@ -92,14 +113,13 @@ function getManualFront(c){
 function renderDetails(c,chipLang='en'){
   const lang=targetLang();
   const meta=targetMeta(lang);
+  if(els.targetTitle)els.targetTitle.textContent=meta.label;
   els.de.textContent=displayGerman(c);
   els.dePluralLine.textContent=(c.category==='noun'&&c.plural)?c.plural:'';
   els.en.textContent=displayTarget(c,lang);
   els.en.classList.toggle('pendingTranslation',isTranslationMissing(c,lang));
-  if(els.fa){
-    els.fa.textContent='';
-    els.fa.closest?.('.detail')?.classList?.add('hidden');
-  }
+  if(lang==='fa')els.en.setAttribute('dir','rtl'); else els.en.removeAttribute('dir');
+  if(els.fa){els.fa.textContent='';els.fa.classList.add('hidden');}
   els.nounBox.classList.toggle('hidden',c.category!=='noun');
   els.article.textContent=c.article||'—';
   els.singular.textContent=c.singular||c.german||'—';
@@ -119,15 +139,15 @@ function render(){const c=filtered[idx];if(!c){els.frontText.textContent='Keine 
 function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=false;render()}function prev(){if(!filtered.length)return;idx=(idx-1+filtered.length)%filtered.length;flipped=false;render()}function flip(){flipped=!flipped;render()}
 
 
-// v34 audio engine: native best-quality voices for German/English; Persian/Farsi Auto = native Farsi/Persian voice if it truly works, otherwise local high-quality sprite fallback.
-// v43 browser voice engine with brute-force Persian/Farsi mobile candidates.
-// Keeps v3-v6 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
+// v64 audio engine: native best-quality voices for German/English; Persian/Farsi Auto = native Farsi/Persian voice if it truly works, otherwise local high-quality sprite fallback.
+// v64 browser voice engine with brute-force Persian/Farsi mobile candidates.
+// Keeps v64-v64 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
 // No local sprite/WebAudio/remote TTS.
-// v54 Persian/Farsi voice restored to version-4 style.
+// v64 Persian/Farsi voice restored to version-4 style.
 // Keep direct browser SpeechSynthesis. No online TTS, no audio sprites, no provider router.
-// The key v4-style behavior is direct utterance creation and direct speechSynthesis.speak().
-// v54: FULL version-4 voice engine restored for all languages.
-// This is the original v4 pattern:
+// The key v64-style behavior is direct utterance creation and direct speechSynthesis.speak().
+// v64: FULL version-4 voice engine restored for all languages.
+// This is the original v64 pattern:
 // voices() -> pickVoice(lang) -> say(text, lang, done)
 // Direct SpeechSynthesisUtterance only. No online TTS. No router. No local audio sprite.
 let activeUtterance=null;
@@ -353,7 +373,7 @@ function playNextPart(partIdx){
   const lang=p.l||p.lang||'de';
   setTimeout(()=>say(txt,lang,()=>setTimeout(()=>playNextPart(partIdx+1),450)),120);
 }
-function pauseResume(){if(!playing||!('speechSynthesis'in window))return;if(paused){paused=false;els.pauseList.textContent='Pause';speechSynthesis.resume()}else{paused=true;els.pauseList.textContent='Resume';speechSynthesis.pause();els.now.textContent='Paused.'}}
+function pauseResume(){if(!playing||!('speechSynthesis'in window))return;if(paused){paused=false;els.pauseList.textContent='Pause';speechSynthesis.resume()}else{paused=true;els.pauseList.textContent='Fortsetzen';speechSynthesis.pause();els.now.textContent='Pausiert.'}}
 function stop(doRender=true){
   playing=false;
   paused=false;
@@ -363,15 +383,15 @@ function stop(doRender=true){
   if('speechSynthesis'in window)speechSynthesis.cancel();
   releaseScreenWakeLock();
   els.pauseList.textContent='Pause';
-  els.now.textContent='Ready.';
+  els.now.textContent='Bereit.';
   els.card.classList.remove('playing');
   els.frontText.removeAttribute('dir');
   if(doRender)render();
 }
 
-function addCard(e){e.preventDefault();const d=Object.fromEntries(new FormData(els.addForm).entries());const syns=String(d.synonyms||'').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);while(syns.length<3)syns.push(syns.length?'related verb':'verb meaning');const isVerb=d.category==='verb';const c={id:'custom-'+Date.now(),source:'user',list:'My cards',unit:d.unit||'My list',part:'',category:d.category||'other',german:d.german,english:d.english,dari:d.dari,article:d.article||'',singular:d.german,plural:d.plural||'',forms:{infinitive:d.infinitive||'',present3:'',past:d.past||'',perfect:d.perfect||'',plusquamperfekt:d.plusquamperfekt||''},synonyms:isVerb?syns:[],synonyms_en:isVerb?syns:[],synonyms_de:isVerb?syns:[],synonyms_fa:isVerb?syns:[],example:''};extra.push(c);localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];setup();apply();scheduleAutoVoiceInit();els.addForm.reset()}
+function addCard(e){e.preventDefault();const d=Object.fromEntries(new FormData(els.addForm).entries());const syns=String(d.synonyms||'').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);while(syns.length<3)syns.push(syns.length?'related verb':'verb meaning');const isVerb=d.category==='verb';const c={id:'custom-'+Date.now(),source:'user',list:'My cards',unit:d.unit||'My list',part:'',category:d.category||'other',german:d.german,english:d.english,dari:d.dari||d.persian,article:d.article||'',singular:d.german,plural:d.plural||'',forms:{infinitive:d.infinitive||'',present3:'',past:d.past||'',perfect:d.perfect||'',plusquamperfekt:d.plusquamperfekt||''},synonyms:isVerb?syns:[],synonyms_en:isVerb?syns:[],synonyms_de:isVerb?syns:[],synonyms_fa:isVerb?syns:[],example:''};extra.push(c);localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];setup();apply();scheduleAutoVoiceInit();els.addForm.reset()}
 function exportBackup(){const blob=new Blob([JSON.stringify(extra,null,2)],{type:'application/json'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='my-flashcard-backup.json';a.click();URL.revokeObjectURL(u)}function importBackup(file){const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw Error('Backup must be an array.');extra=x;localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];setup();apply();scheduleAutoVoiceInit();alert('Backup imported.')}catch(e){alert(e.message)}};r.readAsText(file)}
-['list','unit','part','type','front','targetLang'].forEach(k=>els[k]?.addEventListener('change',()=>{if(k==='list')updateUnits();if(k==='unit')updateParts();apply()}));els.search.addEventListener('input',apply);els.next.addEventListener('click',next);els.prev.addEventListener('click',prev);els.flip.addEventListener('click',flip);els.card.addEventListener('click',()=>{if(!playing)flip()});els.speakFront.addEventListener('click',speakFront);els.playList.addEventListener('click',playSelected);els.pauseList.addEventListener('click',pauseResume);els.stopList.addEventListener('click',()=>stop());els.addForm.addEventListener('submit',addCard);els.exportBtn.addEventListener('click',exportBackup);els.importJson.addEventListener('change',e=>e.target.files[0]&&importBackup(e.target.files[0]));els.unlockSpeech.addEventListener('click',unlockSpeech);els.testDe.addEventListener('click',()=>say('die Abteilung. die Abteilungen.','de'));els.testEn.addEventListener('click',()=>say('department or division','en'));els.testFa.addEventListener('click',()=>say('دیپارتمنت، بخش','fa'));document.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()=>{const c=filtered[idx];if(!c)return;if(b.dataset.say==='de')say(displayGerman(c),'de');if(b.dataset.say==='en')say(displayEnglish(c),'en');if(b.dataset.say==='fa')say(displayDari(c),'fa')}));if(els.voiceSelectDe)els.voiceSelectDe.addEventListener('change',()=>saveVoiceChoice('de'));
+['list','unit','part','type','front','targetLang'].forEach(k=>els[k]?.addEventListener('change',()=>{if(k==='list')updateUnits();if(k==='unit')updateParts();apply()}));els.search.addEventListener('input',apply);els.next.addEventListener('click',next);els.prev.addEventListener('click',prev);els.flip.addEventListener('click',flip);els.card.addEventListener('click',()=>{if(!playing)flip()});els.speakFront.addEventListener('click',speakFront);els.playList.addEventListener('click',playSelected);els.pauseList.addEventListener('click',pauseResume);els.stopList.addEventListener('click',()=>stop());els.addForm.addEventListener('submit',addCard);els.exportBtn.addEventListener('click',exportBackup);els.importJson.addEventListener('change',e=>e.target.files[0]&&importBackup(e.target.files[0]));els.unlockSpeech.addEventListener('click',unlockSpeech);els.testDe.addEventListener('click',()=>say('die Abteilung. die Abteilungen.','de'));els.testEn.addEventListener('click',()=>say('department or division','en'));els.testFa.addEventListener('click',()=>say('دیپارتمنت، بخش','fa'));document.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()=>{const c=filtered[idx];if(!c)return;if(b.dataset.say==='de')say(displayGerman(c),'de');if(b.dataset.say==='target'||b.dataset.say==='en'||b.dataset.say==='fa'){const lang=targetLang();const t=displayTarget(c,lang);if(!isTranslationMissing(c,lang))say(t,lang)}}));if(els.voiceSelectDe)els.voiceSelectDe.addEventListener('change',()=>saveVoiceChoice('de'));
 if(els.voiceSelectEn)els.voiceSelectEn.addEventListener('change',()=>saveVoiceChoice('en'));
 if(els.voiceSelectFa)els.voiceSelectFa.addEventListener('change',()=>saveVoiceChoice('fa'));
 if(els.scanDariVoices)els.scanDariVoices.addEventListener('click',runDariVoiceSearch);

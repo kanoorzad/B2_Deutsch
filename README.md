@@ -1,39 +1,33 @@
-# Deutsch-Karteikarten v63 — Final Clean Multilingual
+# Deutsch-Karteikarten v64 — German Start Flow
 
-## Inhalt
+## Wichtigste Änderung
 
-- Deutsche Benutzeroberfläche
-- Zielsprache-Auswahl
-- Eine Übersetzungssprache gleichzeitig
-- 2.254 Karten
-- Englisch und Farsi aus bestehenden geprüften Daten
-- Russisch/Ukrainisch/Türkisch/Spanisch vorbereitet, aber nicht ungeprüft automatisch gefüllt
+Die Oberfläche führt den Nutzer jetzt in der gewünschten Reihenfolge:
 
-## Unterstützte Zielsprache-Auswahl
+1. Zielsprache wählen
+2. Lernbereich wählen:
+   - B1+
+   - B2
+   - Unregelmäßige Verben
+3. Abspielen drücken
+4. Die Karten laufen automatisch weiter
 
-- Englisch
-- Farsi
-- Russisch — in Vorbereitung
-- Ukrainisch — in Vorbereitung
-- Türkisch — in Vorbereitung
-- Spanisch — in Vorbereitung
+## Struktur
 
-## Sprachausgabe
+Die bestehende Lernkartenstruktur bleibt erhalten:
 
-Die App nutzt die beste im Browser verfügbare Stimme:
+- Karte
+- Fortschritt
+- Abspielen / Pause / Stopp
+- Zurück / Umdrehen / Weiter
+- automatische Wiedergabe mit Deutsch → Formen → Zielsprache → nächste Karte
 
-- Deutsch: de-DE
-- Englisch: en-US
-- Farsi: fa-IR / fa
-- Russisch: ru-RU
-- Ukrainisch: uk-UA
-- Türkisch: tr-TR
-- Spanisch: es-ES
+## Übersetzungen
 
-## Review-Pack
-
-Im Ordner `translation-pack` liegen CSV/JSON-Dateien für die saubere Erweiterung der fehlenden Übersetzungen.
+- Englisch: vorhanden
+- Farsi: vorhanden
+- Russisch/Ukrainisch/Türkisch/Spanisch: vorbereitet, aber noch als „in Vorbereitung“ markiert
 
 ## Öffnen
 
-https://kanoorzad.github.io/B2_Deutsch/?v=63
+https://kanoorzad.github.io/B2_Deutsch/?v=64

@@ -1,13 +1,13 @@
 {
-  "name": "Deutsch-Karteikarten v63",
-  "short_name": "DE Karten v63",
-  "start_url": "./index.html?v=63",
+  "name": "Deutsch-Karteikarten v64",
+  "short_name": "DE Karten v64",
+  "start_url": "./index.html?v=64",
   "display": "standalone",
   "background_color": "#f3f7fb",
   "theme_color": "#17324d",
   "icons": [
     {
-      "src": "icon.svg?v=63",
+      "src": "icon.svg?v=64",
       "sizes": "any",
       "type": "image/svg+xml"
     }
