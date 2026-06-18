@@ -1,45 +1,30 @@
-# B2 + B1 Plus Flashcards v6
+# B2 + B1 Plus Flashcards v54 — Restore v51 + Screen Wake Lock
 
-This version is the cleaner, more readable version.
+## What changed
 
-## Main improvements
+v54 restores the stable v51 app and adds only one feature:
 
-- The interface is less crowded.
-- Study filters, listening controls, add-card form, and backup are grouped into collapsible sections.
-- When you flip a card, all three languages are clearly visible:
-  - German
-  - US English
-  - Dari
-- Dari is displayed right-to-left and with larger line spacing.
-- Synonyms are now visible as chips.
-- Playback order is strict:
-  1. German appears and is spoken
-  2. US English appears and is spoken
-  3. Dari appears and is spoken
-  4. Then the next card starts
-- Pause/Resume is now properly defined.
+- Screen Wake Lock during playback.
 
-## Included data
+This is intended to keep the phone screen awake while the lesson is playing, because mobile browsers usually stop or throttle JavaScript/audio when the screen locks.
 
-- B2 all 12 units: 1629
-- B1 Plus 7 units: 475
-- Irregular verbs: 150
-- Total cards: 2254
-- Cards with English: 2254
-- Cards with Dari: 2254
-- Cards with 2 synonyms/related meanings: 2254
+## Voice engine
 
-## GitHub update
+Same as v51:
 
-Replace all files in your GitHub repository with this folder's files.
+- full version-4 voice engine
+- German: de-DE
+- English: en-US
+- Dari/Farsi: fa-AF
+- direct SpeechSynthesisUtterance
+- no online TTS
+- no local sprite
+- no router
 
-Then open:
+## Screen-off behavior
 
-https://kanoorzad.github.io/B2_Deutsch/?v=6
+A web page cannot reliably continue JavaScript speech after the phone screen is actually locked. v54 instead requests a screen wake lock when Play starts, and releases it when playback stops or finishes.
 
-On iPhone, if the old app still appears, delete the Home Screen icon, open the `?v=6` link in Safari, then add it to Home Screen again.
+## Open
 
-
-## v6 QA correction
-
-All cards now have German, US English, Dari, and two synonyms/related meanings.
+https://kanoorzad.github.io/B2_Deutsch/?v=54
