@@ -1,19 +1,17 @@
 {
-  "version": "83.0-final-addendum",
+  "presentation_version": "1.0.0",
+  "internal_build": "84",
   "implemented": [
-    "Priority German TTS rules for (von + Dat.), (für + Akk.), and (jdn./etw.).",
-    "Options language switch closes the drawer and updates current card/session immediately.",
-    "Voice mapping is displayed in a clean dedicated card.",
-    "Wortart filtern dropdown updates the deck immediately.",
-    "Branding hierarchy added.",
-    "PWA install prompt with localStorage flag added.",
-    "Headword single-line auto-fit preserved.",
-    "Synonyms displayed under headword with exact stored counts."
+    "Removed voice mapping from options and UI.",
+    "Removed extra voice/watermark block under POS filter.",
+    "POS filter closes options, refreshes deck, and autoplays first filtered card.",
+    "Unit replaced with Einheit in UI contexts.",
+    "Visible version set to v1.0.0 and APP_VERSION variable added.",
+    "Best-effort PWA background audio support via Service Worker, AudioContext, and MediaSession."
   ],
   "limitations": [
-    "The app enforces exact synonym counts from available dataset fields, but true 99% semantic verification requires a semantic API.",
-    "Native PWA install prompt appears only in browsers/platforms that fire beforeinstallprompt.",
-    "Exact Azure voice output still requires voices exposed by the browser or backend-generated audio."
+    "Mobile web/PWA background TTS cannot be guaranteed on all iOS/Android browsers after screen lock or app switch; the code now uses best-effort AudioContext + MediaSession, but native background audio needs a native wrapper/foreground service.",
+    "Exact 99% synonym verification still requires a semantic API."
   ],
   "cards": 3171,
   "list_counts": {
@@ -44,24 +42,22 @@
   "a1_normal_verb_cards_only_infinitive": 179,
   "checks": {
     "javascript_syntax_ok": true,
-    "v83_controller_present": true,
-    "options_language_switch_closes_menu": true,
-    "language_switch_updates_current_card_without_restart": true,
-    "tts_priority_rules_present": true,
-    "ui_labels_excluded_from_tts": true,
-    "voice_mapping_card_present": true,
-    "pos_filter_present": true,
-    "pos_filter_logic_present": true,
-    "branding_hierarchy_present": true,
-    "pwa_install_prompt_present": true,
+    "display_version_v1_0_0": true,
+    "voice_mapping_removed_from_options_ui": true,
+    "no_voice_map_card": true,
+    "pos_filter_has_no_watermark_below": true,
+    "filter_auto_closes_and_autoplays": true,
+    "unit_replaced_in_ui": true,
+    "background_audio_best_effort": true,
+    "service_worker_registered_files_present": true,
+    "tts_priority_rules_still_present": true,
     "headword_single_line_fit": true,
-    "synonyms_under_headword": true,
     "exact_synonym_counts_all_cards": true,
     "a1_normal_verbs_only_infinitive": true,
-    "translations_complete_global": true,
-    "cache_busting_v83": true
+    "translations_complete": true,
+    "cache_busting_build84": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=83",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=84",
   "zip_mb": 1.79
 }

@@ -1,21 +1,17 @@
-# Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v83
+# Deutsch Sprache – Wichtige Wörter – telc System – A1-B2
 
-Final addendum implementation.
+Presentation version: v1.0.0  
+Internal build: 84
 
-Added:
-- German TTS priority sanitization for (von + Dat.), (für + Akk.), and (jdn./etw.).
-- Options language switch closes drawer and updates current card immediately.
-- Dedicated clean voice mapping card in options.
-- Wortart filtern dropdown.
-- Branding hierarchy.
-- PWA install banner.
-- Headword single-line fit.
-- Synonyms directly under headword.
+Implemented:
+- Voice mapping display removed from UI.
+- Wortart filter auto-closes options, refreshes, and autoplays.
+- Unit changed to Einheit in UI.
+- Best-effort PWA background playback: Service Worker, AudioContext, MediaSession.
+- Visible version tag: v1.0.0.
 
-Limits:
-- True 99% semantic synonym verification needs an API.
-- Native install prompt depends on browser beforeinstallprompt support.
-- Exact Azure voice output requires browser-exposed voices or backend audio.
+Limit:
+Browser/PWA background TTS is best-effort only. Guaranteed screen-off playback needs native app capabilities or backend/bundled audio.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=83
+https://kanoorzad.github.io/B2_Deutsch/?v=84
