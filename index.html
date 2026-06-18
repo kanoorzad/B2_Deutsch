@@ -7,10 +7,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=73">
-  <link rel="apple-touch-icon" href="icon.svg?v=73">
-  <link rel="stylesheet" href="styles.css?v=73">
-  <title>German A1-B2 telc system Important words v73</title>
+  <link rel="manifest" href="manifest.webmanifest?v=74">
+  <link rel="apple-touch-icon" href="icon.svg?v=74">
+  <link rel="stylesheet" href="styles.css?v=74">
+  <title>German A1-B2 telc system Important words v74</title>
 </head>
 <body class="wizardMode">
 <select id="targetLang" hidden>
@@ -24,7 +24,7 @@
 <section id="startWizard" class="startWizard" aria-live="polite">
   <section id="wizardLang" class="wizardStep active">
     <div class="wizardCard languageStartCard">
-      <em class="startVersionTag">v73</em>
+      <em class="startVersionTag">v74</em>
       <h1 class="startTitle">German A1-B2 telc system Important words</h1>
       <p class="startSubtitle">Bitte wählen Sie zuerst die Übersetzungssprache.</p>
       <div class="choiceGrid languageChoices compactLangGrid">
@@ -41,7 +41,7 @@
 
   <section id="wizardMaterial" class="wizardStep">
     <div class="wizardCard">
-      <em class="startVersionTag">v73</em>
+      <em class="startVersionTag">v74</em>
       <h2>Lernmaterial wählen</h2>
       <p class="startSubtitle">Wählen Sie den Bereich.</p>
       <div class="choiceGrid materialChoices">
@@ -60,7 +60,7 @@
 
   <section id="wizardUnit" class="wizardStep">
     <div class="wizardCard">
-      <em class="startVersionTag">v73</em>
+      <em class="startVersionTag">v74</em>
       <h2>Einheit wählen</h2>
       <p class="startSubtitle">Standard: alle Einheiten.</p>
       <label class="wizardSelectLabel">Einheit
@@ -73,90 +73,9 @@
     </div>
   </section>
 </section>
-<script>
-(function(){
-  window.__hardWizardControllerV73 = true;
-  function $(id){ return document.getElementById(id); }
-  function setStep(id){
-    ['wizardLang','wizardMaterial','wizardUnit'].forEach(function(x){
-      var el=$(x);
-      if(el){
-        if(x===id){ el.classList.add('active'); el.style.display='block'; }
-        else { el.classList.remove('active'); el.style.display='none'; }
-      }
-    });
-  }
-  function setSelectValue(id,value){
-    var el=$(id);
-    if(el){
-      var exists=[].some.call(el.options||[], function(o){ return o.value===value; });
-      if(exists || id==='targetLang') el.value=value;
-    }
-  }
-  function populateUnits(list){
-    var sel=$('wizardUnitSelect');
-    if(!sel) return;
-    var cards=(window.FLASHCARD_DATA && window.FLASHCARD_DATA.cards) || [];
-    var pool=cards.filter(function(c){ return list==='all' || c.list===list; });
-    var units=[];
-    pool.forEach(function(c){ if(c.unit && units.indexOf(c.unit)===-1) units.push(c.unit); });
-    sel.innerHTML='<option value="all">Alle Einheiten</option>'+units.map(function(u){ return '<option value="'+String(u).replace(/"/g,'&quot;')+'">'+u+'</option>'; }).join('');
-    sel.value='all';
-    var note=$('wizardUnitNote');
-    if(note) note.textContent = pool.length ? (pool.length + ' Karten verfügbar.') : 'Noch keine Karten für dieses Material. Bitte anderes Material wählen.';
-  }
-  function showApp(){
-    var wizard=$('startWizard'), options=$('optionsToggle');
-    document.body.classList.remove('wizardMode');
-    document.body.classList.add('appReady');
-    if(wizard) wizard.hidden=true;
-    if(options) options.hidden=false;
-  }
-  function bootWizard(){
-    document.body.classList.add('wizardMode');
-    document.body.classList.remove('appReady');
-    var wizard=$('startWizard'), options=$('optionsToggle');
-    if(wizard) wizard.hidden=false;
-    if(options) options.hidden=true;
-    setStep('wizardLang');
-  }
-  document.addEventListener('click', function(ev){
-    var langBtn=ev.target.closest && ev.target.closest('[data-wizard-lang]');
-    if(langBtn){
-      ev.preventDefault(); ev.stopPropagation();
-      var lang=langBtn.getAttribute('data-wizard-lang') || 'en';
-      setSelectValue('targetLang', lang);
-      try{ localStorage.setItem('targetLang', lang); }catch(e){}
-      if(window.els && window.els.targetLang) window.els.targetLang.value=lang;
-      setStep('wizardMaterial');
-      return false;
-    }
-    var matBtn=ev.target.closest && ev.target.closest('[data-wizard-list]');
-    if(matBtn){
-      ev.preventDefault(); ev.stopPropagation();
-      var list=matBtn.getAttribute('data-wizard-list') || 'all';
-      setSelectValue('listFilter', list);
-      populateUnits(list);
-      setStep('wizardUnit');
-      return false;
-    }
-    var startBtn=ev.target.closest && ev.target.closest('#wizardStart');
-    if(startBtn){
-      ev.preventDefault(); ev.stopPropagation();
-      var unit=$('wizardUnitSelect') ? $('wizardUnitSelect').value : 'all';
-      setSelectValue('unitFilter', unit || 'all');
-      try{ if(window.updateParts) window.updateParts(); if(window.apply) window.apply(); }catch(e){ console.warn(e); }
-      showApp();
-      setTimeout(function(){ try{ if(window.playSelected) window.playSelected(); }catch(e){} }, 180);
-      return false;
-    }
-  }, true);
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bootWizard, {once:true});
-  else bootWizard();
-})();
-</script>
+<button id="optionsToggle" type="button" class="optionsToggle" hidden>Optionen</button>
 <header class="hero">
-  <em class="versionBadge">v73</em>
+  <em class="versionBadge">v74</em>
   <h1>Deutsch-Karteikarten</h1>
   <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
   <p class="initiative"><em>Initiative by: Khalid Noorzad</em></p>
@@ -303,8 +222,202 @@
   </section>
 </main>
 
-<script src="data.js?v=73"></script>
-<script src="app.js?v=73"></script>
+<script src="data.js?v=74"></script>
+<script src="app.js?v=74"></script>
+<script id="v74-controller">
+(function(){
+  window.__v74Controller = true;
+  const $ = id => document.getElementById(id);
+  const LANG_META = {
+    en:{label:'Englisch', code:'en-US', dir:'ltr'},
+    fa:{label:'Farsi', code:'fa-IR', dir:'rtl'},
+    es:{label:'Spanisch', code:'es-ES', dir:'ltr'},
+    ru:{label:'Russisch', code:'ru-RU', dir:'ltr'},
+    uk:{label:'Ukrainisch', code:'uk-UA', dir:'ltr'},
+    tr:{label:'Türkisch', code:'tr-TR', dir:'ltr'},
+    de:{label:'Deutsch', code:'de-DE', dir:'ltr'}
+  };
+  let selectedLang='en', selectedList='all', selectedUnit='all', filtered=[], pos=0;
+
+  function cards(){ return (window.FLASHCARD_DATA && window.FLASHCARD_DATA.cards) || []; }
+  function showStep(id){
+    ['wizardLang','wizardMaterial','wizardUnit'].forEach(x=>{
+      const el=$(x);
+      if(el){
+        const on=x===id;
+        el.classList.toggle('active',on);
+        el.style.display=on?'block':'none';
+      }
+    });
+  }
+  function setSelect(id,val){
+    const el=$(id);
+    if(el) try{el.value=val}catch(e){}
+  }
+  function populateUnits(){
+    const pool=cards().filter(c=>selectedList==='all'||c.list===selectedList);
+    const units=[...new Set(pool.map(c=>c.unit).filter(Boolean))];
+    const sel=$('wizardUnitSelect');
+    if(sel){
+      sel.innerHTML='<option value="all">Alle Einheiten</option>'+units.map(u=>`<option value="${String(u).replace(/"/g,'&quot;')}">${u}</option>`).join('');
+      sel.value='all';
+    }
+    const note=$('wizardUnitNote');
+    if(note) note.textContent=pool.length?`${pool.length} Karten verfügbar.`:'Noch keine Karten für dieses Material. Bitte anderes Material wählen.';
+  }
+  function displayGerman(c){
+    if(!c) return '';
+    if(c.category==='noun') return [c.article,c.singular||c.german].filter(Boolean).join(' ');
+    return c.german||c.singular||'';
+  }
+  function targetText(c){
+    const tr=(c&&c.translations)||{};
+    return tr[selectedLang]||c.english||'';
+  }
+  function updateFilters(){
+    filtered=cards().filter(c=>{
+      const listOK=selectedList==='all'||c.list===selectedList;
+      const unitOK=selectedUnit==='all'||c.unit===selectedUnit;
+      return listOK&&unitOK;
+    });
+    pos=0;
+  }
+  function current(){ return filtered[pos] || cards()[0] || null; }
+  window.current=current;
+
+  function renderCard(){
+    const c=current();
+    if(!c) return;
+    const meta=LANG_META[selectedLang]||LANG_META.en;
+    const set=(id,val)=>{const el=$(id); if(el) el.textContent=val||'—';};
+    set('front',displayGerman(c));
+    set('frontText',displayGerman(c));
+    set('targetTitle',meta.label);
+    const en=$('en'); if(en){ en.textContent=targetText(c)||'—'; en.dir=meta.dir; }
+    set('de',displayGerman(c));
+    set('count',`${filtered.length?pos+1:0} / ${filtered.length}`);
+    set('nowPlaying',`${displayGerman(c)} — ${meta.label}`);
+    const f=c.forms||{};
+    set('inf',f.infinitive);
+    set('pres3',f.present3);
+    set('past',f.past);
+    set('perf',f.perfect);
+    set('plus',f.plusquamperfekt);
+    set('article',c.article);
+    set('singular',c.singular||c.german);
+    set('plural',c.plural);
+    set('ex',c.example);
+    const syn=$('multiSynContent'), synBox=$('multiSynBox');
+    if(syn && c.synonyms_multi){
+      const deSyn=(c.synonyms_multi.de||[]).join(' · ');
+      const tgSyn=(c.synonyms_multi[selectedLang]||[]).join(' · ');
+      syn.innerHTML=`<div class="synCol"><strong>Deutsch</strong><p>${deSyn}</p></div><div class="synCol"><strong>${meta.label}</strong><p dir="${meta.dir}">${tgSyn}</p></div>`;
+      if(synBox) synBox.classList.remove('hidden');
+    }
+  }
+  window.renderCard=renderCard;
+
+  function pickVoice(lang){
+    if(!('speechSynthesis' in window)) return null;
+    const code=(LANG_META[lang]||LANG_META.de).code;
+    const base=code.split('-')[0].toLowerCase();
+    const vs=speechSynthesis.getVoices()||[];
+    return vs.find(v=>(v.lang||'').toLowerCase()===code.toLowerCase()) || vs.find(v=>(v.lang||'').toLowerCase().startsWith(base)) || null;
+  }
+  function sayText(text,lang){
+    return new Promise(resolve=>{
+      if(!text || !('speechSynthesis' in window)){ resolve(); return; }
+      try{speechSynthesis.cancel()}catch(e){}
+      const meta=LANG_META[lang]||LANG_META.de;
+      const u=new SpeechSynthesisUtterance(String(text));
+      u.lang=meta.code;
+      const v=pickVoice(lang);
+      if(v){u.voice=v;u.lang=v.lang||meta.code}
+      u.rate=lang==='de'?.78:.88; u.pitch=1; u.volume=1;
+      u.onend=resolve; u.onerror=resolve;
+      try{speechSynthesis.resume&&speechSynthesis.resume(); speechSynthesis.speak(u)}catch(e){resolve()}
+    });
+  }
+  async function playCurrent(){
+    const c=current();
+    if(!c) return;
+    renderCard();
+    const f=c.forms||{};
+    const forms=[f.infinitive,f.present3,f.past,f.perfect].filter(Boolean).join('. ');
+    await sayText(displayGerman(c),'de');
+    if(forms) await sayText(forms,'de');
+    await sayText(targetText(c),selectedLang);
+  }
+  window.playSelected=playCurrent;
+
+  function enterApp(){
+    selectedUnit=$('wizardUnitSelect')?$('wizardUnitSelect').value:'all';
+    setSelect('unitFilter',selectedUnit||'all');
+    setSelect('listFilter',selectedList);
+    setSelect('targetLang',selectedLang);
+    updateFilters();
+    const wizard=$('startWizard'), opt=$('optionsToggle');
+    document.body.classList.remove('wizardMode');
+    document.body.classList.add('appReady');
+    if(wizard) wizard.hidden=true;
+    if(opt){ opt.hidden=false; opt.style.display='inline-flex'; }
+    try{ if(typeof window.apply==='function') window.apply(); }catch(e){}
+    renderCard();
+    setTimeout(playCurrent,120);
+  }
+  function boot(){
+    document.body.classList.add('wizardMode');
+    document.body.classList.remove('appReady');
+    const wizard=$('startWizard'), opt=$('optionsToggle');
+    if(wizard) wizard.hidden=false;
+    if(opt) opt.hidden=true;
+    showStep('wizardLang');
+    try{speechSynthesis&&speechSynthesis.getVoices()}catch(e){}
+  }
+
+  document.addEventListener('click',ev=>{
+    const langBtn=ev.target.closest&&ev.target.closest('[data-wizard-lang]');
+    if(langBtn){
+      ev.preventDefault(); ev.stopPropagation();
+      selectedLang=langBtn.getAttribute('data-wizard-lang')||'en';
+      setSelect('targetLang',selectedLang);
+      try{localStorage.setItem('targetLang',selectedLang)}catch(e){}
+      showStep('wizardMaterial');
+      return false;
+    }
+    const matBtn=ev.target.closest&&ev.target.closest('[data-wizard-list]');
+    if(matBtn){
+      ev.preventDefault(); ev.stopPropagation();
+      selectedList=matBtn.getAttribute('data-wizard-list')||'all';
+      setSelect('listFilter',selectedList);
+      populateUnits();
+      showStep('wizardUnit');
+      return false;
+    }
+    if(ev.target.closest&&ev.target.closest('#wizardStart')){
+      ev.preventDefault(); ev.stopPropagation();
+      enterApp();
+      return false;
+    }
+    if(ev.target.closest&&ev.target.closest('#optionsToggle')){
+      const drawer=$('optionsDrawer'), back=$('drawerBackdrop');
+      if(drawer) drawer.hidden=false;
+      if(back) back.hidden=false;
+    }
+    if(ev.target.closest&&(ev.target.closest('#closeOptions')||ev.target.closest('#drawerBackdrop'))){
+      const drawer=$('optionsDrawer'), back=$('drawerBackdrop');
+      if(drawer) drawer.hidden=true;
+      if(back) back.hidden=true;
+    }
+    if(ev.target.closest&&ev.target.closest('#playList')){ ev.preventDefault(); playCurrent(); }
+    if(ev.target.closest&&ev.target.closest('#next')){ ev.preventDefault(); if(filtered.length){pos=(pos+1)%filtered.length;renderCard();} }
+    if(ev.target.closest&&ev.target.closest('#prev')){ ev.preventDefault(); if(filtered.length){pos=(pos-1+filtered.length)%filtered.length;renderCard();} }
+  },true);
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
+  else boot();
+})();
+</script>
 </body>
 </html>
 

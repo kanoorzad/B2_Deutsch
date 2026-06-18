@@ -1,22 +1,31 @@
-# German A1-B2 telc system Important words v73
+# German A1-B2 telc system Important words v74
 
-Hard repair for first-page language buttons.
+Full flow repair after deep review.
 
-## What was fixed
+## Fixed user-reported issues
 
-The language page could behave like a static picture because earlier versions depended on app.js startup. v73 adds a small independent wizard controller directly in `index.html`.
+- Option button was missing.
+- Language could be selected, but the card did not play.
 
-## v73 guarantees
+## Root causes found
 
-- One `startWizard`
-- One `wizardLang`
-- One `wizardMaterial`
-- One `wizardUnit`
-- One hidden `targetLang`
-- Language click advances to material selection directly from inline controller
-- Material click advances to unit selection
-- Start button opens the card app
-- A1 vocabulary from v72 is kept
+- `optionsToggle` did not exist in the HTML.
+- `app.js` did not expose `playSelected()` or `current()`.
+- The previous wizard repair moved screens but still relied on missing playback/render functions.
+
+## v74 repair
+
+- Added a guaranteed options button.
+- Added an independent controller after data.js and app.js.
+- Controller handles:
+  - language selection
+  - material selection
+  - unit selection
+  - card rendering
+  - card playback
+  - next / previous
+  - options drawer open / close
+- A1 words and all previous data are kept.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=73
+https://kanoorzad.github.io/B2_Deutsch/?v=74
