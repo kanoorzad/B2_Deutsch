@@ -1,16 +1,24 @@
-# German A1-B2 telc system Important words v70
+# German A1-B2 telc system Important words v71
 
-Corrected package fixing the first-screen language click issue.
+Deep repair for the first-screen language click issue.
 
-## v70 fixes
+## Root cause found
 
-- Rebuilt first wizard screen with valid section nesting.
-- Language buttons now use direct event delegation.
-- Clicking a language moves immediately to material selection.
-- Added v70 tag at top-right of first page.
-- Cache busting updated to v70.
+v70 had duplicated wizard blocks in `index.html`, and `app.js` defined the wizard click handler but did not call the app bootstrap functions. This made the first language page behave like a static picture.
+
+## v71 repair
+
+- Removed duplicated wizard blocks.
+- Rebuilt one clean first wizard.
+- Added one hidden `targetLang` selector.
+- Added an explicit `bootApp()` startup function.
+- `bootApp()` calls:
+  - `warmVoices()`
+  - `setup()`
+  - `apply()`
+  - `initStartWizard()`
+- Language clicks now advance to the material screen.
+- Added top-right v71 tag.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=70
-
-Upload the contents inside this folder to the GitHub Pages repository root.
+https://kanoorzad.github.io/B2_Deutsch/?v=71

@@ -1,5 +1,33 @@
 {
-  "version": "70.0-language-click-fixed",
+  "version": "71.0-wizard-bootstrap-fixed",
+  "root_cause": [
+    "v70 contained duplicated startWizard/wizardLang/wizardMaterial/wizardUnit blocks in index.html.",
+    "v70 app.js defined initStartWizard but never called setup/apply/initStartWizard, so the click handler never became active.",
+    "The first screen therefore appeared as a static picture."
+  ],
+  "before_repair": {
+    "startWizard_count": 2,
+    "wizardLang_count": 2,
+    "wizardMaterial_count": 2,
+    "wizardUnit_count": 2,
+    "initStartWizard_function_count": 1,
+    "initStartWizard_call_count": 0,
+    "setup_call_count": 0,
+    "apply_call_count": 1,
+    "click_handler_present": true
+  },
+  "after_repair": {
+    "startWizard_count": 1,
+    "wizardLang_count": 1,
+    "wizardMaterial_count": 1,
+    "wizardUnit_count": 1,
+    "targetLang_count": 1,
+    "initStartWizard_function_count": 1,
+    "bootApp_function_count": 1,
+    "bootApp_call_present": true,
+    "DOMContentLoaded_boot_present": true,
+    "click_handler_present": true
+  },
   "cards": 2330,
   "list_counts": {
     "B2 all 12 units": 1629,
@@ -25,25 +53,21 @@
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "language_buttons_present": true,
-    "delegated_language_click_handler_present": true,
-    "wizard_material_step_present": true,
-    "wizard_steps_css_present": true,
-    "target_select_present": true,
-    "version_tag_on_first_page": true,
-    "cache_busting_v70": true,
-    "translation_complete": true,
-    "voice_profiles_present": true,
+    "single_startWizard": true,
+    "single_wizardLang": true,
+    "single_wizardMaterial": true,
+    "single_wizardUnit": true,
+    "single_targetLang": true,
+    "bootstrap_present": true,
+    "language_click_handler_present": true,
+    "language_click_advances_to_material": true,
+    "version_tag_top_right": true,
+    "wizard_css_clickable": true,
+    "cache_busting_v71": true,
+    "translations_complete": true,
     "export_removed": true
   },
   "node_check_stderr": "",
-  "fixes_made": [
-    "Rebuilt the complete first wizard block with valid section nesting.",
-    "Added direct event delegation for language buttons so clicking a language always advances to material selection.",
-    "Added v70 tag at the top right of the first page.",
-    "Kept target language selection and all translation/voice profiles.",
-    "Updated cache busting to v70."
-  ],
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=70",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=71",
   "zip_mb": 1.37
 }
