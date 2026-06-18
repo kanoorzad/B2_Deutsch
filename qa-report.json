@@ -1,8 +1,43 @@
 {
-  "version": "68.0-publication",
-  "release_zip_generated": true,
-  "publication_zip": "/mnt/data/german_a1_b2_telc_words_v68_publication.zip",
+  "version": "69.0-corrected-all-languages",
   "cards": 2330,
+  "analysis_findings_before_fix": [
+    {
+      "item": "Language buttons",
+      "ok_before_fix": true,
+      "details": "Found: ['en', 'fa', 'ru', 'uk', 'tr', 'es']"
+    },
+    {
+      "item": "First title",
+      "ok_before_fix": true,
+      "details": "Top title checked"
+    },
+    {
+      "item": "Initiative text",
+      "ok_before_fix": true,
+      "details": "Bottom initiative checked"
+    },
+    {
+      "item": "Export removed",
+      "ok_before_fix": true,
+      "details": "Checked export/import/backup traces"
+    },
+    {
+      "item": "Voice profiles",
+      "ok_before_fix": true,
+      "details": "Voice profiles and 7 language codes checked"
+    },
+    {
+      "item": "Target language metadata",
+      "ok_before_fix": true,
+      "details": "Target language metadata checked"
+    },
+    {
+      "item": "Translation coverage",
+      "ok_before_fix": true,
+      "details": "Coverage: {'en': 2330, 'fa': 2330, 'es': 2330, 'ru': 2330, 'uk': 2330, 'tr': 2330}"
+    }
+  ],
   "list_counts": {
     "B2 all 12 units": 1629,
     "B2 Irregular Verbs": 150,
@@ -32,26 +67,36 @@
     "uk": 0,
     "tr": 0
   },
-  "synonyms": {
-    "verb_cards_with_4_equivalents": 726,
-    "noun_cards_with_2_equivalents": 1280
-  },
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v68": true,
-    "cache_busting_v68": true,
-    "title_present": true,
+    "version_badge_v69": true,
+    "cache_busting_v69": true,
+    "all_translations_complete": true,
+    "language_buttons_all_present": true,
+    "target_select_all_present": true,
+    "target_language_not_fixed_to_english": true,
+    "voice_profiles_all_present": true,
+    "voice_status_panel_present": true,
+    "ios_android_fallback_present": true,
+    "export_removed": true,
+    "first_title_present": true,
     "initiative_present": true,
-    "export_removed_from_index": true,
-    "export_removed_from_app": true,
-    "a1_irregular_present": true,
-    "b2_irregular_present": true,
-    "voice_profiles_present": true,
-    "all_voice_codes_present": true,
+    "step_text_removed": true,
+    "material_placeholders_present": true,
+    "synonyms_present": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=68",
-  "upload_note": "Upload the contents inside this folder to the GitHub Pages repository root, not the parent folder itself.",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=69",
+  "fixes_made": [
+    "Repaired target-language selection so the selected language is stored and used.",
+    "Repaired playback so it reads the selected translation language, not only English.",
+    "Rebuilt voice profiles and fallback retry for all 7 languages.",
+    "Added/verified hidden targetLang select for all six translation languages.",
+    "Verified first-screen title, two-column language layout, initiative text, and removed step text.",
+    "Verified export/import/backup removal.",
+    "Verified material placeholders and actual A1/B1+/B2/B2 irregular/A1 irregular lists.",
+    "Kept all translations and synonym/equivalent blocks."
+  ],
   "zip_mb": 1.37
 }

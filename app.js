@@ -1,8 +1,8 @@
 // v67: full user-provided script applied; Persian/Persian/Farsi debug helper included.
 // v67: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v68AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh68=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh68='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+(function(){try{const key='v69AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh69=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh69='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v68';
+const STORE='b2-native-cards-extra-v69';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[]; let idx=0; let flipped=false; let lastFront=null; let playing=false; let paused=false; let playQueue=[]; let playIndex=0;
@@ -24,15 +24,110 @@ const els={
 };
 
 const TARGET_LANGS={
-  en:{label:'Englisch',voice:'en-US',dir:'ltr',missing:'Geprüfte Übersetzung noch nicht verfügbar'},
-  fa:{label:'Farsi',voice:'fa-IR',dir:'rtl',missing:'Geprüfte Übersetzung noch nicht verfügbar'},
-  ru:{label:'Russisch',voice:'ru-RU',dir:'ltr',missing:'Russisch ist vorbereitet. Geprüfte Übersetzung folgt.'},
-  uk:{label:'Ukrainisch',voice:'uk-UA',dir:'ltr',missing:'Ukrainisch ist vorbereitet. Geprüfte Übersetzung folgt.'},
-  tr:{label:'Türkisch',voice:'tr-TR',dir:'ltr',missing:'Türkisch ist vorbereitet. Geprüfte Übersetzung folgt.'},
-  es:{label:'Spanisch',voice:'es-ES',dir:'ltr',missing:'Spanische Übersetzung für diese Karte fehlt noch.'}
+  en:{label:'Englisch',voice:'en-US',dir:'ltr',missing:'Englische Übersetzung fehlt.'},
+  fa:{label:'Farsi',voice:'fa-IR',dir:'rtl',missing:'Farsi-Übersetzung fehlt.'},
+  es:{label:'Spanisch',voice:'es-ES',dir:'ltr',missing:'Spanische Übersetzung fehlt.'},
+  ru:{label:'Russisch',voice:'ru-RU',dir:'ltr',missing:'Russische Übersetzung fehlt.'},
+  uk:{label:'Ukrainisch',voice:'uk-UA',dir:'ltr',missing:'Ukrainische Übersetzung fehlt.'},
+  tr:{label:'Türkisch',voice:'tr-TR',dir:'ltr',missing:'Türkische Übersetzung fehlt.'}
 };
-function targetLang(){return (document.getElementById('targetLang')?.value)||'en'}
-function targetMeta(lang=targetLang()){return TARGET_LANGS[lang]||TARGET_LANGS.en}
+const VOICE_PROFILES={
+  de:{code:'de-DE',fallback:['de-DE','de-AT','de-CH','de'],premium:/anna|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.78},
+  en:{code:'en-US',fallback:['en-US','en-GB','en-AU','en-CA','en'],premium:/samantha|daniel|alex|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.92},
+  fa:{code:'fa-IR',fallback:['fa-IR','fa-AF','fa'],premium:/persian|farsi|فارسی|دری|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/daria|bulgarian|bg-bg|compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.86},
+  es:{code:'es-ES',fallback:['es-ES','es-MX','es-US','es-419','es'],premium:/monica|paulina|jorge|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.92},
+  ru:{code:'ru-RU',fallback:['ru-RU','ru'],premium:/milena|yuri|russian|рус|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.86},
+  uk:{code:'uk-UA',fallback:['uk-UA','uk'],premium:/ukrainian|україн|украин|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.86},
+  tr:{code:'tr-TR',fallback:['tr-TR','tr'],premium:/turkish|türk|yelda|cem|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.90}
+};
+function voiceCodeFor(lang){return (VOICE_PROFILES[lang]||VOICE_PROFILES.de).code}
+function voices(){try{return speechSynthesis.getVoices()||[]}catch(e){return[]}}
+function voiceScore(v,lang){
+  const p=VOICE_PROFILES[lang]||VOICE_PROFILES.de;
+  const name=((v.name||'')+' '+(v.voiceURI||''));
+  const vl=(v.lang||'').toLowerCase();
+  let score=0;
+  if(p.reject&&p.reject.test(name))score-=1000;
+  if(p.premium&&p.premium.test(name))score+=100;
+  if(v.localService===false)score+=16;
+  if(v.default)score+=8;
+  p.fallback.forEach((code,i)=>{
+    const lc=code.toLowerCase(), base=lc.split('-')[0];
+    if(vl===lc)score+=90-i*7;
+    else if(vl.startsWith(base))score+=45-i*4;
+  });
+  if(/google/i.test(name))score+=20;
+  if(/microsoft/i.test(name))score+=18;
+  if(/apple|siri|enhanced|premium|neural|natural/i.test(name))score+=22;
+  if(/compact/i.test(name))score-=50;
+  return score;
+}
+function pickVoice(lang){
+  if(!('speechSynthesis' in window))return null;
+  const p=VOICE_PROFILES[lang]||VOICE_PROFILES.de;
+  const vs=voices();
+  if(!vs.length)return null;
+  const pool=vs.filter(v=>{
+    const vl=(v.lang||'').toLowerCase();
+    const name=((v.name||'')+' '+(v.voiceURI||''));
+    if(p.reject&&p.reject.test(name))return false;
+    return p.fallback.some(code=>vl===code.toLowerCase()||vl.startsWith(code.split('-')[0].toLowerCase())) || (p.premium&&p.premium.test(name));
+  });
+  const chosen=(pool.length?pool:vs).slice().sort((a,b)=>voiceScore(b,lang)-voiceScore(a,lang))[0]||null;
+  return chosen;
+}
+function warmVoices(){
+  if(!('speechSynthesis' in window))return;
+  try{
+    speechSynthesis.getVoices();
+    setTimeout(()=>{speechSynthesis.getVoices();updateVoiceStatus&&updateVoiceStatus()},250);
+    setTimeout(()=>{speechSynthesis.getVoices();updateVoiceStatus&&updateVoiceStatus()},900);
+  }catch(e){}
+}
+function say(text,lang='de',done=()=>{}){
+  if(!text){done();return}
+  if(!('speechSynthesis' in window)){done();return}
+  const p=VOICE_PROFILES[lang]||VOICE_PROFILES.de;
+  try{speechSynthesis.cancel()}catch(e){}
+  const makeUtter=(withVoice=true)=>{
+    const u=new SpeechSynthesisUtterance(String(text));
+    u.lang=p.code;
+    const v=withVoice?pickVoice(lang):null;
+    if(v){u.voice=v;u.lang=v.lang||p.code}
+    u.rate=p.rate;u.pitch=1;u.volume=1;
+    return u;
+  };
+  let finished=false;
+  const finish=()=>{if(!finished){finished=true;done()}};
+  const u=makeUtter(true);
+  u.onend=finish;
+  u.onerror=()=>{
+    try{
+      const r=makeUtter(false);
+      r.onend=finish;r.onerror=finish;
+      speechSynthesis.cancel();
+      setTimeout(()=>speechSynthesis.speak(r),80);
+    }catch(e){finish()}
+  };
+  try{
+    speechSynthesis.resume&&speechSynthesis.resume();
+    setTimeout(()=>speechSynthesis.speak(u),40);
+  }catch(e){finish()}
+}
+function updateVoiceStatus(){
+  const el=$('voiceStatus');
+  if(!el)return;
+  const vs=voices();
+  if(!vs.length){el.textContent='Stimmen werden geladen …';return}
+  el.textContent=['de','en','fa','es','ru','uk','tr'].map(lang=>{
+    const v=pickVoice(lang);
+    const label=lang==='de'?'Deutsch':(TARGET_LANGS[lang]?.label||lang);
+    return `${label}: ${v?`${v.name} (${v.lang})`:`System ${voiceCodeFor(lang)}`}`;
+  }).join(' · ');
+}
+
+
+
 function translationOf(c,lang=targetLang()){
   const t=(c.translations&&c.translations[lang]) || (lang==='en'?c.english:'') || (lang==='fa'?c.dari:'') || '';
   return String(t||'').trim();
@@ -79,145 +174,7 @@ function formStep(c){
   }
   return null;
 }
-const VOICE_PROFILES={
-  de:{
-    code:'de-DE',
-    fallback:['de-DE','de-AT','de-CH','de'],
-    premium:/anna|siri|google|microsoft|natural|premium|enhanced|neural|online|eloquence/i,
-    reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
-  },
-  en:{
-    code:'en-US',
-    fallback:['en-US','en-GB','en-AU','en-CA','en'],
-    premium:/samantha|daniel|alex|siri|google|microsoft|natural|premium|enhanced|neural|online|eloquence/i,
-    reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
-  },
-  fa:{
-    code:'fa-IR',
-    fallback:['fa-IR','fa-AF','fa'],
-    premium:/persian|farsi|فارسی|siri|google|microsoft|natural|premium|enhanced|neural|online/i,
-    reject:/daria|bulgarian|bg-bg|compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
-  },
-  es:{
-    code:'es-ES',
-    fallback:['es-ES','es-MX','es-US','es-419','es'],
-    premium:/monica|paulina|jorge|siri|google|microsoft|natural|premium|enhanced|neural|online|eloquence/i,
-    reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
-  },
-  ru:{
-    code:'ru-RU',
-    fallback:['ru-RU','ru'],
-    premium:/milena|yuri|russian|рус|siri|google|microsoft|natural|premium|enhanced|neural|online/i,
-    reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
-  },
-  uk:{
-    code:'uk-UA',
-    fallback:['uk-UA','uk'],
-    premium:/ukrainian|україн|украин|siri|google|microsoft|natural|premium|enhanced|neural|online/i,
-    reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
-  },
-  tr:{
-    code:'tr-TR',
-    fallback:['tr-TR','tr'],
-    premium:/turkish|türk|yelda|cem|siri|google|microsoft|natural|premium|enhanced|neural|online/i,
-    reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
-  }
-};
-let VOICE_CACHE={};
-function voiceCodeFor(lang){
-  return (VOICE_PROFILES[lang]||VOICE_PROFILES.de).code;
-}
-function voiceScore(v,lang){
-  const p=VOICE_PROFILES[lang]||VOICE_PROFILES.de;
-  const name=(v.name||'')+' '+(v.voiceURI||'');
-  const vl=(v.lang||'').toLowerCase();
-  let score=0;
-  if(p.reject && p.reject.test(name))score-=1000;
-  if(p.premium && p.premium.test(name))score+=100;
-  if(v.localService===false)score+=12;
-  if(v.default)score+=8;
-  if(vl===p.code.toLowerCase())score+=80;
-  p.fallback.forEach((code,i)=>{
-    const c=code.toLowerCase();
-    if(vl===c)score+=70-i*8;
-    else if(vl.startsWith(c.split('-')[0]))score+=35-i*4;
-  });
-  if(/google/i.test(name))score+=18;      // strong on Android Chrome
-  if(/microsoft/i.test(name))score+=16;   // strong on Edge/Windows/Android
-  if(/siri|apple|enhanced|premium|neural|natural/i.test(name))score+=20; // strong on iOS/macOS
-  if(/compact/i.test(name))score-=45;
-  return score;
-}
-function voices(){
-  return ('speechSynthesis' in window)?speechSynthesis.getVoices():[];
-}
-function pickVoice(lang){
-  const p=VOICE_PROFILES[lang]||VOICE_PROFILES.de;
-  const vs=voices();
-  if(!vs.length)return null;
-  const candidates=vs.filter(v=>{
-    const vl=(v.lang||'').toLowerCase();
-    return p.fallback.some(code=>vl===code.toLowerCase()||vl.startsWith(code.split('-')[0].toLowerCase())) ||
-           (p.premium&&p.premium.test((v.name||'')+' '+(v.voiceURI||'')));
-  }).filter(v=>!(p.reject&&p.reject.test((v.name||'')+' '+(v.voiceURI||''))));
-  const pool=candidates.length?candidates:vs.filter(v=>(v.lang||'').toLowerCase().startsWith(p.code.slice(0,2).toLowerCase()));
-  if(!pool.length)return null;
-  return pool.slice().sort((a,b)=>voiceScore(b,lang)-voiceScore(a,lang))[0]||null;
-}
-function warmVoices(){
-  if(!('speechSynthesis' in window))return;
-  try{
-    speechSynthesis.getVoices();
-    setTimeout(()=>speechSynthesis.getVoices(),100);
-    setTimeout(()=>{speechSynthesis.getVoices();updateVoiceStatus&&updateVoiceStatus();},450);
-  }catch(e){}
-}
-function say(text,lang='de',done=()=>{}){
-  if(!text){done();return}
-  if(!('speechSynthesis' in window)){done();return}
-  const p=VOICE_PROFILES[lang]||VOICE_PROFILES.de;
-  try{speechSynthesis.cancel()}catch(e){}
-  const u=new SpeechSynthesisUtterance(String(text));
-  u.lang=p.code;
-  const v=pickVoice(lang);
-  if(v){u.voice=v;u.lang=v.lang||p.code}
-  // Mobile-safe rates: clearer for German, Farsi, Russian, Ukrainian; normal for Spanish/Turkish/English.
-  u.rate=({de:.78,fa:.86,ru:.86,uk:.86,en:.92,es:.92,tr:.90}[lang]||.88);
-  u.pitch=1;
-  u.volume=1;
-  let finished=false;
-  const finish=()=>{if(!finished){finished=true;done();}};
-  u.onend=finish;
-  u.onerror=()=> {
-    // iOS/Android fallback: retry once with language code only, no explicit voice.
-    if(v){
-      try{
-        const r=new SpeechSynthesisUtterance(String(text));
-        r.lang=p.code;
-        r.rate=u.rate;r.pitch=1;r.volume=1;
-        r.onend=finish;r.onerror=finish;
-        speechSynthesis.cancel();
-        setTimeout(()=>speechSynthesis.speak(r),80);
-      }catch(e){finish()}
-    }else finish();
-  };
-  try{
-    speechSynthesis.resume&&speechSynthesis.resume();
-    setTimeout(()=>speechSynthesis.speak(u),40);
-  }catch(e){finish()}
-}
-function updateVoiceStatus(){
-  const el=$('voiceStatus');
-  const vs=voices();
-  if(!el)return;
-  if(!vs.length){el.textContent='Stimmen werden geladen …';return}
-  const rows=['de','en','fa','es','ru','uk','tr'].map(lang=>{
-    const v=pickVoice(lang);
-    const label=(TARGET_LANGS&&TARGET_LANGS[lang]?TARGET_LANGS[lang].label:lang)||lang;
-    return `${label}: ${v?`${v.name} (${v.lang})`:'Systemstandard '+voiceCodeFor(lang)}`;
-  });
-  el.textContent=rows.join(' · ');
-}
+
 
 function setup(){
   els.list.innerHTML='<option value="all">Alle Karten</option><option value="A1">A1</option><option value="A1 Irregular Verbs">A1 Irregular Verbs</option><option value="A2">A2</option><option value="A2 Irregular Verbs">A2 Irregular Verbs</option><option value="B1">B1</option><option value="B1 Irregular Verbs">B1 Irregular Verbs</option><option value="B1 Plus 7 Units">B1+</option><option value="B2 all 12 units">B2</option><option value="B2 Irregular Verbs">B2 Irregular Verbs</option>';
@@ -268,30 +225,42 @@ function renderMultiSynonyms(c){
   box.classList.remove('hidden');
 }
 
-function renderDetails(c,chipLang='en'){
+function targetLang(){
+  const val=(els.targetLang&&els.targetLang.value)||localStorage.getItem('targetLang')||'en';
+  return TARGET_LANGS[val]?val:'en';
+}
+function targetMeta(lang=targetLang()){
+  return TARGET_LANGS[lang]||TARGET_LANGS.en;
+}
+function targetText(c,lang=targetLang()){
+  const tr=c.translations||{};
+  return tr[lang]||targetMeta(lang).missing||'—';
+}
+function renderDetails(c){
+  if(!c)return;
   const lang=targetLang();
   const meta=targetMeta(lang);
-  if(els.targetTitle)els.targetTitle.textContent=meta.label;
-  els.de.textContent=displayGerman(c);
-  els.dePluralLine.textContent=(c.category==='noun'&&c.plural)?c.plural:'';
-  els.en.textContent=displayTarget(c,lang);
-  els.en.classList.toggle('pendingTranslation',isTranslationMissing(c,lang));
-  if(lang==='fa')els.en.setAttribute('dir','rtl'); else els.en.removeAttribute('dir');
-  if(els.fa){els.fa.textContent='';els.fa.classList.add('hidden');}
-  els.nounBox.classList.toggle('hidden',c.category!=='noun');
-  els.article.textContent=c.article||'—';
-  els.singular.textContent=c.singular||c.german||'—';
-  els.plural.textContent=c.plural||'—';
-  const f=c.forms||{},hasVerb=c.category==='verb'||Object.values(f).some(Boolean);
-  els.verbBox.classList.toggle('hidden',!hasVerb);
-  els.inf.textContent=f.infinitive||c.german||'—';
-  els.pres3.textContent=f.present3||'—';
-  els.past.textContent=f.past||'—';
-  els.perf.textContent=f.perfect||'—';
-  els.plus.textContent=f.plusquamperfekt||'—';
-  renderChips(c,chipLang);
-  els.ex.textContent=c.example||'—';
-  renderMultiSynonyms(c);
+  const forms=c.forms||{};
+  if(els.front)els.front.textContent=displayGerman(c);
+  if(els.gender)els.gender.textContent=c.article||'';
+  if(els.plural)els.plural.textContent=c.plural||'';
+  if(els.forms){
+    const parts=[];
+    if(forms.infinitive)parts.push(`Infinitiv: ${forms.infinitive}`);
+    if(forms.present3)parts.push(`Präsens: ${forms.present3}`);
+    if(forms.past)parts.push(`Präteritum: ${forms.past}`);
+    if(forms.perfect)parts.push(`Perfekt: ${forms.perfect}`);
+    if(forms.plusquamperfekt)parts.push(`Plusquamperfekt: ${forms.plusquamperfekt}`);
+    els.forms.textContent=parts.length?parts.join(' · '):'—';
+  }
+  const targetTitle=$('targetTitle');
+  if(targetTitle)targetTitle.textContent=meta.label;
+  if(els.en)els.en.textContent=targetText(c,lang);
+  if(els.en)els.en.dir=meta.dir||'ltr';
+  if(els.fa)els.fa.textContent=(c.translations&&c.translations.fa)||c.dari||'';
+  if(els.fa)els.fa.dir='rtl';
+  if(els.ex)els.ex.textContent=c.example||'—';
+  renderMultiSynonyms&&renderMultiSynonyms(c);
 }
 function renderProgress(){els.count.textContent=filtered.length?`${idx+1} / ${filtered.length}`:'0 / 0';els.bar.style.width=filtered.length?`${((idx+1)/filtered.length)*100}%`:'0'}
 function render(){const c=filtered[idx];if(!c){els.frontText.textContent='Keine Karten';els.frontHint.textContent='Filter ändern.';els.frontSub.textContent='';els.cardBottom.classList.add('hidden');renderProgress();return}const f=getManualFront(c);lastFront=f;renderDetails(c,f.lang);setDirForLang(f.lang);els.frontText.textContent=f.display||'—';els.frontHint.textContent=f.label;els.frontSub.textContent=f.sub||'';els.answer.classList.toggle('hidden',!flipped);els.card.classList.toggle('playing',playing);renderProgress();}
@@ -365,3 +334,108 @@ function debugVoices() {
   console.log('Stimmen für Zielsprache:', relevant.map(v => v.name + ' (' + v.lang + ')'));
   return relevant;
 }
+
+function initStartWizard(){
+  const wizard=$('startWizard');
+  const optionsToggle=$('optionsToggle');
+  const langButtons=[...document.querySelectorAll('[data-wizard-lang]')];
+  const materialButtons=[...document.querySelectorAll('[data-wizard-list]')];
+  const unitSelect=$('wizardUnitSelect');
+  const startBtn=$('wizardStart');
+
+  function setWizardStep(id){
+    ['wizardLang','wizardMaterial','wizardUnit'].forEach(x=>{
+      const el=$(x);
+      if(el)el.classList.toggle('active',x===id);
+    });
+  }
+  window.showWizardStep=setWizardStep;
+
+  langButtons.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const lang=btn.dataset.wizardLang||'en';
+      if(els.targetLang)els.targetLang.value=lang;
+      try{localStorage.setItem('targetLang',lang)}catch(e){}
+      setWizardStep('wizardMaterial');
+      updateVoiceStatus&&updateVoiceStatus();
+    });
+  });
+
+  materialButtons.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const list=btn.dataset.wizardList||'all';
+      if(els.list)els.list.value=list;
+      updateUnits();
+      populateWizardUnits();
+      setWizardStep('wizardUnit');
+    });
+  });
+
+  function finishWizard(){
+    const selectedUnit=unitSelect?unitSelect.value:'all';
+    if(els.unit)els.unit.value=selectedUnit||'all';
+    updateParts();
+    if(els.part)els.part.value='all';
+    apply();
+    document.body.classList.remove('wizardMode');
+    document.body.classList.add('appReady');
+    if(wizard)wizard.hidden=true;
+    if(optionsToggle)optionsToggle.hidden=false;
+    setTimeout(()=>playSelected&&playSelected(),180);
+  }
+  if(startBtn)startBtn.addEventListener('click',finishWizard);
+
+  // The app always starts with language choice.
+  document.body.classList.add('wizardMode');
+  document.body.classList.remove('appReady');
+  if(wizard)wizard.hidden=false;
+  if(optionsToggle)optionsToggle.hidden=true;
+  setWizardStep('wizardLang');
+}
+
+function populateWizardUnits(){
+  const sel=$('wizardUnitSelect');
+  if(!sel)return;
+  const list=els.list?els.list.value:'all';
+  const pool=CARDS.filter(c=>list==='all'||c.list===list);
+  const units=[...new Set(pool.map(c=>c.unit).filter(Boolean))];
+  sel.innerHTML='<option value="all">Alle Einheiten</option>'+units.map(u=>`<option value="${u}">${u}</option>`).join('');
+  sel.value='all';
+  const note=$('wizardUnitNote');
+  if(note){
+    if(pool.length)note.textContent=`${pool.length} Karten verfügbar.`;
+    else note.textContent='Noch keine Karten für dieses Material. Bitte später Inhalt hinzufügen oder anderes Material wählen.';
+  }
+}
+
+function cardScript(c){
+  const lang=targetLang();
+  const bits=[];
+  bits.push({text:displayGerman(c),lang:'de',label:'Deutsch'});
+  const forms=c.forms||{};
+  const formBits=[];
+  if(forms.infinitive)formBits.push(forms.infinitive);
+  if(forms.present3)formBits.push(forms.present3);
+  if(forms.past)formBits.push(forms.past);
+  if(forms.perfect)formBits.push(forms.perfect);
+  if(formBits.length)bits.push({text:formBits.join('. '),lang:'de',label:'Formen'});
+  bits.push({text:targetText(c,lang),lang:lang,label:targetMeta(lang).label});
+  return bits.filter(x=>x.text&&x.text!=='—');
+}
+
+function speakPart(kind){
+  const c=current();
+  if(!c)return;
+  if(kind==='target')return say(targetText(c,targetLang()),targetLang());
+  if(kind==='de')return say(displayGerman(c),'de');
+  if(kind==='forms'){
+    const forms=c.forms||{};
+    const txt=[forms.infinitive,forms.present3,forms.past,forms.perfect].filter(Boolean).join('. ');
+    return say(txt||displayGerman(c),'de');
+  }
+  return say(displayGerman(c),'de');
+}
+
+document.querySelectorAll('[data-say]').forEach(btn=>btn.addEventListener('click',()=>speakPart(btn.dataset.say)));
+
+if('speechSynthesis' in window){speechSynthesis.onvoiceschanged=()=>{warmVoices();updateVoiceStatus();};}

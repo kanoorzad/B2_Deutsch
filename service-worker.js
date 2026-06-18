@@ -1,11 +1,11 @@
-const CACHE='german-a1-b2-telc-v68-publication';
+const CACHE='german-a1-b2-telc-v69-corrected';
 const FILES=[
-  './index.html?v=68',
-  './styles.css?v=68',
-  './data.js?v=68',
-  './app.js?v=68',
-  './manifest.webmanifest?v=68',
-  './icon.svg?v=68',
+  './index.html?v=69',
+  './styles.css?v=69',
+  './data.js?v=69',
+  './app.js?v=69',
+  './manifest.webmanifest?v=69',
+  './icon.svg?v=69',
   './README.md',
   './qa-report.json',
   './translation-pack/translation_review_template.csv',

@@ -1,44 +1,38 @@
-# German A1-B2 telc system Important words v68
+# German A1-B2 telc system Important words v69
 
-Publication package for GitHub Pages.
+Corrected publication package.
 
-## Open URL
+## Main v69 fixes
 
-https://kanoorzad.github.io/B2_Deutsch/?v=68
+- Fixed language selection so Spanish, Russian, Ukrainian, Turkish, Farsi, and English are all selectable and displayed.
+- Fixed playback so the selected target language is spoken, not only English.
+- Rebuilt adaptive voice selection for all 7 spoken languages:
+  - German: de-DE
+  - English: en-US
+  - Farsi: fa-IR
+  - Spanish: es-ES
+  - Russian: ru-RU
+  - Ukrainian: uk-UA
+  - Turkish: tr-TR
+- Added iOS/Android fallback retry if a selected voice fails.
+- Verified the first screen title and initiative text.
+- Verified export/import/backup removal.
 
-## Included materials
-
-- B2 all 12 units: 1629
-- B2 Irregular Verbs: 150
-- B1 Plus 7 Units: 475
-- A1 Irregular Verbs: 76
+## Cards
 
 Total cards: 2330
 
-## Languages
+{
+  "B2 all 12 units": 1629,
+  "B2 Irregular Verbs": 150,
+  "B1 Plus 7 Units": 475,
+  "A1 Irregular Verbs": 76
+}
 
-All cards include:
-- English
-- Farsi
-- Spanish
-- Russian
-- Ukrainian
-- Turkish
+## Open
 
-## Features
+https://kanoorzad.github.io/B2_Deutsch/?v=69
 
-- Step-by-step mobile flow
-- Language selection first
-- Material and unit selection
-- Synonym/equivalent display at bottom of flashcard
-- Adaptive voice selection for iOS/Android/browser
-- Export/backup option removed
-- Wake Lock support retained
-- Publication cache-busting: v68
+## Upload
 
-## Upload instructions
-
-Upload the contents inside this folder to the repository root, not the parent folder itself.
-Then open:
-
-https://kanoorzad.github.io/B2_Deutsch/?v=68
+Upload the contents inside this folder to your GitHub Pages repository root.

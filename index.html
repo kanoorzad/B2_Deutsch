@@ -7,10 +7,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=68">
-  <link rel="apple-touch-icon" href="icon.svg?v=68">
-  <link rel="stylesheet" href="styles.css?v=68">
-  <title>German A1-B2 telc system Important words v68</title>
+  <link rel="manifest" href="manifest.webmanifest?v=69">
+  <link rel="apple-touch-icon" href="icon.svg?v=69">
+  <link rel="stylesheet" href="styles.css?v=69">
+  <title>German A1-B2 telc system Important words v69</title>
 </head>
 <body class="wizardMode">
 
@@ -75,7 +75,7 @@
 
 
 <header class="hero">
-  <em class="versionBadge">v68</em>
+  <em class="versionBadge">v69</em>
   <h1>Deutsch-Karteikarten</h1>
   <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
   <p class="initiative"><em>Initiative by: Khalid Noorzad</em></p>
@@ -139,14 +139,9 @@
       <p class="small">Wähle zuerst die Übersetzungssprache und dann den Lernbereich. Danach auf <strong>Abspielen</strong> tippen — die Karten laufen automatisch weiter.</p>
 
       <label>Zielsprache
-        <select id="targetLang">
-          <option value="en">Englisch</option>
-          <option value="fa">Farsi</option>
-          <option value="ru">Russisch — in Vorbereitung</option>
-          <option value="uk">Ukrainisch — in Vorbereitung</option>
-          <option value="tr">Türkisch — in Vorbereitung</option>
-          <option value="es">Spanisch</option>
-        </select>
+        <select id="targetLang" hidden>
+<option value="en">Englisch</option><option value="fa">Farsi</option><option value="es">Spanisch</option><option value="ru">Russisch</option><option value="uk">Ukrainisch</option><option value="tr">Türkisch</option>
+</select>
       </label>
 
       <label>Lernbereich
@@ -230,7 +225,13 @@
   </section>
 </main>
 
-<script src="data.js?v=68"></script>
-<script src="app.js?v=68"></script>
+<script src="data.js?v=69"></script>
+<script src="app.js?v=69"></script>
 </body>
 </html>
+
+    <details>
+      <summary>Stimmenqualität</summary>
+      <p class="small">Die App wählt automatisch die beste verfügbare Stimme pro Gerät. iOS und Android können unterschiedliche Stimmen bereitstellen.</p>
+      <p id="voiceStatus" class="small voiceStatus">Stimmen werden geladen …</p>
+    </details>
