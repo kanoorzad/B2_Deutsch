@@ -70,7 +70,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 .miniControls{display:flex;gap:.5rem;flex-wrap:wrap;margin:.55rem 0}
 .miniControls button{font-size:.82rem;padding:.55rem .7rem}
 
-/* v69 multilingual German UI polish */
+/* v70 multilingual German UI polish */
 .targetLangField select {
   font-weight: 700;
 }
@@ -98,7 +98,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 }
 
 
-/* v69 final clean polish */
+/* v70 final clean polish */
 .pendingTranslation {
   display: inline-block;
   color: var(--muted, #73798a);
@@ -118,7 +118,7 @@ select#targetLang option {
 }
 
 
-/* v69 start-flow polish */
+/* v70 start-flow polish */
 .startPanel {
   border: 1px solid rgba(255,255,255,.16);
   border-radius: 22px;
@@ -149,7 +149,7 @@ select#targetLang option {
 }
 
 
-/* v69 step-by-step mobile flow */
+/* v70 step-by-step mobile flow */
 body.wizardMode > header,
 body.wizardMode > aside,
 body.wizardMode > main,
@@ -326,7 +326,7 @@ body.appReady .hero {
 }
 
 
-/* v69 unit-step and change-material improvements */
+/* v70 unit-step and change-material improvements */
 .wizardSelectLabel {
   display: grid;
   gap: 10px;
@@ -462,7 +462,45 @@ body.wizardMode .changeMaterialBtn {
 }
 
 
-/* v69 repairs */
+/* v70 repairs */
 .voiceStatus{line-height:1.45;word-break:break-word}
 .compactLangGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 .wizardUnitNote{margin-top:8px;font-size:.9rem;opacity:.76;text-align:center}
+
+
+/* v70 wizard click and version tag fix */
+.startWizard {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: radial-gradient(circle at top, rgba(45,212,191,.16), transparent 42%), #0f172a;
+}
+.startWizard[hidden] { display:none !important; }
+.wizardStep { display: none !important; width: min(680px, 100%); }
+.wizardStep.active { display: block !important; }
+.wizardCard { position: relative; }
+.startVersionTag {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.2);
+  font-style: normal;
+  font-weight: 900;
+  font-size: .82rem;
+  letter-spacing: .03em;
+}
+.compactLangGrid {
+  grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+}
+.wizardUnitNote {
+  margin: 10px 0 0;
+  text-align: center;
+  opacity: .78;
+  font-size: .92rem;
+}

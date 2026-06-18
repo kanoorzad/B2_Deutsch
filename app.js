@@ -1,8 +1,8 @@
 // v67: full user-provided script applied; Persian/Persian/Farsi debug helper included.
 // v67: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v69AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh69=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh69='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+(function(){try{const key='v70AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh70=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh70='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v69';
+const STORE='b2-native-cards-extra-v70';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[]; let idx=0; let flipped=false; let lastFront=null; let playing=false; let paused=false; let playQueue=[]; let playIndex=0;
@@ -225,13 +225,14 @@ function renderMultiSynonyms(c){
   box.classList.remove('hidden');
 }
 
+
+
+
 function targetLang(){
-  const val=(els.targetLang&&els.targetLang.value)||localStorage.getItem('targetLang')||'en';
+  const val=($('targetLang')&&$('targetLang').value)||localStorage.getItem('targetLang')||'en';
   return TARGET_LANGS[val]?val:'en';
 }
-function targetMeta(lang=targetLang()){
-  return TARGET_LANGS[lang]||TARGET_LANGS.en;
-}
+function targetMeta(lang=targetLang()){return TARGET_LANGS[lang]||TARGET_LANGS.en}
 function targetText(c,lang=targetLang()){
   const tr=c.translations||{};
   return tr[lang]||targetMeta(lang).missing||'—';
@@ -338,74 +339,71 @@ function debugVoices() {
 function initStartWizard(){
   const wizard=$('startWizard');
   const optionsToggle=$('optionsToggle');
-  const langButtons=[...document.querySelectorAll('[data-wizard-lang]')];
-  const materialButtons=[...document.querySelectorAll('[data-wizard-list]')];
-  const unitSelect=$('wizardUnitSelect');
-  const startBtn=$('wizardStart');
-
-  function setWizardStep(id){
+  const setStep=(id)=>{
     ['wizardLang','wizardMaterial','wizardUnit'].forEach(x=>{
       const el=$(x);
       if(el)el.classList.toggle('active',x===id);
     });
-  }
-  window.showWizardStep=setWizardStep;
+  };
+  window.showWizardStep=setStep;
 
-  langButtons.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const lang=btn.dataset.wizardLang||'en';
-      if(els.targetLang)els.targetLang.value=lang;
-      try{localStorage.setItem('targetLang',lang)}catch(e){}
-      setWizardStep('wizardMaterial');
-      updateVoiceStatus&&updateVoiceStatus();
-    });
-  });
-
-  materialButtons.forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const list=btn.dataset.wizardList||'all';
-      if(els.list)els.list.value=list;
-      updateUnits();
-      populateWizardUnits();
-      setWizardStep('wizardUnit');
-    });
-  });
-
-  function finishWizard(){
-    const selectedUnit=unitSelect?unitSelect.value:'all';
-    if(els.unit)els.unit.value=selectedUnit||'all';
-    updateParts();
-    if(els.part)els.part.value='all';
-    apply();
-    document.body.classList.remove('wizardMode');
-    document.body.classList.add('appReady');
-    if(wizard)wizard.hidden=true;
-    if(optionsToggle)optionsToggle.hidden=false;
-    setTimeout(()=>playSelected&&playSelected(),180);
-  }
-  if(startBtn)startBtn.addEventListener('click',finishWizard);
-
-  // The app always starts with language choice.
   document.body.classList.add('wizardMode');
   document.body.classList.remove('appReady');
   if(wizard)wizard.hidden=false;
   if(optionsToggle)optionsToggle.hidden=true;
-  setWizardStep('wizardLang');
+  setStep('wizardLang');
+
+  document.addEventListener('click',(ev)=>{
+    const langBtn=ev.target.closest('[data-wizard-lang]');
+    if(langBtn){
+      ev.preventDefault();
+      const lang=langBtn.getAttribute('data-wizard-lang')||'en';
+      const target=$('targetLang');
+      if(target)target.value=lang;
+      if(els.targetLang)els.targetLang.value=lang;
+      try{localStorage.setItem('targetLang',lang)}catch(e){}
+      setStep('wizardMaterial');
+      updateVoiceStatus&&updateVoiceStatus();
+      return;
+    }
+
+    const materialBtn=ev.target.closest('[data-wizard-list]');
+    if(materialBtn){
+      ev.preventDefault();
+      const list=materialBtn.getAttribute('data-wizard-list')||'all';
+      if(els.list)els.list.value=list;
+      updateUnits&&updateUnits();
+      populateWizardUnits&&populateWizardUnits();
+      setStep('wizardUnit');
+      return;
+    }
+
+    if(ev.target.closest('#wizardStart')){
+      ev.preventDefault();
+      const unit=$('wizardUnitSelect')?$('wizardUnitSelect').value:'all';
+      if(els.unit)els.unit.value=unit||'all';
+      updateParts&&updateParts();
+      if(els.part)els.part.value='all';
+      apply&&apply();
+      document.body.classList.remove('wizardMode');
+      document.body.classList.add('appReady');
+      if(wizard)wizard.hidden=true;
+      if(optionsToggle)optionsToggle.hidden=false;
+      setTimeout(()=>playSelected&&playSelected(),180);
+    }
+  },true);
 }
 
 function populateWizardUnits(){
   const sel=$('wizardUnitSelect');
   if(!sel)return;
-  const list=els.list?els.list.value:'all';
+  const list=(els.list&&els.list.value)||'all';
   const pool=CARDS.filter(c=>list==='all'||c.list===list);
   const units=[...new Set(pool.map(c=>c.unit).filter(Boolean))];
   sel.innerHTML='<option value="all">Alle Einheiten</option>'+units.map(u=>`<option value="${u}">${u}</option>`).join('');
   sel.value='all';
   const note=$('wizardUnitNote');
-  if(note){
-    if(pool.length)note.textContent=`${pool.length} Karten verfügbar.`;
-    else note.textContent='Noch keine Karten für dieses Material. Bitte später Inhalt hinzufügen oder anderes Material wählen.';
-  }
+  if(note)note.textContent=pool.length?`${pool.length} Karten verfügbar.`:'Noch keine Karten für dieses Material. Bitte anderes Material wählen.';
 }
 
 function cardScript(c){

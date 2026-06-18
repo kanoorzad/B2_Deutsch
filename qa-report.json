@@ -1,55 +1,11 @@
 {
-  "version": "69.0-corrected-all-languages",
+  "version": "70.0-language-click-fixed",
   "cards": 2330,
-  "analysis_findings_before_fix": [
-    {
-      "item": "Language buttons",
-      "ok_before_fix": true,
-      "details": "Found: ['en', 'fa', 'ru', 'uk', 'tr', 'es']"
-    },
-    {
-      "item": "First title",
-      "ok_before_fix": true,
-      "details": "Top title checked"
-    },
-    {
-      "item": "Initiative text",
-      "ok_before_fix": true,
-      "details": "Bottom initiative checked"
-    },
-    {
-      "item": "Export removed",
-      "ok_before_fix": true,
-      "details": "Checked export/import/backup traces"
-    },
-    {
-      "item": "Voice profiles",
-      "ok_before_fix": true,
-      "details": "Voice profiles and 7 language codes checked"
-    },
-    {
-      "item": "Target language metadata",
-      "ok_before_fix": true,
-      "details": "Target language metadata checked"
-    },
-    {
-      "item": "Translation coverage",
-      "ok_before_fix": true,
-      "details": "Coverage: {'en': 2330, 'fa': 2330, 'es': 2330, 'ru': 2330, 'uk': 2330, 'tr': 2330}"
-    }
-  ],
   "list_counts": {
     "B2 all 12 units": 1629,
     "B2 Irregular Verbs": 150,
     "B1 Plus 7 Units": 475,
     "A1 Irregular Verbs": 76
-  },
-  "category_counts": {
-    "noun": 1280,
-    "verb": 726,
-    "phrase": 53,
-    "adjective": 258,
-    "other": 13
   },
   "translation_coverage": {
     "en": 2330,
@@ -69,34 +25,25 @@
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v69": true,
-    "cache_busting_v69": true,
-    "all_translations_complete": true,
-    "language_buttons_all_present": true,
-    "target_select_all_present": true,
-    "target_language_not_fixed_to_english": true,
-    "voice_profiles_all_present": true,
-    "voice_status_panel_present": true,
-    "ios_android_fallback_present": true,
-    "export_removed": true,
-    "first_title_present": true,
-    "initiative_present": true,
-    "step_text_removed": true,
-    "material_placeholders_present": true,
-    "synonyms_present": true,
-    "service_worker_not_registered": true
+    "language_buttons_present": true,
+    "delegated_language_click_handler_present": true,
+    "wizard_material_step_present": true,
+    "wizard_steps_css_present": true,
+    "target_select_present": true,
+    "version_tag_on_first_page": true,
+    "cache_busting_v70": true,
+    "translation_complete": true,
+    "voice_profiles_present": true,
+    "export_removed": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=69",
   "fixes_made": [
-    "Repaired target-language selection so the selected language is stored and used.",
-    "Repaired playback so it reads the selected translation language, not only English.",
-    "Rebuilt voice profiles and fallback retry for all 7 languages.",
-    "Added/verified hidden targetLang select for all six translation languages.",
-    "Verified first-screen title, two-column language layout, initiative text, and removed step text.",
-    "Verified export/import/backup removal.",
-    "Verified material placeholders and actual A1/B1+/B2/B2 irregular/A1 irregular lists.",
-    "Kept all translations and synonym/equivalent blocks."
+    "Rebuilt the complete first wizard block with valid section nesting.",
+    "Added direct event delegation for language buttons so clicking a language always advances to material selection.",
+    "Added v70 tag at the top right of the first page.",
+    "Kept target language selection and all translation/voice profiles.",
+    "Updated cache busting to v70."
   ],
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=70",
   "zip_mb": 1.37
 }
