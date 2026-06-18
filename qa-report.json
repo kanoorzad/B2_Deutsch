@@ -1,12 +1,13 @@
 {
-  "version": "55.0",
-  "base": "v54 restored base with user-provided pickVoice(lang) script",
+  "version": "56.0",
+  "base": "v55 with user-requested Dari any-voice fallback in say()",
   "checks": {
-    "version_badge_v55": true,
-    "cache_busting_v55": true,
+    "javascript_syntax_ok": true,
+    "version_badge_v56": true,
+    "cache_busting_v56": true,
     "initiative_only_once": true,
-    "user_pickvoice_fa_candidates": true,
-    "user_pickvoice_fallback_default": true,
+    "user_pickvoice_kept": true,
+    "any_voice_fallback_present": true,
     "false_dari_filter_present": true,
     "wake_lock_kept": true,
     "direct_speech_synthesis": true,
@@ -14,9 +15,12 @@
     "local_sprite_removed": true,
     "service_worker_not_registered": true
   },
+  "node_check_stderr": "",
+  "initiative_count": 1,
   "notes": [
-    "Only pickVoice(lang) was changed according to the provided script.",
-    "v54 wake lock and v51 stable structure are preserved.",
-    "Daria/bg-BG false positive exclusion is retained."
-  ]
+    "Applied user-provided fallback in say().",
+    "This can prevent total silence by assigning any non-false voice when no fa voice exists.",
+    "Pronunciation may still not be correct if the mobile device has no Persian/Farsi voice."
+  ],
+  "zip_mb": 0.18
 }
