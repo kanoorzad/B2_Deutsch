@@ -1,15 +1,15 @@
 {
-  "version": "52.0",
-  "base": "v51 full v4 voice engine + mobile gesture queue workaround",
+  "version": "53.0",
+  "base": "v51 stable app structure; v52 mobile gesture queue removed",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v52": true,
-    "cache_busting_v52": true,
+    "version_badge_v53": true,
+    "cache_busting_v53": true,
     "initiative_only_once": true,
-    "v4_direct_voice_kept": true,
-    "mobile_gesture_queue_present": true,
-    "play_selected_uses_mobile_queue": true,
-    "play_next_no_pre_speech_timeout": true,
+    "full_v4_voice_engine": true,
+    "direct_speech_synthesis": true,
+    "v52_gesture_queue_removed": true,
+    "playback_chain_restored": true,
     "online_tts_removed": true,
     "local_sprite_removed": true,
     "service_worker_not_registered": true
@@ -17,9 +17,9 @@
   "node_check_stderr": "",
   "initiative_count": 1,
   "notes": [
-    "This targets mobile user-activation/autoplay blocking.",
-    "All utterances in mobile Play are queued synchronously inside the tap handler.",
-    "If single Dari Speak still fails, browser-only code cannot expose the missing mobile voice."
+    "This repairs the card flip/playback regression by returning to v51 structure.",
+    "Dari remains browser-only fa-AF direct SpeechSynthesis.",
+    "If Dari still fails on mobile, it is independent of the flip/playback bug."
   ],
   "zip_mb": 0.18
 }
