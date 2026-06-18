@@ -1,32 +1,15 @@
-# Deutsch A1-B2 telc system wichtige Wörter v79
+# Deutsch A1-B2 telc System wichtige Wörter v80
 
-Unified structure across all books and target languages.
+Visible translation and language-switch repair.
 
-## Implemented structure
+## Fixed
 
-The same navigation/data/playback structure is now applied to:
-
-- A1
-- A1 Irregular Verbs
-- A2
-- A2 Irregular Verbs
-- B1
-- B1 Irregular Verbs
-- B1+
-- B2
-- B2 Irregular Verbs
-
-## Important note
-
-A2, A2 Irregular Verbs, B1, and B1 Irregular Verbs are selectable placeholders because those card files have not been uploaded yet. They do not break the app; they show a German safe message.
-
-## Existing card counts
-
-- A1: 841
-- A1 Irregular Verbs: 76
-- B1+: 475
-- B2: 1629
-- B2 Irregular Verbs: 150
+- The selected translation text is now shown in a dedicated visible panel.
+- English text display uses the same logic as Farsi, Spanish, Russian, Ukrainian, and Turkish.
+- Options menu now allows changing the translation language during learning.
+- Changing language immediately updates the current card meaning.
+- A1 normal verbs remain infinitive-only.
+- Core selection/options interface text is German.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=79
+https://kanoorzad.github.io/B2_Deutsch/?v=80

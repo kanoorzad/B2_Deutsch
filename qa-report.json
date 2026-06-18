@@ -1,6 +1,12 @@
 {
-  "version": "79.0-unified-all-books-languages",
-  "requested_scope": "Implement the same structure across all languages and all books: A1, A2, B1, B1+, B2 and irregular verbs.",
+  "version": "80.0-language-switch-visible-translation",
+  "requested_fixes": [
+    "A1 English writing missing while English voice works.",
+    "Same translation-display structure across all languages and all materials.",
+    "A1 unit verbs must stay only infinitive.",
+    "Entire interface selections and options should be German.",
+    "Options should allow changing translation language during listening/learning, e.g. English to Farsi."
+  ],
   "cards": 3171,
   "list_counts": {
     "B2 all 12 units": 1629,
@@ -9,25 +15,6 @@
     "A1 Irregular Verbs": 76,
     "A1": 841
   },
-  "materials_standardized": [
-    "A1",
-    "A1 Irregular Verbs",
-    "A2",
-    "A2 Irregular Verbs",
-    "B1",
-    "B1 Irregular Verbs",
-    "B1 Plus 7 Units",
-    "B2 all 12 units",
-    "B2 Irregular Verbs"
-  ],
-  "languages_standardized": [
-    "en",
-    "fa",
-    "es",
-    "ru",
-    "uk",
-    "tr"
-  ],
   "translation_coverage": {
     "en": 3171,
     "fa": 3171,
@@ -122,27 +109,24 @@
   "a1_normal_verb_cards_only_infinitive": 179,
   "checks": {
     "javascript_syntax_ok": true,
-    "v79_controller_present": true,
+    "v80_controller_present": true,
+    "visible_target_panel_present": true,
+    "english_visible_same_as_all_languages_logic": true,
+    "option_language_switch_buttons_present": true,
+    "language_switch_during_learning_logic": true,
+    "all_interface_core_options_german": true,
+    "all_language_buttons_present_first_screen": true,
     "all_material_buttons_present": true,
-    "all_language_buttons_present": true,
-    "unified_data_shape_all_cards": true,
-    "existing_materials_complete_all_languages": true,
-    "empty_materials_safe_placeholders": true,
-    "manual_start_kept": true,
-    "german_then_translation_kept": true,
-    "options_links_kept": true,
     "a1_normal_verbs_only_infinitive": true,
+    "existing_materials_complete_all_languages": true,
+    "empty_materials_safe": true,
     "translations_complete_global": true,
+    "manual_start_kept": true,
+    "cache_busting_v80": true,
     "title_deutsch": true,
-    "initiative_german": true,
-    "cache_busting_v79": true
+    "initiative_german": true
   },
   "node_check_stderr": "",
-  "notes": [
-    "A2, A2 Irregular Verbs, B1, and B1 Irregular Verbs remain selectable placeholders because no card files for those sections have been uploaded yet.",
-    "Existing materials with cards have complete translations across all six target languages.",
-    "All cards now have the same base data shape: translations, forms, article/singular/plural, example, part, and category fields."
-  ],
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=79",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=80",
   "zip_mb": 1.75
 }
