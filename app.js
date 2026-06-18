@@ -1,5 +1,5 @@
 // v34: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v51AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh46=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh46='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+(function(){try{const key='v52AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh46=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh46='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
 const STORE='b2-native-cards-extra-v43';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
@@ -61,10 +61,10 @@ function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=f
 // v43 browser voice engine with brute-force Dari/Farsi mobile candidates.
 // Keeps v3-v6 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
 // No local sprite/WebAudio/remote TTS.
-// v51 Dari voice restored to version-4 style.
+// v52 Dari voice restored to version-4 style.
 // Keep direct browser SpeechSynthesis. No online TTS, no audio sprites, no provider router.
 // The key v4-style behavior is direct utterance creation and direct speechSynthesis.speak().
-// v51: FULL version-4 voice engine restored for all languages.
+// v52: FULL version-4 voice engine restored for all languages.
 // This is the original v4 pattern:
 // voices() -> pickVoice(lang) -> say(text, lang, done)
 // Direct SpeechSynthesisUtterance only. No online TTS. No router. No local audio sprite.
@@ -81,6 +81,18 @@ function pickVoice(lang){
          vs.find(v=>v.lang&&v.lang.startsWith(prefix));
 }
 
+function makeUtterance(text, lang='de', done=()=>{}){
+  const u=new SpeechSynthesisUtterance(String(text));
+  u.lang=lang==='de'?'de-DE':lang==='en'?'en-US':'fa-AF';
+  u.rate=lang==='de'?0.78:0.92;
+  u.pitch=1;
+  const v=pickVoice(lang);
+  if(v)u.voice=v;
+  u.onend=()=>{activeUtterance=null;done()};
+  u.onerror=()=>{activeUtterance=null;done()};
+  return u;
+}
+
 function say(text, lang='de', done=()=>{}){
   if(!text){done();return}
   if(!('speechSynthesis'in window)){
@@ -88,15 +100,8 @@ function say(text, lang='de', done=()=>{}){
     done();
     return
   }
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang=lang==='de'?'de-DE':lang==='en'?'en-US':'fa-AF';
-  u.rate=lang==='de'?0.78:0.92;
-  u.pitch=1;
-  const v=pickVoice(lang);
-  if(v)u.voice=v;
+  const u=makeUtterance(text,lang,done);
   activeUtterance=u;
-  u.onend=()=>{activeUtterance=null;done()};
-  u.onerror=()=>{activeUtterance=null;done()};
   speechSynthesis.speak(u);
 }
 
@@ -184,6 +189,63 @@ function renderPlaybackCard(item,partIdx){
   lastFront={display:p.t,speech:p.t,lang:p.l,label:p.label,sub:p.sub||'',audio:p.audio||''};
   els.now.textContent=`${item.cardNo}/${item.totalCards}: ${p.label} — ${p.t}`;
 }
+
+function isMobileSpeechGate(){
+  const ua=navigator.userAgent||'';
+  return /iPhone|iPad|iPod|Android|Mobile/i.test(ua);
+}
+
+// v52 mobile workaround:
+// Mobile browsers can block speech started later via timer/callback.
+// This queues all utterances synchronously inside the Play tap handler.
+// PC keeps the normal v4 callback chain.
+function playGestureQueuedMobile(){
+  if(!('speechSynthesis'in window)){alert('Speech is not supported in this browser.');return}
+  if(!playQueue.length){stop();return}
+  try{speechSynthesis.cancel()}catch(e){}
+  let totalParts=0;
+  playQueue.forEach(item=>totalParts+=item.parts.length);
+  let spoken=0;
+
+  playQueue.forEach((item,itemIndex)=>{
+    item.parts.forEach((p,partIdx)=>{
+      const txt=p.t||p.speech||p.display||'';
+      const lang=p.l||p.lang||'de';
+      if(!txt)return;
+      const u=makeUtterance(txt,lang,()=>{});
+      u.onstart=()=>{
+        playIndex=itemIndex;
+        renderPlaybackCard(item,partIdx);
+        const c=item.card;
+        els.now.textContent=`${p.label||lang.toUpperCase()} · card ${item.cardNo}/${item.totalCards}`;
+      };
+      u.onend=()=>{
+        spoken++;
+        activeUtterance=null;
+        if(spoken>=totalParts){
+          playing=false;
+          paused=false;
+          els.pauseList.textContent='Pause';
+          els.now.textContent='Finished.';
+        }
+      };
+      u.onerror=()=>{
+        spoken++;
+        activeUtterance=null;
+        if(spoken>=totalParts){
+          playing=false;
+          paused=false;
+          els.pauseList.textContent='Pause';
+          els.now.textContent='Finished.';
+        }
+      };
+      activeUtterance=u;
+      speechSynthesis.speak(u);
+    });
+  });
+  try{speechSynthesis.resume()}catch(e){}
+}
+
 function playSelected(){
   if(!filtered.length)return;
   
@@ -200,7 +262,11 @@ function playSelected(){
     });
   }
   playIndex=0;
-  playNextPart(0);
+  if(isMobileSpeechGate()){
+    playGestureQueuedMobile();
+  }else{
+    playNextPart(0);
+  }
 }
 function playNextPart(partIdx){
   if(!playing||playIndex>=playQueue.length){stop();return}
@@ -211,7 +277,7 @@ function playNextPart(partIdx){
   const p=item.parts[partIdx];
   const txt=p.t||p.speech||p.display||'';
   const lang=p.l||p.lang||'de';
-  setTimeout(()=>say(txt,lang,()=>setTimeout(()=>playNextPart(partIdx+1),450)),120);
+  say(txt,lang,()=>setTimeout(()=>playNextPart(partIdx+1),450));
 }
 function pauseResume(){if(!playing||!('speechSynthesis'in window))return;if(paused){paused=false;els.pauseList.textContent='Pause';speechSynthesis.resume()}else{paused=true;els.pauseList.textContent='Resume';speechSynthesis.pause();els.now.textContent='Paused.'}}
 function stop(doRender=true){

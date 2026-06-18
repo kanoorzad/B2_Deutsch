@@ -1,14 +1,15 @@
 {
-  "version": "51.0",
-  "base": "v50 with full v4 voice engine for all languages and duplicate initiative removed",
+  "version": "52.0",
+  "base": "v51 full v4 voice engine + mobile gesture queue workaround",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v51": true,
-    "cache_busting_v51": true,
+    "version_badge_v52": true,
+    "cache_busting_v52": true,
     "initiative_only_once": true,
-    "v4_voices_function_exact_style": true,
-    "v4_pickvoice_exact_languages": true,
-    "v4_say_direct_speak": true,
+    "v4_direct_voice_kept": true,
+    "mobile_gesture_queue_present": true,
+    "play_selected_uses_mobile_queue": true,
+    "play_next_no_pre_speech_timeout": true,
     "online_tts_removed": true,
     "local_sprite_removed": true,
     "service_worker_not_registered": true
@@ -16,9 +17,9 @@
   "node_check_stderr": "",
   "initiative_count": 1,
   "notes": [
-    "The v4 voice engine pattern is applied to German, English, and Dari.",
-    "Duplicate initiative banner removed.",
-    "Compatibility wrappers are present only to keep the newer UI buttons from breaking."
+    "This targets mobile user-activation/autoplay blocking.",
+    "All utterances in mobile Play are queued synchronously inside the tap handler.",
+    "If single Dari Speak still fails, browser-only code cannot expose the missing mobile voice."
   ],
   "zip_mb": 0.18
 }

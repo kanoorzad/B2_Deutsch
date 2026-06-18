@@ -1,37 +1,39 @@
-# B2 + B1 Plus Flashcards v51 — Full Version 4 Voice Engine
+# B2 + B1 Plus Flashcards v52 — Mobile Gesture Queue
 
-## What changed
+## Why this version
 
-v51 restores the full voice engine for all languages to the version-4 pattern:
+PC can speak Dari while mobile cannot. A likely browser-only cause is mobile autoplay/user-activation gating:
+speech started later through timers/callbacks may be blocked on mobile even though it works on PC.
 
-```js
-function voices(){return speechSynthesis.getVoices()||[]}
+v52 keeps the full version-4 voice engine but changes mobile list playback:
 
-function pickVoice(lang){
-  const vs=voices();
-  const exact= lang==='de'?'de-DE':lang==='en'?'en-US':'fa-AF';
-  const prefix=exact.slice(0,2);
-  return vs.find(v=>v.lang===exact&&/premium|enhanced|natural|siri|google|microsoft/i.test(v.name))||
-         vs.find(v=>v.lang===exact)||
-         vs.find(v=>v.lang&&v.lang.startsWith(prefix));
-}
+- PC: normal v4 callback playback.
+- Mobile: when you press Play, all selected utterances are queued immediately inside that same tap event.
 
-function say(text, lang='de', done=()=>{}){
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang=lang==='de'?'de-DE':lang==='en'?'en-US':'fa-AF';
-  u.rate=lang==='de'?0.78:0.92;
-  const v=pickVoice(lang);
-  if(v)u.voice=v;
-  speechSynthesis.speak(u);
-}
-```
+This keeps speech calls inside the user gesture as much as a browser page can.
 
-## Also fixed
+## Voice engine
 
-The initiative line appeared twice. v51 keeps it only once:
+Still version 4 style:
 
-Initiative by Khalid Noorzad for Afghan Students
+- direct `SpeechSynthesisUtterance`
+- direct `speechSynthesis.speak(u)`
+- German: `de-DE`
+- English: `en-US`
+- Dari: `fa-AF`
+- no online TTS
+- no local sprite
+- no API key
 
 ## Open
 
-https://kanoorzad.github.io/B2_Deutsch/?v=51
+https://kanoorzad.github.io/B2_Deutsch/?v=52
+
+## Test on mobile
+
+1. Set front to Dari.
+2. Press Speak visible text.
+3. Press Play one card/list.
+
+If "Speak visible text" still gives no Dari, then mobile has no usable browser Dari route.
+If "Speak visible text" works but Play did not before, v52 should fix the Play path.
