@@ -1,24 +1,19 @@
 {
-  "version": "84.0-from-v83-problem-report",
-  "base": "v83_final_addendum",
+  "version": "83.0-final-addendum",
   "implemented": [
-    "Voice mapping removed from UI.",
-    "Watermark/placeholder under Wortart filter removed.",
-    "POS filter auto-closes options, refreshes deck, and autoplays.",
-    "Unit visible labels changed to Einheit.",
-    "Best-effort background audio support retained.",
-    "Problem melden workflow added with state restoration."
-  ],
-  "problem_report_flow": [
-    "Problem melden closes options.",
-    "Flashcard card/player hidden and centered form displayed.",
-    "Textarea + Absenden shown.",
-    "Absenden hides textarea/button and shows thank-you message plus Zurück.",
-    "Zurück restores selected language, material, unit, filter, index, and playback state."
+    "Priority German TTS rules for (von + Dat.), (für + Akk.), and (jdn./etw.).",
+    "Options language switch closes the drawer and updates current card/session immediately.",
+    "Voice mapping is displayed in a clean dedicated card.",
+    "Wortart filtern dropdown updates the deck immediately.",
+    "Branding hierarchy added.",
+    "PWA install prompt with localStorage flag added.",
+    "Headword single-line auto-fit preserved.",
+    "Synonyms displayed under headword with exact stored counts."
   ],
   "limitations": [
-    "Browser/PWA background TTS remains best-effort; guaranteed screen-off playback requires native audio/background service or bundled/backend audio.",
-    "True 99% synonym verification requires a semantic API."
+    "The app enforces exact synonym counts from available dataset fields, but true 99% semantic verification requires a semantic API.",
+    "Native PWA install prompt appears only in browsers/platforms that fire beforeinstallprompt.",
+    "Exact Azure voice output still requires voices exposed by the browser or backend-generated audio."
   ],
   "cards": 3171,
   "list_counts": {
@@ -49,26 +44,24 @@
   "a1_normal_verb_cards_only_infinitive": 179,
   "checks": {
     "javascript_syntax_ok": true,
-    "built_from_v83_to_v84": true,
-    "voice_mapping_removed_from_options_ui": true,
-    "no_voice_map_card": true,
-    "problem_report_button_present": true,
-    "problem_report_form_present": true,
-    "problem_report_closes_options": true,
-    "problem_report_confirmation": true,
-    "problem_report_restore_state_logic": true,
-    "filter_auto_closes_and_autoplays": true,
-    "unit_replaced_in_visible_ui": true,
-    "background_audio_best_effort": true,
-    "service_worker_present": true,
-    "tts_priority_rules_still_present": true,
+    "v83_controller_present": true,
+    "options_language_switch_closes_menu": true,
+    "language_switch_updates_current_card_without_restart": true,
+    "tts_priority_rules_present": true,
+    "ui_labels_excluded_from_tts": true,
+    "voice_mapping_card_present": true,
+    "pos_filter_present": true,
+    "pos_filter_logic_present": true,
+    "branding_hierarchy_present": true,
+    "pwa_install_prompt_present": true,
     "headword_single_line_fit": true,
+    "synonyms_under_headword": true,
     "exact_synonym_counts_all_cards": true,
     "a1_normal_verbs_only_infinitive": true,
-    "translations_complete": true,
-    "cache_busting_v84": true
+    "translations_complete_global": true,
+    "cache_busting_v83": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=84",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=83",
   "zip_mb": 1.79
 }
