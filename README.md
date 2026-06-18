@@ -1,29 +1,30 @@
-# B2 + B1 Plus Flashcards v59 — Dari System Default `fa`
+# B2 + B1 Plus Flashcards v60 — User Full Script + Dari Debug
 
 ## What changed
 
-v59 keeps the stable v58 base and replaces only `say()` with the user-provided system-default Persian approach.
+v60 applies the full script provided by the user.
 
-For Dari/Farsi:
+Included behavior:
 
-- It does **not** set `u.voice`.
-- It sets only `u.lang = 'fa'`.
-- This lets the browser/system choose the default Persian/Farsi voice if one exists.
-- If the Dari attempt errors, it falls back to the English voice as last resort.
-
-For German and English:
-
-- It keeps explicit `pickVoice(lang)` selection.
-
-## Kept
-
-- v58 `pickVoice(lang)` logic
-- Screen Wake Lock
-- Direct browser SpeechSynthesis
-- Initiative line once
-- No online TTS
-- No local audio sprite
+- Updated `pickVoice()` with Persian/Farsi/Dari name-based search.
+- Updated `say()` where Dari uses `u.lang = 'fa'` and does not set `u.voice`.
+- English fallback if Dari errors.
+- iOS user-gesture priming on the first click.
+- `debugVoices()` helper in the browser console.
+- Screen Wake Lock requested during playback.
+- Old caches/service workers are reset once with a v60 key.
+- Initiative line appears once.
 
 ## Open
 
-https://kanoorzad.github.io/B2_Deutsch/?v=59
+https://kanoorzad.github.io/B2_Deutsch/?v=60
+
+## Debug
+
+On mobile browser console, run:
+
+```js
+debugVoices()
+```
+
+It prints all available voices and Persian/Dari candidates.

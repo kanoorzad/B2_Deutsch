@@ -1,7 +1,8 @@
+// v60: full user-provided script applied; Persian/Dari debug helper included.
 // v34: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v59AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh46=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh46='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+(function(){try{const key='v60AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh60=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh60='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v43';
+const STORE='b2-native-cards-extra-v60';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[]; let idx=0; let flipped=false; let lastFront=null; let playing=false; let paused=false; let playQueue=[]; let playIndex=0;
@@ -61,10 +62,10 @@ function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=f
 // v43 browser voice engine with brute-force Dari/Farsi mobile candidates.
 // Keeps v3-v6 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
 // No local sprite/WebAudio/remote TTS.
-// v59 Dari voice restored to version-4 style.
+// v54 Dari voice restored to version-4 style.
 // Keep direct browser SpeechSynthesis. No online TTS, no audio sprites, no provider router.
 // The key v4-style behavior is direct utterance creation and direct speechSynthesis.speak().
-// v59: FULL version-4 voice engine restored for all languages.
+// v54: FULL version-4 voice engine restored for all languages.
 // This is the original v4 pattern:
 // voices() -> pickVoice(lang) -> say(text, lang, done)
 // Direct SpeechSynthesisUtterance only. No online TTS. No router. No local audio sprite.
@@ -108,7 +109,10 @@ document.addEventListener('visibilitychange',()=>{
 
 function voices(){return speechSynthesis.getVoices()||[]}
 
-function pickVoice(lang) {
+// ----------------------------------------------
+// UPDATED pickVoice with name-based search for Dari
+// ----------------------------------------------
+function pickVoice(lang){
   const vs = voices();
 
   // German
@@ -126,8 +130,8 @@ function pickVoice(lang) {
   }
 
   // Dari / Farsi
-  // 1. First, find ANY voice with 'fa' in language OR 'Persian'/'Farsi' in the name,
-  //    but filter out the Bulgarian bug.
+  // Collect all candidates that either have 'fa' in language OR have Persian/Farsi in name,
+  // but filter out the Bulgarian bug.
   const candidates = vs.filter(v => {
     const langOk = v.lang && v.lang.startsWith('fa');
     const nameOk = v.name && /persian|farsi|dari/i.test(v.name);
@@ -136,28 +140,31 @@ function pickVoice(lang) {
 
   if (candidates.length === 0) return null;
 
-  // 2. Prioritize the voice named "Persian" or "Farsi" (this solves your issue!)
+  // 1. Prioritize voice with "Persian" or "Farsi" in the name (your installed voice)
   const nameMatch = candidates.find(v => /persian|farsi/i.test(v.name));
   if (nameMatch) return nameMatch;
 
-  // 3. Then look for high-quality voices
+  // 2. Then high‑quality voices
   const qualityMatch = candidates.find(v => /premium|enhanced|natural|siri|google|microsoft/i.test(v.name));
   if (qualityMatch) return qualityMatch;
 
-  // 4. Then prefer the generic 'fa' tag (works best on mobile)
+  // 3. Then prefer generic 'fa'
   const generic = candidates.find(v => v.lang === 'fa');
   if (generic) return generic;
 
-  // 5. Then 'fa-IR' and finally 'fa-AF'
+  // 4. Then 'fa-IR' and finally 'fa-AF'
   const ir = candidates.find(v => v.lang === 'fa-IR');
   if (ir) return ir;
   const af = candidates.find(v => v.lang === 'fa-AF');
   if (af) return af;
 
-  // 6. Fallback to the first candidate
+  // 5. Fallback to first candidate
   return candidates[0];
 }
 
+// ----------------------------------------------
+// UPDATED say() – for Dari, do NOT set u.voice
+// ----------------------------------------------
 function say(text, lang = 'de', done = () => {}) {
   if (!text) { done(); return; }
   if (!('speechSynthesis' in window)) {
@@ -169,14 +176,12 @@ function say(text, lang = 'de', done = () => {}) {
   const u = new SpeechSynthesisUtterance(text);
 
   if (lang === 'fa') {
-    // For Dari: let the browser use the system default Persian voice.
-    // Do NOT set u.voice – just set the language tag.
-    u.lang = 'fa';                // or 'fa-IR' – try both; 'fa' is universal
-    // Optionally, if you want to be safe, set a rate
+    // Let the system choose the default Persian voice – do not set u.voice
+    u.lang = 'fa';   // 'fa' works on both iOS and Android
     u.rate = 0.92;
     u.pitch = 1;
   } else {
-    // German and English: keep using the explicit voice selection
+    // German and English: use explicit voice selection
     const voice = pickVoice(lang);
     if (voice) u.voice = voice;
     u.lang = lang === 'de' ? 'de-DE' : 'en-US';
@@ -186,9 +191,9 @@ function say(text, lang = 'de', done = () => {}) {
 
   activeUtterance = u;
   u.onend = () => { activeUtterance = null; done(); };
-  u.onerror = () => { 
-    activeUtterance = null; 
-    // If Dari fails, try falling back to English voice as last resort
+  u.onerror = () => {
+    activeUtterance = null;
+    // If Dari fails, fallback to English voice as last resort
     if (lang === 'fa') {
       const fallback = pickVoice('en');
       if (fallback) {
@@ -205,11 +210,28 @@ function say(text, lang = 'de', done = () => {}) {
     }
     done();
   };
-  try { speechSynthesis.resume(); } catch(e) {}
+
   speechSynthesis.speak(u);
 }
 
-// Compatibility wrappers for the newer UI. They do not change the v4 voice engine.
+// ----------------------------------------------
+// iOS user‑gesture priming
+// ----------------------------------------------
+document.addEventListener('click', function primeSpeech() {
+  if (!window._speechPrimed) {
+    window._speechPrimed = true;
+    // Speak a short silent or space utterance to prime the engine
+    const temp = new SpeechSynthesisUtterance(' ');
+    temp.volume = 0;
+    temp.onend = () => {};
+    speechSynthesis.speak(temp);
+    setTimeout(() => speechSynthesis.cancel(), 100);
+  }
+}, { once: true }); // Runs only on the first click
+
+// ----------------------------------------------
+// Compatibility wrappers (unchanged)
+// ----------------------------------------------
 function sayBrowserOnly(text,lang='de',done=()=>{}){say(text,lang,done)}
 function queueSay(t,l='de',d=()=>{}){say(t,l,d)}
 function speakFront(){if(lastFront)say(lastFront.speech||lastFront.display||lastFront.txt,lastFront.lang)}
@@ -299,6 +321,7 @@ function playSelected(){
   stop(false);
   playing=true;
   paused=false;
+  requestScreenWakeLock();
   playQueue=[];
   const source=[...filtered];
   const rep=Number(els.repeat.value)||1;
@@ -330,6 +353,7 @@ function stop(doRender=true){
   playIndex=0;
   stopOnlineAudio();
   if('speechSynthesis'in window)speechSynthesis.cancel();
+  releaseScreenWakeLock();
   els.pauseList.textContent='Pause';
   els.now.textContent='Ready.';
   els.card.classList.remove('playing');
@@ -345,3 +369,14 @@ if(els.voiceSelectFa)els.voiceSelectFa.addEventListener('change',()=>saveVoiceCh
 if(els.scanDariVoices)els.scanDariVoices.addEventListener('click',runDariVoiceSearch);
 if(els.nextDariCandidate)els.nextDariCandidate.addEventListener('click',nextDariCandidate);
 document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(e.code==='Space'){e.preventDefault();if(!playing)flip()}if(e.code==='ArrowRight')next();if(e.code==='ArrowLeft')prev()});if('speechSynthesis'in window)speechSynthesis.onvoiceschanged=()=>voices();setup();apply();
+
+// ----------------------------------------------
+// Debug helper (call from console)
+// ----------------------------------------------
+function debugVoices() {
+  const vs = speechSynthesis.getVoices();
+  const fa = vs.filter(v => v.lang.startsWith('fa') || /persian|farsi|dari/i.test(v.name));
+  console.log('All voices:', vs.map(v => v.name + ' (' + v.lang + ')'));
+  console.log('Persian/Dari voices:', fa.map(v => v.name + ' (' + v.lang + ')'));
+  return fa;
+}
