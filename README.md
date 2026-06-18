@@ -1,24 +1,22 @@
-# German A1-B2 telc system Important words v71
+# German A1-B2 telc system Important words v73
 
-Deep repair for the first-screen language click issue.
+Hard repair for first-page language buttons.
 
-## Root cause found
+## What was fixed
 
-v70 had duplicated wizard blocks in `index.html`, and `app.js` defined the wizard click handler but did not call the app bootstrap functions. This made the first language page behave like a static picture.
+The language page could behave like a static picture because earlier versions depended on app.js startup. v73 adds a small independent wizard controller directly in `index.html`.
 
-## v71 repair
+## v73 guarantees
 
-- Removed duplicated wizard blocks.
-- Rebuilt one clean first wizard.
-- Added one hidden `targetLang` selector.
-- Added an explicit `bootApp()` startup function.
-- `bootApp()` calls:
-  - `warmVoices()`
-  - `setup()`
-  - `apply()`
-  - `initStartWizard()`
-- Language clicks now advance to the material screen.
-- Added top-right v71 tag.
+- One `startWizard`
+- One `wizardLang`
+- One `wizardMaterial`
+- One `wizardUnit`
+- One hidden `targetLang`
+- Language click advances to material selection directly from inline controller
+- Material click advances to unit selection
+- Start button opens the card app
+- A1 vocabulary from v72 is kept
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=71
+https://kanoorzad.github.io/B2_Deutsch/?v=73

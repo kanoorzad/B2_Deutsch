@@ -1,7 +1,7 @@
-const CACHE='german-a1-b2-telc-v71-wizard-bootstrap-fixed';
+const CACHE='german-a1-b2-telc-v73-wizard-click-repaired';
 const FILES=[
- './index.html?v=71','./styles.css?v=71','./data.js?v=71','./app.js?v=71',
- './manifest.webmanifest?v=71','./icon.svg?v=71','./README.md','./qa-report.json'
+ './index.html?v=73','./styles.css?v=73','./data.js?v=73','./app.js?v=73',
+ './manifest.webmanifest?v=73','./icon.svg?v=73','./README.md','./qa-report.json'
 ];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

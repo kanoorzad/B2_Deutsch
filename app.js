@@ -1,8 +1,8 @@
 // v67: full user-provided script applied; Persian/Persian/Farsi debug helper included.
 // v67: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v71AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh71=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh71='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+(function(){try{const key='v73AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh73=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh73='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v71';
+const STORE='b2-native-cards-extra-v73';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[]; let idx=0; let flipped=false; let lastFront=null; let playing=false; let paused=false; let playQueue=[]; let playIndex=0;
@@ -22,6 +22,8 @@ const els={
   addForm:$('addForm'),importJson:$('importJson'),deviceInfo:$('deviceInfo'),voiceDe:$('voiceDe'),voiceEn:$('voiceEn'),voiceFa:$('voiceFa'),
   testDe:$('testDe'),testEn:$('testEn'),testFa:$('testFa'),unlockSpeech:$('unlockSpeech'),voiceSelectDe:$('voiceSelectDe'),voiceSelectEn:$('voiceSelectEn'),voiceSelectFa:$('voiceSelectFa'),scanDariVoices:$('scanDariVoices'),nextDariCandidate:$('nextDariCandidate'),dariCandidate:$('dariCandidate'),onlineStatus:$('onlineStatus')
 };
+window.els=els;
+
 
 const TARGET_LANGS={
   en:{label:'Englisch',voice:'en-US',dir:'ltr',missing:'Englische Übersetzung fehlt.'},
@@ -342,64 +344,18 @@ function initStartWizard(){
   const setStep=(id)=>{
     ['wizardLang','wizardMaterial','wizardUnit'].forEach(x=>{
       const el=$(x);
-      if(el)el.classList.toggle('active',x===id);
+      if(el){
+        el.classList.toggle('active',x===id);
+        el.style.display=(x===id?'block':'none');
+      }
     });
   };
   window.showWizardStep=setStep;
-
   document.body.classList.add('wizardMode');
   document.body.classList.remove('appReady');
   if(wizard)wizard.hidden=false;
   if(optionsToggle)optionsToggle.hidden=true;
   setStep('wizardLang');
-
-  if(!window.__wizardClickBound){
-    window.__wizardClickBound=true;
-    document.addEventListener('click',(ev)=>{
-      const langBtn=ev.target.closest('[data-wizard-lang]');
-      if(langBtn){
-        ev.preventDefault();
-        ev.stopPropagation();
-        const lang=langBtn.getAttribute('data-wizard-lang')||'en';
-        const target=$('targetLang');
-        if(target)target.value=lang;
-        if(els.targetLang)els.targetLang.value=lang;
-        try{localStorage.setItem('targetLang',lang)}catch(e){}
-        setStep('wizardMaterial');
-        updateVoiceStatus&&updateVoiceStatus();
-        return false;
-      }
-
-      const materialBtn=ev.target.closest('[data-wizard-list]');
-      if(materialBtn){
-        ev.preventDefault();
-        ev.stopPropagation();
-        const list=materialBtn.getAttribute('data-wizard-list')||'all';
-        if(els.list)els.list.value=list;
-        updateUnits&&updateUnits();
-        populateWizardUnits&&populateWizardUnits();
-        setStep('wizardUnit');
-        return false;
-      }
-
-      const startBtn=ev.target.closest('#wizardStart');
-      if(startBtn){
-        ev.preventDefault();
-        ev.stopPropagation();
-        const unit=$('wizardUnitSelect')?$('wizardUnitSelect').value:'all';
-        if(els.unit)els.unit.value=unit||'all';
-        updateParts&&updateParts();
-        if(els.part)els.part.value='all';
-        apply&&apply();
-        document.body.classList.remove('wizardMode');
-        document.body.classList.add('appReady');
-        if(wizard)wizard.hidden=true;
-        if(optionsToggle)optionsToggle.hidden=false;
-        setTimeout(()=>playSelected&&playSelected(),180);
-        return false;
-      }
-    },true);
-  }
 }
 
 function populateWizardUnits(){
@@ -446,14 +402,16 @@ document.querySelectorAll('[data-say]').forEach(btn=>btn.addEventListener('click
 
 
 
+
+
 function bootApp(){
   try{
-    warmVoices&&warmVoices();
-    setup&&setup();
-    apply&&apply();
-    initStartWizard&&initStartWizard();
+    if(typeof warmVoices==='function') warmVoices();
+    if(typeof setup==='function') setup();
+    if(typeof apply==='function') apply();
+    if(typeof initStartWizard==='function') initStartWizard();
     if('speechSynthesis' in window){
-      speechSynthesis.onvoiceschanged=()=>{warmVoices&&warmVoices();updateVoiceStatus&&updateVoiceStatus();};
+      speechSynthesis.onvoiceschanged=()=>{ if(typeof warmVoices==='function') warmVoices(); if(typeof updateVoiceStatus==='function') updateVoiceStatus(); };
     }
   }catch(err){
     console.error('Boot error:',err);

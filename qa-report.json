@@ -1,47 +1,50 @@
 {
-  "version": "71.0-wizard-bootstrap-fixed",
-  "root_cause": [
-    "v70 contained duplicated startWizard/wizardLang/wizardMaterial/wizardUnit blocks in index.html.",
-    "v70 app.js defined initStartWizard but never called setup/apply/initStartWizard, so the click handler never became active.",
-    "The first screen therefore appeared as a static picture."
+  "version": "73.0-wizard-click-repaired",
+  "root_issue_confirmed": [
+    "Previous builds had duplicated wizard markup and/or app boot problems.",
+    "v73 adds an independent inline wizard controller directly in index.html, so first-page clicks do not depend on app.js boot order.",
+    "app.js still has a secondary boot path, but the first interface is now controlled directly by the page."
   ],
-  "before_repair": {
-    "startWizard_count": 2,
-    "wizardLang_count": 2,
-    "wizardMaterial_count": 2,
-    "wizardUnit_count": 2,
-    "initStartWizard_function_count": 1,
-    "initStartWizard_call_count": 0,
-    "setup_call_count": 0,
-    "apply_call_count": 1,
-    "click_handler_present": true
-  },
-  "after_repair": {
+  "before": {
     "startWizard_count": 1,
     "wizardLang_count": 1,
     "wizardMaterial_count": 1,
     "wizardUnit_count": 1,
     "targetLang_count": 1,
-    "initStartWizard_function_count": 1,
-    "bootApp_function_count": 1,
-    "bootApp_call_present": true,
-    "DOMContentLoaded_boot_present": true,
-    "click_handler_present": true
+    "bootApp_count": 1,
+    "boot_call_count": 1,
+    "inline_wizard_controller_present": false,
+    "script_order": {
+      "data_js": 11182,
+      "app_js": 11219,
+      "startWizard": 947
+    }
   },
-  "cards": 2330,
+  "after": {
+    "startWizard_count": 1,
+    "wizardLang_count": 1,
+    "wizardMaterial_count": 1,
+    "wizardUnit_count": 1,
+    "targetLang_count": 1,
+    "inline_wizard_controller_present": true,
+    "app_boot_present": true,
+    "app_init_present": true
+  },
+  "cards": 3171,
   "list_counts": {
     "B2 all 12 units": 1629,
     "B2 Irregular Verbs": 150,
     "B1 Plus 7 Units": 475,
-    "A1 Irregular Verbs": 76
+    "A1 Irregular Verbs": 76,
+    "A1": 841
   },
   "translation_coverage": {
-    "en": 2330,
-    "fa": 2330,
-    "es": 2330,
-    "ru": 2330,
-    "uk": 2330,
-    "tr": 2330
+    "en": 3171,
+    "fa": 3171,
+    "es": 3171,
+    "ru": 3171,
+    "uk": 3171,
+    "tr": 3171
   },
   "translation_missing": {
     "en": 0,
@@ -58,16 +61,18 @@
     "single_wizardMaterial": true,
     "single_wizardUnit": true,
     "single_targetLang": true,
-    "bootstrap_present": true,
-    "language_click_handler_present": true,
-    "language_click_advances_to_material": true,
-    "version_tag_top_right": true,
-    "wizard_css_clickable": true,
-    "cache_busting_v71": true,
+    "inline_controller_present": true,
+    "inline_language_click_advances": true,
+    "inline_material_click_advances": true,
+    "inline_start_hides_wizard": true,
+    "css_pointer_clickable": true,
+    "v73_tag_present": true,
+    "cache_busting_v73": true,
     "translations_complete": true,
-    "export_removed": true
+    "a1_cards_kept": true,
+    "a1_irregular_kept": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=71",
-  "zip_mb": 1.37
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=73",
+  "zip_mb": 1.75
 }

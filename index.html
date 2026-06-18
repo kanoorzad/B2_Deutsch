@@ -7,10 +7,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=71">
-  <link rel="apple-touch-icon" href="icon.svg?v=71">
-  <link rel="stylesheet" href="styles.css?v=71">
-  <title>German A1-B2 telc system Important words v71</title>
+  <link rel="manifest" href="manifest.webmanifest?v=73">
+  <link rel="apple-touch-icon" href="icon.svg?v=73">
+  <link rel="stylesheet" href="styles.css?v=73">
+  <title>German A1-B2 telc system Important words v73</title>
 </head>
 <body class="wizardMode">
 <select id="targetLang" hidden>
@@ -24,7 +24,7 @@
 <section id="startWizard" class="startWizard" aria-live="polite">
   <section id="wizardLang" class="wizardStep active">
     <div class="wizardCard languageStartCard">
-      <em class="startVersionTag">v71</em>
+      <em class="startVersionTag">v73</em>
       <h1 class="startTitle">German A1-B2 telc system Important words</h1>
       <p class="startSubtitle">Bitte wählen Sie zuerst die Übersetzungssprache.</p>
       <div class="choiceGrid languageChoices compactLangGrid">
@@ -41,7 +41,7 @@
 
   <section id="wizardMaterial" class="wizardStep">
     <div class="wizardCard">
-      <em class="startVersionTag">v71</em>
+      <em class="startVersionTag">v73</em>
       <h2>Lernmaterial wählen</h2>
       <p class="startSubtitle">Wählen Sie den Bereich.</p>
       <div class="choiceGrid materialChoices">
@@ -60,7 +60,7 @@
 
   <section id="wizardUnit" class="wizardStep">
     <div class="wizardCard">
-      <em class="startVersionTag">v71</em>
+      <em class="startVersionTag">v73</em>
       <h2>Einheit wählen</h2>
       <p class="startSubtitle">Standard: alle Einheiten.</p>
       <label class="wizardSelectLabel">Einheit
@@ -73,8 +73,90 @@
     </div>
   </section>
 </section>
+<script>
+(function(){
+  window.__hardWizardControllerV73 = true;
+  function $(id){ return document.getElementById(id); }
+  function setStep(id){
+    ['wizardLang','wizardMaterial','wizardUnit'].forEach(function(x){
+      var el=$(x);
+      if(el){
+        if(x===id){ el.classList.add('active'); el.style.display='block'; }
+        else { el.classList.remove('active'); el.style.display='none'; }
+      }
+    });
+  }
+  function setSelectValue(id,value){
+    var el=$(id);
+    if(el){
+      var exists=[].some.call(el.options||[], function(o){ return o.value===value; });
+      if(exists || id==='targetLang') el.value=value;
+    }
+  }
+  function populateUnits(list){
+    var sel=$('wizardUnitSelect');
+    if(!sel) return;
+    var cards=(window.FLASHCARD_DATA && window.FLASHCARD_DATA.cards) || [];
+    var pool=cards.filter(function(c){ return list==='all' || c.list===list; });
+    var units=[];
+    pool.forEach(function(c){ if(c.unit && units.indexOf(c.unit)===-1) units.push(c.unit); });
+    sel.innerHTML='<option value="all">Alle Einheiten</option>'+units.map(function(u){ return '<option value="'+String(u).replace(/"/g,'&quot;')+'">'+u+'</option>'; }).join('');
+    sel.value='all';
+    var note=$('wizardUnitNote');
+    if(note) note.textContent = pool.length ? (pool.length + ' Karten verfügbar.') : 'Noch keine Karten für dieses Material. Bitte anderes Material wählen.';
+  }
+  function showApp(){
+    var wizard=$('startWizard'), options=$('optionsToggle');
+    document.body.classList.remove('wizardMode');
+    document.body.classList.add('appReady');
+    if(wizard) wizard.hidden=true;
+    if(options) options.hidden=false;
+  }
+  function bootWizard(){
+    document.body.classList.add('wizardMode');
+    document.body.classList.remove('appReady');
+    var wizard=$('startWizard'), options=$('optionsToggle');
+    if(wizard) wizard.hidden=false;
+    if(options) options.hidden=true;
+    setStep('wizardLang');
+  }
+  document.addEventListener('click', function(ev){
+    var langBtn=ev.target.closest && ev.target.closest('[data-wizard-lang]');
+    if(langBtn){
+      ev.preventDefault(); ev.stopPropagation();
+      var lang=langBtn.getAttribute('data-wizard-lang') || 'en';
+      setSelectValue('targetLang', lang);
+      try{ localStorage.setItem('targetLang', lang); }catch(e){}
+      if(window.els && window.els.targetLang) window.els.targetLang.value=lang;
+      setStep('wizardMaterial');
+      return false;
+    }
+    var matBtn=ev.target.closest && ev.target.closest('[data-wizard-list]');
+    if(matBtn){
+      ev.preventDefault(); ev.stopPropagation();
+      var list=matBtn.getAttribute('data-wizard-list') || 'all';
+      setSelectValue('listFilter', list);
+      populateUnits(list);
+      setStep('wizardUnit');
+      return false;
+    }
+    var startBtn=ev.target.closest && ev.target.closest('#wizardStart');
+    if(startBtn){
+      ev.preventDefault(); ev.stopPropagation();
+      var unit=$('wizardUnitSelect') ? $('wizardUnitSelect').value : 'all';
+      setSelectValue('unitFilter', unit || 'all');
+      try{ if(window.updateParts) window.updateParts(); if(window.apply) window.apply(); }catch(e){ console.warn(e); }
+      showApp();
+      setTimeout(function(){ try{ if(window.playSelected) window.playSelected(); }catch(e){} }, 180);
+      return false;
+    }
+  }, true);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bootWizard, {once:true});
+  else bootWizard();
+})();
+</script>
 <header class="hero">
-  <em class="versionBadge">v71</em>
+  <em class="versionBadge">v73</em>
   <h1>Deutsch-Karteikarten</h1>
   <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
   <p class="initiative"><em>Initiative by: Khalid Noorzad</em></p>
@@ -221,8 +303,8 @@
   </section>
 </main>
 
-<script src="data.js?v=71"></script>
-<script src="app.js?v=71"></script>
+<script src="data.js?v=73"></script>
+<script src="app.js?v=73"></script>
 </body>
 </html>
 
