@@ -1,8 +1,8 @@
-// v66: full user-provided script applied; Persian/Persian/Farsi debug helper included.
-// v66: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v66AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh66=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh66='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+// v67: full user-provided script applied; Persian/Persian/Farsi debug helper included.
+// v67: remove old service workers/caches once so old broken versions cannot control audio.
+(function(){try{const key='v68AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh68=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh68='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v66';
+const STORE='b2-native-cards-extra-v68';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[]; let idx=0; let flipped=false; let lastFront=null; let playing=false; let paused=false; let playQueue=[]; let playIndex=0;
@@ -16,10 +16,10 @@ const els={
   prev:$('prev'),next:$('next'),flip:$('flip'),speakFront:$('speakFront'),card:$('card'),cardBottom:$('cardBottom'),answer:$('answer'),
   frontText:$('frontText'),frontHint:$('frontHint'),frontSub:$('frontSub'),frontSyn:$('frontSynonyms'),chipLabel:$('chipLabel'),
   targetTitle:$('targetTitle'),de:$('de'),dePluralLine:$('dePluralLine'),en:$('en'),fa:$('fa'),nounBox:$('nounBox'),article:$('article'),singular:$('singular'),plural:$('plural'),
-  verbBox:$('verbBox'),inf:$('inf'),pres3:$('pres3'),past:$('past'),perf:$('perf'),plus:$('plus'),syn:$('syn'),synBox:$('synBox'),ex:$('ex'),
+  verbBox:$('verbBox'),inf:$('inf'),pres3:$('pres3'),past:$('past'),perf:$('perf'),plus:$('plus'),syn:$('syn'),synBox:$('synBox'),ex:$('ex'),multiSynBox:$('multiSynBox'),multiSynContent:$('multiSynContent'),
   count:$('count'),bar:$('bar'),playDe:$('playDe'),playEn:$('playEn'),playFa:$('playFa'),playForms:$('playForms'),repeat:$('repeat'),
   playList:$('playList'),pauseList:$('pauseList'),stopList:$('stopList'),now:$('nowPlaying'),speechWarning:$('speechWarning'),
-  addForm:$('addForm'),exportBtn:$('exportBtn'),importJson:$('importJson'),deviceInfo:$('deviceInfo'),voiceDe:$('voiceDe'),voiceEn:$('voiceEn'),voiceFa:$('voiceFa'),
+  addForm:$('addForm'),importJson:$('importJson'),deviceInfo:$('deviceInfo'),voiceDe:$('voiceDe'),voiceEn:$('voiceEn'),voiceFa:$('voiceFa'),
   testDe:$('testDe'),testEn:$('testEn'),testFa:$('testFa'),unlockSpeech:$('unlockSpeech'),voiceSelectDe:$('voiceSelectDe'),voiceSelectEn:$('voiceSelectEn'),voiceSelectFa:$('voiceSelectFa'),scanDariVoices:$('scanDariVoices'),nextDariCandidate:$('nextDariCandidate'),dariCandidate:$('dariCandidate'),onlineStatus:$('onlineStatus')
 };
 
@@ -29,7 +29,7 @@ const TARGET_LANGS={
   ru:{label:'Russisch',voice:'ru-RU',dir:'ltr',missing:'Russisch ist vorbereitet. Geprüfte Übersetzung folgt.'},
   uk:{label:'Ukrainisch',voice:'uk-UA',dir:'ltr',missing:'Ukrainisch ist vorbereitet. Geprüfte Übersetzung folgt.'},
   tr:{label:'Türkisch',voice:'tr-TR',dir:'ltr',missing:'Türkisch ist vorbereitet. Geprüfte Übersetzung folgt.'},
-  es:{label:'Spanisch',voice:'es-ES',dir:'ltr',missing:'Spanisch ist vorbereitet. Geprüfte Übersetzung folgt.'}
+  es:{label:'Spanisch',voice:'es-ES',dir:'ltr',missing:'Spanische Übersetzung für diese Karte fehlt noch.'}
 };
 function targetLang(){return (document.getElementById('targetLang')?.value)||'en'}
 function targetMeta(lang=targetLang()){return TARGET_LANGS[lang]||TARGET_LANGS.en}
@@ -42,7 +42,7 @@ function displayTranslation(c,lang=targetLang()){
   return t || targetMeta(lang).missing;
 }
 function isTranslationMissing(c,lang=targetLang()){return !translationOf(c,lang)}
-function voiceCodeFor(lang){return ({de:'de-DE',en:'en-US',fa:'fa-IR',ru:'ru-RU',uk:'uk-UA',tr:'tr-TR',es:'es-ES'}[lang]) || 'en-US'}
+
 
 function unique(a){return [...new Set(a.filter(Boolean))].sort((x,y)=>x.localeCompare(y,undefined,{numeric:true}))}
 function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
@@ -79,8 +79,148 @@ function formStep(c){
   }
   return null;
 }
+const VOICE_PROFILES={
+  de:{
+    code:'de-DE',
+    fallback:['de-DE','de-AT','de-CH','de'],
+    premium:/anna|siri|google|microsoft|natural|premium|enhanced|neural|online|eloquence/i,
+    reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
+  },
+  en:{
+    code:'en-US',
+    fallback:['en-US','en-GB','en-AU','en-CA','en'],
+    premium:/samantha|daniel|alex|siri|google|microsoft|natural|premium|enhanced|neural|online|eloquence/i,
+    reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
+  },
+  fa:{
+    code:'fa-IR',
+    fallback:['fa-IR','fa-AF','fa'],
+    premium:/persian|farsi|فارسی|siri|google|microsoft|natural|premium|enhanced|neural|online/i,
+    reject:/daria|bulgarian|bg-bg|compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
+  },
+  es:{
+    code:'es-ES',
+    fallback:['es-ES','es-MX','es-US','es-419','es'],
+    premium:/monica|paulina|jorge|siri|google|microsoft|natural|premium|enhanced|neural|online|eloquence/i,
+    reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
+  },
+  ru:{
+    code:'ru-RU',
+    fallback:['ru-RU','ru'],
+    premium:/milena|yuri|russian|рус|siri|google|microsoft|natural|premium|enhanced|neural|online/i,
+    reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
+  },
+  uk:{
+    code:'uk-UA',
+    fallback:['uk-UA','uk'],
+    premium:/ukrainian|україн|украин|siri|google|microsoft|natural|premium|enhanced|neural|online/i,
+    reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
+  },
+  tr:{
+    code:'tr-TR',
+    fallback:['tr-TR','tr'],
+    premium:/turkish|türk|yelda|cem|siri|google|microsoft|natural|premium|enhanced|neural|online/i,
+    reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|good news|hysterical|pipe organ|princess|rishi|victoria/i
+  }
+};
+let VOICE_CACHE={};
+function voiceCodeFor(lang){
+  return (VOICE_PROFILES[lang]||VOICE_PROFILES.de).code;
+}
+function voiceScore(v,lang){
+  const p=VOICE_PROFILES[lang]||VOICE_PROFILES.de;
+  const name=(v.name||'')+' '+(v.voiceURI||'');
+  const vl=(v.lang||'').toLowerCase();
+  let score=0;
+  if(p.reject && p.reject.test(name))score-=1000;
+  if(p.premium && p.premium.test(name))score+=100;
+  if(v.localService===false)score+=12;
+  if(v.default)score+=8;
+  if(vl===p.code.toLowerCase())score+=80;
+  p.fallback.forEach((code,i)=>{
+    const c=code.toLowerCase();
+    if(vl===c)score+=70-i*8;
+    else if(vl.startsWith(c.split('-')[0]))score+=35-i*4;
+  });
+  if(/google/i.test(name))score+=18;      // strong on Android Chrome
+  if(/microsoft/i.test(name))score+=16;   // strong on Edge/Windows/Android
+  if(/siri|apple|enhanced|premium|neural|natural/i.test(name))score+=20; // strong on iOS/macOS
+  if(/compact/i.test(name))score-=45;
+  return score;
+}
+function voices(){
+  return ('speechSynthesis' in window)?speechSynthesis.getVoices():[];
+}
+function pickVoice(lang){
+  const p=VOICE_PROFILES[lang]||VOICE_PROFILES.de;
+  const vs=voices();
+  if(!vs.length)return null;
+  const candidates=vs.filter(v=>{
+    const vl=(v.lang||'').toLowerCase();
+    return p.fallback.some(code=>vl===code.toLowerCase()||vl.startsWith(code.split('-')[0].toLowerCase())) ||
+           (p.premium&&p.premium.test((v.name||'')+' '+(v.voiceURI||'')));
+  }).filter(v=>!(p.reject&&p.reject.test((v.name||'')+' '+(v.voiceURI||''))));
+  const pool=candidates.length?candidates:vs.filter(v=>(v.lang||'').toLowerCase().startsWith(p.code.slice(0,2).toLowerCase()));
+  if(!pool.length)return null;
+  return pool.slice().sort((a,b)=>voiceScore(b,lang)-voiceScore(a,lang))[0]||null;
+}
+function warmVoices(){
+  if(!('speechSynthesis' in window))return;
+  try{
+    speechSynthesis.getVoices();
+    setTimeout(()=>speechSynthesis.getVoices(),100);
+    setTimeout(()=>{speechSynthesis.getVoices();updateVoiceStatus&&updateVoiceStatus();},450);
+  }catch(e){}
+}
+function say(text,lang='de',done=()=>{}){
+  if(!text){done();return}
+  if(!('speechSynthesis' in window)){done();return}
+  const p=VOICE_PROFILES[lang]||VOICE_PROFILES.de;
+  try{speechSynthesis.cancel()}catch(e){}
+  const u=new SpeechSynthesisUtterance(String(text));
+  u.lang=p.code;
+  const v=pickVoice(lang);
+  if(v){u.voice=v;u.lang=v.lang||p.code}
+  // Mobile-safe rates: clearer for German, Farsi, Russian, Ukrainian; normal for Spanish/Turkish/English.
+  u.rate=({de:.78,fa:.86,ru:.86,uk:.86,en:.92,es:.92,tr:.90}[lang]||.88);
+  u.pitch=1;
+  u.volume=1;
+  let finished=false;
+  const finish=()=>{if(!finished){finished=true;done();}};
+  u.onend=finish;
+  u.onerror=()=> {
+    // iOS/Android fallback: retry once with language code only, no explicit voice.
+    if(v){
+      try{
+        const r=new SpeechSynthesisUtterance(String(text));
+        r.lang=p.code;
+        r.rate=u.rate;r.pitch=1;r.volume=1;
+        r.onend=finish;r.onerror=finish;
+        speechSynthesis.cancel();
+        setTimeout(()=>speechSynthesis.speak(r),80);
+      }catch(e){finish()}
+    }else finish();
+  };
+  try{
+    speechSynthesis.resume&&speechSynthesis.resume();
+    setTimeout(()=>speechSynthesis.speak(u),40);
+  }catch(e){finish()}
+}
+function updateVoiceStatus(){
+  const el=$('voiceStatus');
+  const vs=voices();
+  if(!el)return;
+  if(!vs.length){el.textContent='Stimmen werden geladen …';return}
+  const rows=['de','en','fa','es','ru','uk','tr'].map(lang=>{
+    const v=pickVoice(lang);
+    const label=(TARGET_LANGS&&TARGET_LANGS[lang]?TARGET_LANGS[lang].label:lang)||lang;
+    return `${label}: ${v?`${v.name} (${v.lang})`:'Systemstandard '+voiceCodeFor(lang)}`;
+  });
+  el.textContent=rows.join(' · ');
+}
+
 function setup(){
-  els.list.innerHTML='<option value="all">Alle Karten</option><option value="B1 Plus 7 Units">B1+</option><option value="B2 all 12 units">B2</option><option value="Irregular verbs">Unregelmäßige Verben</option>';
+  els.list.innerHTML='<option value="all">Alle Karten</option><option value="A1">A1</option><option value="A1 Irregular Verbs">A1 Irregular Verbs</option><option value="A2">A2</option><option value="A2 Irregular Verbs">A2 Irregular Verbs</option><option value="B1">B1</option><option value="B1 Irregular Verbs">B1 Irregular Verbs</option><option value="B1 Plus 7 Units">B1+</option><option value="B2 all 12 units">B2</option><option value="B2 Irregular Verbs">B2 Irregular Verbs</option>';
   updateUnits();
   detectDevice();
   updateVoiceStatus();
@@ -110,6 +250,24 @@ function getManualFront(c){
   }
   return{display:displayGerman(c),speech:displayGerman(c),label:'Deutsch',sub:'Langsam',lang:'de'}
 }
+
+function escHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function renderMultiSynonyms(c){
+  const box=els.multiSynBox, cont=els.multiSynContent;
+  if(!box||!cont)return;
+  const lang=targetLang();
+  const multi=c.synonyms_multi||{};
+  const de=(multi.de||[]).filter(Boolean);
+  const target=(multi[lang]||[]).filter(Boolean);
+  if(!de.length && !target.length){box.classList.add('hidden');cont.innerHTML='';return}
+  const meta=targetMeta(lang);
+  const rows=[];
+  if(de.length)rows.push(`<div class="synCol"><strong>Deutsch</strong><p>${de.map(escHtml).join(' · ')}</p></div>`);
+  if(target.length)rows.push(`<div class="synCol"><strong>${escHtml(meta.label)}</strong><p dir="${meta.dir||'ltr'}">${target.map(escHtml).join(' · ')}</p></div>`);
+  cont.innerHTML=rows.join('');
+  box.classList.remove('hidden');
+}
+
 function renderDetails(c,chipLang='en'){
   const lang=targetLang();
   const meta=targetMeta(lang);
@@ -133,21 +291,22 @@ function renderDetails(c,chipLang='en'){
   els.plus.textContent=f.plusquamperfekt||'—';
   renderChips(c,chipLang);
   els.ex.textContent=c.example||'—';
+  renderMultiSynonyms(c);
 }
 function renderProgress(){els.count.textContent=filtered.length?`${idx+1} / ${filtered.length}`:'0 / 0';els.bar.style.width=filtered.length?`${((idx+1)/filtered.length)*100}%`:'0'}
 function render(){const c=filtered[idx];if(!c){els.frontText.textContent='Keine Karten';els.frontHint.textContent='Filter ändern.';els.frontSub.textContent='';els.cardBottom.classList.add('hidden');renderProgress();return}const f=getManualFront(c);lastFront=f;renderDetails(c,f.lang);setDirForLang(f.lang);els.frontText.textContent=f.display||'—';els.frontHint.textContent=f.label;els.frontSub.textContent=f.sub||'';els.answer.classList.toggle('hidden',!flipped);els.card.classList.toggle('playing',playing);renderProgress();}
 function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=false;render()}function prev(){if(!filtered.length)return;idx=(idx-1+filtered.length)%filtered.length;flipped=false;render()}function flip(){flipped=!flipped;render()}
 
 
-// v66 audio engine: native best-quality voices for German/English; Persian/Farsi Auto = native Farsi/Persian voice if it truly works, otherwise local high-quality sprite fallback.
-// v66 browser voice engine with brute-force Persian/Farsi mobile candidates.
-// Keeps v66-v66 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
+// v67 audio engine: native best-quality voices for German/English; Persian/Farsi Auto = native Farsi/Persian voice if it truly works, otherwise local high-quality sprite fallback.
+// v67 browser voice engine with brute-force Persian/Farsi mobile candidates.
+// Keeps v67-v67 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
 // No local sprite/WebAudio/remote TTS.
-// v66 Persian/Farsi voice restored to version-4 style.
+// v67 Persian/Farsi voice restored to version-4 style.
 // Keep direct browser SpeechSynthesis. No online TTS, no audio sprites, no provider router.
-// The key v66-style behavior is direct utterance creation and direct speechSynthesis.speak().
-// v66: FULL version-4 voice engine restored for all languages.
-// This is the original v66 pattern:
+// The key v67-style behavior is direct utterance creation and direct speechSynthesis.speak().
+// v67: FULL version-4 voice engine restored for all languages.
+// This is the original v67 pattern:
 // voices() -> pickVoice(lang) -> say(text, lang, done)
 // Direct SpeechSynthesisUtterance only. No online TTS. No router. No local audio sprite.
 let activeUtterance=null;
@@ -188,314 +347,15 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 
-function voices(){return speechSynthesis.getVoices()||[]}
 
 // ----------------------------------------------
 // UPDATED pickVoice with name-based search for Persian/Farsi
 // ----------------------------------------------
-function pickVoice(lang){
-  const vs = voices();
-  const code = voiceCodeFor(lang);
-  const prefix = code.slice(0,2);
-  const quality=/premium|enhanced|natural|siri|google|microsoft|neural|natural/i;
-  if(lang==='fa'){
-    return vs.find(v => v.lang === 'fa-IR' && quality.test(v.name)) ||
-           vs.find(v => v.lang === 'fa' && quality.test(v.name)) ||
-           vs.find(v => /persian|farsi|فارسی/i.test(v.name) && !isFalseDariVoice(v)) ||
-           vs.find(v => v.lang === 'fa-IR') ||
-           vs.find(v => v.lang === 'fa') ||
-           vs.find(v => v.lang && v.lang.startsWith('fa') && !isFalseDariVoice(v));
-  }
-  return vs.find(v => v.lang === code && quality.test(v.name)) ||
-         vs.find(v => v.lang === code) ||
-         vs.find(v => v.lang && v.lang.startsWith(prefix));
-}
+
 
 // ----------------------------------------------
 // UPDATED say() – for Persian/Farsi, do NOT set u.voice
 // ----------------------------------------------
-function say(text, lang = 'de', done = () => {}) {
-  if (!text) { done(); return; }
-  if (!('speechSynthesis' in window)) {
-    alert('Sprachausgabe wird in diesem Browser nicht unterstützt.');
-    done();
-    return;
-  }
-
-  const u = new SpeechSynthesisUtterance(text);
-  const voice = pickVoice(lang);
-  const code = voiceCodeFor(lang);
-
-  if (voice) {
-    u.voice = voice;
-    u.lang = voice.lang || code;
-  } else {
-    u.lang = code;
-  }
-
-  u.rate = lang === 'de' ? 0.78 : 0.92;
-  u.pitch = 1;
-
-  activeUtterance = u;
-  u.onend = () => { activeUtterance = null; done(); };
-  u.onerror = () => { activeUtterance = null; done(); };
-
-  try { speechSynthesis.resume(); } catch(e) {}
-  speechSynthesis.speak(u);
-}
-// ----------------------------------------------
-// iOS user‑gesture priming
-// ----------------------------------------------
-document.addEventListener('click', function primeSpeech() {
-  if (!window._speechPrimed) {
-    window._speechPrimed = true;
-    // Speak a short silent or space utterance to prime the engine
-    const temp = new SpeechSynthesisUtterance(' ');
-    temp.volume = 0;
-    temp.onend = () => {};
-    speechSynthesis.speak(temp);
-    setTimeout(() => speechSynthesis.cancel(), 100);
-  }
-}, { once: true }); // Runs only on the first click
-
-// ----------------------------------------------
-// Compatibility wrappers (unchanged)
-// ----------------------------------------------
-function sayBrowserOnly(text,lang='de',done=()=>{}){say(text,lang,done)}
-function queueSay(t,l='de',d=()=>{}){say(t,l,d)}
-function speakFront(){if(lastFront)say(lastFront.speech||lastFront.display||lastFront.txt,lastFront.lang)}
-
-function voiceLabel(v){return v ? `${v.name} (${v.lang})` : 'Automatic'}
-function voiceKey(v){return v ? `${v.name}|||${v.lang}` : ''}
-function voiceByKey(k){return null}
-function isFalseDariVoice(v){
-  const name=((v&&v.name)||'').toLowerCase();
-  const code=((v&&v.lang)||'').toLowerCase();
-  return code==='bg-bg' || code.startsWith('bg') || /\bdaria\b|bulgarian|българ/i.test(name);
-}
-function selectedVoice(lang){return pickVoice(lang)||null}
-function populateVoiceSelect(lang){
-  const select = lang==='de' ? els.voiceSelectDe : lang==='en' ? els.voiceSelectEn : els.voiceSelectFa;
-  if(!select)return;
-  select.innerHTML='<option value="">Automatic</option>';
-}
-function populateAllVoiceSelects(){
-  populateVoiceSelect('de');
-  populateVoiceSelect('en');
-  populateVoiceSelect('fa');
-}
-function saveVoiceChoice(lang){updateVoiceStatus()}
-function updateOnlineStatus(msg){if(els.onlineStatus)els.onlineStatus.textContent='Automatic'}
-function stopOnlineAudio(){}
-function unlockSpeech(){
-  populateAllVoiceSelects();
-  updateVoiceStatus();
-  try{speechSynthesis.cancel();speechSynthesis.resume()}catch(e){}
-  els.now.textContent='Audio ready.';
-}
-function runDariVoiceSearch(){updateVoiceStatus()}
-function tryCurrentdariCandidate(){updateVoiceStatus()}
-function nextDariCandidate(){updateVoiceStatus()}
-function detectDevice(){if(els.deviceInfo)els.deviceInfo.textContent='Audio ready.'}
-function updatedariCandidateLabel(){if(els.dariCandidate)els.dariCandidate.textContent='Automatic'}
-function autoInitVoices(){populateAllVoiceSelects();updateVoiceStatus()}
-function scheduleAutoVoiceInit(){autoInitVoices()}
-function updateVoiceStatus(){
-  populateAllVoiceSelects();
-  if(els.voiceDe)els.voiceDe.textContent=voiceLabel(pickVoice('de'));
-  if(els.voiceEn)els.voiceEn.textContent=voiceLabel(pickVoice('en'));
-  if(els.voiceFa)els.voiceFa.textContent=voiceLabel(pickVoice('fa'));
-  updatedariCandidateLabel();
-  updateOnlineStatus('Automatic');
-}
-function cardScript(c){
-  const steps=[];
-  if(els.playDe.checked){
-    const g=displayGerman(c);
-    steps.push({t:g,l:'de',label:'Deutsch',sub:'Langsam'});
-  }
-  if(els.playForms.checked){
-    const fs=formStep(c);
-    if(fs)steps.push({t:fs.display||fs.speech,l:'de',label:fs.label||'Deutsche Formen',sub:fs.sub||'Langsam'});
-  }
-  const lang=targetLang();
-  const meta=targetMeta(lang);
-  const t=displayTarget(c,lang);
-  if((els.playEn.checked||els.playFa.checked) && t && !isTranslationMissing(c,lang)){
-    steps.push({t:t,l:lang,label:meta.label,sub:'Mittel'});
-  }
-  return steps.filter(x=>x.t&&String(x.t).trim()&&String(x.t).trim()!=='—');
-}
-function renderPlaybackCard(item,partIdx){
-  const c=item.card;
-  const p=item.parts[partIdx];
-  idx=Math.max(0,filtered.indexOf(c));
-  flipped=false;
-  playing=true;
-  renderDetails(c,p.l);
-  renderProgress();
-  setDirForLang(p.l);
-  els.card.classList.add('playing');
-  els.answer.classList.add('hidden');
-  els.frontText.textContent=p.t;
-  els.frontHint.textContent=p.label;
-  els.frontSub.textContent=`${item.cardNo}/${item.totalCards} · ${p.sub||''}`;
-  lastFront={display:p.t,speech:p.t,lang:p.l,label:p.label,sub:p.sub||'',audio:p.audio||''};
-  els.now.textContent=`${item.cardNo}/${item.totalCards}: ${p.label} — ${p.t}`;
-}
-function playSelected(){
-  if(!filtered.length)return;
-  
-  stop(false);
-  playing=true;
-  paused=false;
-  requestScreenWakeLock();
-  playQueue=[];
-  const source=[...filtered];
-  const rep=Number(els.repeat.value)||1;
-  for(let r=0;r<rep;r++){
-    source.forEach((c,i)=>{
-      const parts=cardScript(c);
-      if(parts.length)playQueue.push({card:c,parts,cardNo:i+1,totalCards:source.length});
-    });
-  }
-  playIndex=0;
-  playNextPart(0);
-}
-function playNextPart(partIdx){
-  if(!playing||playIndex>=playQueue.length){stop();return}
-  if(paused)return;
-  const item=playQueue[playIndex];
-  if(partIdx>=item.parts.length){playIndex++;playNextPart(0);return}
-  renderPlaybackCard(item,partIdx);
-  const p=item.parts[partIdx];
-  const txt=p.t||p.speech||p.display||'';
-  const lang=p.l||p.lang||'de';
-  setTimeout(()=>say(txt,lang,()=>setTimeout(()=>playNextPart(partIdx+1),450)),120);
-}
-function pauseResume(){if(!playing||!('speechSynthesis'in window))return;if(paused){paused=false;els.pauseList.textContent='Pause';speechSynthesis.resume()}else{paused=true;els.pauseList.textContent='Fortsetzen';speechSynthesis.pause();els.now.textContent='Pausiert.'}}
-function stop(doRender=true){
-  playing=false;
-  paused=false;
-  playQueue=[];
-  playIndex=0;
-  stopOnlineAudio();
-  if('speechSynthesis'in window)speechSynthesis.cancel();
-  releaseScreenWakeLock();
-  els.pauseList.textContent='Pause';
-  els.now.textContent='Bereit.';
-  els.card.classList.remove('playing');
-  els.frontText.removeAttribute('dir');
-  if(doRender)render();
-}
-
-function addCard(e){e.preventDefault();const d=Object.fromEntries(new FormData(els.addForm).entries());const syns=String(d.synonyms||'').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);while(syns.length<3)syns.push(syns.length?'related verb':'verb meaning');const isVerb=d.category==='verb';const c={id:'custom-'+Date.now(),source:'user',list:'My cards',unit:d.unit||'My list',part:'',category:d.category||'other',german:d.german,english:d.english,dari:d.dari||d.persian,article:d.article||'',singular:d.german,plural:d.plural||'',forms:{infinitive:d.infinitive||'',present3:'',past:d.past||'',perfect:d.perfect||'',plusquamperfekt:d.plusquamperfekt||''},synonyms:isVerb?syns:[],synonyms_en:isVerb?syns:[],synonyms_de:isVerb?syns:[],synonyms_fa:isVerb?syns:[],example:''};extra.push(c);localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];setup();apply();initStartWizard();scheduleAutoVoiceInit();els.addForm.reset()}
-function exportBackup(){const blob=new Blob([JSON.stringify(extra,null,2)],{type:'application/json'});const u=URL.createObjectURL(blob);const a=document.createElement('a');a.href=u;a.download='my-flashcard-backup.json';a.click();URL.revokeObjectURL(u)}function importBackup(file){const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw Error('Backup must be an array.');extra=x;localStorage.setItem(STORE,JSON.stringify(extra));cards=[...initialData,...extra];setup();apply();initStartWizard();scheduleAutoVoiceInit();alert('Backup imported.')}catch(e){alert(e.message)}};r.readAsText(file)}
-['list','unit','part','type','front','targetLang'].forEach(k=>els[k]?.addEventListener('change',()=>{if(k==='list')updateUnits();if(k==='unit')updateParts();apply()}));els.search.addEventListener('input',apply);els.next.addEventListener('click',next);els.prev.addEventListener('click',prev);els.flip.addEventListener('click',flip);els.card.addEventListener('click',()=>{if(!playing)flip()});els.speakFront.addEventListener('click',speakFront);els.playList.addEventListener('click',playSelected);els.pauseList.addEventListener('click',pauseResume);els.stopList.addEventListener('click',()=>stop());els.addForm.addEventListener('submit',addCard);els.exportBtn.addEventListener('click',exportBackup);els.importJson.addEventListener('change',e=>e.target.files[0]&&importBackup(e.target.files[0]));els.unlockSpeech.addEventListener('click',unlockSpeech);els.testDe.addEventListener('click',()=>say('die Abteilung. die Abteilungen.','de'));els.testEn.addEventListener('click',()=>say('department or division','en'));els.testFa.addEventListener('click',()=>say('دیپارتمنت، بخش','fa'));document.querySelectorAll('[data-say]').forEach(b=>b.addEventListener('click',()=>{const c=filtered[idx];if(!c)return;if(b.dataset.say==='de')say(displayGerman(c),'de');if(b.dataset.say==='target'||b.dataset.say==='en'||b.dataset.say==='fa'){const lang=targetLang();const t=displayTarget(c,lang);if(!isTranslationMissing(c,lang))say(t,lang)}}));if(els.voiceSelectDe)els.voiceSelectDe.addEventListener('change',()=>saveVoiceChoice('de'));
-if(els.voiceSelectEn)els.voiceSelectEn.addEventListener('change',()=>saveVoiceChoice('en'));
-if(els.voiceSelectFa)els.voiceSelectFa.addEventListener('change',()=>saveVoiceChoice('fa'));
-if(els.scanDariVoices)els.scanDariVoices.addEventListener('click',runDariVoiceSearch);
-if(els.nextDariCandidate)els.nextDariCandidate.addEventListener('click',nextDariCandidate);
-document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;if(e.code==='Space'){e.preventDefault();if(!playing)flip()}if(e.code==='ArrowRight')next();if(e.code==='ArrowLeft')prev()});if('speechSynthesis'in window)speechSynthesis.onvoiceschanged=()=>voices();setup();apply();initStartWizard();
-
-// ----------------------------------------------
-// Debug helper (call from console)
-// ----------------------------------------------
-
-function langLabelFor(code){
-  return (TARGET_LANGS[code]&&TARGET_LANGS[code].label)||code;
-}
-function openOptionsDrawer(){
-  const d=$('optionsDrawer'), b=$('drawerBackdrop'), t=$('optionsToggle');
-  if(d){d.classList.add('open');d.setAttribute('aria-hidden','false')}
-  if(b)b.classList.remove('hidden');
-  if(t)t.setAttribute('aria-expanded','true');
-}
-function closeOptionsDrawer(){
-  const d=$('optionsDrawer'), b=$('drawerBackdrop'), t=$('optionsToggle');
-  if(d){d.classList.remove('open');d.setAttribute('aria-hidden','true')}
-  if(b)b.classList.add('hidden');
-  if(t)t.setAttribute('aria-expanded','false');
-}
-function finishWizard(){
-  const w=$('startWizard'), t=$('optionsToggle');
-  if(w)w.classList.add('hidden');
-  document.body.classList.remove('wizardMode');
-  document.body.classList.add('appReady');
-  if(t)t.classList.remove('hidden');
-  apply();
-  render();
-}
-function populateWizardUnits(){
-  const sel=$('wizardUnitSelect');
-  if(!sel || !els.list)return;
-  const l=els.list.value;
-  const pool=l==='all'?cards:cards.filter(c=>c.list===l);
-  const units=unique(pool.map(c=>c.unit));
-  sel.innerHTML='<option value="all">Alle Einheiten</option>'+units.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
-  sel.value='all';
-}
-function showWizardStep(stepId){
-  ['wizardLang','wizardMaterial','wizardUnit'].forEach(id=>$(id)?.classList.remove('active'));
-  $(stepId)?.classList.add('active');
-}
-function initStartWizard(){
-  const w=$('startWizard');
-  if(!w)return;
-  document.body.classList.add('wizardMode');
-  const chosen=$('wizardChosenLang');
-  const chosenMat=$('wizardChosenMaterial');
-  document.querySelectorAll('[data-wizard-lang]').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const lang=btn.dataset.wizardLang;
-      if(els.targetLang)els.targetLang.value=lang;
-      if(chosen)chosen.textContent='Zielsprache: '+langLabelFor(lang);
-      showWizardStep('wizardMaterial');
-      apply();
-    });
-  });
-  document.querySelectorAll('[data-wizard-list]').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      if(els.list)els.list.value=btn.dataset.wizardList;
-      updateUnits();
-      populateWizardUnits();
-      if(chosenMat)chosenMat.textContent='Lernmaterial: '+btn.textContent.trim();
-      showWizardStep('wizardUnit');
-      apply();
-    });
-  });
-  $('wizardUnitSelect')?.addEventListener('change',()=>{
-    if(els.unit){
-      els.unit.value=$('wizardUnitSelect').value||'all';
-      updateParts();
-      apply();
-    }
-  });
-  $('wizardStart')?.addEventListener('click',()=>{
-    if(els.unit){
-      els.unit.value=$('wizardUnitSelect')?.value||'all';
-      updateParts();
-    }
-    apply();
-    finishWizard();
-    setTimeout(()=>playSelected(),180);
-  });
-  $('wizardBack')?.addEventListener('click',()=>showWizardStep('wizardLang'));
-  $('wizardBackMaterial')?.addEventListener('click',()=>showWizardStep('wizardMaterial'));
-  $('changeMaterial')?.addEventListener('click',()=>{
-    stop(false);
-    closeOptionsDrawer();
-    document.body.classList.add('wizardMode');
-    document.body.classList.remove('appReady');
-    $('startWizard')?.classList.remove('hidden');
-    $('optionsToggle')?.classList.add('hidden');
-    showWizardStep('wizardMaterial');
-  });
-  $('optionsToggle')?.addEventListener('click',openOptionsDrawer);
-  $('optionsClose')?.addEventListener('click',closeOptionsDrawer);
-  $('drawerBackdrop')?.addEventListener('click',closeOptionsDrawer);
-}
-
 function debugVoices() {
   const vs = speechSynthesis.getVoices();
   const selected = targetLang();

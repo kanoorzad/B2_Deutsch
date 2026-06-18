@@ -1,0 +1,190 @@
+{
+  "staged_package_path": "/mnt/data/b2_b1plus_flashcards_pending_multilang_working_updated",
+  "release_zip_generated": false,
+  "cards": 2330,
+  "translation_coverage": {
+    "en": 2330,
+    "fa": 2330,
+    "es": 2330,
+    "ru": 2330,
+    "uk": 2330,
+    "tr": 2330
+  },
+  "translation_missing": {
+    "en": 0,
+    "fa": 0,
+    "es": 0,
+    "ru": 0,
+    "uk": 0,
+    "tr": 0
+  },
+  "synonym_report": {
+    "verb_cards": 650,
+    "noun_cards": 1280,
+    "other_cards": 324,
+    "synonyms_added_for_cards": 1930,
+    "notes": [
+      "Synonym data is generated conservatively from supplied translations, existing synonyms, German forms, and exact-equivalent fallback markers.",
+      "No broad unrelated thesaurus words were invented.",
+      "Each verb receives 4 display equivalents per language; each noun receives 2 display equivalents per language."
+    ]
+  },
+  "synonym_counts": {
+    "verbs_with_synonyms_multi": 650,
+    "nouns_with_synonyms_multi": 1280
+  },
+  "list_counts": {
+    "B2 all 12 units": 1629,
+    "B2 Irregular Verbs": 150,
+    "B1 Plus 7 Units": 475,
+    "A1 Irregular Verbs": 76
+  },
+  "export_removed_from_index": true,
+  "export_removed_from_app": true,
+  "b2_irregular_renamed": true,
+  "placeholder_lists_added_to_ui": true,
+  "javascript_syntax_ok": true,
+  "node_check_stderr": "",
+  "notes": [
+    "No release ZIP/version generated.",
+    "Synonym/equivalent display is staged at bottom of flashcard.",
+    "A1/A2/B1 lists are UI placeholders until content is supplied.",
+    "Export/backup controls removed to reduce misuse."
+  ],
+  "first_interface_update": {
+    "title_added": true,
+    "step_text_removed_from_language_screen": true,
+    "language_buttons_two_column_css": true,
+    "initiative_bottom_added": true,
+    "six_language_buttons_present": true
+  },
+  "voice_quality_analysis": {
+    "languages": {
+      "German": {
+        "code": "de-DE",
+        "fallbacks": [
+          "de-DE",
+          "de-AT",
+          "de-CH",
+          "de"
+        ],
+        "rate": 0.78,
+        "strategy": "prefer Apple/Siri/Google/Microsoft/Natural German voices"
+      },
+      "English": {
+        "code": "en-US",
+        "fallbacks": [
+          "en-US",
+          "en-GB",
+          "en-AU",
+          "en-CA",
+          "en"
+        ],
+        "rate": 0.92,
+        "strategy": "prefer Samantha/Daniel/Alex/Siri/Google/Microsoft/Natural voices"
+      },
+      "Farsi": {
+        "code": "fa-IR",
+        "fallbacks": [
+          "fa-IR",
+          "fa-AF",
+          "fa"
+        ],
+        "rate": 0.86,
+        "strategy": "prefer Persian/Farsi voices and reject false Daria/Bulgarian voices"
+      },
+      "Spanish": {
+        "code": "es-ES",
+        "fallbacks": [
+          "es-ES",
+          "es-MX",
+          "es-US",
+          "es-419",
+          "es"
+        ],
+        "rate": 0.92,
+        "strategy": "prefer Apple/Google/Microsoft/Natural Spanish voices"
+      },
+      "Russian": {
+        "code": "ru-RU",
+        "fallbacks": [
+          "ru-RU",
+          "ru"
+        ],
+        "rate": 0.86,
+        "strategy": "prefer Russian natural voices"
+      },
+      "Ukrainian": {
+        "code": "uk-UA",
+        "fallbacks": [
+          "uk-UA",
+          "uk"
+        ],
+        "rate": 0.86,
+        "strategy": "prefer Ukrainian natural voices"
+      },
+      "Turkish": {
+        "code": "tr-TR",
+        "fallbacks": [
+          "tr-TR",
+          "tr"
+        ],
+        "rate": 0.9,
+        "strategy": "prefer Turkish natural voices"
+      }
+    },
+    "ios_android_adaptability": [
+      "Uses device-installed speechSynthesis voices.",
+      "Scores premium/enhanced/natural/Siri/Google/Microsoft voices higher.",
+      "Rejects novelty/compact/incorrect voices where possible.",
+      "Retries with language-code-only fallback if explicit voice fails.",
+      "Refreshes voices after delayed mobile voice loading and on voiceschanged."
+    ],
+    "voice_status_panel_added": true,
+    "voice_profiles_present": true,
+    "fallback_retry_present": true,
+    "false_farsi_voice_reject_present": true,
+    "all_language_codes_present": true
+  },
+  "a1_irregular_import": {
+    "source_file": "/mnt/data/A1_Irregular_Verbs_Translations_6_Languages(1).xlsx",
+    "sheet": "A1 Irregular Verbs",
+    "rows_read": 77,
+    "headers": [
+      "Infinitive",
+      "Present (er/es/sie/man)",
+      "Perfekt (er/es/sie/man)",
+      "English",
+      "Dari",
+      "Turkish",
+      "Spanish",
+      "Russian",
+      "Ukrainian"
+    ],
+    "detected_columns": {
+      "infinitive": 0,
+      "present": 1,
+      "past": null,
+      "perfect": 2,
+      "example": null,
+      "en": 3,
+      "fa": 4,
+      "es": 6,
+      "ru": 7,
+      "uk": 8,
+      "tr": 5
+    },
+    "parsed_entries": 76,
+    "cards_added": 76,
+    "missing_translations_in_added_cards": {
+      "en": 0,
+      "fa": 0,
+      "es": 0,
+      "ru": 0,
+      "uk": 0,
+      "tr": 0
+    },
+    "synonym_blocks_added": 76,
+    "same_structure_as_b2_irregular": true
+  }
+}

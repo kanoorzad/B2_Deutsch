@@ -70,7 +70,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 .miniControls{display:flex;gap:.5rem;flex-wrap:wrap;margin:.55rem 0}
 .miniControls button{font-size:.82rem;padding:.55rem .7rem}
 
-/* v66 multilingual German UI polish */
+/* v68 multilingual German UI polish */
 .targetLangField select {
   font-weight: 700;
 }
@@ -98,7 +98,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 }
 
 
-/* v66 final clean polish */
+/* v68 final clean polish */
 .pendingTranslation {
   display: inline-block;
   color: var(--muted, #73798a);
@@ -118,7 +118,7 @@ select#targetLang option {
 }
 
 
-/* v66 start-flow polish */
+/* v68 start-flow polish */
 .startPanel {
   border: 1px solid rgba(255,255,255,.16);
   border-radius: 22px;
@@ -149,7 +149,7 @@ select#targetLang option {
 }
 
 
-/* v66 step-by-step mobile flow */
+/* v68 step-by-step mobile flow */
 body.wizardMode > header,
 body.wizardMode > aside,
 body.wizardMode > main,
@@ -326,7 +326,7 @@ body.appReady .hero {
 }
 
 
-/* v66 unit-step and change-material improvements */
+/* v68 unit-step and change-material improvements */
 .wizardSelectLabel {
   display: grid;
   gap: 10px;
@@ -371,4 +371,92 @@ body.wizardMode .changeMaterialBtn {
     max-height: calc(100svh - 36px);
     overflow: auto;
   }
+}
+
+
+/* staged synonym + material-list adjustments */
+.multiSynBox {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+}
+.multiSynBox h3 {
+  margin: 0 0 10px;
+  font-size: .95rem;
+}
+.multiSynContent {
+  display: grid;
+  gap: 10px;
+}
+.synCol strong {
+  display: block;
+  margin-bottom: 4px;
+  opacity: .78;
+  font-size: .86rem;
+}
+.synCol p {
+  margin: 0;
+  line-height: 1.45;
+}
+.materialChoices {
+  max-height: min(62svh, 560px);
+  overflow: auto;
+  padding-right: 2px;
+}
+
+
+/* staged first-language-screen polish */
+.languageStartCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: min(620px, calc(100svh - 36px));
+}
+.startTitle {
+  margin: 0 0 10px;
+  text-align: center;
+  font-size: clamp(1.85rem, 7vw, 3.7rem);
+  line-height: 1.03;
+  letter-spacing: -.04em;
+}
+.startSubtitle {
+  text-align: center;
+  margin: 0 0 18px;
+}
+.compactLangGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px;
+  margin: 18px 0 20px;
+}
+.compactLangGrid button {
+  min-height: 58px;
+}
+.wizardInitiative {
+  margin: 16px 0 0;
+  text-align: center;
+  font-weight: 800;
+  color: rgba(255,255,255,.78) !important;
+  font-size: .95rem !important;
+}
+@media (max-width: 420px) {
+  .compactLangGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px;
+  }
+  .compactLangGrid button {
+    min-height: 54px;
+    font-size: .98rem;
+  }
+  .languageStartCard {
+    padding: 22px 18px;
+  }
+}
+
+
+/* staged adaptive voice-quality panel */
+.voiceStatus {
+  line-height: 1.45;
+  word-break: break-word;
 }

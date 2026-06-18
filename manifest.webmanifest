@@ -1,13 +1,13 @@
 {
-  "name": "Deutsch-Karteikarten v66",
-  "short_name": "DE Karten v66",
-  "start_url": "./index.html?v=66",
+  "name": "German A1-B2 telc system Important words v68",
+  "short_name": "Telc Words v68",
+  "start_url": "./index.html?v=68",
   "display": "standalone",
   "background_color": "#f3f7fb",
   "theme_color": "#17324d",
   "icons": [
     {
-      "src": "icon.svg?v=66",
+      "src": "icon.svg?v=68",
       "sizes": "any",
       "type": "image/svg+xml"
     }
