@@ -1,11 +1,25 @@
 {
-  "version": "80.0-language-switch-visible-translation",
-  "requested_fixes": [
-    "A1 English writing missing while English voice works.",
-    "Same translation-display structure across all languages and all materials.",
-    "A1 unit verbs must stay only infinitive.",
-    "Entire interface selections and options should be German.",
-    "Options should allow changing translation language during listening/learning, e.g. English to Farsi."
+  "version": "81.0-spec-consolidated",
+  "implemented": {
+    "german_ui": true,
+    "fasisch_label": true,
+    "microsoft_voice_preferences": true,
+    "playback_sequence": "German display/audio -> selected target display/audio",
+    "verb_forms_inline_sequential": true,
+    "german_tts_preprocessing": "etw.->etwas; jdn.->jemanden; Akk./Dat. removed",
+    "five_player_buttons": [
+      "Start",
+      "Pause",
+      "Weiter",
+      "Zurück",
+      "Beenden"
+    ],
+    "exit_returns_to_material_selection": true,
+    "material_pairs_layout": true
+  },
+  "limitations": [
+    "A static browser app can prefer exact Microsoft voice names only if the browser exposes them. Guaranteed Azure Neural voices require Azure-generated audio or a backend.",
+    "A 99% semantic synonym guarantee cannot be verified offline without a synonym/embedding API; existing synonym fields are displayed with fixed counts."
   ],
   "cards": 3171,
   "list_counts": {
@@ -88,6 +102,14 @@
       "uk": 0,
       "tr": 0
     },
+    "B1 Plus Irregular Verbs": {
+      "en": 0,
+      "fa": 0,
+      "es": 0,
+      "ru": 0,
+      "uk": 0,
+      "tr": 0
+    },
     "B2 all 12 units": {
       "en": 0,
       "fa": 0,
@@ -109,24 +131,28 @@
   "a1_normal_verb_cards_only_infinitive": 179,
   "checks": {
     "javascript_syntax_ok": true,
-    "v80_controller_present": true,
-    "visible_target_panel_present": true,
-    "english_visible_same_as_all_languages_logic": true,
-    "option_language_switch_buttons_present": true,
-    "language_switch_during_learning_logic": true,
-    "all_interface_core_options_german": true,
-    "all_language_buttons_present_first_screen": true,
+    "v81_controller_present": true,
+    "ui_controlled_text_german": true,
+    "fasisch_label_used": true,
+    "microsoft_voice_preferences_present": true,
+    "play_sequence_german_then_target": true,
+    "verb_forms_sequential_highlight": true,
+    "german_tts_preprocessing": true,
+    "player_controls_five_buttons": true,
+    "exit_goes_to_material": true,
+    "material_pair_layout": true,
+    "material_back_button": true,
     "all_material_buttons_present": true,
+    "all_language_buttons_present": true,
+    "language_switch_in_options": true,
+    "visible_translation_panel": true,
     "a1_normal_verbs_only_infinitive": true,
     "existing_materials_complete_all_languages": true,
     "empty_materials_safe": true,
     "translations_complete_global": true,
-    "manual_start_kept": true,
-    "cache_busting_v80": true,
-    "title_deutsch": true,
-    "initiative_german": true
+    "cache_busting_v81": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=80",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=81",
   "zip_mb": 1.75
 }

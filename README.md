@@ -1,15 +1,10 @@
-# Deutsch A1-B2 telc System wichtige Wörter v80
+# Deutsch A1-B2 telc System – wichtige Wörter v81
 
-Visible translation and language-switch repair.
+Specification consolidation.
 
-## Fixed
+Implemented: German UI labels, Fasisch label, Microsoft voice preferences, German→target playback sequence, inline/sequential verb forms, German TTS preprocessing, five player buttons, Exit to material selection, and pair layout for materials.
 
-- The selected translation text is now shown in a dedicated visible panel.
-- English text display uses the same logic as Farsi, Spanish, Russian, Ukrainian, and Turkish.
-- Options menu now allows changing the translation language during learning.
-- Changing language immediately updates the current card meaning.
-- A1 normal verbs remain infinitive-only.
-- Core selection/options interface text is German.
+Limit: exact Azure Neural voices require Azure-generated audio or backend; browser-only mode can only prefer exposed voices.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=80
+https://kanoorzad.github.io/B2_Deutsch/?v=81
