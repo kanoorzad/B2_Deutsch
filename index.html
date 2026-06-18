@@ -7,10 +7,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=77">
-  <link rel="apple-touch-icon" href="icon.svg?v=77">
-  <link rel="stylesheet" href="styles.css?v=77">
-  <title>German A1-B2 telc system Important words v77</title>
+  <link rel="manifest" href="manifest.webmanifest?v=79">
+  <link rel="apple-touch-icon" href="icon.svg?v=79">
+  <link rel="stylesheet" href="styles.css?v=79">
+  <title>Deutsch A1-B2 telc system wichtige Wörter v79</title>
 </head>
 <body class="wizardMode">
 <select id="targetLang" hidden>
@@ -24,8 +24,8 @@
 <section id="startWizard" class="startWizard" aria-live="polite">
   <section id="wizardLang" class="wizardStep active">
     <div class="wizardCard languageStartCard">
-      <em class="startVersionTag">v77</em>
-      <h1 class="startTitle">German A1-B2 telc system Important words</h1>
+      <em class="startVersionTag">v79</em>
+      <h1 class="startTitle">Deutsch A1-B2 telc system wichtige Wörter</h1>
       <p class="startSubtitle">Bitte wählen Sie zuerst die Übersetzungssprache.</p>
       <div class="choiceGrid languageChoices compactLangGrid">
         <button type="button" data-wizard-lang="en">Englisch</button>
@@ -35,13 +35,13 @@
         <button type="button" data-wizard-lang="tr">Türkisch</button>
         <button type="button" data-wizard-lang="es">Spanisch</button>
       </div>
-      <p class="wizardInitiative">Initiative by: Khalid Noorzad</p>
+      <p class="wizardInitiative">Initiative von: Khalid Noorzad</p>
     </div>
   </section>
 
   <section id="wizardMaterial" class="wizardStep">
     <div class="wizardCard">
-      <em class="startVersionTag">v77</em>
+      <em class="startVersionTag">v79</em>
       <h2>Lernmaterial wählen</h2>
       <p class="startSubtitle">Wählen Sie den Bereich.</p>
       <div class="choiceGrid materialChoices">
@@ -60,7 +60,7 @@
 
   <section id="wizardUnit" class="wizardStep">
     <div class="wizardCard">
-      <em class="startVersionTag">v77</em>
+      <em class="startVersionTag">v79</em>
       <h2>Einheit wählen</h2>
       <p class="startSubtitle">Standard: alle Einheiten.</p>
       <label class="wizardSelectLabel">Einheit
@@ -75,10 +75,10 @@
 </section>
 <button id="optionsToggle" type="button" class="optionsToggle" hidden>Optionen</button>
 <header class="hero">
-  <em class="versionBadge">v77</em>
+  <em class="versionBadge">v79</em>
   <h1>Deutsch-Karteikarten</h1>
   <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
-  <p class="initiative"><em>Initiative by: Khalid Noorzad</em></p>
+  <p class="initiative"><em>Initiative von: Khalid Noorzad</em></p>
 </header>
 
 <aside id="optionsDrawer" class="optionsDrawer" hidden>
@@ -233,33 +233,42 @@
   </section>
 </main>
 
-<script src="data.js?v=77"></script>
-<script src="app.js?v=77"></script>
-<script id="v77-controller">
+<script src="data.js?v=79"></script>
+<script src="app.js?v=79"></script>
+<script id="v79-controller">
 (function(){
-  window.__v77Controller = true;
+  window.__v79Controller = true;
   const $ = id => document.getElementById(id);
   const LANG_META = {
-    en:{label:'Englisch', code:'en-US', dir:'ltr'},
-    fa:{label:'Farsi', code:'fa-IR', dir:'rtl'},
-    es:{label:'Spanisch', code:'es-ES', dir:'ltr'},
-    ru:{label:'Russisch', code:'ru-RU', dir:'ltr'},
-    uk:{label:'Ukrainisch', code:'uk-UA', dir:'ltr'},
-    tr:{label:'Türkisch', code:'tr-TR', dir:'ltr'},
-    de:{label:'Deutsch', code:'de-DE', dir:'ltr'}
+    en:{label:'Englisch', code:'en-US', dir:'ltr', rate:.90},
+    fa:{label:'Farsi', code:'fa-IR', dir:'rtl', rate:.84},
+    es:{label:'Spanisch', code:'es-ES', dir:'ltr', rate:.90},
+    ru:{label:'Russisch', code:'ru-RU', dir:'ltr', rate:.84},
+    uk:{label:'Ukrainisch', code:'uk-UA', dir:'ltr', rate:.84},
+    tr:{label:'Türkisch', code:'tr-TR', dir:'ltr', rate:.88},
+    de:{label:'Deutsch', code:'de-DE', dir:'ltr', rate:.68}
   };
+  const MATERIALS = [
+    {id:'A1', label:'A1', irregular:'A1 Irregular Verbs'},
+    {id:'A2', label:'A2', irregular:'A2 Irregular Verbs'},
+    {id:'B1', label:'B1', irregular:'B1 Irregular Verbs'},
+    {id:'B1 Plus 7 Units', label:'B1+', irregular:null},
+    {id:'B2 all 12 units', label:'B2', irregular:'B2 Irregular Verbs'}
+  ];
+  const PLACEHOLDER_EMPTY = new Set(['A2','A2 Irregular Verbs','B1','B1 Irregular Verbs']);
 
   let selectedLang='en';
   let selectedList='all';
   let selectedUnit='all';
   let filtered=[];
   let pos=0;
-  let autoplay=false;
-  let stopped=false;
+  let playing=false;
   let paused=false;
-  let speakingToken=0;
+  let stopped=true;
+  let token=0;
 
   function cards(){ return (window.FLASHCARD_DATA && window.FLASHCARD_DATA.cards) || []; }
+  function setText(id,val){ const el=$(id); if(el) el.textContent=val||'—'; }
   function showStep(id){
     ['wizardLang','wizardMaterial','wizardUnit'].forEach(x=>{
       const el=$(x);
@@ -270,19 +279,7 @@
       }
     });
   }
-  function setSelect(id,val){ const el=$(id); if(el) try{el.value=val}catch(e){} }
-  function materialPool(list){ return cards().filter(c=>list==='all'||c.list===list); }
-  function populateUnits(){
-    const pool=materialPool(selectedList);
-    const units=[...new Set(pool.map(c=>c.unit).filter(Boolean))];
-    const sel=$('wizardUnitSelect');
-    if(sel){
-      sel.innerHTML='<option value="all">Alle Einheiten</option>'+units.map(u=>`<option value="${String(u).replace(/"/g,'&quot;')}">${u}</option>`).join('');
-      sel.value='all';
-    }
-    const note=$('wizardUnitNote');
-    if(note) note.textContent=pool.length?`${pool.length} Karten verfügbar.`:'Noch keine Karten für dieses Material. Bitte anderes Material wählen.';
-  }
+  function setSelect(id,val){ const el=$(id); if(el) try{ el.value=val; }catch(e){} }
   function displayGerman(c){
     if(!c) return '';
     if(c.category==='noun') return [c.article,c.singular||c.german].filter(Boolean).join(' ');
@@ -290,69 +287,99 @@
   }
   function targetText(c){
     const tr=(c&&c.translations)||{};
-    return tr[selectedLang]||c.english||'';
+    return tr[selectedLang] || c.english || '';
   }
   function updateFilters(){
-    filtered=cards().filter(c=>{
-      const listOK=selectedList==='all'||c.list===selectedList;
-      const unitOK=selectedUnit==='all'||c.unit===selectedUnit;
-      return listOK&&unitOK;
+    filtered = cards().filter(c=>{
+      const listOK = selectedList==='all' || c.list===selectedList;
+      const unitOK = selectedUnit==='all' || c.unit===selectedUnit;
+      return listOK && unitOK;
     });
     pos=0;
   }
   function current(){ return filtered[pos] || null; }
   window.current=current;
-  function setText(id,val){ const el=$(id); if(el) el.textContent=val||'—'; }
 
-  function setStage(stage, text, lang){
-    const now=$('nowPlaying');
-    if(now) now.textContent = `${stage}: ${text || ''}`;
-    const front=$('front'), frontText=$('frontText'), trans=$('en');
-    [front,frontText].forEach(el=>{ if(el) el.classList.toggle('isReading', stage==='Deutsch' || stage==='Formen'); });
-    if(trans) trans.classList.toggle('isReading', stage!=='Deutsch' && stage!=='Formen');
+  function populateUnits(){
+    const pool=cards().filter(c=>selectedList==='all'||c.list===selectedList);
+    const units=[...new Set(pool.map(c=>c.unit).filter(Boolean))];
+    const sel=$('wizardUnitSelect');
+    if(sel){
+      sel.innerHTML='<option value="all">Alle Einheiten</option>'+units.map(u=>`<option value="${String(u).replace(/"/g,'&quot;')}">${u}</option>`).join('');
+      sel.value='all';
+    }
+    const note=$('wizardUnitNote');
+    if(note){
+      if(pool.length){
+        note.textContent=`${pool.length} Karten verfügbar.`;
+      }else if(PLACEHOLDER_EMPTY.has(selectedList)){
+        note.textContent='Dieses Lernmaterial ist vorbereitet, aber die Karten wurden noch nicht hochgeladen.';
+      }else{
+        note.textContent='Noch keine Karten für dieses Material.';
+      }
+    }
   }
 
+  function setMode(mode){
+    const card=$('card');
+    if(card) card.dataset.mode=mode;
+    ['front','frontText','en'].forEach(id=>{
+      const el=$(id);
+      if(el) el.classList.remove('isReading','isActiveSide');
+    });
+    if(mode==='german') ['front','frontText'].forEach(id=>{ const el=$(id); if(el) el.classList.add('isReading','isActiveSide'); });
+    if(mode==='translation'){ const el=$('en'); if(el) el.classList.add('isReading','isActiveSide'); }
+  }
+
+  function normalA1Verb(c){ return c && c.list==='A1' && c.category==='verb'; }
   function formText(c){
     if(!c) return '';
-    if(c.list==='A1' && c.category==='verb'){
-      return (c.forms && c.forms.infinitive) || c.german || '';
-    }
+    if(normalA1Verb(c)) return (c.forms && c.forms.infinitive) || c.german || '';
     const f=c.forms||{};
     return [f.infinitive,f.present3,f.past,f.perfect].filter(Boolean).join('. ');
   }
 
-  function renderCard(stageLabel){
-    const c=current();
-    if(!c){
-      setText('front','Keine Karten');
-      setText('frontText','Keine Karten');
-      setText('targetTitle','Übersetzung');
-      setText('en','Für dieses Material gibt es noch keine Karten.');
-      setText('count','0 / 0');
-      setText('nowPlaying','Keine Karten');
-      return;
-    }
+  function renderEmptyMaterial(){
     const meta=LANG_META[selectedLang]||LANG_META.en;
+    setText('front','Noch keine Karten');
+    setText('frontText','Noch keine Karten');
+    setText('de','Noch keine Karten');
+    setText('targetTitle',meta.label);
+    const t=$('en');
+    if(t){
+      t.textContent='Dieses Lernmaterial ist vorbereitet. Bitte laden Sie später die Karten hoch.';
+      t.dir='ltr'; t.hidden=false; t.style.display='block'; t.classList.add('targetVisible');
+    }
+    setText('count','0 / 0');
+    setText('nowPlaying','Keine Karten in dieser Auswahl');
+    ['inf','pres3','past','perf','plus','article','singular','plural','ex'].forEach(id=>setText(id,'—'));
+    setMode('german');
+  }
+
+  function renderCard(mode='german'){
+    const c=current();
+    if(!c){ renderEmptyMaterial(); return; }
+    const meta=LANG_META[selectedLang] || LANG_META.en;
     const german=displayGerman(c);
-    const translation=targetText(c);
+    const trans=targetText(c);
     setText('front',german);
     setText('frontText',german);
-    setText('targetTitle',meta.label);
-    const trans=$('en');
-    if(trans){
-      trans.textContent=translation||'—';
-      trans.dir=meta.dir;
-      trans.lang=selectedLang==='fa'?'fa':selectedLang;
-      trans.style.display='block';
-      trans.hidden=false;
-      trans.classList.add('targetVisible');
-    }
     setText('de',german);
-    setText('count',`${pos+1} / ${filtered.length}`);
-    setText('nowPlaying',stageLabel ? `${stageLabel}: ${german}` : `${german} — ${meta.label}`);
+    setText('targetTitle',meta.label);
+    const t=$('en');
+    if(t){
+      t.textContent=trans||'—';
+      t.dir=meta.dir;
+      t.lang=selectedLang;
+      t.hidden=false;
+      t.style.display='block';
+      t.classList.add('targetVisible');
+    }
+    setText('count',`${filtered.length?pos+1:0} / ${filtered.length}`);
+    setText('nowPlaying',mode==='translation'?`${meta.label}: ${trans}`:`Deutsch: ${german}`);
     const f=c.forms||{};
     setText('inf',f.infinitive || (c.category==='verb'?c.german:''));
-    if(c.list==='A1' && c.category==='verb'){
+    if(normalA1Verb(c)){
       setText('pres3','—'); setText('past','—'); setText('perf','—'); setText('plus','—');
     }else{
       setText('pres3',f.present3); setText('past',f.past); setText('perf',f.perfect); setText('plus',f.plusquamperfekt);
@@ -368,135 +395,92 @@
       syn.innerHTML=`<div class="synCol"><strong>Deutsch</strong><p>${deSyn}</p></div><div class="synCol"><strong>${meta.label}</strong><p dir="${meta.dir}">${tgSyn}</p></div>`;
       if(synBox) synBox.classList.remove('hidden');
     }
+    setMode(mode);
   }
   window.renderCard=renderCard;
 
-  function estimateDuration(text){
-    const len=String(text||'').length;
-    return Math.max(900, Math.min(7000, 450 + len*55));
-  }
+  function estimateDuration(text){ const len=String(text||'').length; return Math.max(1000,Math.min(8000,550+len*65)); }
   function pickVoice(lang){
     if(!('speechSynthesis' in window)) return null;
-    const code=(LANG_META[lang]||LANG_META.de).code;
-    const base=code.split('-')[0].toLowerCase();
+    const meta=LANG_META[lang]||LANG_META.de;
+    const base=meta.code.split('-')[0].toLowerCase();
     const vs=speechSynthesis.getVoices()||[];
     const good=vs.filter(v=>{
       const l=(v.lang||'').toLowerCase();
       const n=((v.name||'')+' '+(v.voiceURI||'')).toLowerCase();
       if(/novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/.test(n)) return false;
-      return l===code.toLowerCase() || l.startsWith(base);
+      return l===meta.code.toLowerCase() || l.startsWith(base);
     });
     return good.find(v=>/google|microsoft|apple|siri|enhanced|premium|natural|neural/i.test((v.name||'')+' '+(v.voiceURI||''))) || good[0] || null;
   }
-  function speakOnce(text, lang, token, stage){
+  function speak(text,lang,myToken){
     return new Promise(resolve=>{
-      if(!text || stopped || paused || token!==speakingToken){ resolve(); return; }
-      setStage(stage, text, lang);
-      if(!('speechSynthesis' in window)){ resolve(); return; }
+      if(!text || stopped || paused || myToken!==token){ resolve(false); return; }
+      if(!('speechSynthesis' in window)){ resolve(false); return; }
       let done=false;
-      const finish=()=>{ if(!done){ done=true; clearTimeout(timer); resolve(); } };
+      const finish=()=>{ if(!done){ done=true; clearTimeout(timer); resolve(true); } };
       const meta=LANG_META[lang]||LANG_META.de;
       const u=new SpeechSynthesisUtterance(String(text));
       u.lang=meta.code;
       const v=pickVoice(lang);
       if(v){ u.voice=v; u.lang=v.lang||meta.code; }
-      u.rate=lang==='de' ? .78 : .88;
-      u.pitch=1; u.volume=1;
+      u.rate=meta.rate; u.pitch=1; u.volume=1;
       u.onend=finish; u.onerror=finish;
-      const timer=setTimeout(finish, estimateDuration(text)+1200);
+      const timer=setTimeout(finish,estimateDuration(text)+1400);
       try{ speechSynthesis.resume&&speechSynthesis.resume(); speechSynthesis.speak(u); }catch(e){ finish(); }
     });
   }
-  const sleep = ms => new Promise(r=>setTimeout(r,ms));
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
-  async function playOneCard(token){
+  async function playOne(myToken){
     const c=current();
-    if(!c || stopped || paused || token!==speakingToken) return;
-    renderCard('Deutsch');
+    if(!c) return;
     try{ speechSynthesis.cancel(); }catch(e){}
-    await sleep(120);
-    await speakOnce(displayGerman(c),'de',token,'Deutsch');
-    if(stopped || paused || token!==speakingToken) return;
+    renderCard('german');
+    await sleep(160);
+    await speak(displayGerman(c),'de',myToken);
+    if(stopped||paused||myToken!==token) return;
     const forms=formText(c);
-    if(forms){
-      renderCard('Formen');
-      await sleep(180);
-      await speakOnce(forms,'de',token,'Formen');
+    if(forms && !normalA1Verb(c)){
+      renderCard('german');
+      setText('nowPlaying',`Formen: ${forms}`);
+      await sleep(170);
+      await speak(forms,'de',myToken);
+      if(stopped||paused||myToken!==token) return;
     }
-    if(stopped || paused || token!==speakingToken) return;
-    const meta=LANG_META[selectedLang]||LANG_META.en;
-    renderCard(meta.label);
-    await sleep(180);
-    await speakOnce(targetText(c),selectedLang,token,meta.label);
+    renderCard('translation');
+    await sleep(260);
+    await speak(targetText(c),selectedLang,myToken);
   }
-
   async function playLoop(){
-    if(!filtered.length){ renderCard(); return; }
-    autoplay=true; stopped=false; paused=false;
-    const token=++speakingToken;
-    while(autoplay && !stopped && !paused && token===speakingToken && filtered.length){
-      await playOneCard(token);
-      if(!autoplay || stopped || paused || token!==speakingToken) break;
+    if(!filtered.length){ renderEmptyMaterial(); return; }
+    playing=true; paused=false; stopped=false;
+    const myToken=++token;
+    while(playing && !paused && !stopped && myToken===token && filtered.length){
+      await playOne(myToken);
+      if(!playing||paused||stopped||myToken!==token) break;
       pos=(pos+1)%filtered.length;
-      renderCard('Nächste Karte');
-      await sleep(650);
+      renderCard('german');
+      await sleep(700);
     }
   }
   function playSelected(){
-    autoplay=false; stopped=false; paused=false;
-    const token=++speakingToken;
-    playOneCard(token);
+    if(!filtered.length) updateFilters();
+    stopped=false; paused=false; playing=false;
+    const myToken=++token;
+    playOne(myToken);
   }
   window.playSelected=playSelected;
   window.playList=playLoop;
 
-  function pausePlayback(){
-    paused=true; autoplay=false; speakingToken++;
-    try{ speechSynthesis.pause&&speechSynthesis.pause(); speechSynthesis.cancel(); }catch(e){}
-    setText('nowPlaying','Pause');
-  }
-  function stopPlayback(){
-    autoplay=false; stopped=true; paused=false; speakingToken++;
-    try{ speechSynthesis.cancel(); }catch(e){}
-    setText('nowPlaying','Gestoppt');
-  }
+  function pausePlayback(){ paused=true; playing=false; token++; try{ speechSynthesis.pause&&speechSynthesis.pause(); speechSynthesis.cancel(); }catch(e){} setText('nowPlaying','Pause'); }
+  function stopPlayback(){ stopped=true; paused=false; playing=false; token++; try{ speechSynthesis.cancel(); }catch(e){} setText('nowPlaying','Gestoppt'); }
 
-  function openOptions(){
-    const drawer=$('optionsDrawer'), back=$('drawerBackdrop');
-    if(drawer){ drawer.hidden=false; drawer.classList.add('open'); drawer.style.display='block'; }
-    if(back){ back.hidden=false; back.style.display='block'; }
-  }
-  function closeOptions(){
-    const drawer=$('optionsDrawer'), back=$('drawerBackdrop');
-    if(drawer){ drawer.hidden=true; drawer.classList.remove('open'); drawer.style.display='none'; }
-    if(back){ back.hidden=true; back.style.display='none'; }
-  }
-  function returnToLanguage(){
-    stopPlayback();
-    closeOptions();
-    const wizard=$('startWizard'), opt=$('optionsToggle');
-    document.body.classList.add('wizardMode');
-    document.body.classList.remove('appReady');
-    if(wizard) wizard.hidden=false;
-    if(opt) opt.hidden=true;
-    showStep('wizardLang');
-  }
-  function returnToMaterial(){
-    stopPlayback();
-    closeOptions();
-    const wizard=$('startWizard'), opt=$('optionsToggle');
-    document.body.classList.add('wizardMode');
-    document.body.classList.remove('appReady');
-    if(wizard) wizard.hidden=false;
-    if(opt) opt.hidden=true;
-    showStep('wizardMaterial');
-  }
-  function restartCurrent(){
-    closeOptions();
-    updateFilters();
-    renderCard();
-    playLoop();
-  }
+  function openOptions(){ const d=$('optionsDrawer'), b=$('drawerBackdrop'); if(d){d.hidden=false;d.classList.add('open');d.style.display='block';} if(b){b.hidden=false;b.style.display='block';} }
+  function closeOptions(){ const d=$('optionsDrawer'), b=$('drawerBackdrop'); if(d){d.hidden=true;d.classList.remove('open');d.style.display='none';} if(b){b.hidden=true;b.style.display='none';} }
+  function returnToLanguage(){ stopPlayback(); closeOptions(); const w=$('startWizard'),o=$('optionsToggle'); document.body.classList.add('wizardMode'); document.body.classList.remove('appReady'); if(w)w.hidden=false; if(o)o.hidden=true; showStep('wizardLang'); }
+  function returnToMaterial(){ stopPlayback(); closeOptions(); const w=$('startWizard'),o=$('optionsToggle'); document.body.classList.add('wizardMode'); document.body.classList.remove('appReady'); if(w)w.hidden=false; if(o)o.hidden=true; showStep('wizardMaterial'); }
+  function restartCurrent(){ closeOptions(); stopped=true; paused=false; updateFilters(); renderCard('german'); setText('nowPlaying','Bereit. Bitte Start drücken.'); }
 
   function enterApp(){
     selectedUnit=$('wizardUnitSelect')?$('wizardUnitSelect').value:'all';
@@ -504,21 +488,20 @@
     setSelect('listFilter',selectedList);
     setSelect('targetLang',selectedLang);
     updateFilters();
-    const wizard=$('startWizard'), opt=$('optionsToggle');
-    document.body.classList.remove('wizardMode');
-    document.body.classList.add('appReady');
-    if(wizard) wizard.hidden=true;
-    if(opt){ opt.hidden=false; opt.style.display='inline-flex'; }
+    const w=$('startWizard'), o=$('optionsToggle');
+    document.body.classList.remove('wizardMode'); document.body.classList.add('appReady');
+    if(w) w.hidden=true;
+    if(o){ o.hidden=false; o.style.display='inline-flex'; }
     try{ if(typeof window.apply==='function') window.apply(); }catch(e){}
-    renderCard();
-    playLoop();
+    stopped=true; paused=false; playing=false;
+    renderCard('german');
+    if(filtered.length) setText('nowPlaying','Bereit. Bitte Start drücken.');
   }
   function boot(){
-    document.body.classList.add('wizardMode');
-    document.body.classList.remove('appReady');
-    const wizard=$('startWizard'), opt=$('optionsToggle');
-    if(wizard) wizard.hidden=false;
-    if(opt) opt.hidden=true;
+    document.body.classList.add('wizardMode'); document.body.classList.remove('appReady');
+    const w=$('startWizard'), o=$('optionsToggle');
+    if(w) w.hidden=false;
+    if(o) o.hidden=true;
     showStep('wizardLang');
     closeOptions();
     try{ speechSynthesis&&speechSynthesis.getVoices(); }catch(e){}
@@ -526,23 +509,9 @@
 
   document.addEventListener('click',ev=>{
     const langBtn=ev.target.closest&&ev.target.closest('[data-wizard-lang]');
-    if(langBtn){
-      ev.preventDefault(); ev.stopPropagation();
-      selectedLang=langBtn.getAttribute('data-wizard-lang')||'en';
-      setSelect('targetLang',selectedLang);
-      try{localStorage.setItem('targetLang',selectedLang)}catch(e){}
-      showStep('wizardMaterial');
-      return false;
-    }
+    if(langBtn){ ev.preventDefault(); ev.stopPropagation(); selectedLang=langBtn.getAttribute('data-wizard-lang')||'en'; setSelect('targetLang',selectedLang); try{localStorage.setItem('targetLang',selectedLang)}catch(e){} showStep('wizardMaterial'); return false; }
     const matBtn=ev.target.closest&&ev.target.closest('[data-wizard-list]');
-    if(matBtn){
-      ev.preventDefault(); ev.stopPropagation();
-      selectedList=matBtn.getAttribute('data-wizard-list')||'all';
-      setSelect('listFilter',selectedList);
-      populateUnits();
-      showStep('wizardUnit');
-      return false;
-    }
+    if(matBtn){ ev.preventDefault(); ev.stopPropagation(); selectedList=matBtn.getAttribute('data-wizard-list')||'all'; setSelect('listFilter',selectedList); populateUnits(); showStep('wizardUnit'); return false; }
     if(ev.target.closest&&ev.target.closest('#wizardStart')){ ev.preventDefault(); ev.stopPropagation(); enterApp(); return false; }
     if(ev.target.closest&&ev.target.closest('#optionsToggle')){ ev.preventDefault(); ev.stopPropagation(); openOptions(); return false; }
     if(ev.target.closest&&ev.target.closest('#closeOptions')){ ev.preventDefault(); ev.stopPropagation(); closeOptions(); return false; }
@@ -553,8 +522,8 @@
     if(ev.target.closest&&ev.target.closest('#playList')){ ev.preventDefault(); stopped=false; paused=false; playLoop(); }
     if(ev.target.closest&&ev.target.closest('#pauseList')){ ev.preventDefault(); pausePlayback(); }
     if(ev.target.closest&&ev.target.closest('#stopList')){ ev.preventDefault(); stopPlayback(); }
-    if(ev.target.closest&&ev.target.closest('#next')){ ev.preventDefault(); stopPlayback(); if(filtered.length){pos=(pos+1)%filtered.length;renderCard();} }
-    if(ev.target.closest&&ev.target.closest('#prev')){ ev.preventDefault(); stopPlayback(); if(filtered.length){pos=(pos-1+filtered.length)%filtered.length;renderCard();} }
+    if(ev.target.closest&&ev.target.closest('#next')){ ev.preventDefault(); stopPlayback(); if(filtered.length){pos=(pos+1)%filtered.length;renderCard('german');} }
+    if(ev.target.closest&&ev.target.closest('#prev')){ ev.preventDefault(); stopPlayback(); if(filtered.length){pos=(pos-1+filtered.length)%filtered.length;renderCard('german');} }
   },true);
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
