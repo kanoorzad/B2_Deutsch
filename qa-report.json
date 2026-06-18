@@ -1,25 +1,27 @@
 {
-  "version": "53.0",
-  "base": "v51 stable app structure; v52 mobile gesture queue removed",
-  "checks": {
-    "javascript_syntax_ok": true,
-    "version_badge_v53": true,
-    "cache_busting_v53": true,
-    "initiative_only_once": true,
-    "full_v4_voice_engine": true,
-    "direct_speech_synthesis": true,
-    "v52_gesture_queue_removed": true,
-    "playback_chain_restored": true,
-    "online_tts_removed": true,
-    "local_sprite_removed": true,
-    "service_worker_not_registered": true
+  "version": "4.0",
+  "counts": {
+    "b2Entries": 1629,
+    "b1PlusEntries": 475,
+    "irregularVerbs": 150,
+    "totalCards": 2254,
+    "irregularVerbsWithEnglish": 150,
+    "irregularVerbsWithDari": 150
   },
-  "node_check_stderr": "",
-  "initiative_count": 1,
-  "notes": [
-    "This repairs the card flip/playback regression by returning to v51 structure.",
-    "Dari remains browser-only fa-AF direct SpeechSynthesis.",
-    "If Dari still fails on mobile, it is independent of the flip/playback bug."
+  "lists": {
+    "B2 all 12 units": 1629,
+    "Irregular verbs": 150,
+    "B1 Plus 7 Units": 475
+  },
+  "fixes": [
+    "Playback now updates the visual card for each spoken card and each spoken part.",
+    "The currently spoken part is displayed in the big card area before audio starts.",
+    "Irregular verbs now include US English and Dari meanings.",
+    "Irregular verbs now include curated related meanings/synonyms.",
+    "Service worker cache version changed to force a new GitHub Pages/iPhone refresh."
   ],
-  "zip_mb": 0.18
+  "checks": {
+    "irregular_verbs_missing_english": [],
+    "irregular_verbs_missing_dari": []
+  }
 }

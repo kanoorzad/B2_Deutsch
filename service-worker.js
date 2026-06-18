@@ -1,5 +1,1 @@
-const CACHE='b2-b1plus-native-flashcards-v530-flip-repair-v4-voice';
-const FILES=['./index.html?v=53','./styles.css?v=53','./data.js?v=53','./app.js?v=53','./manifest.webmanifest?v=53','./icon.svg?v=53','./README.md','./qa-report.json'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+const CACHE='b2-b1plus-native-flashcards-v40-screen-sync';const FILES=['./','./index.html','./styles.css','./app.js','./data.js','./manifest.webmanifest','./icon.svg','./README.md','./qa-report.json'];self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
