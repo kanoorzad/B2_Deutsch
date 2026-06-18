@@ -1,25 +1,16 @@
 {
-  "version": "81.0-spec-consolidated",
-  "implemented": {
-    "german_ui": true,
-    "fasisch_label": true,
-    "microsoft_voice_preferences": true,
-    "playback_sequence": "German display/audio -> selected target display/audio",
-    "verb_forms_inline_sequential": true,
-    "german_tts_preprocessing": "etw.->etwas; jdn.->jemanden; Akk./Dat. removed",
-    "five_player_buttons": [
-      "Start",
-      "Pause",
-      "Weiter",
-      "Zurück",
-      "Beenden"
-    ],
-    "exit_returns_to_material_selection": true,
-    "material_pairs_layout": true
-  },
+  "version": "82.0-options-tts-synonyms-fit",
+  "implemented": [
+    "Options language switch closes side menu immediately and updates current card language.",
+    "German TTS preprocessing extended for etw, etw., etw/, jdn., Akk./Dat. and case markers in brackets/parentheses.",
+    "Static UI labels excluded from TTS path.",
+    "Exact stored/displayed synonym counts enforced: verbs 4, others 2.",
+    "Synonyms displayed directly below the main German word.",
+    "German headword constrained to one line with dynamic font fitting."
+  ],
   "limitations": [
-    "A static browser app can prefer exact Microsoft voice names only if the browser exposes them. Guaranteed Azure Neural voices require Azure-generated audio or a backend.",
-    "A 99% semantic synonym guarantee cannot be verified offline without a synonym/embedding API; existing synonym fields are displayed with fixed counts."
+    "The app enforces exact synonym counts from available dataset fields, but cannot verify 99% semantic match offline without a semantic API.",
+    "Exact Microsoft/Azure voice output is still limited by which voices the browser exposes."
   ],
   "cards": 3171,
   "list_counts": {
@@ -45,114 +36,24 @@
     "uk": 0,
     "tr": 0
   },
-  "material_language_missing": {
-    "A1": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "A1 Irregular Verbs": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "A2": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "A2 Irregular Verbs": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "B1": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "B1 Irregular Verbs": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "B1 Plus 7 Units": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "B1 Plus Irregular Verbs": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "B2 all 12 units": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "B2 Irregular Verbs": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    }
-  },
+  "synonym_exact_count_cards": 3171,
   "a1_normal_verb_cards": 179,
   "a1_normal_verb_cards_only_infinitive": 179,
   "checks": {
     "javascript_syntax_ok": true,
-    "v81_controller_present": true,
-    "ui_controlled_text_german": true,
-    "fasisch_label_used": true,
-    "microsoft_voice_preferences_present": true,
-    "play_sequence_german_then_target": true,
-    "verb_forms_sequential_highlight": true,
-    "german_tts_preprocessing": true,
-    "player_controls_five_buttons": true,
-    "exit_goes_to_material": true,
-    "material_pair_layout": true,
-    "material_back_button": true,
-    "all_material_buttons_present": true,
-    "all_language_buttons_present": true,
-    "language_switch_in_options": true,
-    "visible_translation_panel": true,
+    "v82_controller_present": true,
+    "options_language_switch_closes_menu": true,
+    "language_switch_updates_current_card_without_restart": true,
+    "tts_extended_etw_rules": true,
+    "ui_labels_excluded_from_tts": true,
+    "exact_synonym_counts_all_cards": true,
+    "synonyms_under_headword": true,
+    "headword_single_line_fit": true,
     "a1_normal_verbs_only_infinitive": true,
-    "existing_materials_complete_all_languages": true,
-    "empty_materials_safe": true,
     "translations_complete_global": true,
-    "cache_busting_v81": true
+    "cache_busting_v82": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=81",
-  "zip_mb": 1.75
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=82",
+  "zip_mb": 1.79
 }

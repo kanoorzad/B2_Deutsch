@@ -1,10 +1,8 @@
-# Deutsch A1-B2 telc System – wichtige Wörter v81
+# Deutsch A1-B2 telc System – wichtige Wörter v82
 
-Specification consolidation.
+Added: options language switch during playback/paused closes menu and updates current card; extended German TTS preprocessing; synonyms directly under headword; headword single-line auto-fit.
 
-Implemented: German UI labels, Fasisch label, Microsoft voice preferences, German→target playback sequence, inline/sequential verb forms, German TTS preprocessing, five player buttons, Exit to material selection, and pair layout for materials.
-
-Limit: exact Azure Neural voices require Azure-generated audio or backend; browser-only mode can only prefer exposed voices.
+Limits: exact Azure voice and 99% semantic synonym verification require backend/API support.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=81
+https://kanoorzad.github.io/B2_Deutsch/?v=82

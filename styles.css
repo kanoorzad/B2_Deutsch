@@ -70,7 +70,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 .miniControls{display:flex;gap:.5rem;flex-wrap:wrap;margin:.55rem 0}
 .miniControls button{font-size:.82rem;padding:.55rem .7rem}
 
-/* v81 multilingual German UI polish */
+/* v82 multilingual German UI polish */
 .targetLangField select {
   font-weight: 700;
 }
@@ -98,7 +98,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 }
 
 
-/* v81 final clean polish */
+/* v82 final clean polish */
 .pendingTranslation {
   display: inline-block;
   color: var(--muted, #73798a);
@@ -118,7 +118,7 @@ select#targetLang option {
 }
 
 
-/* v81 start-flow polish */
+/* v82 start-flow polish */
 .startPanel {
   border: 1px solid rgba(255,255,255,.16);
   border-radius: 22px;
@@ -149,7 +149,7 @@ select#targetLang option {
 }
 
 
-/* v81 step-by-step mobile flow */
+/* v82 step-by-step mobile flow */
 body.wizardMode > header,
 body.wizardMode > aside,
 body.wizardMode > main,
@@ -326,7 +326,7 @@ body.appReady .hero {
 }
 
 
-/* v81 unit-step and change-material improvements */
+/* v82 unit-step and change-material improvements */
 .wizardSelectLabel {
   display: grid;
   gap: 10px;
@@ -462,13 +462,13 @@ body.wizardMode .changeMaterialBtn {
 }
 
 
-/* v81 repairs */
+/* v82 repairs */
 .voiceStatus{line-height:1.45;word-break:break-word}
 .compactLangGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 .wizardUnitNote{margin-top:8px;font-size:.9rem;opacity:.76;text-align:center}
 
 
-/* v81 wizard click and version tag fix */
+/* v82 wizard click and version tag fix */
 .startWizard {
   position: fixed;
   inset: 0;
@@ -506,7 +506,7 @@ body.wizardMode .changeMaterialBtn {
 }
 
 
-/* v81 deep wizard repair */
+/* v82 deep wizard repair */
 .startWizard{
   position:fixed;
   inset:0;
@@ -539,7 +539,7 @@ body.wizardMode .changeMaterialBtn {
 .wizardUnitNote{margin:10px 0 0;text-align:center;opacity:.78;font-size:.92rem}
 
 
-/* v81 independent wizard click repair */
+/* v82 independent wizard click repair */
 .startWizard{
   position:fixed;
   inset:0;
@@ -572,7 +572,7 @@ body.wizardMode .changeMaterialBtn {
 .wizardUnitNote{margin:10px 0 0;text-align:center;opacity:.78;font-size:.92rem}
 
 
-/* v81 full flow repair */
+/* v82 full flow repair */
 .optionsToggle{position:fixed;top:14px;left:14px;z-index:2147483641;min-height:42px;padding:8px 13px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center}
 body.wizardMode .optionsToggle{display:none!important}
 body.appReady .optionsToggle{display:inline-flex!important}
@@ -588,7 +588,7 @@ body.appReady .optionsToggle{display:inline-flex!important}
 .optionsDrawer[hidden],.drawerBackdrop[hidden]{display:none!important}
 
 
-/* v81 autoplay sequence repair */
+/* v82 autoplay sequence repair */
 .optionsToggle{position:fixed;top:14px;left:14px;z-index:2147483641;min-height:42px;padding:8px 13px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center}
 body.wizardMode .optionsToggle{display:none!important}
 body.appReady .optionsToggle{display:inline-flex!important}
@@ -604,7 +604,7 @@ body.appReady .optionsToggle{display:inline-flex!important}
 .optionsDrawer[hidden],.drawerBackdrop[hidden]{display:none!important}
 
 
-/* v81 inline display + options + A1 verb forms fix */
+/* v82 inline display + options + A1 verb forms fix */
 #front.isReading,#en.isReading{
   outline:3px solid rgba(45,212,191,.75);
   box-shadow:0 0 0 6px rgba(45,212,191,.16);
@@ -644,7 +644,7 @@ body.appReady .optionsToggle{display:inline-flex!important}
 .wizardUnitNote{margin:10px 0 0;text-align:center;opacity:.78;font-size:.92rem}
 
 
-/* v81 full interlink repair */
+/* v82 full interlink repair */
 #en.targetVisible{
   display:block!important;
   visibility:visible!important;
@@ -690,7 +690,7 @@ body.appReady .optionsToggle{display:inline-flex!important}
 .wizardUnitNote{margin:10px 0 0;text-align:center;opacity:.78;font-size:.92rem}
 
 
-/* v81 stable manual playback: German -> selected translation */
+/* v82 stable manual playback: German -> selected translation */
 #en.targetVisible{
   display:block!important;
   visibility:visible!important;
@@ -723,7 +723,7 @@ body.appReady .optionsToggle{display:inline-flex!important}
 .closeOptions{float:right}
 
 
-/* v81 unified all books/languages structure */
+/* v82 unified all books/languages structure */
 .materialChoices button[data-wizard-list]{
   min-height:48px;
 }
@@ -741,8 +741,8 @@ body.appReady .optionsToggle{display:inline-flex!important}
 .closeOptions{float:right}
 
 
-/* v81 visible translation + switch language during learning */
-.v81TargetText{
+/* v82 visible translation + switch language during learning */
+.v82TargetText{
   display:block!important;
   visibility:visible!important;
   opacity:1!important;
@@ -756,7 +756,7 @@ body.appReady .optionsToggle{display:inline-flex!important}
   min-height:54px;
   word-break:break-word;
 }
-#en.targetVisible,#v81TargetText.targetVisible{
+#en.targetVisible,#v82TargetText.targetVisible{
   display:block!important;
   visibility:visible!important;
   opacity:1!important;
@@ -769,8 +769,8 @@ body.appReady .optionsToggle{display:inline-flex!important}
   margin:10px 0 16px;
 }
 .optionLanguageGrid button{min-height:44px;touch-action:manipulation}
-#card[data-mode="translation"] #v81TargetText,
-#v81TargetText.isReading{
+#card[data-mode="translation"] #v82TargetText,
+#v82TargetText.isReading{
   outline:3px solid rgba(45,212,191,.75);
   box-shadow:0 0 0 6px rgba(45,212,191,.16);
 }
@@ -785,5 +785,9 @@ body.appReady .optionsToggle{display:inline-flex!important}
 .optionActions{display:grid;gap:10px;margin:14px 0}
 
 
-/* v81 specification consolidation */
-.materialPairGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}.materialPairGrid button{min-height:52px;touch-action:manipulation}.wizardActionRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.wizardBackBtn{width:100%;margin-top:12px}.v81TargetText{display:block!important;visibility:visible!important;opacity:1!important;margin:10px 0 14px;padding:14px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);font-size:clamp(1.15rem,4vw,1.82rem);line-height:1.38;min-height:54px;word-break:break-word}#en.targetVisible,#v81TargetText.targetVisible{display:block!important;visibility:visible!important;opacity:1!important;color:inherit!important}.optionLanguageGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0 16px}.optionLanguageGrid button{min-height:44px;touch-action:manipulation}.playerControls{position:fixed;left:0;right:0;bottom:0;z-index:2147483000;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:8px;background:rgba(15,23,42,.92);backdrop-filter:blur(10px)}.playerControls button,#playList,#pauseList,#next,#prev,#stopList{touch-action:manipulation}.v81VerbForms{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.v81VerbForm{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13)}.v81VerbForm.active{outline:3px solid rgba(45,212,191,.75);box-shadow:0 0 0 6px rgba(45,212,191,.16)}#card[data-mode="translation"] #v81TargetText,#v81TargetText.isReading{outline:3px solid rgba(45,212,191,.75);box-shadow:0 0 0 6px rgba(45,212,191,.16)}#front.isReading,#frontText.isReading,#en.isReading{outline:3px solid rgba(45,212,191,.75);box-shadow:0 0 0 6px rgba(45,212,191,.16);border-radius:18px}.fitText,#front,#frontText,#en,#v81TargetText{overflow-wrap:anywhere}.optionsDrawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,92vw);z-index:2147483642;overflow:auto;background:#0f172a;border-left:1px solid rgba(255,255,255,.16);padding:18px}.drawerBackdrop{position:fixed;inset:0;z-index:2147483641;background:rgba(0,0,0,.45)}.optionsDrawer[hidden],.drawerBackdrop[hidden]{display:none!important}.optionActions{display:grid;gap:10px;margin:14px 0}
+/* v82 specification consolidation */
+.materialPairGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}.materialPairGrid button{min-height:52px;touch-action:manipulation}.wizardActionRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.wizardBackBtn{width:100%;margin-top:12px}.v82TargetText{display:block!important;visibility:visible!important;opacity:1!important;margin:10px 0 14px;padding:14px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);font-size:clamp(1.15rem,4vw,1.82rem);line-height:1.38;min-height:54px;word-break:break-word}#en.targetVisible,#v82TargetText.targetVisible{display:block!important;visibility:visible!important;opacity:1!important;color:inherit!important}.optionLanguageGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0 16px}.optionLanguageGrid button{min-height:44px;touch-action:manipulation}.playerControls{position:fixed;left:0;right:0;bottom:0;z-index:2147483000;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:8px;background:rgba(15,23,42,.92);backdrop-filter:blur(10px)}.playerControls button,#playList,#pauseList,#next,#prev,#stopList{touch-action:manipulation}.v82VerbForms{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.v82VerbForm{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13)}.v82VerbForm.active{outline:3px solid rgba(45,212,191,.75);box-shadow:0 0 0 6px rgba(45,212,191,.16)}#card[data-mode="translation"] #v82TargetText,#v82TargetText.isReading{outline:3px solid rgba(45,212,191,.75);box-shadow:0 0 0 6px rgba(45,212,191,.16)}#front.isReading,#frontText.isReading,#en.isReading{outline:3px solid rgba(45,212,191,.75);box-shadow:0 0 0 6px rgba(45,212,191,.16);border-radius:18px}.fitText,#front,#frontText,#en,#v82TargetText{overflow-wrap:anywhere}.optionsDrawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,92vw);z-index:2147483642;overflow:auto;background:#0f172a;border-left:1px solid rgba(255,255,255,.16);padding:18px}.drawerBackdrop{position:fixed;inset:0;z-index:2147483641;background:rgba(0,0,0,.45)}.optionsDrawer[hidden],.drawerBackdrop[hidden]{display:none!important}.optionActions{display:grid;gap:10px;margin:14px 0}
+
+
+/* v82 options/TTS/synonyms/headword fit */
+#front,#frontText{white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;max-width:100%}.v82HeadSynonyms{display:block;margin:6px 0 10px;padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.06);font-size:clamp(.78rem,2.4vw,1rem);line-height:1.32}.v82HeadSynonyms strong{font-weight:800}.v82VerbForms,.v82VerbForms{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.v82VerbForm,.v82VerbForm{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13)}.v82VerbForm.active,.v82VerbForm.active{outline:3px solid rgba(45,212,191,.75);box-shadow:0 0 0 6px rgba(45,212,191,.16)}.v82TargetText,#v82TargetText{display:block!important;visibility:visible!important;opacity:1!important;margin:10px 0 14px;padding:14px;border-radius:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);font-size:clamp(1.15rem,4vw,1.82rem);line-height:1.38;min-height:54px;word-break:break-word}#en.targetVisible,#v82TargetText.targetVisible,#v82TargetText.targetVisible{display:block!important;visibility:visible!important;opacity:1!important;color:inherit!important}.optionLanguageGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0 16px}.optionLanguageGrid button{min-height:44px;touch-action:manipulation}.playerControls{position:fixed;left:0;right:0;bottom:0;z-index:2147483000;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:8px;background:rgba(15,23,42,.92);backdrop-filter:blur(10px)}
