@@ -1,5 +1,5 @@
 // v34: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v58AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh46=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh46='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+(function(){try{const key='v59AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh46=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh46='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
 const STORE='b2-native-cards-extra-v43';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
@@ -61,10 +61,10 @@ function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=f
 // v43 browser voice engine with brute-force Dari/Farsi mobile candidates.
 // Keeps v3-v6 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
 // No local sprite/WebAudio/remote TTS.
-// v58 Dari voice restored to version-4 style.
+// v59 Dari voice restored to version-4 style.
 // Keep direct browser SpeechSynthesis. No online TTS, no audio sprites, no provider router.
 // The key v4-style behavior is direct utterance creation and direct speechSynthesis.speak().
-// v58: FULL version-4 voice engine restored for all languages.
+// v59: FULL version-4 voice engine restored for all languages.
 // This is the original v4 pattern:
 // voices() -> pickVoice(lang) -> say(text, lang, done)
 // Direct SpeechSynthesisUtterance only. No online TTS. No router. No local audio sprite.
@@ -167,27 +167,44 @@ function say(text, lang = 'de', done = () => {}) {
   }
 
   const u = new SpeechSynthesisUtterance(text);
-  const voice = pickVoice(lang);
 
-  if (voice) {
-    u.voice = voice;
-    // Use the exact language tag from the voice, so the engine doesn't ignore it
-    u.lang = voice.lang;
+  if (lang === 'fa') {
+    // For Dari: let the browser use the system default Persian voice.
+    // Do NOT set u.voice – just set the language tag.
+    u.lang = 'fa';                // or 'fa-IR' – try both; 'fa' is universal
+    // Optionally, if you want to be safe, set a rate
+    u.rate = 0.92;
+    u.pitch = 1;
   } else {
-    // If NO Persian voice exists at all, fall back to English voice
-    const fallbackVoice = pickVoice('en');
-    if (fallbackVoice) u.voice = fallbackVoice;
-    u.lang = 'en-US';
+    // German and English: keep using the explicit voice selection
+    const voice = pickVoice(lang);
+    if (voice) u.voice = voice;
+    u.lang = lang === 'de' ? 'de-DE' : 'en-US';
+    u.rate = lang === 'de' ? 0.78 : 0.92;
+    u.pitch = 1;
   }
-
-  // Set speed
-  u.rate = lang === 'de' ? 0.78 : 0.92;
-  u.pitch = 1;
 
   activeUtterance = u;
   u.onend = () => { activeUtterance = null; done(); };
-  u.onerror = () => { activeUtterance = null; done(); };
-
+  u.onerror = () => { 
+    activeUtterance = null; 
+    // If Dari fails, try falling back to English voice as last resort
+    if (lang === 'fa') {
+      const fallback = pickVoice('en');
+      if (fallback) {
+        const u2 = new SpeechSynthesisUtterance(text);
+        u2.voice = fallback;
+        u2.lang = 'en-US';
+        u2.rate = 0.92;
+        u2.pitch = 1;
+        u2.onend = done;
+        u2.onerror = done;
+        speechSynthesis.speak(u2);
+        return;
+      }
+    }
+    done();
+  };
   try { speechSynthesis.resume(); } catch(e) {}
   speechSynthesis.speak(u);
 }

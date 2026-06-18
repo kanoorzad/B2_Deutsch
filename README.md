@@ -1,28 +1,23 @@
-# B2 + B1 Plus Flashcards v58 — Prioritize Persian/Farsi Voice
+# B2 + B1 Plus Flashcards v59 — Dari System Default `fa`
 
 ## What changed
 
-v58 keeps the stable v57/v56/v55/v54/v51 base and updates both functions requested by the user:
+v59 keeps the stable v58 base and replaces only `say()` with the user-provided system-default Persian approach.
 
-- `pickVoice(lang)`
-- `say(text, lang, done)`
+For Dari/Farsi:
 
-## New Dari/Farsi logic
+- It does **not** set `u.voice`.
+- It sets only `u.lang = 'fa'`.
+- This lets the browser/system choose the default Persian/Farsi voice if one exists.
+- If the Dari attempt errors, it falls back to the English voice as last resort.
 
-`pickVoice('fa')` now:
+For German and English:
 
-1. Finds any voice with `fa*` language or Persian/Farsi/Dari in the name.
-2. Filters false Bulgarian/Daria voices.
-3. Prioritizes voices named Persian or Farsi.
-4. Then checks quality voices.
-5. Then prefers generic `fa`.
-6. Then `fa-IR`.
-7. Then `fa-AF`.
-
-`say()` now uses the exact `voice.lang` from the selected voice. If no Persian voice exists at all, it falls back to the English engine.
+- It keeps explicit `pickVoice(lang)` selection.
 
 ## Kept
 
+- v58 `pickVoice(lang)` logic
 - Screen Wake Lock
 - Direct browser SpeechSynthesis
 - Initiative line once
@@ -31,4 +26,4 @@ v58 keeps the stable v57/v56/v55/v54/v51 base and updates both functions request
 
 ## Open
 
-https://kanoorzad.github.io/B2_Deutsch/?v=58
+https://kanoorzad.github.io/B2_Deutsch/?v=59

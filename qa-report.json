@@ -1,16 +1,15 @@
 {
-  "version": "58.0",
-  "base": "v57 with user-provided pickVoice and say functions",
+  "version": "59.0",
+  "base": "v58 with user-provided say() using system default fa for Dari",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v58": true,
-    "cache_busting_v58": true,
+    "version_badge_v59": true,
+    "cache_busting_v59": true,
     "initiative_only_once": true,
-    "new_pickvoice_persian_priority": true,
-    "new_pickvoice_generic_fa_priority": true,
-    "new_say_uses_voice_lang": true,
-    "new_say_english_fallback": true,
-    "false_dari_filter_present": true,
+    "dari_no_voice_assignment_in_branch": true,
+    "dari_error_english_fallback": true,
+    "german_english_explicit_voice": true,
+    "pickvoice_kept": true,
     "wake_lock_kept": true,
     "direct_speech_synthesis": true,
     "online_tts_removed": true,
@@ -20,9 +19,9 @@
   "node_check_stderr": "",
   "initiative_count": 1,
   "notes": [
-    "Applied both user-provided functions.",
-    "pickVoice now prioritizes Persian/Farsi by name before fa tags.",
-    "say now uses the selected voice.lang exactly."
+    "Applied user-provided say() function.",
+    "Dari branch sets only u.lang='fa' and does not assign u.voice.",
+    "English fallback is attempted on Dari error."
   ],
   "zip_mb": 0.18
 }
