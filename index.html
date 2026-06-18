@@ -7,10 +7,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=75">
-  <link rel="apple-touch-icon" href="icon.svg?v=75">
-  <link rel="stylesheet" href="styles.css?v=75">
-  <title>German A1-B2 telc system Important words v75</title>
+  <link rel="manifest" href="manifest.webmanifest?v=76">
+  <link rel="apple-touch-icon" href="icon.svg?v=76">
+  <link rel="stylesheet" href="styles.css?v=76">
+  <title>German A1-B2 telc system Important words v76</title>
 </head>
 <body class="wizardMode">
 <select id="targetLang" hidden>
@@ -24,7 +24,7 @@
 <section id="startWizard" class="startWizard" aria-live="polite">
   <section id="wizardLang" class="wizardStep active">
     <div class="wizardCard languageStartCard">
-      <em class="startVersionTag">v75</em>
+      <em class="startVersionTag">v76</em>
       <h1 class="startTitle">German A1-B2 telc system Important words</h1>
       <p class="startSubtitle">Bitte wählen Sie zuerst die Übersetzungssprache.</p>
       <div class="choiceGrid languageChoices compactLangGrid">
@@ -41,7 +41,7 @@
 
   <section id="wizardMaterial" class="wizardStep">
     <div class="wizardCard">
-      <em class="startVersionTag">v75</em>
+      <em class="startVersionTag">v76</em>
       <h2>Lernmaterial wählen</h2>
       <p class="startSubtitle">Wählen Sie den Bereich.</p>
       <div class="choiceGrid materialChoices">
@@ -60,7 +60,7 @@
 
   <section id="wizardUnit" class="wizardStep">
     <div class="wizardCard">
-      <em class="startVersionTag">v75</em>
+      <em class="startVersionTag">v76</em>
       <h2>Einheit wählen</h2>
       <p class="startSubtitle">Standard: alle Einheiten.</p>
       <label class="wizardSelectLabel">Einheit
@@ -75,7 +75,7 @@
 </section>
 <button id="optionsToggle" type="button" class="optionsToggle" hidden>Optionen</button>
 <header class="hero">
-  <em class="versionBadge">v75</em>
+  <em class="versionBadge">v76</em>
   <h1>Deutsch-Karteikarten</h1>
   <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
   <p class="initiative"><em>Initiative by: Khalid Noorzad</em></p>
@@ -222,11 +222,11 @@
   </section>
 </main>
 
-<script src="data.js?v=75"></script>
-<script src="app.js?v=75"></script>
-<script id="v75-controller">
+<script src="data.js?v=76"></script>
+<script src="app.js?v=76"></script>
+<script id="v76-controller">
 (function(){
-  window.__v75Controller = true;
+  window.__v76Controller = true;
   const $ = id => document.getElementById(id);
   const LANG_META = {
     en:{label:'Englisch', code:'en-US', dir:'ltr'},
@@ -245,6 +245,7 @@
   let pos=0;
   let autoplay=false;
   let stopped=false;
+  let paused=false;
   let speakingToken=0;
 
   function cards(){ return (window.FLASHCARD_DATA && window.FLASHCARD_DATA.cards) || []; }
@@ -300,6 +301,22 @@
     const el=$(id);
     if(el) el.textContent=val||'—';
   }
+  function setStage(stage, text, lang){
+    const now=$('nowPlaying');
+    if(now) now.textContent = `${stage}: ${text || ''}`;
+    const front=$('front'), target=$('en');
+    if(front) front.classList.toggle('isReading', stage==='Deutsch' || stage==='Formen');
+    if(target) target.classList.toggle('isReading', stage!=='Deutsch' && stage!=='Formen');
+  }
+  function formText(c){
+    if(!c) return '';
+    // Normal A1 verbs: only infinitive is allowed, no present/past/perfect reading.
+    if(c.list==='A1' && c.category==='verb'){
+      return (c.forms && c.forms.infinitive) || c.german || '';
+    }
+    const f=c.forms||{};
+    return [f.infinitive,f.present3,f.past,f.perfect].filter(Boolean).join('. ');
+  }
   function renderCard(stageLabel){
     const c=current();
     if(!c){
@@ -311,20 +328,30 @@
       return;
     }
     const meta=LANG_META[selectedLang]||LANG_META.en;
-    setText('front',displayGerman(c));
-    setText('frontText',displayGerman(c));
+    const german=displayGerman(c);
+    const translation=targetText(c);
+    setText('front',german);
+    setText('frontText',german);
     setText('targetTitle',meta.label);
     const en=$('en');
-    if(en){ en.textContent=targetText(c)||'—'; en.dir=meta.dir; }
-    setText('de',displayGerman(c));
+    if(en){ en.textContent=translation||'—'; en.dir=meta.dir; }
+    setText('de',german);
     setText('count',`${pos+1} / ${filtered.length}`);
-    setText('nowPlaying',stageLabel ? `${stageLabel}: ${displayGerman(c)}` : `${displayGerman(c)} — ${meta.label}`);
+    setText('nowPlaying',stageLabel ? `${stageLabel}: ${german}` : `${german} — ${meta.label}`);
     const f=c.forms||{};
-    setText('inf',f.infinitive);
-    setText('pres3',f.present3);
-    setText('past',f.past);
-    setText('perf',f.perfect);
-    setText('plus',f.plusquamperfekt);
+    setText('inf',f.infinitive || (c.category==='verb'?c.german:''));
+    // Normal A1 verbs show ONLY infinitive.
+    if(c.list==='A1' && c.category==='verb'){
+      setText('pres3','—');
+      setText('past','—');
+      setText('perf','—');
+      setText('plus','—');
+    }else{
+      setText('pres3',f.present3);
+      setText('past',f.past);
+      setText('perf',f.perfect);
+      setText('plus',f.plusquamperfekt);
+    }
     setText('article',c.article);
     setText('singular',c.singular||c.german);
     setText('plural',c.plural);
@@ -357,9 +384,10 @@
     const premium=good.find(v=>/google|microsoft|apple|siri|enhanced|premium|natural|neural/i.test((v.name||'')+' '+(v.voiceURI||'')));
     return premium || good[0] || null;
   }
-  function speakOnce(text, lang, token){
+  function speakOnce(text, lang, token, stage){
     return new Promise(resolve=>{
-      if(!text || stopped || token!==speakingToken){ resolve(); return; }
+      if(!text || stopped || paused || token!==speakingToken){ resolve(); return; }
+      setStage(stage, text, lang);
       if(!('speechSynthesis' in window)){ resolve(); return; }
       let done=false;
       const finish=()=>{ if(!done){ done=true; clearTimeout(timer); resolve(); } };
@@ -380,39 +408,38 @@
     });
   }
   function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
-  function formText(c){
-    const f=(c&&c.forms)||{};
-    return [f.infinitive,f.present3,f.past,f.perfect].filter(Boolean).join('. ');
-  }
 
   async function playOneCard(token){
     const c=current();
-    if(!c || stopped || token!==speakingToken) return;
+    if(!c || stopped || paused || token!==speakingToken) return;
     renderCard('Deutsch');
     try{ speechSynthesis.cancel(); }catch(e){}
     await sleep(120);
-    await speakOnce(displayGerman(c),'de',token);
-    if(stopped || token!==speakingToken) return;
+    await speakOnce(displayGerman(c),'de',token,'Deutsch');
+    if(stopped || paused || token!==speakingToken) return;
     const forms=formText(c);
+    // A1 normal verbs: forms == infinitive; still short, inline, no present/past/perfect.
     if(forms){
       renderCard('Formen');
       await sleep(180);
-      await speakOnce(forms,'de',token);
+      await speakOnce(forms,'de',token,'Formen');
     }
-    if(stopped || token!==speakingToken) return;
-    renderCard((LANG_META[selectedLang]||LANG_META.en).label);
+    if(stopped || paused || token!==speakingToken) return;
+    const meta=LANG_META[selectedLang]||LANG_META.en;
+    renderCard(meta.label);
     await sleep(180);
-    await speakOnce(targetText(c),selectedLang,token);
+    await speakOnce(targetText(c),selectedLang,token,meta.label);
   }
 
   async function playLoop(){
     if(!filtered.length){ renderCard(); return; }
     autoplay=true;
     stopped=false;
+    paused=false;
     const token=++speakingToken;
-    while(autoplay && !stopped && token===speakingToken && filtered.length){
+    while(autoplay && !stopped && !paused && token===speakingToken && filtered.length){
       await playOneCard(token);
-      if(!autoplay || stopped || token!==speakingToken) break;
+      if(!autoplay || stopped || paused || token!==speakingToken) break;
       pos=(pos+1)%filtered.length;
       renderCard('Nächste Karte');
       await sleep(650);
@@ -421,6 +448,7 @@
   function playSelected(){
     autoplay=false;
     stopped=false;
+    paused=false;
     const token=++speakingToken;
     playOneCard(token);
   }
@@ -428,6 +456,7 @@
   window.playList=playLoop;
 
   function pausePlayback(){
+    paused=true;
     autoplay=false;
     speakingToken++;
     try{ speechSynthesis.pause&&speechSynthesis.pause(); speechSynthesis.cancel(); }catch(e){}
@@ -436,9 +465,34 @@
   function stopPlayback(){
     autoplay=false;
     stopped=true;
+    paused=false;
     speakingToken++;
     try{ speechSynthesis.cancel(); }catch(e){}
     setText('nowPlaying','Gestoppt');
+  }
+  function openOptions(){
+    const drawer=$('optionsDrawer'), back=$('drawerBackdrop');
+    if(drawer){
+      drawer.hidden=false;
+      drawer.classList.add('open');
+      drawer.style.display='block';
+    }
+    if(back){
+      back.hidden=false;
+      back.style.display='block';
+    }
+  }
+  function closeOptions(){
+    const drawer=$('optionsDrawer'), back=$('drawerBackdrop');
+    if(drawer){
+      drawer.hidden=true;
+      drawer.classList.remove('open');
+      drawer.style.display='none';
+    }
+    if(back){
+      back.hidden=true;
+      back.style.display='none';
+    }
   }
 
   function enterApp(){
@@ -463,6 +517,7 @@
     if(wizard) wizard.hidden=false;
     if(opt) opt.hidden=true;
     showStep('wizardLang');
+    closeOptions();
     try{speechSynthesis&&speechSynthesis.getVoices()}catch(e){}
   }
 
@@ -491,16 +546,16 @@
       return false;
     }
     if(ev.target.closest&&ev.target.closest('#optionsToggle')){
-      const drawer=$('optionsDrawer'), back=$('drawerBackdrop');
-      if(drawer) drawer.hidden=false;
-      if(back) back.hidden=false;
+      ev.preventDefault(); ev.stopPropagation();
+      openOptions();
+      return false;
     }
     if(ev.target.closest&&(ev.target.closest('#closeOptions')||ev.target.closest('#drawerBackdrop'))){
-      const drawer=$('optionsDrawer'), back=$('drawerBackdrop');
-      if(drawer) drawer.hidden=true;
-      if(back) back.hidden=true;
+      ev.preventDefault(); ev.stopPropagation();
+      closeOptions();
+      return false;
     }
-    if(ev.target.closest&&ev.target.closest('#playList')){ ev.preventDefault(); stopped=false; playLoop(); }
+    if(ev.target.closest&&ev.target.closest('#playList')){ ev.preventDefault(); stopped=false; paused=false; playLoop(); }
     if(ev.target.closest&&ev.target.closest('#pauseList')){ ev.preventDefault(); pausePlayback(); }
     if(ev.target.closest&&ev.target.closest('#stopList')){ ev.preventDefault(); stopPlayback(); }
     if(ev.target.closest&&ev.target.closest('#next')){ ev.preventDefault(); stopPlayback(); if(filtered.length){pos=(pos+1)%filtered.length;renderCard();} }

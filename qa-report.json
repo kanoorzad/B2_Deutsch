@@ -1,7 +1,16 @@
 {
-  "version": "75.0-autoplay-sequence-fixed",
-  "user_reported_issue": "Card reads German but does not continue to translation and then next card.",
-  "root_cause": "v74 playCurrent only played one card; it did not run an autoplay loop that advances after German/forms/translation. Some mobile browsers can also fail to fire speech onend reliably, so v75 adds timeout fallback.",
+  "version": "76.0-inline-options-a1verb-fix",
+  "user_reported_issues": [
+    "Reading and writing on card are not inline/synchronized.",
+    "Options button is not working.",
+    "Remove present/past/perfect for A1 verbs; only infinitive is OK."
+  ],
+  "fixes": [
+    "Added visual reading highlight to German/form side and translation side.",
+    "Options button now explicitly opens drawer/backdrop and close button/backdrop closes it.",
+    "Normal A1 verb cards now keep only forms.infinitive; present3/past/perfect are blank.",
+    "A1 Irregular Verbs keep their forms because they were requested separately to match irregular-verb structure."
+  ],
   "cards": 3171,
   "list_counts": {
     "B2 all 12 units": 1629,
@@ -10,91 +19,9 @@
     "A1 Irregular Verbs": 76,
     "A1": 841
   },
-  "material_counts": {
-    "A1": 841,
-    "A1 Irregular Verbs": 76,
-    "A2": 0,
-    "A2 Irregular Verbs": 0,
-    "B1": 0,
-    "B1 Irregular Verbs": 0,
-    "B1 Plus 7 Units": 475,
-    "B2 all 12 units": 1629,
-    "B2 Irregular Verbs": 150
-  },
-  "material_language_missing": {
-    "A1": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "A1 Irregular Verbs": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "A2": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "A2 Irregular Verbs": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "B1": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "B1 Irregular Verbs": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "B1 Plus 7 Units": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "B2 all 12 units": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    },
-    "B2 Irregular Verbs": {
-      "en": 0,
-      "fa": 0,
-      "es": 0,
-      "ru": 0,
-      "uk": 0,
-      "tr": 0
-    }
-  },
+  "a1_normal_verb_cards": 179,
+  "a1_normal_verb_cards_only_infinitive": 179,
+  "a1_irregular_verb_cards_with_forms_preserved": 76,
   "translation_coverage": {
     "en": 3171,
     "fa": 3171,
@@ -113,22 +40,17 @@
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "v75_controller_present": true,
-    "german_forms_translation_sequence_present": true,
-    "autoplay_advances_to_next_card": true,
-    "play_loop_defined": true,
-    "pause_stop_defined": true,
-    "play_pause_stop_buttons_wired": true,
-    "timeout_fallback_for_onend": true,
-    "options_button_present": true,
-    "a1_kept": true,
-    "all_existing_materials_have_complete_translations": true,
-    "empty_placeholder_materials_safe": true,
+    "v76_controller_present": true,
+    "inline_reading_highlight_present": true,
+    "options_open_close_present": true,
+    "options_drawer_css_present": true,
+    "a1_normal_verbs_only_infinitive": true,
+    "a1_irregular_forms_preserved": true,
+    "autoplay_sequence_kept": true,
     "translations_complete": true,
-    "cache_busting_v75": true
+    "cache_busting_v76": true
   },
   "node_check_stderr": "",
-  "sequence_now": "German → forms → selected translation → next card → repeat until pause/stop.",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=75",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=76",
   "zip_mb": 1.75
 }

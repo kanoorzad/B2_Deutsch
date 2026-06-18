@@ -1,22 +1,14 @@
-# German A1-B2 telc system Important words v75
+# German A1-B2 telc system Important words v76
 
-Autoplay sequence repair.
+Inline display, options drawer, and A1 verb-form repair.
 
 ## Fixed
 
-- Card now reads:
-  1. German
-  2. forms
-  3. selected translation
-  4. next card
-  5. repeats until pause/stop
-
-## Additional safety
-
-- Added timeout fallback if mobile browser does not fire speech `onend`.
-- Pause and stop buttons are wired.
-- Play button starts the continuous loop.
-- Checked all languages and all reading materials.
+- Reading and displayed text now stay visually synchronized with a reading highlight.
+- Options button opens the options drawer.
+- Drawer close button and backdrop close it.
+- Normal A1 verbs now show/read only the infinitive form.
+- A1 Irregular Verbs keep their irregular forms.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=75
+https://kanoorzad.github.io/B2_Deutsch/?v=76
