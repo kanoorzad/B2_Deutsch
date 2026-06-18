@@ -1,41 +1,32 @@
 {
-  "version": "64.0-german-start-flow",
+  "version": "65.0-step-mobile-flow",
   "counts": {
-    "cards": 2254,
-    "cards_with_translation_object": 2254,
-    "missing_by_language": {
-      "en": 0,
-      "fa": 0,
-      "ru": 2254,
-      "uk": 2254,
-      "tr": 2254,
-      "es": 2254
-    }
+    "cards": 2254
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v64": true,
-    "cache_busting_v64": true,
+    "version_badge_v65": true,
+    "cache_busting_v65": true,
     "initiative_only_once": true,
-    "start_panel_open": true,
-    "target_language_first": true,
-    "learning_area_options": true,
-    "german_interface_flow": true,
-    "now_playing_id_fixed": true,
-    "target_title_present": true,
+    "wizard_present": true,
+    "language_first_only_stage": true,
+    "material_second_stage": true,
+    "options_drawer_present": true,
+    "body_wizard_mode": true,
+    "finish_wizard_autoplay": true,
+    "main_hidden_during_wizard": true,
+    "drawer_css_present": true,
     "autoplay_functions_present": true,
-    "target_translation_speaker": true,
-    "voice_codes_all_languages": true,
     "wake_lock_kept": true,
-    "online_tts_removed": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
   "initiative_count": 1,
   "notes": [
-    "Interface flow changed to target language first, then B1+/B2/Irregular verbs.",
-    "Autoplay card queue remains active: playSelected -> playNextPart -> next card.",
-    "Only selected translation language is displayed."
+    "Opening screen shows only translation-language selection.",
+    "Second screen shows only material selection.",
+    "After material selection, app view opens and autoplay starts.",
+    "Options are moved into a right-side drawer."
   ],
   "zip_mb": 0.38
 }

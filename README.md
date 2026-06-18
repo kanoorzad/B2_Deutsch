@@ -1,33 +1,26 @@
-# Deutsch-Karteikarten v64 — German Start Flow
+# Deutsch-Karteikarten v65 — Step Mobile Flow
 
-## Wichtigste Änderung
+## Neue Startlogik
 
-Die Oberfläche führt den Nutzer jetzt in der gewünschten Reihenfolge:
+Beim Öffnen sieht der Nutzer nur:
 
 1. Zielsprache wählen
-2. Lernbereich wählen:
+
+Danach sieht der Nutzer nur:
+
+2. Lernmaterial wählen:
    - B1+
    - B2
    - Unregelmäßige Verben
-3. Abspielen drücken
-4. Die Karten laufen automatisch weiter
 
-## Struktur
+Danach öffnet sich die Karteikarten-Oberfläche und die Wiedergabe startet automatisch.
 
-Die bestehende Lernkartenstruktur bleibt erhalten:
+## Mobile Bedienung
 
-- Karte
-- Fortschritt
-- Abspielen / Pause / Stopp
-- Zurück / Umdrehen / Weiter
-- automatische Wiedergabe mit Deutsch → Formen → Zielsprache → nächste Karte
-
-## Übersetzungen
-
-- Englisch: vorhanden
-- Farsi: vorhanden
-- Russisch/Ukrainisch/Türkisch/Spanisch: vorbereitet, aber noch als „in Vorbereitung“ markiert
+- Die Hauptansicht bleibt sauber: Karte + Play/Pause/Stopp.
+- Alle weiteren Optionen liegen im rechten Seitenmenü „Optionen“.
+- Auf dem Handy muss man in der Hauptansicht nicht nach unten scrollen, außer das Menü wird geöffnet.
 
 ## Öffnen
 
-https://kanoorzad.github.io/B2_Deutsch/?v=64
+https://kanoorzad.github.io/B2_Deutsch/?v=65

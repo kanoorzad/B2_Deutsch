@@ -70,7 +70,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 .miniControls{display:flex;gap:.5rem;flex-wrap:wrap;margin:.55rem 0}
 .miniControls button{font-size:.82rem;padding:.55rem .7rem}
 
-/* v64 multilingual German UI polish */
+/* v65 multilingual German UI polish */
 .targetLangField select {
   font-weight: 700;
 }
@@ -98,7 +98,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 }
 
 
-/* v64 final clean polish */
+/* v65 final clean polish */
 .pendingTranslation {
   display: inline-block;
   color: var(--muted, #73798a);
@@ -118,7 +118,7 @@ select#targetLang option {
 }
 
 
-/* v64 start-flow polish */
+/* v65 start-flow polish */
 .startPanel {
   border: 1px solid rgba(255,255,255,.16);
   border-radius: 22px;
@@ -146,4 +146,181 @@ select#targetLang option {
 .pendingTranslation {
   color: var(--muted, #73798a);
   font-style: italic;
+}
+
+
+/* v65 step-by-step mobile flow */
+body.wizardMode > header,
+body.wizardMode > aside,
+body.wizardMode > main,
+body.wizardMode > footer,
+body.wizardMode #optionsToggle {
+  display: none !important;
+}
+.startWizard {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background:
+    radial-gradient(circle at top left, rgba(83,113,255,.32), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(0,190,160,.25), transparent 40%),
+    linear-gradient(145deg, #0f172a, #111827 55%, #0b1120);
+  color: #fff;
+}
+.startWizard.hidden {
+  display: none !important;
+}
+.wizardStep {
+  display: none;
+  width: min(720px, 100%);
+}
+.wizardStep.active {
+  display: block;
+}
+.wizardCard {
+  border-radius: 30px;
+  padding: clamp(22px, 5vw, 42px);
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow: 0 26px 80px rgba(0,0,0,.38);
+  backdrop-filter: blur(18px);
+}
+.wizardCard h1 {
+  margin: 0 0 10px;
+  font-size: clamp(2rem, 8vw, 4rem);
+  letter-spacing: -.04em;
+}
+.wizardCard p {
+  color: rgba(255,255,255,.82);
+  font-size: 1rem;
+}
+.wizardKicker {
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .8rem !important;
+  color: rgba(255,255,255,.62) !important;
+  font-weight: 800;
+}
+.choiceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 22px 0;
+}
+.materialChoices {
+  grid-template-columns: 1fr;
+}
+.choiceGrid button,
+.ghostBtn {
+  min-height: 62px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 22px;
+  background: rgba(255,255,255,.14);
+  color: #fff;
+  font-weight: 850;
+  font-size: 1.04rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,.20);
+}
+.choiceGrid button:active,
+.ghostBtn:active {
+  transform: scale(.985);
+}
+.ghostBtn {
+  width: 100%;
+  min-height: 50px;
+  background: rgba(255,255,255,.08);
+}
+.wizardNote {
+  font-size: .9rem !important;
+  color: rgba(255,255,255,.58) !important;
+}
+.optionsToggle {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top));
+  right: 12px;
+  z-index: 80;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 850;
+  background: rgba(20,24,36,.92);
+  color: #fff;
+  box-shadow: 0 12px 34px rgba(0,0,0,.28);
+}
+.optionsDrawer {
+  position: fixed;
+  z-index: 90;
+  top: 0;
+  right: 0;
+  height: 100svh;
+  width: min(390px, 92vw);
+  transform: translateX(105%);
+  transition: transform .22s ease;
+  background: var(--panel, #111827);
+  color: var(--text, #fff);
+  box-shadow: -30px 0 80px rgba(0,0,0,.42);
+  overflow-y: auto;
+  padding: max(14px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom));
+}
+.optionsDrawer.open {
+  transform: translateX(0);
+}
+.drawerHead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0 12px;
+  background: inherit;
+}
+.drawerHead button {
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 800;
+}
+.drawerBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  background: rgba(0,0,0,.38);
+}
+.drawerBackdrop.hidden,
+.optionsToggle.hidden {
+  display: none !important;
+}
+body.appReady main {
+  min-height: 100svh;
+  padding-top: 54px;
+}
+body.appReady .hero {
+  display: none;
+}
+@media (max-width: 760px) {
+  body.appReady main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  body.appReady .cardWrap,
+  body.appReady .player,
+  body.appReady .nav {
+    width: 100%;
+  }
+  body.appReady .answer:not(.hidden) {
+    max-height: 36svh;
+    overflow: auto;
+  }
+  body.appReady .frontText {
+    font-size: clamp(2.2rem, 13vw, 4.5rem);
+  }
+  .choiceGrid {
+    grid-template-columns: 1fr;
+  }
 }
