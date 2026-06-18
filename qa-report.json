@@ -1,14 +1,14 @@
 {
-  "version": "56.0",
-  "base": "v55 with user-requested Dari any-voice fallback in say()",
+  "version": "57.0",
+  "base": "v56 with user-provided say() English fallback for Dari",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v56": true,
-    "cache_busting_v56": true,
+    "version_badge_v57": true,
+    "cache_busting_v57": true,
     "initiative_only_once": true,
+    "user_say_function_applied": true,
+    "dari_english_fallback_present": true,
     "user_pickvoice_kept": true,
-    "any_voice_fallback_present": true,
-    "false_dari_filter_present": true,
     "wake_lock_kept": true,
     "direct_speech_synthesis": true,
     "online_tts_removed": true,
@@ -18,9 +18,9 @@
   "node_check_stderr": "",
   "initiative_count": 1,
   "notes": [
-    "Applied user-provided fallback in say().",
-    "This can prevent total silence by assigning any non-false voice when no fa voice exists.",
-    "Pronunciation may still not be correct if the mobile device has no Persian/Farsi voice."
+    "Replaced only say() with the user-provided English fallback logic.",
+    "This should avoid complete silence if no fa voice exists but English does.",
+    "Dari pronunciation may sound English-accented because it uses the English engine when fallback is triggered."
   ],
   "zip_mb": 0.18
 }
