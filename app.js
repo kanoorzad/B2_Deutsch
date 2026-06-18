@@ -1,5 +1,5 @@
 // v34: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v57AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh46=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh46='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+(function(){try{const key='v58AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh46=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh46='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
 const STORE='b2-native-cards-extra-v43';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
@@ -61,10 +61,10 @@ function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=f
 // v43 browser voice engine with brute-force Dari/Farsi mobile candidates.
 // Keeps v3-v6 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
 // No local sprite/WebAudio/remote TTS.
-// v57 Dari voice restored to version-4 style.
+// v58 Dari voice restored to version-4 style.
 // Keep direct browser SpeechSynthesis. No online TTS, no audio sprites, no provider router.
 // The key v4-style behavior is direct utterance creation and direct speechSynthesis.speak().
-// v57: FULL version-4 voice engine restored for all languages.
+// v58: FULL version-4 voice engine restored for all languages.
 // This is the original v4 pattern:
 // voices() -> pickVoice(lang) -> say(text, lang, done)
 // Direct SpeechSynthesisUtterance only. No online TTS. No router. No local audio sprite.
@@ -108,38 +108,54 @@ document.addEventListener('visibilitychange',()=>{
 
 function voices(){return speechSynthesis.getVoices()||[]}
 
-function pickVoice(lang){
+function pickVoice(lang) {
   const vs = voices();
+
+  // German
   if (lang === 'de') {
     return vs.find(v => v.lang === 'de-DE' && /premium|enhanced|natural|siri|google|microsoft/i.test(v.name)) ||
            vs.find(v => v.lang === 'de-DE') ||
            vs.find(v => v.lang && v.lang.startsWith('de'));
   }
+
+  // English
   if (lang === 'en') {
     return vs.find(v => v.lang === 'en-US' && /premium|enhanced|natural|siri|google|microsoft/i.test(v.name)) ||
            vs.find(v => v.lang === 'en-US') ||
            vs.find(v => v.lang && v.lang.startsWith('en'));
   }
+
   // Dari / Farsi
-  const faCandidates = ['fa-AF', 'fa-IR', 'fa'];
-  // 1. Try quality voices for each candidate
-  for (const cand of faCandidates) {
-    const found = vs.find(v => v.lang === cand && /premium|enhanced|natural|siri|google|microsoft/i.test(v.name));
-    if (found) return found;
-  }
-  // 2. Try exact matches in order
-  for (const cand of faCandidates) {
-    const found = vs.find(v => v.lang === cand);
-    if (found) return found;
-  }
-  // 3. Try any voice with 'fa' prefix, but filter out false ones
-  const faVoices = vs.filter(v => v.lang && v.lang.startsWith('fa') && !isFalseDariVoice(v));
-  if (faVoices.length) return faVoices[0];
-  // 4. Try voices with name containing 'persian', 'farsi', or 'dari'
-  const nameMatch = vs.find(v => /persian|farsi|dari/i.test(v.name) && !isFalseDariVoice(v));
+  // 1. First, find ANY voice with 'fa' in language OR 'Persian'/'Farsi' in the name,
+  //    but filter out the Bulgarian bug.
+  const candidates = vs.filter(v => {
+    const langOk = v.lang && v.lang.startsWith('fa');
+    const nameOk = v.name && /persian|farsi|dari/i.test(v.name);
+    return (langOk || nameOk) && !isFalseDariVoice(v);
+  });
+
+  if (candidates.length === 0) return null;
+
+  // 2. Prioritize the voice named "Persian" or "Farsi" (this solves your issue!)
+  const nameMatch = candidates.find(v => /persian|farsi/i.test(v.name));
   if (nameMatch) return nameMatch;
-  // 5. Fallback to any voice (the browser default)
-  return vs[0] || null;
+
+  // 3. Then look for high-quality voices
+  const qualityMatch = candidates.find(v => /premium|enhanced|natural|siri|google|microsoft/i.test(v.name));
+  if (qualityMatch) return qualityMatch;
+
+  // 4. Then prefer the generic 'fa' tag (works best on mobile)
+  const generic = candidates.find(v => v.lang === 'fa');
+  if (generic) return generic;
+
+  // 5. Then 'fa-IR' and finally 'fa-AF'
+  const ir = candidates.find(v => v.lang === 'fa-IR');
+  if (ir) return ir;
+  const af = candidates.find(v => v.lang === 'fa-AF');
+  if (af) return af;
+
+  // 6. Fallback to the first candidate
+  return candidates[0];
 }
 
 function say(text, lang = 'de', done = () => {}) {
@@ -149,22 +165,20 @@ function say(text, lang = 'de', done = () => {}) {
     done();
     return;
   }
+
   const u = new SpeechSynthesisUtterance(text);
+  const voice = pickVoice(lang);
 
-  // Try to get a voice for the requested language
-  let voice = pickVoice(lang);
-
-  // If no suitable voice is found for Dari, use the English voice as fallback
-  if (lang === 'fa' && !voice) {
-    // Use the English voice that we know works
-    voice = pickVoice('en');
-    // Change the language tag to English so the system uses the right engine
-    u.lang = 'en-US';
+  if (voice) {
+    u.voice = voice;
+    // Use the exact language tag from the voice, so the engine doesn't ignore it
+    u.lang = voice.lang;
   } else {
-    u.lang = lang === 'de' ? 'de-DE' : lang === 'en' ? 'en-US' : 'fa-AF';
+    // If NO Persian voice exists at all, fall back to English voice
+    const fallbackVoice = pickVoice('en');
+    if (fallbackVoice) u.voice = fallbackVoice;
+    u.lang = 'en-US';
   }
-
-  if (voice) u.voice = voice;
 
   // Set speed
   u.rate = lang === 'de' ? 0.78 : 0.92;
