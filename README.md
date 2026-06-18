@@ -1,30 +1,28 @@
-# B2 + B1 Plus Flashcards v60 — User Full Script + Dari Debug
+# B2 + B1 Plus Flashcards v61 — Persian/Farsi Voice Mode Test
 
-## What changed
+## Purpose
 
-v60 applies the full script provided by the user.
+This version tests whether the mobile voice problem is caused by Dari/`fa-AF` routing.
 
-Included behavior:
+The card translation text is not rewritten yet. The app now treats the third language as Persian/Farsi for voice routing.
 
-- Updated `pickVoice()` with Persian/Farsi/Dari name-based search.
-- Updated `say()` where Dari uses `u.lang = 'fa'` and does not set `u.voice`.
-- English fallback if Dari errors.
-- iOS user-gesture priming on the first click.
-- `debugVoices()` helper in the browser console.
-- Screen Wake Lock requested during playback.
-- Old caches/service workers are reset once with a v60 key.
-- Initiative line appears once.
+## Changes
+
+- Visible UI label: Dari → Persian/Farsi
+- Voice route: prefer Persian/Farsi, not Dari
+- `pickVoice('fa')` searches:
+  1. Persian/Farsi voice names
+  2. `fa-IR`
+  3. generic `fa`
+  4. other `fa*`
+- `say(..., 'fa')` tries:
+  1. selected Persian/Farsi voice
+  2. `u.lang = 'fa-IR'`
+  3. `u.lang = 'fa'`
+  4. English fallback on error
+- `debugVoices()` now reports Persian/Farsi candidates.
+- Screen Wake Lock remains active during playback.
 
 ## Open
 
-https://kanoorzad.github.io/B2_Deutsch/?v=60
-
-## Debug
-
-On mobile browser console, run:
-
-```js
-debugVoices()
-```
-
-It prints all available voices and Persian/Dari candidates.
+https://kanoorzad.github.io/B2_Deutsch/?v=61

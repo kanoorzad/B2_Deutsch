@@ -1,18 +1,19 @@
 {
-  "version": "60.0",
-  "base": "v59 with full user-provided script applied",
+  "version": "61.0",
+  "base": "v60 converted to Persian/Farsi voice mode test",
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v60": true,
-    "cache_busting_v60": true,
+    "version_badge_v61": true,
+    "cache_busting_v61": true,
     "initiative_only_once": true,
-    "uploaded_pickvoice_present": true,
-    "uploaded_say_present": true,
-    "ios_priming_present": true,
-    "debug_voices_present": true,
-    "wake_lock_present": true,
-    "wake_lock_requested_on_play": true,
-    "cache_reset_v60": true,
+    "ui_persian_farsi_label": true,
+    "data_not_retranslated": true,
+    "no_invalid_identifier_slash": true,
+    "no_dari_name_search_in_pickvoice": true,
+    "fa_ir_preferred": true,
+    "generic_fa_fallback": true,
+    "debug_voices_persian": true,
+    "wake_lock_kept": true,
     "direct_speech_synthesis": true,
     "online_tts_removed": true,
     "local_sprite_removed": true,
@@ -21,9 +22,9 @@
   "node_check_stderr": "",
   "initiative_count": 1,
   "notes": [
-    "Used the full script uploaded by the user.",
-    "Patched version/cache keys to v60.",
-    "Added wake lock request during playback because the uploaded script defined wake lock but did not request it in playSelected()."
+    "Created Persian/Farsi voice-mode test without rewriting translations.",
+    "Removed Dari/fa-AF preference from the voice picker.",
+    "Persian/Farsi mode tries explicit voice, fa-IR, fa, then English fallback."
   ],
   "zip_mb": 0.18
 }

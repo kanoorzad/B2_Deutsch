@@ -1,8 +1,8 @@
-// v60: full user-provided script applied; Persian/Dari debug helper included.
+// v61: full user-provided script applied; Persian/Persian/Farsi debug helper included.
 // v34: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v60AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh60=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh60='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+(function(){try{const key='v61AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh61=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh61='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v60';
+const STORE='b2-native-cards-extra-v61';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[]; let idx=0; let flipped=false; let lastFront=null; let playing=false; let paused=false; let playQueue=[]; let playIndex=0;
@@ -34,7 +34,7 @@ function setDirForLang(lang){if(lang==='fa')els.frontText.setAttribute('dir','rt
 function showWarning(msg){els.speechWarning.textContent=msg; els.speechWarning.classList.remove('hidden')}
 function clearWarning(){els.speechWarning.textContent=''; els.speechWarning.classList.add('hidden')}
 function chipsFor(c,lang){ if(c.category!=='verb') return []; if(lang==='de')return(c.synonyms_de||[]).slice(0,3); if(lang==='fa')return(c.synonyms_fa||[]).slice(0,3); return(c.synonyms_en||[]).slice(0,3).map(cleanEnglish); }
-function chipLabel(lang){ if(lang==='de')return 'German verb synonyms'; if(lang==='fa')return 'Dari verb synonyms'; return 'English verb synonyms'; }
+function chipLabel(lang){ if(lang==='de')return 'German verb synonyms'; if(lang==='fa')return 'Persian/Farsi verb synonyms'; return 'English verb synonyms'; }
 function renderChips(c,lang='en'){
   const chips=chipsFor(c,lang);
   const show=c.category==='verb' && chips.length>0;
@@ -51,18 +51,18 @@ function setup(){els.list.innerHTML='<option value="all">All lists</option>'+uni
 function updateUnits(){const l=els.list.value,pool=l==='all'?cards:cards.filter(c=>c.list===l);els.unit.innerHTML='<option value="all">All units</option>'+unique(pool.map(c=>c.unit)).map(x=>`<option>${esc(x)}</option>`).join('');updateParts();}
 function updateParts(){const l=els.list.value,u=els.unit.value,pool=cards.filter(c=>(l==='all'||c.list===l)&&(u==='all'||c.unit===u));els.part.innerHTML='<option value="all">All parts</option>'+unique(pool.map(c=>c.part)).map(x=>`<option>${esc(x)}</option>`).join('');}
 function apply(){const l=els.list.value,u=els.unit.value,p=els.part.value,t=els.type.value,q=norm(els.search.value);filtered=cards.filter(c=>(l==='all'||c.list===l)&&(u==='all'||c.unit===u)&&(p==='all'||c.part===p)&&(t==='all'||c.category===t)&&(!q||textOf(c).includes(q)));idx=Math.min(idx,Math.max(filtered.length-1,0));flipped=false;render();}
-function getManualFront(c){let m=els.front.value;if(m==='random')m=['german','english','dari','plural'][Math.floor(Math.random()*4)];if(m==='english')return{display:displayEnglish(c),speech:cleanSpeechText(c.english,'en'),label:'English',sub:'Medium',lang:'en'};if(m==='dari')return{display:displayDari(c),speech:displayDari(c),label:'Dari',sub:'Medium',lang:'fa'};if(m==='plural'){const fs=formStep(c);return fs||{display:'No plural/forms',speech:'',label:'Plural / forms',sub:'',lang:'de'}}return{display:displayGerman(c),speech:displayGerman(c),label:'German',sub:'Slow',lang:'de'}}
+function getManualFront(c){let m=els.front.value;if(m==='random')m=['german','english','dari','plural'][Math.floor(Math.random()*4)];if(m==='english')return{display:displayEnglish(c),speech:cleanSpeechText(c.english,'en'),label:'English',sub:'Medium',lang:'en'};if(m==='dari')return{display:displayDari(c),speech:displayDari(c),label:'Persian/Farsi',sub:'Medium',lang:'fa'};if(m==='plural'){const fs=formStep(c);return fs||{display:'No plural/forms',speech:'',label:'Plural / forms',sub:'',lang:'de'}}return{display:displayGerman(c),speech:displayGerman(c),label:'German',sub:'Slow',lang:'de'}}
 function renderDetails(c,chipLang='en'){els.de.textContent=displayGerman(c);els.dePluralLine.textContent=(c.category==='noun'&&c.plural)?c.plural:'';els.en.textContent=displayEnglish(c);els.fa.textContent=displayDari(c);els.nounBox.classList.toggle('hidden',c.category!=='noun');els.article.textContent=c.article||'—';els.singular.textContent=c.singular||c.german||'—';els.plural.textContent=c.plural||'—';const f=c.forms||{},hasVerb=c.category==='verb'||Object.values(f).some(Boolean);els.verbBox.classList.toggle('hidden',!hasVerb);els.inf.textContent=f.infinitive||c.german||'—';els.pres3.textContent=f.present3||'—';els.past.textContent=f.past||'—';els.perf.textContent=f.perfect||'—';els.plus.textContent=f.plusquamperfekt||'—';renderChips(c,chipLang);els.ex.textContent=c.example||'—';}
 function renderProgress(){els.count.textContent=filtered.length?`${idx+1} / ${filtered.length}`:'0 / 0';els.bar.style.width=filtered.length?`${((idx+1)/filtered.length)*100}%`:'0'}
 function render(){const c=filtered[idx];if(!c){els.frontText.textContent='No cards';els.frontHint.textContent='Change filters.';els.frontSub.textContent='';els.cardBottom.classList.add('hidden');renderProgress();return}const f=getManualFront(c);lastFront=f;renderDetails(c,f.lang);setDirForLang(f.lang);els.frontText.textContent=f.display||'—';els.frontHint.textContent=f.label;els.frontSub.textContent=f.sub||'';els.answer.classList.toggle('hidden',!flipped);els.card.classList.toggle('playing',playing);renderProgress();}
 function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=false;render()}function prev(){if(!filtered.length)return;idx=(idx-1+filtered.length)%filtered.length;flipped=false;render()}function flip(){flipped=!flipped;render()}
 
 
-// v34 audio engine: native best-quality voices for German/English; Dari Auto = native Farsi/Persian voice if it truly works, otherwise local high-quality sprite fallback.
-// v43 browser voice engine with brute-force Dari/Farsi mobile candidates.
+// v34 audio engine: native best-quality voices for German/English; Persian/Farsi Auto = native Farsi/Persian voice if it truly works, otherwise local high-quality sprite fallback.
+// v43 browser voice engine with brute-force Persian/Farsi mobile candidates.
 // Keeps v3-v6 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
 // No local sprite/WebAudio/remote TTS.
-// v54 Dari voice restored to version-4 style.
+// v54 Persian/Farsi voice restored to version-4 style.
 // Keep direct browser SpeechSynthesis. No online TTS, no audio sprites, no provider router.
 // The key v4-style behavior is direct utterance creation and direct speechSynthesis.speak().
 // v54: FULL version-4 voice engine restored for all languages.
@@ -110,7 +110,7 @@ document.addEventListener('visibilitychange',()=>{
 function voices(){return speechSynthesis.getVoices()||[]}
 
 // ----------------------------------------------
-// UPDATED pickVoice with name-based search for Dari
+// UPDATED pickVoice with name-based search for Persian/Farsi
 // ----------------------------------------------
 function pickVoice(lang){
   const vs = voices();
@@ -129,41 +129,42 @@ function pickVoice(lang){
            vs.find(v => v.lang && v.lang.startsWith('en'));
   }
 
-  // Dari / Farsi
-  // Collect all candidates that either have 'fa' in language OR have Persian/Farsi in name,
-  // but filter out the Bulgarian bug.
+  // Persian / Farsi mode
+  // Do not search for "Dari" or prefer fa-AF in this test.
   const candidates = vs.filter(v => {
-    const langOk = v.lang && v.lang.startsWith('fa');
-    const nameOk = v.name && /persian|farsi|dari/i.test(v.name);
+    const code = String(v.lang || '').toLowerCase();
+    const name = String(v.name || '').toLowerCase();
+    const langOk = code === 'fa-ir' || code === 'fa' || code.startsWith('fa-');
+    const nameOk = /persian|farsi|فارسی/.test(name);
     return (langOk || nameOk) && !isFalseDariVoice(v);
   });
 
-  if (candidates.length === 0) return null;
+  if (!candidates.length) return null;
 
-  // 1. Prioritize voice with "Persian" or "Farsi" in the name (your installed voice)
-  const nameMatch = candidates.find(v => /persian|farsi/i.test(v.name));
+  // 1. Prioritize voices named Persian or Farsi.
+  const nameMatch = candidates.find(v => /persian|farsi|فارسی/i.test(v.name));
   if (nameMatch) return nameMatch;
 
-  // 2. Then high‑quality voices
-  const qualityMatch = candidates.find(v => /premium|enhanced|natural|siri|google|microsoft/i.test(v.name));
-  if (qualityMatch) return qualityMatch;
+  // 2. Prefer high-quality fa-IR / fa voices.
+  const qualityFaIr = candidates.find(v => v.lang === 'fa-IR' && /premium|enhanced|natural|siri|google|microsoft/i.test(v.name));
+  if (qualityFaIr) return qualityFaIr;
 
-  // 3. Then prefer generic 'fa'
+  const qualityFa = candidates.find(v => v.lang === 'fa' && /premium|enhanced|natural|siri|google|microsoft/i.test(v.name));
+  if (qualityFa) return qualityFa;
+
+  // 3. Prefer fa-IR, then generic fa.
+  const ir = candidates.find(v => v.lang === 'fa-IR');
+  if (ir) return ir;
+
   const generic = candidates.find(v => v.lang === 'fa');
   if (generic) return generic;
 
-  // 4. Then 'fa-IR' and finally 'fa-AF'
-  const ir = candidates.find(v => v.lang === 'fa-IR');
-  if (ir) return ir;
-  const af = candidates.find(v => v.lang === 'fa-AF');
-  if (af) return af;
-
-  // 5. Fallback to first candidate
+  // 4. Any remaining fa* candidate.
   return candidates[0];
 }
 
 // ----------------------------------------------
-// UPDATED say() – for Dari, do NOT set u.voice
+// UPDATED say() – for Persian/Farsi, do NOT set u.voice
 // ----------------------------------------------
 function say(text, lang = 'de', done = () => {}) {
   if (!text) { done(); return; }
@@ -173,44 +174,66 @@ function say(text, lang = 'de', done = () => {}) {
     return;
   }
 
+  function speakEnglishFallback() {
+    const fallback = pickVoice('en');
+    const u2 = new SpeechSynthesisUtterance(text);
+    if (fallback) u2.voice = fallback;
+    u2.lang = 'en-US';
+    u2.rate = 0.92;
+    u2.pitch = 1;
+    activeUtterance = u2;
+    u2.onend = () => { activeUtterance = null; done(); };
+    u2.onerror = () => { activeUtterance = null; done(); };
+    try { speechSynthesis.resume(); } catch(e) {}
+    speechSynthesis.speak(u2);
+  }
+
   const u = new SpeechSynthesisUtterance(text);
 
   if (lang === 'fa') {
-    // Let the system choose the default Persian voice – do not set u.voice
-    u.lang = 'fa';   // 'fa' works on both iOS and Android
+    // Persian/Farsi mode:
+    // 1) Use explicit Persian/Farsi voice if the mobile browser exposes one.
+    // 2) Otherwise use fa-IR language tag without assigning u.voice.
+    const voice = pickVoice('fa');
+    if (voice) {
+      u.voice = voice;
+      u.lang = voice.lang || 'fa-IR';
+    } else {
+      u.lang = 'fa-IR';
+    }
     u.rate = 0.92;
     u.pitch = 1;
+
+    let triedGenericFa = false;
+    u.onerror = () => {
+      activeUtterance = null;
+      if (!triedGenericFa) {
+        triedGenericFa = true;
+        const uFa = new SpeechSynthesisUtterance(text);
+        uFa.lang = 'fa';
+        uFa.rate = 0.92;
+        uFa.pitch = 1;
+        activeUtterance = uFa;
+        uFa.onend = () => { activeUtterance = null; done(); };
+        uFa.onerror = () => { activeUtterance = null; speakEnglishFallback(); };
+        try { speechSynthesis.resume(); } catch(e) {}
+        speechSynthesis.speak(uFa);
+        return;
+      }
+      speakEnglishFallback();
+    };
   } else {
-    // German and English: use explicit voice selection
     const voice = pickVoice(lang);
     if (voice) u.voice = voice;
     u.lang = lang === 'de' ? 'de-DE' : 'en-US';
     u.rate = lang === 'de' ? 0.78 : 0.92;
     u.pitch = 1;
+    u.onerror = () => { activeUtterance = null; done(); };
   }
 
   activeUtterance = u;
   u.onend = () => { activeUtterance = null; done(); };
-  u.onerror = () => {
-    activeUtterance = null;
-    // If Dari fails, fallback to English voice as last resort
-    if (lang === 'fa') {
-      const fallback = pickVoice('en');
-      if (fallback) {
-        const u2 = new SpeechSynthesisUtterance(text);
-        u2.voice = fallback;
-        u2.lang = 'en-US';
-        u2.rate = 0.92;
-        u2.pitch = 1;
-        u2.onend = done;
-        u2.onerror = done;
-        speechSynthesis.speak(u2);
-        return;
-      }
-    }
-    done();
-  };
-
+  try { speechSynthesis.resume(); } catch(e) {}
   speechSynthesis.speak(u);
 }
 
@@ -265,10 +288,10 @@ function unlockSpeech(){
   els.now.textContent='Audio ready.';
 }
 function runDariVoiceSearch(){updateVoiceStatus()}
-function tryCurrentDariCandidate(){updateVoiceStatus()}
+function tryCurrentdariCandidate(){updateVoiceStatus()}
 function nextDariCandidate(){updateVoiceStatus()}
 function detectDevice(){if(els.deviceInfo)els.deviceInfo.textContent='Audio ready.'}
-function updateDariCandidateLabel(){if(els.dariCandidate)els.dariCandidate.textContent='Automatic'}
+function updatedariCandidateLabel(){if(els.dariCandidate)els.dariCandidate.textContent='Automatic'}
 function autoInitVoices(){populateAllVoiceSelects();updateVoiceStatus()}
 function scheduleAutoVoiceInit(){autoInitVoices()}
 function updateVoiceStatus(){
@@ -276,7 +299,7 @@ function updateVoiceStatus(){
   if(els.voiceDe)els.voiceDe.textContent=voiceLabel(pickVoice('de'));
   if(els.voiceEn)els.voiceEn.textContent=voiceLabel(pickVoice('en'));
   if(els.voiceFa)els.voiceFa.textContent=voiceLabel(pickVoice('fa'));
-  updateDariCandidateLabel();
+  updatedariCandidateLabel();
   updateOnlineStatus('Automatic');
 }
 function cardScript(c){
@@ -294,7 +317,7 @@ function cardScript(c){
   }
   if(els.playFa.checked&&c.dari){
     const d=displayDari(c);
-    steps.push({t:d,l:'fa',label:'Dari',sub:'Medium',audio:c.audio_fa||''});
+    steps.push({t:d,l:'fa',label:'Persian/Farsi',sub:'Medium',audio:c.audio_fa||''});
   }
   return steps.filter(x=>x.t&&String(x.t).trim()&&String(x.t).trim()!=='—');
 }
@@ -375,8 +398,12 @@ document.addEventListener('keydown',e=>{if(e.target.matches('input,select,textar
 // ----------------------------------------------
 function debugVoices() {
   const vs = speechSynthesis.getVoices();
-  const fa = vs.filter(v => v.lang.startsWith('fa') || /persian|farsi|dari/i.test(v.name));
+  const fa = vs.filter(v => {
+    const code = String(v.lang || '').toLowerCase();
+    const name = String(v.name || '').toLowerCase();
+    return code.startsWith('fa') || /persian|farsi|فارسی/.test(name);
+  });
   console.log('All voices:', vs.map(v => v.name + ' (' + v.lang + ')'));
-  console.log('Persian/Dari voices:', fa.map(v => v.name + ' (' + v.lang + ')'));
+  console.log('Persian/Farsi voices:', fa.map(v => v.name + ' (' + v.lang + ')'));
   return fa;
 }
