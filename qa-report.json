@@ -1,32 +1,28 @@
 {
-  "version": "65.0-step-mobile-flow",
+  "version": "66.0-unit-step-change-material",
   "counts": {
     "cards": 2254
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "version_badge_v65": true,
-    "cache_busting_v65": true,
+    "version_badge_v66": true,
+    "cache_busting_v66": true,
     "initiative_only_once": true,
-    "wizard_present": true,
-    "language_first_only_stage": true,
-    "material_second_stage": true,
-    "options_drawer_present": true,
-    "body_wizard_mode": true,
-    "finish_wizard_autoplay": true,
-    "main_hidden_during_wizard": true,
-    "drawer_css_present": true,
-    "autoplay_functions_present": true,
+    "wizard_has_three_steps": true,
+    "unit_step_default_all": true,
+    "unit_start_button": true,
+    "change_material_button": true,
+    "autoplay_after_unit_start": true,
+    "options_drawer_kept": true,
     "wake_lock_kept": true,
     "service_worker_not_registered": true
   },
   "node_check_stderr": "",
   "initiative_count": 1,
   "notes": [
-    "Opening screen shows only translation-language selection.",
-    "Second screen shows only material selection.",
-    "After material selection, app view opens and autoplay starts.",
-    "Options are moved into a right-side drawer."
+    "Added third wizard step for unit selection.",
+    "Unit selection defaults to all units.",
+    "Added visible change-material button in player/card interface."
   ],
   "zip_mb": 0.38
 }

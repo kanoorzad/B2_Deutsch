@@ -1,26 +1,21 @@
-# Deutsch-Karteikarten v65 — Step Mobile Flow
+# Deutsch-Karteikarten v66 — Unit Step + Change Material
 
-## Neue Startlogik
-
-Beim Öffnen sieht der Nutzer nur:
+## Flow
 
 1. Zielsprache wählen
+2. Lernmaterial wählen
+3. Einheit wählen
+   - Standard: Alle Einheiten
+4. Karten starten
 
-Danach sieht der Nutzer nur:
+## Neuer Button
 
-2. Lernmaterial wählen:
-   - B1+
-   - B2
-   - Unregelmäßige Verben
+In der Karten-/Player-Ansicht gibt es jetzt:
 
-Danach öffnet sich die Karteikarten-Oberfläche und die Wiedergabe startet automatisch.
+- Lernmaterial ändern
 
-## Mobile Bedienung
-
-- Die Hauptansicht bleibt sauber: Karte + Play/Pause/Stopp.
-- Alle weiteren Optionen liegen im rechten Seitenmenü „Optionen“.
-- Auf dem Handy muss man in der Hauptansicht nicht nach unten scrollen, außer das Menü wird geöffnet.
+Damit kann der Nutzer zurückgehen und ein anderes Material wählen.
 
 ## Öffnen
 
-https://kanoorzad.github.io/B2_Deutsch/?v=65
+https://kanoorzad.github.io/B2_Deutsch/?v=66

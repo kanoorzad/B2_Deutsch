@@ -7,17 +7,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=65">
-  <link rel="apple-touch-icon" href="icon.svg?v=65">
-  <link rel="stylesheet" href="styles.css?v=65">
-  <title>Deutsch-Karteikarten v65</title>
+  <link rel="manifest" href="manifest.webmanifest?v=66">
+  <link rel="apple-touch-icon" href="icon.svg?v=66">
+  <link rel="stylesheet" href="styles.css?v=66">
+  <title>Deutsch-Karteikarten v66</title>
 </head>
 <body class="wizardMode">
+
 
 <div id="startWizard" class="startWizard" aria-live="polite">
   <section id="wizardLang" class="wizardStep active">
     <div class="wizardCard">
-      <p class="wizardKicker">Schritt 1 von 2</p>
+      <p class="wizardKicker">Schritt 1 von 3</p>
       <h1>Zielsprache wählen</h1>
       <p>Wähle zuerst die Sprache, in der die deutsche Karte übersetzt und vorgelesen werden soll.</p>
       <div class="choiceGrid languageChoices">
@@ -34,7 +35,7 @@
 
   <section id="wizardMaterial" class="wizardStep">
     <div class="wizardCard">
-      <p class="wizardKicker">Schritt 2 von 2</p>
+      <p class="wizardKicker">Schritt 2 von 3</p>
       <h1>Lernmaterial wählen</h1>
       <p id="wizardChosenLang">Zielsprache: —</p>
       <div class="choiceGrid materialChoices">
@@ -45,13 +46,31 @@
       <button type="button" id="wizardBack" class="ghostBtn">Zurück zur Sprache</button>
     </div>
   </section>
+
+  <section id="wizardUnit" class="wizardStep">
+    <div class="wizardCard">
+      <p class="wizardKicker">Schritt 3 von 3</p>
+      <h1>Einheit wählen</h1>
+      <p id="wizardChosenMaterial">Lernmaterial: —</p>
+      <label class="wizardSelectLabel">Einheit
+        <select id="wizardUnitSelect">
+          <option value="all">Alle Einheiten</option>
+        </select>
+      </label>
+      <div class="choiceGrid unitActions">
+        <button type="button" id="wizardStart">Karten starten</button>
+      </div>
+      <button type="button" id="wizardBackMaterial" class="ghostBtn">Zurück zum Lernmaterial</button>
+    </div>
+  </section>
 </div>
 
 <button type="button" id="optionsToggle" class="optionsToggle hidden" aria-expanded="false">Optionen</button>
 <div id="drawerBackdrop" class="drawerBackdrop hidden"></div>
 
+
 <header class="hero">
-  <em class="versionBadge">v65</em>
+  <em class="versionBadge">v66</em>
   <h1>Deutsch-Karteikarten</h1>
   <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
   <p class="initiative"><em>Initiative by Khalid Noorzad for Afghan Students</em></p>
@@ -80,6 +99,7 @@
       <div class="navRow"><button id="prev">Zurück</button><button id="flip" class="primary ghost">Umdrehen</button><button id="next">Weiter</button></div>
       <button id="speakFront" class="wide">Sichtbaren Text sprechen</button>
       <p id="nowPlaying" class="now">Bereit.</p>
+        <button type="button" id="changeMaterial" class="changeMaterialBtn">Lernmaterial ändern</button>
       <p id="speechWarning" class="warning hidden"></p>
     </section>
 
@@ -205,7 +225,7 @@
   </section>
 </main>
 
-<script src="data.js?v=65"></script>
-<script src="app.js?v=65"></script>
+<script src="data.js?v=66"></script>
+<script src="app.js?v=66"></script>
 </body>
 </html>

@@ -1,8 +1,8 @@
-// v65: full user-provided script applied; Persian/Persian/Farsi debug helper included.
-// v65: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v65AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh65=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh65='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+// v66: full user-provided script applied; Persian/Persian/Farsi debug helper included.
+// v66: remove old service workers/caches once so old broken versions cannot control audio.
+(function(){try{const key='v66AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh66=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh66='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
-const STORE='b2-native-cards-extra-v65';
+const STORE='b2-native-cards-extra-v66';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');
 let cards=[...initialData,...extra];
 let filtered=[]; let idx=0; let flipped=false; let lastFront=null; let playing=false; let paused=false; let playQueue=[]; let playIndex=0;
@@ -139,15 +139,15 @@ function render(){const c=filtered[idx];if(!c){els.frontText.textContent='Keine 
 function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=false;render()}function prev(){if(!filtered.length)return;idx=(idx-1+filtered.length)%filtered.length;flipped=false;render()}function flip(){flipped=!flipped;render()}
 
 
-// v65 audio engine: native best-quality voices for German/English; Persian/Farsi Auto = native Farsi/Persian voice if it truly works, otherwise local high-quality sprite fallback.
-// v65 browser voice engine with brute-force Persian/Farsi mobile candidates.
-// Keeps v65-v65 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
+// v66 audio engine: native best-quality voices for German/English; Persian/Farsi Auto = native Farsi/Persian voice if it truly works, otherwise local high-quality sprite fallback.
+// v66 browser voice engine with brute-force Persian/Farsi mobile candidates.
+// Keeps v66-v66 browser SpeechSynthesis, but tries all practical BCP-47 tags and voice-name forms.
 // No local sprite/WebAudio/remote TTS.
-// v65 Persian/Farsi voice restored to version-4 style.
+// v66 Persian/Farsi voice restored to version-4 style.
 // Keep direct browser SpeechSynthesis. No online TTS, no audio sprites, no provider router.
-// The key v65-style behavior is direct utterance creation and direct speechSynthesis.speak().
-// v65: FULL version-4 voice engine restored for all languages.
-// This is the original v65 pattern:
+// The key v66-style behavior is direct utterance creation and direct speechSynthesis.speak().
+// v66: FULL version-4 voice engine restored for all languages.
+// This is the original v66 pattern:
 // voices() -> pickVoice(lang) -> say(text, lang, done)
 // Direct SpeechSynthesisUtterance only. No online TTS. No router. No local audio sprite.
 let activeUtterance=null;
@@ -426,18 +426,31 @@ function finishWizard(){
   apply();
   render();
 }
+function populateWizardUnits(){
+  const sel=$('wizardUnitSelect');
+  if(!sel || !els.list)return;
+  const l=els.list.value;
+  const pool=l==='all'?cards:cards.filter(c=>c.list===l);
+  const units=unique(pool.map(c=>c.unit));
+  sel.innerHTML='<option value="all">Alle Einheiten</option>'+units.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');
+  sel.value='all';
+}
+function showWizardStep(stepId){
+  ['wizardLang','wizardMaterial','wizardUnit'].forEach(id=>$(id)?.classList.remove('active'));
+  $(stepId)?.classList.add('active');
+}
 function initStartWizard(){
   const w=$('startWizard');
   if(!w)return;
   document.body.classList.add('wizardMode');
-  const langStep=$('wizardLang'), matStep=$('wizardMaterial'), chosen=$('wizardChosenLang');
+  const chosen=$('wizardChosenLang');
+  const chosenMat=$('wizardChosenMaterial');
   document.querySelectorAll('[data-wizard-lang]').forEach(btn=>{
     btn.addEventListener('click',()=>{
       const lang=btn.dataset.wizardLang;
       if(els.targetLang)els.targetLang.value=lang;
       if(chosen)chosen.textContent='Zielsprache: '+langLabelFor(lang);
-      langStep?.classList.remove('active');
-      matStep?.classList.add('active');
+      showWizardStep('wizardMaterial');
       apply();
     });
   });
@@ -445,14 +458,38 @@ function initStartWizard(){
     btn.addEventListener('click',()=>{
       if(els.list)els.list.value=btn.dataset.wizardList;
       updateUnits();
+      populateWizardUnits();
+      if(chosenMat)chosenMat.textContent='Lernmaterial: '+btn.textContent.trim();
+      showWizardStep('wizardUnit');
       apply();
-      finishWizard();
-      setTimeout(()=>playSelected(),180);
     });
   });
-  $('wizardBack')?.addEventListener('click',()=>{
-    matStep?.classList.remove('active');
-    langStep?.classList.add('active');
+  $('wizardUnitSelect')?.addEventListener('change',()=>{
+    if(els.unit){
+      els.unit.value=$('wizardUnitSelect').value||'all';
+      updateParts();
+      apply();
+    }
+  });
+  $('wizardStart')?.addEventListener('click',()=>{
+    if(els.unit){
+      els.unit.value=$('wizardUnitSelect')?.value||'all';
+      updateParts();
+    }
+    apply();
+    finishWizard();
+    setTimeout(()=>playSelected(),180);
+  });
+  $('wizardBack')?.addEventListener('click',()=>showWizardStep('wizardLang'));
+  $('wizardBackMaterial')?.addEventListener('click',()=>showWizardStep('wizardMaterial'));
+  $('changeMaterial')?.addEventListener('click',()=>{
+    stop(false);
+    closeOptionsDrawer();
+    document.body.classList.add('wizardMode');
+    document.body.classList.remove('appReady');
+    $('startWizard')?.classList.remove('hidden');
+    $('optionsToggle')?.classList.add('hidden');
+    showWizardStep('wizardMaterial');
   });
   $('optionsToggle')?.addEventListener('click',openOptionsDrawer);
   $('optionsClose')?.addEventListener('click',closeOptionsDrawer);

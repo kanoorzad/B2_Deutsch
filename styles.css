@@ -70,7 +70,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 .miniControls{display:flex;gap:.5rem;flex-wrap:wrap;margin:.55rem 0}
 .miniControls button{font-size:.82rem;padding:.55rem .7rem}
 
-/* v65 multilingual German UI polish */
+/* v66 multilingual German UI polish */
 .targetLangField select {
   font-weight: 700;
 }
@@ -98,7 +98,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 }
 
 
-/* v65 final clean polish */
+/* v66 final clean polish */
 .pendingTranslation {
   display: inline-block;
   color: var(--muted, #73798a);
@@ -118,7 +118,7 @@ select#targetLang option {
 }
 
 
-/* v65 start-flow polish */
+/* v66 start-flow polish */
 .startPanel {
   border: 1px solid rgba(255,255,255,.16);
   border-radius: 22px;
@@ -149,7 +149,7 @@ select#targetLang option {
 }
 
 
-/* v65 step-by-step mobile flow */
+/* v66 step-by-step mobile flow */
 body.wizardMode > header,
 body.wizardMode > aside,
 body.wizardMode > main,
@@ -322,5 +322,53 @@ body.appReady .hero {
   }
   .choiceGrid {
     grid-template-columns: 1fr;
+  }
+}
+
+
+/* v66 unit-step and change-material improvements */
+.wizardSelectLabel {
+  display: grid;
+  gap: 10px;
+  margin: 22px 0;
+  font-weight: 800;
+}
+.wizardSelectLabel select {
+  min-height: 58px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.12);
+  color: #fff;
+  font-weight: 850;
+  font-size: 1.02rem;
+  padding: 0 14px;
+}
+.wizardSelectLabel option {
+  color: #111;
+}
+.changeMaterialBtn {
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 850;
+  background: rgba(255,255,255,.10);
+  color: inherit;
+  margin: 6px auto 8px;
+  display: inline-flex;
+  align-self: center;
+  justify-content: center;
+}
+body.wizardMode .changeMaterialBtn {
+  display: none !important;
+}
+@media (max-width: 760px) {
+  .changeMaterialBtn {
+    min-height: 42px;
+    font-size: .92rem;
+    margin: 2px auto 6px;
+  }
+  .wizardCard {
+    max-height: calc(100svh - 36px);
+    overflow: auto;
   }
 }
