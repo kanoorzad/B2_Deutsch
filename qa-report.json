@@ -1,32 +1,35 @@
 {
+  "version": "6.0",
   "counts": {
     "b2Entries": 1629,
-    "irregularVerbs": 150
+    "b1PlusEntries": 475,
+    "irregularVerbs": 150,
+    "totalCards": 2254,
+    "cardsWithTwoSynonyms": 2254,
+    "cardsWithEnglish": 2254,
+    "cardsWithDari": 2254
   },
-  "b2ByUnit": {
-    "Unit 1": 140,
-    "Unit 2": 144,
-    "Unit 3": 134,
-    "Unit 4": 124,
-    "Unit 5": 126,
-    "Unit 6": 142,
-    "Unit 7": 145,
-    "Unit 8": 136,
-    "Unit 9": 124,
-    "Unit 10": 128,
-    "Unit 11": 148,
-    "Unit 12": 138
+  "checks": {
+    "all_cards_have_english": true,
+    "all_cards_have_dari": true,
+    "all_cards_have_two_synonyms": true,
+    "flip_view_contains_three_language_cards": true,
+    "dari_flip_card_is_rtl": true,
+    "pause_resume_function_defined": true,
+    "strict_playback_order": true
   },
-  "b2ByCategory": {
-    "noun": 971,
-    "verb": 392,
-    "phrase": 42,
-    "adjective": 224
+  "lists": {
+    "B2 all 12 units": 1629,
+    "Irregular verbs": 150,
+    "B1 Plus 7 Units": 475
   },
-  "verbFormQuality": {
-    "regular-estimate": 294,
-    "source-pdf-exact": 21,
-    "derived-from-irregular-root": 74,
-    "missing": 3
-  }
+  "improvements": [
+    "Less crowded layout: filters, listening, add-card, and backup sections are grouped with collapsible panels.",
+    "Flip view shows German, US English, and Dari in three large readable language cards.",
+    "Dari answer card uses RTL direction and larger line height.",
+    "Two synonyms are rendered as visible chips.",
+    "Pause/Resume function is defined and safe.",
+    "Listening playback changes the visible card before the voice starts.",
+    "Manual Dari fixes added for the 24 entries that were missing Dari in the B1 Plus source parse."
+  ]
 }
