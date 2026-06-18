@@ -70,7 +70,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 .miniControls{display:flex;gap:.5rem;flex-wrap:wrap;margin:.55rem 0}
 .miniControls button{font-size:.82rem;padding:.55rem .7rem}
 
-/* v76 multilingual German UI polish */
+/* v77 multilingual German UI polish */
 .targetLangField select {
   font-weight: 700;
 }
@@ -98,7 +98,7 @@ button,.fileBtn{min-width:0;white-space:normal}
 }
 
 
-/* v76 final clean polish */
+/* v77 final clean polish */
 .pendingTranslation {
   display: inline-block;
   color: var(--muted, #73798a);
@@ -118,7 +118,7 @@ select#targetLang option {
 }
 
 
-/* v76 start-flow polish */
+/* v77 start-flow polish */
 .startPanel {
   border: 1px solid rgba(255,255,255,.16);
   border-radius: 22px;
@@ -149,7 +149,7 @@ select#targetLang option {
 }
 
 
-/* v76 step-by-step mobile flow */
+/* v77 step-by-step mobile flow */
 body.wizardMode > header,
 body.wizardMode > aside,
 body.wizardMode > main,
@@ -326,7 +326,7 @@ body.appReady .hero {
 }
 
 
-/* v76 unit-step and change-material improvements */
+/* v77 unit-step and change-material improvements */
 .wizardSelectLabel {
   display: grid;
   gap: 10px;
@@ -462,13 +462,13 @@ body.wizardMode .changeMaterialBtn {
 }
 
 
-/* v76 repairs */
+/* v77 repairs */
 .voiceStatus{line-height:1.45;word-break:break-word}
 .compactLangGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 .wizardUnitNote{margin-top:8px;font-size:.9rem;opacity:.76;text-align:center}
 
 
-/* v76 wizard click and version tag fix */
+/* v77 wizard click and version tag fix */
 .startWizard {
   position: fixed;
   inset: 0;
@@ -506,7 +506,7 @@ body.wizardMode .changeMaterialBtn {
 }
 
 
-/* v76 deep wizard repair */
+/* v77 deep wizard repair */
 .startWizard{
   position:fixed;
   inset:0;
@@ -539,7 +539,7 @@ body.wizardMode .changeMaterialBtn {
 .wizardUnitNote{margin:10px 0 0;text-align:center;opacity:.78;font-size:.92rem}
 
 
-/* v76 independent wizard click repair */
+/* v77 independent wizard click repair */
 .startWizard{
   position:fixed;
   inset:0;
@@ -572,7 +572,7 @@ body.wizardMode .changeMaterialBtn {
 .wizardUnitNote{margin:10px 0 0;text-align:center;opacity:.78;font-size:.92rem}
 
 
-/* v76 full flow repair */
+/* v77 full flow repair */
 .optionsToggle{position:fixed;top:14px;left:14px;z-index:2147483641;min-height:42px;padding:8px 13px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center}
 body.wizardMode .optionsToggle{display:none!important}
 body.appReady .optionsToggle{display:inline-flex!important}
@@ -588,7 +588,7 @@ body.appReady .optionsToggle{display:inline-flex!important}
 .optionsDrawer[hidden],.drawerBackdrop[hidden]{display:none!important}
 
 
-/* v76 autoplay sequence repair */
+/* v77 autoplay sequence repair */
 .optionsToggle{position:fixed;top:14px;left:14px;z-index:2147483641;min-height:42px;padding:8px 13px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center}
 body.wizardMode .optionsToggle{display:none!important}
 body.appReady .optionsToggle{display:inline-flex!important}
@@ -604,7 +604,7 @@ body.appReady .optionsToggle{display:inline-flex!important}
 .optionsDrawer[hidden],.drawerBackdrop[hidden]{display:none!important}
 
 
-/* v76 inline display + options + A1 verb forms fix */
+/* v77 inline display + options + A1 verb forms fix */
 #front.isReading,#en.isReading{
   outline:3px solid rgba(45,212,191,.75);
   box-shadow:0 0 0 6px rgba(45,212,191,.16);
@@ -633,6 +633,52 @@ body.appReady .optionsToggle{display:inline-flex!important}
   background:rgba(0,0,0,.45);
 }
 .optionsDrawer[hidden],.drawerBackdrop[hidden]{display:none!important}
+.startWizard{position:fixed;inset:0;z-index:2147483640;display:grid;place-items:center;padding:18px;background:radial-gradient(circle at top,rgba(45,212,191,.16),transparent 42%),#0f172a;pointer-events:auto!important}
+.startWizard[hidden]{display:none!important}
+.wizardStep{display:none!important;width:min(680px,100%);pointer-events:auto!important}
+.wizardStep.active{display:block!important}
+.wizardCard{position:relative;pointer-events:auto!important}
+.wizardCard button{pointer-events:auto!important;cursor:pointer!important;touch-action:manipulation}
+.startVersionTag{position:absolute;top:12px;right:14px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);font-style:normal;font-weight:900;font-size:.82rem;letter-spacing:.03em}
+.compactLangGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.wizardUnitNote{margin:10px 0 0;text-align:center;opacity:.78;font-size:.92rem}
+
+
+/* v77 full interlink repair */
+#en.targetVisible{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  min-height:42px;
+  font-size:clamp(1.05rem,3.7vw,1.6rem);
+  line-height:1.35;
+  color:inherit;
+}
+#front.isReading,#frontText.isReading,#en.isReading{
+  outline:3px solid rgba(45,212,191,.75);
+  box-shadow:0 0 0 6px rgba(45,212,191,.16);
+  border-radius:18px;
+  transition:outline .15s ease,box-shadow .15s ease;
+}
+.optionsToggle{position:fixed;top:14px;left:14px;z-index:2147483641;min-height:42px;padding:8px 13px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center}
+body.wizardMode .optionsToggle{display:none!important}
+body.appReady .optionsToggle{display:inline-flex!important}
+.optionsDrawer{
+  position:fixed;
+  top:0;
+  right:0;
+  bottom:0;
+  width:min(420px,92vw);
+  z-index:2147483642;
+  overflow:auto;
+  background:#0f172a;
+  border-left:1px solid rgba(255,255,255,.16);
+  padding:18px;
+}
+.drawerBackdrop{position:fixed;inset:0;z-index:2147483641;background:rgba(0,0,0,.45)}
+.optionsDrawer[hidden],.drawerBackdrop[hidden]{display:none!important}
+.optionActions{display:grid;gap:10px;margin:14px 0}
+.closeOptions{float:right}
 .startWizard{position:fixed;inset:0;z-index:2147483640;display:grid;place-items:center;padding:18px;background:radial-gradient(circle at top,rgba(45,212,191,.16),transparent 42%),#0f172a;pointer-events:auto!important}
 .startWizard[hidden]{display:none!important}
 .wizardStep{display:none!important;width:min(680px,100%);pointer-events:auto!important}

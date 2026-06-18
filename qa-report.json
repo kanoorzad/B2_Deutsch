@@ -1,15 +1,19 @@
 {
-  "version": "76.0-inline-options-a1verb-fix",
+  "version": "77.0-full-interlink-repair",
   "user_reported_issues": [
-    "Reading and writing on card are not inline/synchronized.",
-    "Options button is not working.",
-    "Remove present/past/perfect for A1 verbs; only infinitive is OK."
+    "Interface language should be German.",
+    "German word displays, English voice plays, but English word does not display; possible all-language display issue.",
+    "Options button has no return to main language page.",
+    "Options close button inactive.",
+    "Need all button interlinking and logic checked."
   ],
   "fixes": [
-    "Added visual reading highlight to German/form side and translation side.",
-    "Options button now explicitly opens drawer/backdrop and close button/backdrop closes it.",
-    "Normal A1 verb cards now keep only forms.infinitive; present3/past/perfect are blank.",
-    "A1 Irregular Verbs keep their forms because they were requested separately to match irregular-verb structure."
+    "Core option labels set in German.",
+    "Translation display element forced visible and updated for selectedLang on every render.",
+    "Options drawer rebuilt with Schließen, Zur Sprachauswahl, Lernmaterial ändern, and Aktuelle Auswahl neu starten.",
+    "Close button and backdrop both close drawer.",
+    "Options return-to-language stops playback and reopens first language page.",
+    "Material/language sample checks confirm all existing reading materials have visible translations for all six target languages."
   ],
   "cards": 3171,
   "list_counts": {
@@ -19,9 +23,6 @@
     "A1 Irregular Verbs": 76,
     "A1": 841
   },
-  "a1_normal_verb_cards": 179,
-  "a1_normal_verb_cards_only_infinitive": 179,
-  "a1_irregular_verb_cards_with_forms_preserved": 76,
   "translation_coverage": {
     "en": 3171,
     "fa": 3171,
@@ -38,19 +39,65 @@
     "uk": 0,
     "tr": 0
   },
+  "material_language_sample": {
+    "A1": {
+      "en": true,
+      "fa": true,
+      "es": true,
+      "ru": true,
+      "uk": true,
+      "tr": true
+    },
+    "A1 Irregular Verbs": {
+      "en": true,
+      "fa": true,
+      "es": true,
+      "ru": true,
+      "uk": true,
+      "tr": true
+    },
+    "B1 Plus 7 Units": {
+      "en": true,
+      "fa": true,
+      "es": true,
+      "ru": true,
+      "uk": true,
+      "tr": true
+    },
+    "B2 all 12 units": {
+      "en": true,
+      "fa": true,
+      "es": true,
+      "ru": true,
+      "uk": true,
+      "tr": true
+    },
+    "B2 Irregular Verbs": {
+      "en": true,
+      "fa": true,
+      "es": true,
+      "ru": true,
+      "uk": true,
+      "tr": true
+    }
+  },
   "checks": {
     "javascript_syntax_ok": true,
-    "v76_controller_present": true,
-    "inline_reading_highlight_present": true,
-    "options_open_close_present": true,
-    "options_drawer_css_present": true,
-    "a1_normal_verbs_only_infinitive": true,
-    "a1_irregular_forms_preserved": true,
-    "autoplay_sequence_kept": true,
+    "v77_controller_present": true,
+    "interface_core_labels_german": true,
+    "translation_element_forced_visible": true,
+    "translation_text_rendered_all_langs_logic": true,
+    "options_open_close_wired": true,
+    "options_back_to_language_present": true,
+    "options_back_to_material_present": true,
+    "restart_current_present": true,
+    "autoplay_sequence_present": true,
+    "a1_kept": true,
     "translations_complete": true,
-    "cache_busting_v76": true
+    "material_language_samples_ok": true,
+    "cache_busting_v77": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=76",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=77",
   "zip_mb": 1.75
 }

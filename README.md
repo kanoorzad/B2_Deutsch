@@ -1,14 +1,19 @@
-# German A1-B2 telc system Important words v76
+# German A1-B2 telc system Important words v77
 
-Inline display, options drawer, and A1 verb-form repair.
+Full interlink repair.
 
 ## Fixed
 
-- Reading and displayed text now stay visually synchronized with a reading highlight.
-- Options button opens the options drawer.
-- Drawer close button and backdrop close it.
-- Normal A1 verbs now show/read only the infinitive form.
-- A1 Irregular Verbs keep their irregular forms.
+- German UI labels restored for core option actions.
+- Translation text is now forced visible and updated for the selected target language.
+- Options drawer includes:
+  - Schließen
+  - Zur Sprachauswahl
+  - Lernmaterial ändern
+  - Aktuelle Auswahl neu starten
+- Close button and backdrop now close the drawer.
+- Return to language selection stops playback and reopens first language page.
+- Existing materials and all six target languages were cross-checked.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=76
+https://kanoorzad.github.io/B2_Deutsch/?v=77
