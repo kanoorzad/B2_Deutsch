@@ -1,19 +1,21 @@
 {
-  "version": "84.0-from-v83-report-backend-ready",
+  "version": "85.0-report-problem-fixed-from-v83",
   "base": "v83_final_addendum",
   "implemented": [
-    "Background audio best-effort retained/enhanced with Service Worker, AudioContext, and MediaSession.",
-    "Options watermark/placeholder and visible TTS voice mapping removed.",
-    "Wortart filter auto-closes options and starts playback.",
-    "Visible Unit labels changed to Einheit.",
-    "Report a Problem module added.",
-    "Frontend posts to /api/report-problem; recipient email is not in frontend/UI.",
-    "Node/Vercel server-side endpoint included in api/report-problem.js."
+    "Fixed Report Problem flow with stable overlay instead of broken flashcard flip.",
+    "Problem melden button is German.",
+    "Report page has Betreff, Zusammenfassung, Absenden, and Zurück.",
+    "Flashcard and controls are hidden/disabled while reporting mode is active.",
+    "Submit shows German thank-you message and replaces form actions with Zurück.",
+    "Zurück restores the learning view and resumes playback when it was active before reporting.",
+    "Frontend posts to /api/report-problem; recipient email is only in server-side endpoint file.",
+    "Voice mapping UI and watermark section remain removed.",
+    "Wortart filter auto-closes and autoplays.",
+    "Background audio best-effort retained."
   ],
   "important_limitations": [
-    "GitHub Pages alone cannot send email because it cannot run server-side endpoints. Deploy the included api/report-problem.js on Vercel/Node or adapt it to your backend.",
-    "The email address exists only in the backend endpoint file, not in frontend UI.",
-    "Mobile web/PWA background TTS remains best-effort. Guaranteed screen-off playback needs native background audio or bundled/backend audio."
+    "GitHub Pages alone cannot send email because it cannot run server-side endpoints. Deploy api/report-problem.js on Vercel/Node or adapt it to your backend.",
+    "Browser/PWA background TTS remains best-effort. Guaranteed locked-screen playback requires native background audio or bundled/backend audio."
   ],
   "cards": 3171,
   "list_counts": {
@@ -45,28 +47,28 @@
   "checks": {
     "javascript_syntax_ok": true,
     "base_is_v83_final_addendum": true,
-    "voice_mapping_removed_from_options_ui": true,
-    "no_voice_map_card": true,
-    "watermark_under_filter_removed": true,
-    "problem_report_button_present": true,
-    "problem_report_form_present": true,
-    "problem_report_closes_options": true,
-    "problem_report_confirmation": true,
-    "problem_report_restore_state_logic": true,
-    "report_backend_endpoint_included": true,
+    "problem_button_german": true,
+    "report_overlay_present": true,
+    "report_overlay_not_trapped": true,
+    "report_hides_controls": true,
+    "report_submit_and_back_german": true,
+    "report_posts_to_backend": true,
+    "backend_endpoint_included": true,
     "email_not_visible_in_frontend": true,
+    "voice_mapping_removed_from_options_ui": true,
+    "watermark_under_filter_removed": true,
     "filter_auto_closes_and_autoplays": true,
     "unit_replaced_in_visible_ui": true,
     "background_audio_best_effort": true,
     "service_worker_present": true,
-    "tts_priority_rules_still_present": true,
-    "headword_single_line_fit": true,
+    "tts_priority_rules_kept": true,
+    "headword_single_line_fit_kept": true,
     "exact_synonym_counts_all_cards": true,
     "a1_normal_verbs_only_infinitive": true,
     "translations_complete": true,
-    "cache_busting_v84": true
+    "cache_busting_v85": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=84",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=85",
   "zip_mb": 1.79
 }
