@@ -7,9 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=83">
-  <link rel="apple-touch-icon" href="icon.svg?v=83">
-  <link rel="stylesheet" href="styles.css?v=83">
+  <link rel="manifest" href="manifest.webmanifest?v=84">
+  <link rel="apple-touch-icon" href="icon.svg?v=84">
+  <link rel="stylesheet" href="styles.css?v=84">
   <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v83</title>
 </head>
 <body class="wizardMode">
@@ -35,19 +35,8 @@
 <aside id="optionsDrawer" class="optionsDrawer" hidden><button id="closeOptions" type="button" class="closeOptions">Schließen</button><h2>Optionen</h2>
 <section class="optionSection"><h3>Übersetzungssprache wechseln</h3><p class="small">Sie können die Sprache während des Lernens wechseln. Die aktuelle Karte wird sofort in der neuen Sprache angezeigt.</p><div class="optionLanguageGrid"><button type="button" data-change-lang="en">Englisch</button><button type="button" data-change-lang="fa">Fasisch</button><button type="button" data-change-lang="es">Spanisch</button><button type="button" data-change-lang="ru">Russisch</button><button type="button" data-change-lang="uk">Ukrainisch</button><button type="button" data-change-lang="tr">Türkisch</button></div></section>
 <section class="optionSection"><label for="posFilterOptions"><strong>Wortart filtern</strong></label><select id="posFilterOptions"><option value="all">Alle</option></select></section>
-<div class="voiceMapCard">
-<h3>Stimmenzuordnung</h3>
-<ul>
-<li><strong>Deutsch:</strong> Microsoft Seraphina</li>
-<li><strong>Englisch:</strong> Microsoft Ava</li>
-<li><strong>Fasisch:</strong> Microsoft دلارا</li>
-<li><strong>Spanisch:</strong> Microsoft Elvira</li>
-<li><strong>Russisch:</strong> Microsoft Светлана</li>
-<li><strong>Ukrainisch:</strong> Microsoft Поліна</li>
-<li><strong>Türkisch:</strong> Microsoft Emel</li>
-</ul>
-</div>
-<div class="optionActions"><button id="backToLanguage" type="button" class="secondaryBtn">Zur Sprachauswahl</button><button id="backToMaterial" type="button" class="secondaryBtn">Lernmaterial ändern</button><button id="restartCurrent" type="button" class="secondaryBtn">Aktuelle Karte neu anzeigen</button></div>
+<div class="optionActions"><button id="backToLanguage" type="button" class="secondaryBtn">Zur Sprachauswahl</button><button id="backToMaterial" type="button" class="secondaryBtn">Lernmaterial ändern</button><button id="reportProblemBtn" type="button" class="secondaryBtn">Report a Problem</button>
+<button id="restartCurrent" type="button" class="secondaryBtn">Aktuelle Karte neu anzeigen</button></div>
 <p id="voiceStatus" class="small voiceStatus">Stimmen werden geladen …</p><p class="footerCredit">Initiative von: Khalid Noorzad</p></aside><div id="drawerBackdrop" class="drawerBackdrop" hidden></div>
 <main class="shell">
   <section class="study">
@@ -191,10 +180,19 @@
     <details><summary>Eigene Karte hinzufügen</summary><form id="addForm"><div class="grid"><label>Wortart<select name="category"><option>noun</option><option>verb</option><option>adjective</option><option>phrase</option><option>other</option></select></label><label>Einheit<input name="unit" placeholder="My list"></label></div><label>Deutsch<input name="german" required></label><div class="grid"><label>Artikel<input name="article" placeholder="der/die/das"></label><label>Plural<input name="plural"></label></div><div class="grid"><label>Englisch<input name="english" required></label><label>Fasisch<input name="persian" required dir="rtl"></label></div><details><summary>Verbformen</summary><label>Infinitive<input name="infinitive"></label><label>Past / Präteritum<input name="past"></label><label>Perfekt<input name="perfect"></label><label>Plusquamperfekt<input name="plusquamperfekt"></label></details><label>Ähnliche Bedeutungen<input name="synonyms" placeholder="three verb synonyms, comma separated"></label><button class="primary">Karte hinzufügen</button></form></details>
     
   </section>
+<section id="problemReportView" class="problemReportView" hidden>
+  <div class="problemReportCard">
+    <h2>Problem melden</h2>
+    <textarea id="problemReportText" rows="7" placeholder="Beschreiben Sie Ihr Problem hier..."></textarea>
+    <button id="submitProblemReport" type="button" class="primaryBtn">Submit</button>
+    <p id="problemReportThanks" class="problemReportThanks" hidden>Vielen Dank für die Meldung des Problems, wir werden uns schnellstmöglich darum kümmern.</p>
+    <button id="backFromProblemReport" type="button" class="secondaryBtn" hidden>Back</button>
+  </div>
+</section>
 </main>
 
-<script src="data.js?v=83"></script>
-<script src="app.js?v=83"></script>
+<script src="data.js?v=84"></script>
+<script src="app.js?v=84"></script>
 <script id="v83-controller">
 (function(){
   window.__v83Controller=true;
@@ -254,6 +252,24 @@
 })();
 </script>
 <div id="installBanner" class="installBanner" hidden><span>Möchten Sie diese App auf Ihrem Startbildschirm installieren?</span><button id="installAccept" type="button">Installieren</button><button id="installLater" type="button">Später</button></div>
+<script id="v84-report-problem-addon">
+(function(){
+  window.__v84ReportProblemAddon = true;
+  const REPORT_ENDPOINT = '/api/report-problem';
+  let savedReportState = null, bgAudioCtx=null, bgOsc=null, bgGain=null;
+  function $(id){return document.getElementById(id);}
+  function closeOptions(){const d=$('optionsDrawer'),b=$('drawerBackdrop');if(d){d.hidden=true;d.classList.remove('open');d.style.display='none'}if(b){b.hidden=true;b.style.display='none'}}
+  function keepBackgroundAudioAlive(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!bgAudioCtx)bgAudioCtx=new C();if(bgAudioCtx.state==='suspended')bgAudioCtx.resume();if(!bgOsc){bgGain=bgAudioCtx.createGain();bgGain.gain.value=0.00001;bgOsc=bgAudioCtx.createOscillator();bgOsc.frequency.value=1;bgOsc.connect(bgGain).connect(bgAudioCtx.destination);bgOsc.start()}}catch(e){}try{if('mediaSession'in navigator){navigator.mediaSession.metadata=new MediaMetadata({title:'Deutsch Sprache – Wichtige Wörter',artist:'Initiative von: Khalid Noorzad'})}}catch(e){}}
+  if('speechSynthesis'in window&&!window.__v84SpeakPatched){window.__v84SpeakPatched=true;const os=window.speechSynthesis.speak.bind(window.speechSynthesis);window.speechSynthesis.speak=function(u){keepBackgroundAudioAlive();return os(u)}}
+  function hideFlashUI(h){['card','playerControls','optionsToggle'].forEach(id=>{const el=$(id);if(el)el.style.display=h?'none':''})}
+  function openProblemReport(){savedReportState={nowPlaying:$('nowPlaying')?$('nowPlaying').textContent:'', card:$('card')?$('card').innerHTML:''};closeOptions();try{speechSynthesis.cancel()}catch(e){}hideFlashUI(true);const v=$('problemReportView');if(v){v.hidden=false;v.style.display='grid'}const ta=$('problemReportText'),s=$('submitProblemReport'),t=$('problemReportThanks'),b=$('backFromProblemReport');if(ta){ta.value='';ta.hidden=false;ta.style.display='block';ta.focus()}if(s){s.hidden=false;s.style.display='inline-flex';s.disabled=false}if(t)t.hidden=true;if(b)b.hidden=true}
+  async function submitProblemReport(){const ta=$('problemReportText'),s=$('submitProblemReport'),t=$('problemReportThanks'),b=$('backFromProblemReport');if(s)s.disabled=true;const payload={message:(ta&&ta.value)||'',card:(window.current&&window.current())?(window.current().german||window.current().id||''):'',timestamp:new Date().toISOString(),userAgent:navigator.userAgent};try{await fetch(REPORT_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})}catch(e){try{localStorage.setItem('lastProblemReport',JSON.stringify(payload))}catch(_){}}if(ta){ta.hidden=true;ta.style.display='none'}if(s){s.hidden=true;s.style.display='none'}if(t){t.textContent='Vielen Dank für die Meldung des Problems, wir werden uns schnellstmöglich darum kümmern.';t.hidden=false}if(b)b.hidden=false}
+  function restoreProblemReport(){const v=$('problemReportView');if(v){v.hidden=true;v.style.display='none'}hideFlashUI(false);try{if(typeof window.renderCard==='function')window.renderCard('german');else if(savedReportState&&$('card'))$('card').innerHTML=savedReportState.card}catch(e){}if(savedReportState&&$('nowPlaying'))$('nowPlaying').textContent=savedReportState.nowPlaying||$('nowPlaying').textContent;savedReportState=null}
+  document.addEventListener('change',function(ev){if(ev.target&&ev.target.id==='posFilterOptions'){closeOptions();setTimeout(()=>{const p=$('playList');if(p)p.click()},180)}},true);
+  document.addEventListener('click',function(ev){if(ev.target.closest&&ev.target.closest('#reportProblemBtn')){ev.preventDefault();ev.stopPropagation();openProblemReport();return false}if(ev.target.closest&&ev.target.closest('#submitProblemReport')){ev.preventDefault();ev.stopPropagation();submitProblemReport();return false}if(ev.target.closest&&ev.target.closest('#backFromProblemReport')){ev.preventDefault();ev.stopPropagation();restoreProblemReport();return false}},true);
+  document.addEventListener('visibilitychange',keepBackgroundAudioAlive,true);window.addEventListener('pagehide',keepBackgroundAudioAlive,true);
+})();
+</script>
 </body>
 </html>
 

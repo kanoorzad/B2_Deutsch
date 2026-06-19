@@ -1,21 +1,17 @@
-# Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v83
+# Deutsch Sprache – Wichtige Wörter – telc System – A1-B2
 
-Final addendum implementation.
+Build: v84, based on v83 final addendum.
 
 Added:
-- German TTS priority sanitization for (von + Dat.), (für + Akk.), and (jdn./etw.).
-- Options language switch closes drawer and updates current card immediately.
-- Dedicated clean voice mapping card in options.
-- Wortart filtern dropdown.
-- Branding hierarchy.
-- PWA install banner.
-- Headword single-line fit.
-- Synonyms directly under headword.
+- Report a Problem module.
+- Server-side report endpoint example at `/api/report-problem.js`.
+- Voice mapping UI removed.
+- Wortart filter auto-closes and autoplays.
+- Einheit wording in visible UI.
+- Best-effort background audio support retained/enhanced.
 
-Limits:
-- True 99% semantic synonym verification needs an API.
-- Native install prompt depends on browser beforeinstallprompt support.
-- Exact Azure voice output requires browser-exposed voices or backend audio.
+Important:
+GitHub Pages cannot send email by itself. Deploy `/api/report-problem.js` on Vercel/Node or adapt it to your server. The recipient email is not displayed in the frontend UI.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=83
+https://kanoorzad.github.io/B2_Deutsch/?v=84
