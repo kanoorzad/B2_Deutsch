@@ -1,15 +1,16 @@
 {
-  "version": "92.0-version-label-fixed",
-  "base_package": "german_a1_b2_telc_words_v91_static_german_synonyms_from_v88.zip",
-  "problem_fixed": "Visible app/build label no longer says v83; it now displays Flashcard Pro v92 and cache references are v92.",
-  "important_note": "Some internal IDs/functions still contain v83 because the stable controller uses those names. They are not visible app-version labels and were preserved to avoid breaking the app.",
-  "before_counts": {
-    "index_v83": 20,
-    "app_v83": 0,
-    "styles_v83": 1,
-    "data_v83": 1
-  },
-  "visible_v83_count_after": 0,
+  "version": "93.0-verb-forms-below-word-real-synonyms",
+  "base_package": "german_a1_b2_telc_words_v92_version_label_fixed.zip",
+  "change_scope": "Separated verb forms from synonyms. Verb forms are displayed under the verb; bottom line shows German-only synonym/equivalent verbs.",
+  "implemented": [
+    "Verb forms are visible directly below the German verb/headword.",
+    "The bottom synonym line says: Synonyms:",
+    "Verb cards have 4 German verb synonym/equivalent candidates, not the card's own conjugation forms.",
+    "Non-verb cards keep 2 German synonym/equivalent words.",
+    "No translated-language synonyms are displayed at the bottom.",
+    "No live API, no MutationObserver, and no playback/TTS changes."
+  ],
+  "quality_note": "The synonym candidates are static/offline and are generated from curated German verb pairs plus translation-similarity among the app's own vocabulary. They are closer than verb forms, but not a professional thesaurus validation.",
   "cards": 5123,
   "list_counts": {
     "B2 all 12 units": 1629,
@@ -22,6 +23,133 @@
     "B1 Irregular Verbs": 183,
     "B1": 862
   },
+  "category_counts": {
+    "noun": 2644,
+    "verb": 1371,
+    "phrase": 307,
+    "adjective": 399,
+    "other": 401,
+    "adverb": 1
+  },
+  "verb_cards": 1371,
+  "nonverb_cards": 3752,
+  "verb_cards_with_4_german_synonyms": 1371,
+  "nonverb_cards_with_2_german_synonyms": 3752,
+  "verb_cards_with_own_forms_in_synonyms": 0,
+  "sample_verbs": [
+    {
+      "verb": "gehen",
+      "synonyms": [
+        "laufen",
+        "schreiten",
+        "spazieren",
+        "wandern"
+      ],
+      "forms": {
+        "infinitive": "gehen",
+        "present3": "geht",
+        "past": "ging",
+        "perfect": "ist gegangen",
+        "plusquamperfekt": "war gegangen"
+      }
+    },
+    {
+      "verb": "machen",
+      "synonyms": [
+        "tun",
+        "erledigen",
+        "ausführen",
+        "durchführen"
+      ],
+      "forms": {
+        "infinitive": "machen",
+        "present3": "",
+        "past": "machte",
+        "perfect": "hat gemacht",
+        "plusquamperfekt": "hatte gemacht"
+      }
+    },
+    {
+      "verb": "fahren",
+      "synonyms": [
+        "reisen",
+        "sich bewegen",
+        "lenken",
+        "transportieren"
+      ],
+      "forms": {
+        "infinitive": "fahren",
+        "present3": "fährt",
+        "past": "fuhr",
+        "perfect": "ist gefahren",
+        "plusquamperfekt": "war gefahren"
+      }
+    },
+    {
+      "verb": "sprechen",
+      "synonyms": [
+        "reden",
+        "sagen",
+        "erzählen",
+        "äußern"
+      ],
+      "forms": {
+        "infinitive": "sprechen",
+        "present3": "spricht",
+        "past": "sprach",
+        "perfect": "hat gesprochen",
+        "plusquamperfekt": "hatte gesprochen"
+      }
+    },
+    {
+      "verb": "arbeiten",
+      "synonyms": [
+        "tätig sein",
+        "schaffen",
+        "wirken",
+        "beschäftigt sein"
+      ],
+      "forms": {
+        "infinitive": "arbeiten",
+        "present3": "",
+        "past": "",
+        "perfect": "",
+        "plusquamperfekt": ""
+      }
+    },
+    {
+      "verb": "bekommen",
+      "synonyms": [
+        "erhalten",
+        "kriegen",
+        "empfangen",
+        "erlangen"
+      ],
+      "forms": {
+        "infinitive": "bekommen",
+        "present3": "",
+        "past": "bekam",
+        "perfect": "ist bekommen",
+        "plusquamperfekt": "war bekommen"
+      }
+    },
+    {
+      "verb": "schreiben",
+      "synonyms": [
+        "notieren",
+        "verfassen",
+        "aufschreiben",
+        "formulieren"
+      ],
+      "forms": {
+        "infinitive": "schreiben",
+        "present3": "schreibt",
+        "past": "schrieb",
+        "perfect": "hat geschrieben",
+        "plusquamperfekt": "hatte geschrieben"
+      }
+    }
+  ],
   "translation_coverage": {
     "en": 5123,
     "fa": 5123,
@@ -38,27 +166,26 @@
     "uk": 0,
     "tr": 0
   },
-  "verb_cards": 1371,
-  "nonverb_cards": 3752,
-  "verb_cards_with_4_german_synonyms": 1371,
-  "nonverb_cards_with_2_german_synonyms": 3752,
   "checks": {
     "javascript_syntax_ok": true,
-    "base_is_v91_from_v88": true,
-    "data_version_is_v92": true,
-    "app_version_status_v92": true,
-    "title_v92": true,
-    "manifest_v92": true,
-    "service_worker_cache_v92": true,
-    "cache_busting_v92": true,
-    "no_visible_v83_text": true,
-    "functional_v83_ids_preserved": true,
+    "base_is_v92": true,
+    "no_v89_or_v90_code": true,
+    "verb_forms_container_under_headword": true,
+    "verb_forms_labeled": true,
+    "synonym_label_bottom": true,
+    "translated_synonyms_not_rendered": true,
+    "verbs_have_four_german_synonyms": true,
+    "nonverbs_have_two_german_synonyms": true,
+    "verb_synonyms_do_not_show_own_forms": true,
     "cards_preserved": true,
     "translations_complete": true,
-    "german_synonyms_preserved": true,
-    "no_v89_api_code": true
+    "cache_busting_v93": true,
+    "a2_present": true,
+    "a2_irregular_present": true,
+    "b1_present": true,
+    "b1_irregular_present": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=92",
-  "zip_mb": 2.29
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=93",
+  "zip_mb": 2.3
 }

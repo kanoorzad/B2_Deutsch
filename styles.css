@@ -879,3 +879,50 @@ body.reportingMode .navRow{
   color:rgba(255,255,255,.85);
   pointer-events:none;
 }
+
+
+/* v93 verb forms below word + real German synonym line */
+#v83HeadSynonyms,#v82HeadSynonyms{display:none!important}
+.v93VerbFormsBelow{
+  margin:8px auto 4px;
+  padding:7px 10px;
+  border-radius:14px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
+  max-width:96%;
+  text-align:center;
+}
+.v93VerbFormsBelow[hidden]{display:none!important}
+.v93VerbFormsTitle{
+  font-size:.76rem;
+  font-weight:800;
+  letter-spacing:.04em;
+  opacity:.72;
+  margin-bottom:4px;
+}
+.v93VerbFormsLine{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:6px;
+}
+.v93VerbFormsBelow .v83VerbForm{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 7px;
+  border-radius:999px;
+  background:rgba(255,255,255,.10);
+  font-size:clamp(.78rem,2.3vw,.96rem);
+  line-height:1.15;
+}
+.v93VerbFormsBelow .v83VerbForm.active{outline:2px solid rgba(255,255,255,.35)}
+#chipLabel{font-weight:800}
+#frontSynonyms{
+  font-style:italic;
+  font-weight:700;
+  line-height:1.25;
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
+.cardBottom > div{max-width:82%}

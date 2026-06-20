@@ -1,21 +1,15 @@
 # Deutsch Sprache – Wichtige Wörter – telc System – A1-B2
 
-Build: v92
+Build: v93
 
 Fix:
-- Visible app version/build label now displays `Flashcard Pro v92`.
-- Page title now uses v92.
-- Manifest start URL and short name now use v92.
-- Cache-busting references now use `?v=92`.
-- Service Worker cache is now v92.
-
-Preserved:
-- v91 static German-only synonyms from v88.
-- All v88 data/cards.
-- Existing playback and app logic.
-
-Note:
-Some internal element IDs/functions still include `v83` because the stable controller uses those names. They are preserved intentionally and are not visible app version labels.
+- Verb forms are no longer used as the bottom synonym line.
+- Verb forms now show directly below the German verb/headword.
+- The bottom line says `Synonyms:` and shows German-only synonym/equivalent verbs.
+- Verb cards show 4 German synonym/equivalent candidates.
+- Non-verb cards show 2 German synonym/equivalent words.
+- No translated-language synonyms are shown at the bottom.
+- No live API, no MutationObserver, no playback/TTS changes.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=92
+https://kanoorzad.github.io/B2_Deutsch/?v=93

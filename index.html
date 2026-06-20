@@ -7,9 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=92">
-  <link rel="apple-touch-icon" href="icon.svg?v=92">
-  <link rel="stylesheet" href="styles.css?v=92">
+  <link rel="manifest" href="manifest.webmanifest?v=93">
+  <link rel="apple-touch-icon" href="icon.svg?v=93">
+  <link rel="stylesheet" href="styles.css?v=93">
   <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v92</title>
 </head>
 <body class="wizardMode">
@@ -44,6 +44,7 @@
       <div class="cardMain">
         <p id="frontHint" class="frontHint"></p>
         <h2 id="frontText">Loading…</h2>
+<div id="v93VerbFormsBelow" class="v93VerbFormsBelow" hidden></div>
 <div id="v83HeadSynonyms" class="v83HeadSynonyms"></div>
 <div id="v82HeadSynonyms" class="v82HeadSynonyms"></div>
         <p id="frontSub" class="frontSub"></p>
@@ -182,13 +183,13 @@
   </section>
 </main>
 
-<script src="data.js?v=92"></script>
+<script src="data.js?v=93"></script>
 <script id="app-version">
 window.APP_VERSION="v92";
 window.BUILD_VERSION="92.0-version-label-fixed";
 document.title="Flashcard Pro v92 – Deutsch Sprache";
 </script>
-<script src="app.js?v=92"></script>
+<script src="app.js?v=93"></script>
 <script id="v83-controller">
 (function(){
   window.__v83Controller=true;
@@ -217,14 +218,42 @@ document.title="Flashcard Pro v92 – Deutsch Sprache";
   function fitHeadword(){fitOneLine($('front'));fitOneLine($('frontText'))}
   window.addEventListener('resize',()=>setTimeout(fitHeadword,50));
   function setMode(mode){const card=$('card');if(card)card.dataset.mode=mode;['front','frontText','en','v83TargetText'].forEach(id=>{const el=$(id);if(el)el.classList.remove('isReading','isActiveSide')});if(mode==='german')['front','frontText'].forEach(id=>{const el=$(id);if(el)el.classList.add('isReading','isActiveSide')});if(mode==='translation')['en','v83TargetText'].forEach(id=>{const el=$(id);if(el)el.classList.add('isReading','isActiveSide')})}
-  function ensureVerbBox(){let box=$('v83VerbForms')||$('v82VerbForms')||$('v81VerbForms');if(!box){const vb=$('verbBox')||$('card');if(vb){box=document.createElement('div');box.id='v83VerbForms';box.className='v83VerbForms';vb.appendChild(box)}}return box}
-  function renderVerbForms(c){const box=ensureVerbBox();if(!box)return;const forms=formList(c);box.innerHTML=forms.map((f,i)=>`<span class="v83VerbForm ${i===currentFormIndex?'active':''}">${f}</span>`).join('')}
+  function ensureVerbBox(){
+    let box=$('v93VerbFormsBelow');
+    if(!box){
+      const anchor=$('frontText')||$('front')||$('card');
+      if(anchor&&anchor.parentElement){
+        box=document.createElement('div');
+        box.id='v93VerbFormsBelow';
+        box.className='v93VerbFormsBelow';
+        anchor.insertAdjacentElement('afterend',box);
+      }
+    }
+    return box;
+  }
+  function renderVerbForms(c){
+    const box=ensureVerbBox();
+    if(!box)return;
+    if(!c||c.category!=='verb'){
+      box.hidden=true;
+      box.innerHTML='';
+      return;
+    }
+    const forms=formList(c).filter(Boolean);
+    if(!forms.length){
+      box.hidden=true;
+      box.innerHTML='';
+      return;
+    }
+    box.hidden=false;
+    box.innerHTML='<div class="v93VerbFormsTitle">Verbformen</div><div class="v93VerbFormsLine">'+forms.map((f,i)=>`<span class="v83VerbForm ${i===currentFormIndex?'active':''}">${f}</span>`).join('')+'</div>';
+  }
   function renderHeadSynonyms(c){
-    const head=$('v83HeadSynonyms'); if(head) head.innerHTML='';
-    const head2=$('v82HeadSynonyms'); if(head2) head2.innerHTML='';
-    const label=$('chipLabel'); if(label) label.textContent='Synonyms:';
+    const head=$('v83HeadSynonyms');if(head)head.innerHTML='';
+    const head2=$('v82HeadSynonyms');if(head2)head2.innerHTML='';
+    const label=$('chipLabel');if(label)label.textContent='Synonyms:';
     const bottom=$('frontSynonyms');
-    if(!bottom){return}
+    if(!bottom)return;
     if(!c){bottom.textContent='';return}
     const n=req(c),sm=c.synonyms_multi||{},de=(sm.de||[]).slice(0,n).filter(Boolean);
     bottom.textContent=de.length?de.join(' · '):'';
