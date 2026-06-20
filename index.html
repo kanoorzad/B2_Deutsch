@@ -7,9 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=97">
-  <link rel="apple-touch-icon" href="icon.svg?v=97">
-  <link rel="stylesheet" href="styles.css?v=97">
+  <link rel="manifest" href="manifest.webmanifest?v=98">
+  <link rel="apple-touch-icon" href="icon.svg?v=98">
+  <link rel="stylesheet" href="styles.css?v=98">
   <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v92</title>
 </head>
 <body class="wizardMode">
@@ -183,13 +183,41 @@
   </section>
 </main>
 
-<script src="data.js?v=97"></script>
+<script src="data.js?v=98"></script>
 <script id="app-version">
-window.APP_VERSION="v97";
-window.BUILD_VERSION="97.0-short-verb-form-labels";
-document.title="Flashcard Pro v97 – Deutsch Sprache";
+(function(){
+  function currentAppVersion(){
+    var d=window.FLASHCARD_DATA||{};
+    if(d.app_version) return String(d.app_version);
+    if(d.version){
+      var m=String(d.version).match(/^(\d+)/);
+      if(m) return 'v'+m[1];
+    }
+    return 'v98';
+  }
+  function applyVersion(){
+    var v=currentAppVersion();
+    window.APP_VERSION=v;
+    window.BUILD_VERSION=(window.FLASHCARD_DATA&&window.FLASHCARD_DATA.version)||'98.0-vertical-forms-dynamic-version';
+    document.title='Flashcard Pro '+v+' – Deutsch Sprache';
+    var el=document.getElementById('appVersionStatus');
+    if(!el){
+      el=document.createElement('div');
+      el.id='appVersionStatus';
+      el.className='appVersionStatus';
+      el.setAttribute('aria-label','App-Version');
+      document.body.appendChild(el);
+    }
+    el.textContent='Flashcard Pro '+v;
+  }
+  applyVersion();
+  document.addEventListener('DOMContentLoaded',applyVersion);
+  window.addEventListener('pageshow',applyVersion);
+  setTimeout(applyVersion,300);
+})();
 </script>
-<script src="app.js?v=97"></script>
+
+<script src="app.js?v=98"></script>
 <script id="v83-controller">
 (function(){
   window.__v83Controller=true;
@@ -241,14 +269,14 @@ document.title="Flashcard Pro v97 – Deutsch Sprache";
     }
     const f=c.forms||{};
     const rows=[
-      ['Inf',f.infinitive||c.german||'—'],
-      ['Präs',f.present3||'—'],
-      ['Präte',f.past||'—'],
-      ['Perf',f.perfect||'—'],
-      ['Pqperf',f.plusquamperfekt||'—']
+      ['Infinitiv',f.infinitive||c.german||'—'],
+      ['Präsens',f.present3||'—'],
+      ['Präteritum',f.past||'—'],
+      ['Perfekt',f.perfect||'—'],
+      ['Plusquamperfekt',f.plusquamperfekt||'—']
     ];
     box.hidden=false;
-    box.innerHTML='<div class="v95VerbFormsInline">'+rows.map((r,i)=>`<span class="v95VerbFormItem ${i===currentFormIndex?'active':''}"><strong>${r[0]}:</strong> ${r[1]}</span>`).join('<span class="v95VerbSep">|</span>')+'</div>';
+    box.innerHTML='<div class="v98VerbFormsVertical">'+rows.map((r,i)=>`<div class="v98VerbFormRow ${i===currentFormIndex?'active':''}"><span class="v98VerbFormLabel">${r[0]}:</span><span class="v98VerbFormValue">${r[1]}</span></div>`).join('')+'</div>';
   }
   function renderHeadSynonyms(c){
     const head=$('v83HeadSynonyms');if(head)head.innerHTML='';
@@ -528,7 +556,6 @@ document.title="Flashcard Pro v97 – Deutsch Sprache";
   window.addEventListener('pagehide', keepBackgroundAudioAlive, true);
 })();
 </script>
-<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v97</div>
 </body>
 </html>
 
