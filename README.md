@@ -1,17 +1,12 @@
 # Deutsch Sprache – Wichtige Wörter – telc System – A1-B2
 
-Build: v90 stable repair
+Build: v88
 
-What was wrong in v89:
-- The live OpenThesaurus synonym feature watched the flashcard DOM and also wrote into the same DOM area.
-- This could trigger repeated updates and freeze the browser.
-- The silent-audio speechSynthesis patch could also interfere with browser TTS playback.
-
-Repair:
-- Rebuilt from stable v88.
-- Removed the risky v89 synonym/API observer and audio wrapper.
-- Kept APP_VERSION = v1 as a safe display only.
-- Preserved all data from v88.
+Change:
+- Added B1 main vocabulary from `B1_Wichtige_Woerter_Units_1-12_Multilingual(1).xlsx`.
+- B1 Irregular Verbs are included from the pending staged data / uploaded workbook.
+- Existing app logic and UI were preserved.
+- A2 and A2 Irregular Verbs remain intact.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=90
+https://kanoorzad.github.io/B2_Deutsch/?v=88
