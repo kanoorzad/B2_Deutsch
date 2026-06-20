@@ -971,3 +971,53 @@ body.reportingMode .navRow{
     text-align:center;
   }
 }
+
+
+/* v95 single-line verb forms under headword */
+.v93VerbFormsBelow{
+  margin:8px auto 4px;
+  padding:7px 10px;
+  border-radius:14px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
+  max-width:98%;
+  text-align:center;
+}
+.v95VerbFormsInline{
+  display:flex;
+  flex-wrap:nowrap;
+  align-items:center;
+  gap:6px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  white-space:nowrap;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  padding-bottom:2px;
+}
+.v95VerbFormItem{
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  flex:0 0 auto;
+  padding:4px 7px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  font-size:clamp(.72rem,2.2vw,.94rem);
+  line-height:1.1;
+}
+.v95VerbFormItem strong{
+  font-weight:900;
+}
+.v95VerbFormItem.active{
+  outline:2px solid rgba(255,255,255,.34);
+}
+.v95VerbSep{
+  flex:0 0 auto;
+  opacity:.45;
+  font-weight:900;
+}
+/* override older v94 mobile stacking */
+@media (max-width:420px){
+  .v94VerbFormRow{grid-template-columns:minmax(104px,auto) 1fr!important;text-align:left!important}
+}

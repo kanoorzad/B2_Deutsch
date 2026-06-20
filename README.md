@@ -1,17 +1,18 @@
 # Deutsch Sprache – Wichtige Wörter – telc System – A1-B2
 
-Build: v94
+Build: v96
 
-Change:
-- Verb forms shown under the German verb now have German labels:
-  - Infinitiv
-  - Präsens
-  - Präteritum
-  - Perfekt
-  - Plusquamperfekt
-- Missing values display as `—`.
-- Bottom `Synonyms:` line from v93 is preserved.
-- No playback/TTS/audio logic changed.
+Fix:
+- Verb playback sequence now includes Plusquamperfekt after Perfekt.
+- The playback order is now:
+  Infinitiv → Präsens → Präteritum → Perfekt → Plusquamperfekt
+- This fixes B2 verb playback where Plusquamperfekt was visible but not spoken.
+
+Preserved:
+- One-line verb display from v95.
+- Synonyms from v93/v95.
+- Translations and all cards.
+- No speech engine / TTS monkey-patch / live API changes.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=94
+https://kanoorzad.github.io/B2_Deutsch/?v=96

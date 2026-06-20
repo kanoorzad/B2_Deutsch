@@ -7,9 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=94">
-  <link rel="apple-touch-icon" href="icon.svg?v=94">
-  <link rel="stylesheet" href="styles.css?v=94">
+  <link rel="manifest" href="manifest.webmanifest?v=96">
+  <link rel="apple-touch-icon" href="icon.svg?v=96">
+  <link rel="stylesheet" href="styles.css?v=96">
   <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v92</title>
 </head>
 <body class="wizardMode">
@@ -183,13 +183,13 @@
   </section>
 </main>
 
-<script src="data.js?v=94"></script>
+<script src="data.js?v=96"></script>
 <script id="app-version">
-window.APP_VERSION="v94";
-window.BUILD_VERSION="94.0-labeled-verb-forms";
-document.title="Flashcard Pro v94 – Deutsch Sprache";
+window.APP_VERSION="v96";
+window.BUILD_VERSION="96.0-plusquamperfekt-playback";
+document.title="Flashcard Pro v96 – Deutsch Sprache";
 </script>
-<script src="app.js?v=94"></script>
+<script src="app.js?v=96"></script>
 <script id="v83-controller">
 (function(){
   window.__v83Controller=true;
@@ -213,7 +213,7 @@ document.title="Flashcard Pro v94 – Deutsch Sprache";
   function populatePosFilter(){const sel=$('posFilterOptions');if(!sel)return;const cats=[...new Set(basePool().map(c=>c.category||'other'))];sel.innerHTML='<option value="all">Alle</option>'+cats.map(c=>`<option value="${c}">${CAT_LABEL[c]||c}</option>`).join('');sel.value=selectedCategory}
   function normalA1Verb(c){return c&&c.list==='A1'&&c.category==='verb'}
   function req(c){return c&&c.category==='verb'?4:2}
-  function formList(c){if(!c||c.category!=='verb')return[];const f=c.forms||{};if(normalA1Verb(c))return[f.infinitive||c.german].filter(Boolean);return[f.infinitive,f.present3,f.past,f.perfect].filter(Boolean)}
+  function formList(c){if(!c||c.category!=='verb')return[];const f=c.forms||{};if(normalA1Verb(c))return[f.infinitive||c.german].filter(Boolean);return[f.infinitive,f.present3,f.past,f.perfect,f.plusquamperfekt].filter(Boolean)}
   function fitOneLine(el){if(!el)return;el.style.whiteSpace='nowrap';el.style.overflow='hidden';el.style.textOverflow='clip';let size=46,min=15;el.style.fontSize=size+'px';const avail=Math.max(120,(el.parentElement||el).clientWidth-18);while(size>min&&el.scrollWidth>avail){size--;el.style.fontSize=size+'px'}}
   function fitHeadword(){fitOneLine($('front'));fitOneLine($('frontText'))}
   window.addEventListener('resize',()=>setTimeout(fitHeadword,50));
@@ -248,7 +248,7 @@ document.title="Flashcard Pro v94 – Deutsch Sprache";
       ['Plusquamperfekt',f.plusquamperfekt||'—']
     ];
     box.hidden=false;
-    box.innerHTML='<div class="v94VerbFormsTitle">Verbformen</div><div class="v94VerbFormsGrid">'+rows.map((r,i)=>`<div class="v94VerbFormRow ${i===currentFormIndex?'active':''}"><span class="v94VerbFormLabel">${r[0]}:</span><span class="v94VerbFormValue">${r[1]}</span></div>`).join('')+'</div>';
+    box.innerHTML='<div class="v95VerbFormsInline">'+rows.map((r,i)=>`<span class="v95VerbFormItem ${i===currentFormIndex?'active':''}"><strong>${r[0]}:</strong> ${r[1]}</span>`).join('<span class="v95VerbSep">|</span>')+'</div>';
   }
   function renderHeadSynonyms(c){
     const head=$('v83HeadSynonyms');if(head)head.innerHTML='';
@@ -528,7 +528,7 @@ document.title="Flashcard Pro v94 – Deutsch Sprache";
   window.addEventListener('pagehide', keepBackgroundAudioAlive, true);
 })();
 </script>
-<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v94</div>
+<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v96</div>
 </body>
 </html>
 

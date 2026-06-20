@@ -1,13 +1,8 @@
 {
-  "version": "94.0-labeled-verb-forms",
-  "base_package": "german_a1_b2_telc_words_v93_verb_forms_and_real_synonyms.zip",
-  "change_scope": "Only changed the verb-form display labels/format under the headword. Synonyms and playback remain unchanged.",
-  "implemented": [
-    "Under each German verb, the app now displays German labels for all five form fields.",
-    "Labels: Infinitiv, Präsens, Präteritum, Perfekt, Plusquamperfekt.",
-    "Missing form values show as — instead of disappearing.",
-    "Bottom Synonyms line from v93 is preserved."
-  ],
+  "version": "96.0-plusquamperfekt-playback",
+  "base_package": "german_a1_b2_telc_words_v95_inline_forms_filled.zip",
+  "problem_fixed": "Playback form sequence now includes Plusquamperfekt after Perfekt.",
+  "change_scope": "Only formList/playback form sequence changed; display, synonyms, data, and audio engine unchanged.",
   "cards": 5123,
   "list_counts": {
     "B2 all 12 units": 1629,
@@ -28,10 +23,62 @@
     "other": 401,
     "adverb": 1
   },
-  "verb_cards": 1371,
-  "nonverb_cards": 3752,
-  "verb_cards_with_4_german_synonyms": 1371,
-  "nonverb_cards_with_2_german_synonyms": 3752,
+  "verb_cards_total": 1371,
+  "b2_verb_cards": 542,
+  "b2_verb_cards_with_plusquamperfekt": 539,
+  "non_a1_verb_cards_with_plusquamperfekt": 1029,
+  "samples": [
+    {
+      "verb": "gehen",
+      "playback_sequence_now": [
+        "gehen",
+        "geht",
+        "ging",
+        "ist gegangen",
+        "war gegangen"
+      ]
+    },
+    {
+      "verb": "fahren",
+      "playback_sequence_now": [
+        "fahren",
+        "fährt",
+        "fuhr",
+        "ist gefahren",
+        "war gefahren"
+      ]
+    },
+    {
+      "verb": "sprechen",
+      "playback_sequence_now": [
+        "sprechen",
+        "spricht",
+        "sprach",
+        "hat gesprochen",
+        "hatte gesprochen"
+      ]
+    },
+    {
+      "verb": "schreiben",
+      "playback_sequence_now": [
+        "schreiben",
+        "schreibt",
+        "schrieb",
+        "hat geschrieben",
+        "hatte geschrieben"
+      ]
+    },
+    {
+      "verb": "bekommen",
+      "playback_sequence_now": [
+        "bekommen",
+        "bekommt",
+        "bekam",
+        "ist bekommen",
+        "war bekommen"
+      ]
+    }
+  ],
   "translation_coverage": {
     "en": 5123,
     "fa": 5123,
@@ -48,104 +95,21 @@
     "uk": 0,
     "tr": 0
   },
-  "samples": [
-    {
-      "verb": "gehen",
-      "display_rows": {
-        "Infinitiv": "gehen",
-        "Präsens": "geht",
-        "Präteritum": "ging",
-        "Perfekt": "ist gegangen",
-        "Plusquamperfekt": "war gegangen"
-      },
-      "synonyms": [
-        "laufen",
-        "schreiten",
-        "spazieren",
-        "wandern"
-      ]
-    },
-    {
-      "verb": "machen",
-      "display_rows": {
-        "Infinitiv": "machen",
-        "Präsens": "—",
-        "Präteritum": "machte",
-        "Perfekt": "hat gemacht",
-        "Plusquamperfekt": "hatte gemacht"
-      },
-      "synonyms": [
-        "tun",
-        "erledigen",
-        "ausführen",
-        "durchführen"
-      ]
-    },
-    {
-      "verb": "fahren",
-      "display_rows": {
-        "Infinitiv": "fahren",
-        "Präsens": "fährt",
-        "Präteritum": "fuhr",
-        "Perfekt": "ist gefahren",
-        "Plusquamperfekt": "war gefahren"
-      },
-      "synonyms": [
-        "reisen",
-        "sich bewegen",
-        "lenken",
-        "transportieren"
-      ]
-    },
-    {
-      "verb": "sprechen",
-      "display_rows": {
-        "Infinitiv": "sprechen",
-        "Präsens": "spricht",
-        "Präteritum": "sprach",
-        "Perfekt": "hat gesprochen",
-        "Plusquamperfekt": "hatte gesprochen"
-      },
-      "synonyms": [
-        "reden",
-        "sagen",
-        "erzählen",
-        "äußern"
-      ]
-    },
-    {
-      "verb": "arbeiten",
-      "display_rows": {
-        "Infinitiv": "arbeiten",
-        "Präsens": "—",
-        "Präteritum": "—",
-        "Perfekt": "—",
-        "Plusquamperfekt": "—"
-      },
-      "synonyms": [
-        "tätig sein",
-        "schaffen",
-        "wirken",
-        "beschäftigt sein"
-      ]
-    }
-  ],
   "checks": {
     "javascript_syntax_ok": true,
-    "base_is_v93": true,
-    "app_version_v94": true,
-    "all_five_german_labels_present": true,
-    "verb_forms_under_headword_preserved": true,
-    "synonyms_bottom_preserved": true,
-    "no_translated_synonyms_bottom": true,
-    "no_playback_logic_changed": true,
+    "base_is_v95": true,
+    "formlist_includes_plusquamperfekt": true,
+    "plus_after_perfect_in_formlist": true,
+    "playone_uses_formlist": true,
+    "b2_verbs_have_plusquamperfekt_available": true,
     "cards_preserved": true,
     "translations_complete": true,
-    "verb_synonyms_preserved": true,
-    "nonverb_synonyms_preserved": true,
-    "cache_busting_v94": true
+    "no_playback_monkey_patch_added": true,
+    "display_one_line_preserved": true,
+    "synonyms_preserved": true,
+    "cache_busting_v96": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=94",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=96",
   "zip_mb": 2.3
 }
