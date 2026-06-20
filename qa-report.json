@@ -1,15 +1,16 @@
 {
-  "version": "98.0-vertical-forms-dynamic-version",
-  "base_package": "german_a1_b2_telc_words_v97_short_verb_labels.zip",
-  "change_scope": "Verb forms changed back to vertical full labels; visible version display made dynamic from data.js.",
+  "version": "99.0-force-version-cache-reset",
+  "base_package": "german_a1_b2_telc_words_v98_vertical_forms_dynamic_version.zip",
+  "problem_fixed": "Visible version stuck on v92 because old cached/service-worker assets may still be served.",
   "implemented": [
-    "Verb forms are vertical again to avoid going off screen.",
-    "Full labels restored: Infinitiv, Präsens, Präteritum, Perfekt, Plusquamperfekt.",
-    "Visible version display is now dynamically derived from window.FLASHCARD_DATA.app_version.",
-    "Manifest, service worker, cache-busting, title, and status display updated to v98.",
-    "Plusquamperfekt playback from v96/v97 preserved."
+    "Hardcoded visible version label: Flashcard Pro v99.",
+    "Data app_version is v99.",
+    "Manifest and service worker are v99.",
+    "Cache reset script clears old non-v99 caches once.",
+    "Service worker uses network-first navigation with no-store fetch.",
+    "Vertical full verb forms from v98 are preserved."
   ],
-  "important_note": "If a phone still shows an older version, open with ?v=98 and refresh once; the new service worker cache is v98 and should replace older cached assets.",
+  "upload_instruction": "Upload v99, then open https://kanoorzad.github.io/B2_Deutsch/?v=99&fresh=1 once. If old installed PWA still shows v92, close it fully and open the browser URL once so v99 can clear the old cache.",
   "cards": 5123,
   "list_counts": {
     "B2 all 12 units": 1629,
@@ -30,8 +31,6 @@
     "other": 401,
     "adverb": 1
   },
-  "verb_cards": 1371,
-  "nonverb_cards": 3752,
   "translation_coverage": {
     "en": 5123,
     "fa": 5123,
@@ -50,23 +49,23 @@
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "base_is_v97": true,
-    "vertical_render_used": true,
-    "full_labels_present": true,
-    "compact_labels_removed_from_render": true,
-    "vertical_css_no_horizontal_overflow": true,
-    "dynamic_version_script_present": true,
-    "visible_version_v98_fallback": true,
-    "manifest_v98": true,
-    "service_worker_cache_v98": true,
+    "base_is_v98": true,
+    "hardcoded_v99_visible_label": true,
+    "no_visible_v92_in_index": true,
+    "data_app_version_v99": true,
+    "data_version_v99": true,
+    "cache_reset_script_present": true,
+    "service_worker_network_first_navigation": true,
+    "manifest_v99": true,
+    "cache_busting_v99": true,
+    "vertical_forms_preserved": true,
     "plusquamperfekt_playback_preserved": true,
     "cards_preserved": true,
     "translations_complete": true,
     "synonyms_preserved": true,
-    "no_v89_api_code": true,
-    "cache_busting_v98": true
+    "no_v89_api_code": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=98",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=99&fresh=1",
   "zip_mb": 2.3
 }

@@ -7,26 +7,51 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=98">
-  <link rel="apple-touch-icon" href="icon.svg?v=98">
-  <link rel="stylesheet" href="styles.css?v=98">
-  <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v92</title>
+  <link rel="manifest" href="manifest.webmanifest?v=99">
+  <link rel="apple-touch-icon" href="icon.svg?v=99">
+  <link rel="stylesheet" href="styles.css?v=99">
+  <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v99</title>
+<script id="app-version">
+window.APP_VERSION="v99";
+window.BUILD_VERSION="99.0-force-version-cache-reset";
+document.title="Flashcard Pro v99 – Deutsch Sprache";
+(function(){
+  function showV99(){
+    document.title='Flashcard Pro v99 – Deutsch Sprache';
+    var el=document.getElementById('appVersionStatus');
+    if(!el && document.body){
+      el=document.createElement('div');
+      el.id='appVersionStatus';
+      el.className='appVersionStatus';
+      el.setAttribute('aria-label','App-Version');
+      document.body.appendChild(el);
+    }
+    if(el) el.textContent='Flashcard Pro v99';
+  }
+  window.__forceVersionLabel=showV99;
+  document.addEventListener('DOMContentLoaded',showV99);
+  window.addEventListener('pageshow',showV99);
+  setTimeout(showV99,50);
+  setTimeout(showV99,500);
+})();
+</script>
+
 </head>
 <body class="wizardMode">
 <select id="targetLang" hidden>
 <option value="en">Englisch</option><option value="fa">Fasisch</option><option value="es">Spanisch</option><option value="ru">Russisch</option><option value="uk">Ukrainisch</option><option value="tr">Türkisch</option>
 </select>
 <section id="startWizard" class="startWizard" aria-live="polite">
-<section id="wizardLang" class="wizardStep active"><div class="wizardCard languageStartCard"><em class="startVersionTag">v92</em>
+<section id="wizardLang" class="wizardStep active"><div class="wizardCard languageStartCard"><em class="startVersionTag">v99</em>
 <div class="brandBlock"><h1>Deutsch Sprache</h1><h2>Wichtige Wörter</h2><h3>telc System</h3><p><em>A1-B2</em></p></div>
 <p class="startSubtitle">Bitte wählen Sie zuerst die Übersetzungssprache.</p>
 <div class="choiceGrid languageChoices compactLangGrid"><button type="button" data-wizard-lang="en">Englisch</button><button type="button" data-wizard-lang="fa">Fasisch</button><button type="button" data-wizard-lang="es">Spanisch</button><button type="button" data-wizard-lang="ru">Russisch</button><button type="button" data-wizard-lang="uk">Ukrainisch</button><button type="button" data-wizard-lang="tr">Türkisch</button></div>
 <p class="wizardInitiative footerCredit">Initiative von: Khalid Noorzad</p></div></section>
-<section id="wizardMaterial" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v92</em><h2>Lernmaterial wählen</h2><p class="startSubtitle">Wählen Sie den Bereich.</p><div class="materialPairGrid"><button type="button" data-wizard-list="A1">A1</button><button type="button" data-wizard-list="A1 Irregular Verbs">A1 Irregular Verbs</button><button type="button" data-wizard-list="A2">A2</button><button type="button" data-wizard-list="A2 Irregular Verbs">A2 Irregular Verbs</button><button type="button" data-wizard-list="B1">B1</button><button type="button" data-wizard-list="B1 Irregular Verbs">B1 Irregular Verbs</button><button type="button" data-wizard-list="B1 Plus 7 Units">B1+</button><button type="button" data-wizard-list="B1 Plus Irregular Verbs">B1+ Irregular Verbs</button><button type="button" data-wizard-list="B2 all 12 units">B2</button><button type="button" data-wizard-list="B2 Irregular Verbs">B2 Irregular Verbs</button></div><button id="materialBack" type="button" class="secondaryBtn wizardBackBtn">Zurück</button></div></section>
-<section id="wizardUnit" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v92</em><h2>Einheit wählen</h2><p class="startSubtitle">Standard: alle Einheiten.</p><label class="wizardSelectLabel">Einheit <select id="wizardUnitSelect"><option value="all">Alle Einheiten</option></select></label><p id="wizardUnitNote" class="wizardUnitNote"></p><div class="wizardActionRow"><button id="unitBack" type="button" class="secondaryBtn">Zurück</button><button id="wizardStart" type="button" class="primaryBtn">Karten öffnen</button></div></div></section></section>
+<section id="wizardMaterial" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v99</em><h2>Lernmaterial wählen</h2><p class="startSubtitle">Wählen Sie den Bereich.</p><div class="materialPairGrid"><button type="button" data-wizard-list="A1">A1</button><button type="button" data-wizard-list="A1 Irregular Verbs">A1 Irregular Verbs</button><button type="button" data-wizard-list="A2">A2</button><button type="button" data-wizard-list="A2 Irregular Verbs">A2 Irregular Verbs</button><button type="button" data-wizard-list="B1">B1</button><button type="button" data-wizard-list="B1 Irregular Verbs">B1 Irregular Verbs</button><button type="button" data-wizard-list="B1 Plus 7 Units">B1+</button><button type="button" data-wizard-list="B1 Plus Irregular Verbs">B1+ Irregular Verbs</button><button type="button" data-wizard-list="B2 all 12 units">B2</button><button type="button" data-wizard-list="B2 Irregular Verbs">B2 Irregular Verbs</button></div><button id="materialBack" type="button" class="secondaryBtn wizardBackBtn">Zurück</button></div></section>
+<section id="wizardUnit" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v99</em><h2>Einheit wählen</h2><p class="startSubtitle">Standard: alle Einheiten.</p><label class="wizardSelectLabel">Einheit <select id="wizardUnitSelect"><option value="all">Alle Einheiten</option></select></label><p id="wizardUnitNote" class="wizardUnitNote"></p><div class="wizardActionRow"><button id="unitBack" type="button" class="secondaryBtn">Zurück</button><button id="wizardStart" type="button" class="primaryBtn">Karten öffnen</button></div></div></section></section>
 <button id="optionsToggle" type="button" class="optionsToggle" hidden>Optionen</button>
 <header class="hero">
-  <em class="versionBadge">v92</em>
+  <em class="versionBadge">v99</em>
   <h1>Deutsch-Karteikarten</h1>
   <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
   <p class="initiative"><em>Initiative von: Khalid Noorzad</em></p>
@@ -183,41 +208,32 @@
   </section>
 </main>
 
-<script src="data.js?v=98"></script>
-<script id="app-version">
+<script src="data.js?v=99"></script>
+<script id="v99-cache-reset">
 (function(){
-  function currentAppVersion(){
-    var d=window.FLASHCARD_DATA||{};
-    if(d.app_version) return String(d.app_version);
-    if(d.version){
-      var m=String(d.version).match(/^(\d+)/);
-      if(m) return 'v'+m[1];
-    }
-    return 'v98';
+  var key='v99-cache-reset-done';
+  async function resetOldCachesOnce(){
+    try{
+      if(localStorage.getItem(key)==='1') return;
+      localStorage.setItem(key,'1');
+      if('caches' in window){
+        var names=await caches.keys();
+        await Promise.all(names.filter(function(n){return !String(n).includes('v99');}).map(function(n){return caches.delete(n);}));
+      }
+      if(navigator.serviceWorker && navigator.serviceWorker.getRegistrations){
+        var regs=await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map(function(r){return r.update().catch(function(){});}));
+      }
+      if(location.search.indexOf('v=99')===-1){
+        location.replace(location.pathname+'?v=99&fresh='+Date.now());
+      }
+    }catch(e){}
   }
-  function applyVersion(){
-    var v=currentAppVersion();
-    window.APP_VERSION=v;
-    window.BUILD_VERSION=(window.FLASHCARD_DATA&&window.FLASHCARD_DATA.version)||'98.0-vertical-forms-dynamic-version';
-    document.title='Flashcard Pro '+v+' – Deutsch Sprache';
-    var el=document.getElementById('appVersionStatus');
-    if(!el){
-      el=document.createElement('div');
-      el.id='appVersionStatus';
-      el.className='appVersionStatus';
-      el.setAttribute('aria-label','App-Version');
-      document.body.appendChild(el);
-    }
-    el.textContent='Flashcard Pro '+v;
-  }
-  applyVersion();
-  document.addEventListener('DOMContentLoaded',applyVersion);
-  window.addEventListener('pageshow',applyVersion);
-  setTimeout(applyVersion,300);
+  window.addEventListener('load',function(){setTimeout(resetOldCachesOnce,600);});
 })();
 </script>
 
-<script src="app.js?v=98"></script>
+<script src="app.js?v=99"></script>
 <script id="v83-controller">
 (function(){
   window.__v83Controller=true;
@@ -556,6 +572,7 @@
   window.addEventListener('pagehide', keepBackgroundAudioAlive, true);
 })();
 </script>
+<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v99</div>
 </body>
 </html>
 

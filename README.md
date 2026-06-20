@@ -1,25 +1,21 @@
 # Deutsch Sprache – Wichtige Wörter – telc System – A1-B2
 
-Build: v98
+Build: v99
 
-Fixes:
-- Verb forms are vertical again so they do not go out of the screen.
-- Full labels are restored:
-  - Infinitiv
-  - Präsens
-  - Präteritum
-  - Perfekt
-  - Plusquamperfekt
-- Visible app version is dynamic and reads from the app data version.
-- Display now shows Flashcard Pro v98.
-- Manifest, service worker, and cache-busting are v98.
+Fix:
+- Visible version was stuck on v92 because old cached/service-worker files could still be served.
+- This build hardcodes the visible label as `Flashcard Pro v99`.
+- `data.js` has `app_version: v99`.
+- Manifest, service worker, title, and cache-busting are v99.
+- A first-load script clears old non-v99 caches once.
+- The service worker uses network-first navigation.
 
 Preserved:
+- Vertical full verb forms from v98.
 - Plusquamperfekt playback.
 - Synonyms.
 - Translations.
 - All cards.
-- No live API / no playback engine changes.
 
-Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=98
+Open once after upload:
+https://kanoorzad.github.io/B2_Deutsch/?v=99&fresh=1
