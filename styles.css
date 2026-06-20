@@ -1108,3 +1108,33 @@ body.reportingMode .navRow{
   color:rgba(255,255,255,.92);
   pointer-events:none;
 }
+
+
+/* v100 clean flashcard area */
+#nowPlaying,
+.now,
+#changeMaterial.changeMaterialBtn,
+.changeMaterialBtn,
+#slow,
+#slowBtn,
+#speedSlow,
+button[data-speed="slow"],
+button[data-rate="slow"],
+button[aria-label="Langsam"]{
+  display:none!important;
+  visibility:hidden!important;
+}
+.appVersionStatus{
+  position:fixed;
+  left:50%;
+  bottom:6px;
+  transform:translateX(-50%);
+  z-index:2147483647;
+  font-size:11px;
+  opacity:.72;
+  padding:3px 8px;
+  border-radius:999px;
+  background:rgba(15,23,42,.65);
+  color:rgba(255,255,255,.92);
+  pointer-events:none;
+}
