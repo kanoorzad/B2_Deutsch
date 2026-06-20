@@ -1,18 +1,18 @@
 {
-  "version": "89.0-app-version-dynamic-german-synonyms-audio",
+  "version": "90.0-stable-repair-from-v88",
   "base_package": "german_a1_b2_telc_words_v88_b1_words_added.zip",
-  "app_version": "v1",
-  "implemented": [
-    "APP_VERSION set to v1 and displayed as Flashcard Pro v1 in title/status bar.",
-    "Dynamic German-only synonyms integrated with OpenThesaurus API.",
-    "POS-specific synonym count: verbs 4, nouns/adjectives/adverbs/others 2.",
-    "Synonyms render at the bottom of the flashcard with the label (Synonyme).",
-    "Audio keepalive enhanced with AudioContext, silent audio loop, MediaSession, and speechSynthesis hook."
+  "mistake_in_v89": [
+    "Live OpenThesaurus synonym fetching was tied to a MutationObserver watching the same card DOM it modified.",
+    "That could create repeated DOM updates/fetch checks and freeze the browser.",
+    "The extra silent-audio speechSynthesis wrapper could also interfere with browser TTS playback."
   ],
-  "important_limitations": [
-    "The supplied Python snippets were adapted to the actual app stack: static HTML/CSS/vanilla JavaScript PWA.",
-    "OpenThesaurus calls require internet access and browser CORS availability; if the request fails, the synonym box is hidden gracefully.",
-    "Mobile browser/PWA locked-screen TTS remains best-effort. Guaranteed screen-off playback requires native app background audio or pre-generated/bundled audio."
+  "repair": [
+    "Rebuilt from stable v88.",
+    "Removed risky live OpenThesaurus/MutationObserver addon.",
+    "Removed silent-audio speechSynthesis patch.",
+    "Kept only safe APP_VERSION v1 display.",
+    "Kept all cards and previous stable app logic.",
+    "Removed older speechSynthesis monkey-patch from the report-problem addon so native TTS playback is untouched."
   ],
   "cards": 5123,
   "list_counts": {
@@ -44,22 +44,19 @@
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "base_is_v88": true,
-    "app_version_v1_set": true,
-    "app_version_displayed": true,
-    "document_title_uses_app_version": true,
-    "openthesaurus_api_integrated": true,
-    "dynamic_synonym_box_present": true,
-    "synonyme_label_present": true,
-    "pos_specific_synonym_limit": true,
-    "german_only_synonyms": true,
-    "audio_keepalive_present": true,
-    "speech_synthesis_hooked": true,
-    "cache_busting_v89": true,
-    "previous_cards_preserved": true,
-    "translations_complete": true
+    "base_is_v88_stable": true,
+    "risky_v89_addon_removed": true,
+    "speech_synthesis_not_patched_by_v89": true,
+    "app_version_v1_safe_display": true,
+    "cache_busting_v90": true,
+    "cards_preserved_from_v88": true,
+    "translations_complete": true,
+    "a2_present": true,
+    "a2_irregular_present": true,
+    "b1_present": true,
+    "b1_irregular_present": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=89",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=90",
   "zip_mb": 2.29
 }

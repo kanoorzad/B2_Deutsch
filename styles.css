@@ -852,7 +852,7 @@ body.reportingMode .navRow{
 .posFilterSection{padding-bottom:0;margin-bottom:0}
 
 
-/* v89: APP_VERSION, dynamic German synonyms, audio session keepalive */
+/* v90 stable repair: safe version label only */
 .appVersionStatus{
   position:fixed;
   left:50%;
@@ -867,16 +867,3 @@ body.reportingMode .navRow{
   color:rgba(255,255,255,.85);
   pointer-events:none;
 }
-.dynamicGermanSynonyms{
-  margin-top:12px;
-  padding:8px 10px;
-  border-radius:14px;
-  font-size:clamp(.82rem,2.4vw,1rem);
-  line-height:1.35;
-  font-style:italic;
-  color:rgba(226,232,240,.86);
-  background:rgba(15,23,42,.26);
-  border:1px solid rgba(255,255,255,.12);
-  text-align:center;
-}
-.dynamicGermanSynonyms[hidden]{display:none!important}
