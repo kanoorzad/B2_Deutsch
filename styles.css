@@ -850,3 +850,16 @@ body.reportingMode .navRow{
   margin:18px 0;
 }
 .posFilterSection{padding-bottom:0;margin-bottom:0}
+
+
+/* v91 static German-only synonyms */
+#v83HeadSynonyms,#v82HeadSynonyms{display:none!important}
+#chipLabel{font-weight:800}
+#frontSynonyms{
+  font-style:italic;
+  font-weight:700;
+  line-height:1.25;
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
+.cardBottom > div{max-width:78%}

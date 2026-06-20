@@ -7,9 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=88">
-  <link rel="apple-touch-icon" href="icon.svg?v=88">
-  <link rel="stylesheet" href="styles.css?v=88">
+  <link rel="manifest" href="manifest.webmanifest?v=91">
+  <link rel="apple-touch-icon" href="icon.svg?v=91">
+  <link rel="stylesheet" href="styles.css?v=91">
   <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v83</title>
 </head>
 <body class="wizardMode">
@@ -50,7 +50,7 @@
       </div>
       <footer id="cardBottom" class="cardBottom">
         <div>
-          <p id="chipLabel" class="bottomLabel">Ähnliche Bedeutungen</p>
+          <p id="chipLabel" class="bottomLabel">Synonyms:</p>
           <p id="frontSynonyms" class="frontSynonyms"></p>
         </div>
         <p class="tapHint">Tippen zum Umdrehen</p>
@@ -182,8 +182,8 @@
   </section>
 </main>
 
-<script src="data.js?v=88"></script>
-<script src="app.js?v=88"></script>
+<script src="data.js?v=91"></script>
+<script src="app.js?v=91"></script>
 <script id="v83-controller">
 (function(){
   window.__v83Controller=true;
@@ -214,7 +214,16 @@
   function setMode(mode){const card=$('card');if(card)card.dataset.mode=mode;['front','frontText','en','v83TargetText'].forEach(id=>{const el=$(id);if(el)el.classList.remove('isReading','isActiveSide')});if(mode==='german')['front','frontText'].forEach(id=>{const el=$(id);if(el)el.classList.add('isReading','isActiveSide')});if(mode==='translation')['en','v83TargetText'].forEach(id=>{const el=$(id);if(el)el.classList.add('isReading','isActiveSide')})}
   function ensureVerbBox(){let box=$('v83VerbForms')||$('v82VerbForms')||$('v81VerbForms');if(!box){const vb=$('verbBox')||$('card');if(vb){box=document.createElement('div');box.id='v83VerbForms';box.className='v83VerbForms';vb.appendChild(box)}}return box}
   function renderVerbForms(c){const box=ensureVerbBox();if(!box)return;const forms=formList(c);box.innerHTML=forms.map((f,i)=>`<span class="v83VerbForm ${i===currentFormIndex?'active':''}">${f}</span>`).join('')}
-  function renderHeadSynonyms(c){const box=$('v83HeadSynonyms');if(!box||!c)return;const n=req(c),sm=c.synonyms_multi||{},de=(sm.de||[]).slice(0,n).join(' · '),tg=(sm[selectedLang]||[]).slice(0,n).join(' · ');box.innerHTML=`<div><strong>Ähnliche Bedeutungen:</strong> <span>${de}</span></div><div dir="${meta().dir}"><strong>${meta().label}:</strong> <span>${tg}</span></div>`}
+  function renderHeadSynonyms(c){
+    const head=$('v83HeadSynonyms'); if(head) head.innerHTML='';
+    const head2=$('v82HeadSynonyms'); if(head2) head2.innerHTML='';
+    const label=$('chipLabel'); if(label) label.textContent='Synonyms:';
+    const bottom=$('frontSynonyms');
+    if(!bottom){return}
+    if(!c){bottom.textContent='';return}
+    const n=req(c),sm=c.synonyms_multi||{},de=(sm.de||[]).slice(0,n).filter(Boolean);
+    bottom.textContent=de.length?de.join(' · '):'';
+  }
   function renderTarget(c){const m=meta(),text=c?targetText(c):'Dieses Lernmaterial ist vorbereitet. Bitte laden Sie später die Karten hoch.';['en','v83TargetText','v82TargetText','v81TargetText'].forEach(id=>{const el=$(id);if(el){el.textContent=text||'—';el.dir=m.dir;el.lang=selectedLang;el.hidden=false;el.style.display='block';el.style.visibility='visible';el.style.opacity='1';el.classList.add('targetVisible')}});setText('targetTitle',m.label)}
   function renderEmpty(msg='Keine Karten für diese Filterung'){setText('front','Keine Karten');setText('frontText','Keine Karten');setText('de','Keine Karten');renderTarget(null);setText('v83TargetText',msg);setText('count','0 / 0');setText('nowPlaying',msg);['inf','pres3','past','perf','plus','article','singular','plural','ex'].forEach(id=>setText(id,'—'));const hs=$('v83HeadSynonyms');if(hs)hs.innerHTML='';setMode('german');fitHeadword()}
   function renderCard(mode='german'){const c=current();if(!c){renderEmpty();return}const german=displayGerman(c);setText('front',german);setText('frontText',german);setText('de',german);renderTarget(c);setText('count',`${filtered.length?pos+1:0} / ${filtered.length}`);setText('nowPlaying',mode==='translation'?`${meta().label}: ${targetText(c)}`:`Deutsch: ${german}`);const f=c.forms||{};setText('inf',f.infinitive||(c.category==='verb'?c.german:''));if(normalA1Verb(c)){setText('pres3','—');setText('past','—');setText('perf','—');setText('plus','—')}else{setText('pres3',f.present3);setText('past',f.past);setText('perf',f.perfect);setText('plus',f.plusquamperfekt)}setText('article',c.article);setText('singular',c.singular||c.german);setText('plural',c.plural);setText('ex',c.example);renderVerbForms(c);renderHeadSynonyms(c);setMode(mode);setTimeout(fitHeadword,30)}
