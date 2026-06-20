@@ -926,3 +926,48 @@ body.reportingMode .navRow{
   overflow-wrap:anywhere;
 }
 .cardBottom > div{max-width:82%}
+
+
+/* v94 labeled German verb forms */
+.v94VerbFormsTitle{
+  font-size:.76rem;
+  font-weight:900;
+  letter-spacing:.04em;
+  opacity:.78;
+  margin-bottom:6px;
+  text-align:center;
+}
+.v94VerbFormsGrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:4px;
+}
+.v94VerbFormRow{
+  display:grid;
+  grid-template-columns:minmax(104px,auto) 1fr;
+  gap:8px;
+  align-items:center;
+  text-align:left;
+  padding:4px 7px;
+  border-radius:12px;
+  background:rgba(255,255,255,.07);
+}
+.v94VerbFormRow.active{
+  outline:2px solid rgba(255,255,255,.35);
+}
+.v94VerbFormLabel{
+  font-weight:900;
+  opacity:.88;
+  white-space:nowrap;
+}
+.v94VerbFormValue{
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+@media (max-width:420px){
+  .v94VerbFormRow{
+    grid-template-columns:1fr;
+    gap:1px;
+    text-align:center;
+  }
+}

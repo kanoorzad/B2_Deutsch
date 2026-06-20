@@ -7,9 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=93">
-  <link rel="apple-touch-icon" href="icon.svg?v=93">
-  <link rel="stylesheet" href="styles.css?v=93">
+  <link rel="manifest" href="manifest.webmanifest?v=94">
+  <link rel="apple-touch-icon" href="icon.svg?v=94">
+  <link rel="stylesheet" href="styles.css?v=94">
   <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v92</title>
 </head>
 <body class="wizardMode">
@@ -183,13 +183,13 @@
   </section>
 </main>
 
-<script src="data.js?v=93"></script>
+<script src="data.js?v=94"></script>
 <script id="app-version">
-window.APP_VERSION="v92";
-window.BUILD_VERSION="92.0-version-label-fixed";
-document.title="Flashcard Pro v92 – Deutsch Sprache";
+window.APP_VERSION="v94";
+window.BUILD_VERSION="94.0-labeled-verb-forms";
+document.title="Flashcard Pro v94 – Deutsch Sprache";
 </script>
-<script src="app.js?v=93"></script>
+<script src="app.js?v=94"></script>
 <script id="v83-controller">
 (function(){
   window.__v83Controller=true;
@@ -239,14 +239,16 @@ document.title="Flashcard Pro v92 – Deutsch Sprache";
       box.innerHTML='';
       return;
     }
-    const forms=formList(c).filter(Boolean);
-    if(!forms.length){
-      box.hidden=true;
-      box.innerHTML='';
-      return;
-    }
+    const f=c.forms||{};
+    const rows=[
+      ['Infinitiv',f.infinitive||c.german||'—'],
+      ['Präsens',f.present3||'—'],
+      ['Präteritum',f.past||'—'],
+      ['Perfekt',f.perfect||'—'],
+      ['Plusquamperfekt',f.plusquamperfekt||'—']
+    ];
     box.hidden=false;
-    box.innerHTML='<div class="v93VerbFormsTitle">Verbformen</div><div class="v93VerbFormsLine">'+forms.map((f,i)=>`<span class="v83VerbForm ${i===currentFormIndex?'active':''}">${f}</span>`).join('')+'</div>';
+    box.innerHTML='<div class="v94VerbFormsTitle">Verbformen</div><div class="v94VerbFormsGrid">'+rows.map((r,i)=>`<div class="v94VerbFormRow ${i===currentFormIndex?'active':''}"><span class="v94VerbFormLabel">${r[0]}:</span><span class="v94VerbFormValue">${r[1]}</span></div>`).join('')+'</div>';
   }
   function renderHeadSynonyms(c){
     const head=$('v83HeadSynonyms');if(head)head.innerHTML='';
@@ -526,7 +528,7 @@ document.title="Flashcard Pro v92 – Deutsch Sprache";
   window.addEventListener('pagehide', keepBackgroundAudioAlive, true);
 })();
 </script>
-<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v92</div>
+<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v94</div>
 </body>
 </html>
 
