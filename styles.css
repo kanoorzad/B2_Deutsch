@@ -863,3 +863,19 @@ body.reportingMode .navRow{
   overflow-wrap:anywhere;
 }
 .cardBottom > div{max-width:78%}
+
+/* v92 version label fixed */
+.appVersionStatus{
+  position:fixed;
+  left:50%;
+  bottom:6px;
+  transform:translateX(-50%);
+  z-index:2147482200;
+  font-size:11px;
+  opacity:.56;
+  padding:3px 8px;
+  border-radius:999px;
+  background:rgba(15,23,42,.55);
+  color:rgba(255,255,255,.85);
+  pointer-events:none;
+}

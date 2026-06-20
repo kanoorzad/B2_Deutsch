@@ -1,18 +1,15 @@
 {
-  "version": "91.0-static-german-synonyms-from-v88",
-  "base_package": "german_a1_b2_telc_words_v88_b1_words_added.zip",
-  "change_scope": "Only static German synonym display/data count guarantee plus cache metadata. No playback logic changed.",
-  "implemented": [
-    "Flashcard bottom now displays German-only synonyms with label: Synonyms:",
-    "Verbs display 4 German synonyms/equivalent forms.",
-    "Nouns, adjectives, adverbs, phrases and other cards display 2 German synonyms/equivalent words.",
-    "Translated-language synonym row was removed from display.",
-    "No live API, no MutationObserver, no speechSynthesis/audio changes."
-  ],
-  "notes": [
-    "Synonym values are static from existing German card data/synonyms_multi and form/article/plural fields; no online API is used.",
-    "Translated language text remains unchanged, but translated-language synonym lists are not displayed at the bottom of the card."
-  ],
+  "version": "92.0-version-label-fixed",
+  "base_package": "german_a1_b2_telc_words_v91_static_german_synonyms_from_v88.zip",
+  "problem_fixed": "Visible app/build label no longer says v83; it now displays Flashcard Pro v92 and cache references are v92.",
+  "important_note": "Some internal IDs/functions still contain v83 because the stable controller uses those names. They are not visible app-version labels and were preserved to avoid breaking the app.",
+  "before_counts": {
+    "index_v83": 20,
+    "app_v83": 0,
+    "styles_v83": 1,
+    "data_v83": 1
+  },
+  "visible_v83_count_after": 0,
   "cards": 5123,
   "list_counts": {
     "B2 all 12 units": 1629,
@@ -25,18 +22,6 @@
     "B1 Irregular Verbs": 183,
     "B1": 862
   },
-  "category_counts": {
-    "noun": 2644,
-    "verb": 1371,
-    "phrase": 307,
-    "adjective": 399,
-    "other": 401,
-    "adverb": 1
-  },
-  "verb_cards": 1371,
-  "non_verb_cards": 3752,
-  "verb_cards_with_4_german_synonyms": 1371,
-  "non_verb_cards_with_2_german_synonyms": 3752,
   "translation_coverage": {
     "en": 5123,
     "fa": 5123,
@@ -53,26 +38,27 @@
     "uk": 0,
     "tr": 0
   },
+  "verb_cards": 1371,
+  "nonverb_cards": 3752,
+  "verb_cards_with_4_german_synonyms": 1371,
+  "nonverb_cards_with_2_german_synonyms": 3752,
   "checks": {
     "javascript_syntax_ok": true,
-    "base_is_v88": true,
-    "no_v89_or_v90_code": true,
-    "label_is_synonyms": true,
-    "bottom_flashcard_render_used": true,
-    "translated_language_synonyms_not_rendered": true,
-    "head_synonyms_hidden": true,
-    "verbs_have_four_german_synonyms": true,
-    "others_have_two_german_synonyms": true,
-    "all_cards_have_required_german_synonym_count": true,
-    "cards_preserved_from_v88": true,
+    "base_is_v91_from_v88": true,
+    "data_version_is_v92": true,
+    "app_version_status_v92": true,
+    "title_v92": true,
+    "manifest_v92": true,
+    "service_worker_cache_v92": true,
+    "cache_busting_v92": true,
+    "no_visible_v83_text": true,
+    "functional_v83_ids_preserved": true,
+    "cards_preserved": true,
     "translations_complete": true,
-    "cache_busting_v91": true,
-    "a2_present": true,
-    "a2_irregular_present": true,
-    "b1_present": true,
-    "b1_irregular_present": true
+    "german_synonyms_preserved": true,
+    "no_v89_api_code": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=91",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=92",
   "zip_mb": 2.29
 }
