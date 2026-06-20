@@ -1,8 +1,8 @@
 {
-  "version": "87.0-a2-words-added",
-  "base_package": "german_a1_b2_telc_words_v86_a2_irregular_verbs_added.zip",
-  "change_scope": "Dataset-only addition plus cache metadata; existing app logic/UI kept from base package.",
-  "source_workbook": "/mnt/data/A2_Wichtige_Woerter_Units_1-14_Multilingual(1).xlsx",
+  "version": "88.0-b1-words-added",
+  "base_package": "german_a1_b2_telc_words_v87_a2_words_added.zip",
+  "change_scope": "B1 main vocabulary added; B1 irregular verbs retained/added; existing app logic/UI preserved.",
+  "source_workbook_b1_words": "/mnt/data/B1_Wichtige_Woerter_Units_1-12_Multilingual(1).xlsx",
   "workbook_sheet": "Vocabulary",
   "workbook_headers": [
     "Unit",
@@ -15,10 +15,12 @@
     "Turkish",
     "Spanish"
   ],
-  "before_total_cards": 3298,
-  "before_a2_cards": 0,
-  "added_a2_cards": 780,
-  "after_total_cards": 4078,
+  "before_total_cards": 4078,
+  "before_b1_cards": 0,
+  "before_b1_irregular_cards": 0,
+  "added_b1_cards": 862,
+  "b1_irregular_cards": 183,
+  "after_total_cards": 5123,
   "list_counts": {
     "B2 all 12 units": 1629,
     "B2 Irregular Verbs": 150,
@@ -26,38 +28,38 @@
     "A1 Irregular Verbs": 76,
     "A1": 841,
     "A2 Irregular Verbs": 127,
-    "A2": 780
+    "A2": 780,
+    "B1 Irregular Verbs": 183,
+    "B1": 862
   },
-  "a2_unit_counts": {
-    "A2 Einheit 1": 51,
-    "A2 Einheit 10": 53,
-    "A2 Einheit 11": 63,
-    "A2 Einheit 12": 65,
-    "A2 Einheit 13": 51,
-    "A2 Einheit 14": 52,
-    "A2 Einheit 2": 61,
-    "A2 Einheit 3": 52,
-    "A2 Einheit 4": 64,
-    "A2 Einheit 5": 52,
-    "A2 Einheit 6": 56,
-    "A2 Einheit 7": 53,
-    "A2 Einheit 8": 53,
-    "A2 Einheit 9": 54
+  "b1_unit_counts": {
+    "B1 Einheit 1": 92,
+    "B1 Einheit 10": 73,
+    "B1 Einheit 11": 76,
+    "B1 Einheit 12": 59,
+    "B1 Einheit 2": 57,
+    "B1 Einheit 3": 65,
+    "B1 Einheit 4": 83,
+    "B1 Einheit 5": 74,
+    "B1 Einheit 6": 65,
+    "B1 Einheit 7": 73,
+    "B1 Einheit 8": 70,
+    "B1 Einheit 9": 75
   },
-  "a2_category_counts": {
-    "noun": 411,
-    "other": 182,
-    "adjective": 49,
-    "phrase": 137,
-    "adverb": 1
+  "b1_category_counts": {
+    "noun": 499,
+    "other": 72,
+    "verb": 156,
+    "adjective": 68,
+    "phrase": 67
   },
   "translation_coverage_global": {
-    "en": 4078,
-    "fa": 4078,
-    "es": 4078,
-    "ru": 4078,
-    "uk": 4078,
-    "tr": 4078
+    "en": 5123,
+    "fa": 5123,
+    "es": 5123,
+    "ru": 5123,
+    "uk": 5123,
+    "tr": 5123
   },
   "translation_missing_global": {
     "en": 0,
@@ -67,15 +69,15 @@
     "uk": 0,
     "tr": 0
   },
-  "a2_translation_coverage": {
-    "en": 780,
-    "fa": 780,
-    "es": 780,
-    "ru": 780,
-    "uk": 780,
-    "tr": 780
+  "b1_translation_coverage": {
+    "en": 862,
+    "fa": 862,
+    "es": 862,
+    "ru": 862,
+    "uk": 862,
+    "tr": 862
   },
-  "a2_translation_missing": {
+  "b1_translation_missing": {
     "en": 0,
     "fa": 0,
     "es": 0,
@@ -83,18 +85,30 @@
     "uk": 0,
     "tr": 0
   },
-  "a2_synonym_exact_count_cards": 780,
+  "b1_irregular_translation_coverage": {
+    "en": 183,
+    "fa": 183,
+    "es": 183,
+    "ru": 183,
+    "uk": 183,
+    "tr": 183
+  },
+  "b1_synonym_exact_count_cards": 862,
+  "b1_irregular_synonym_exact_count_cards": 183,
   "checks": {
     "javascript_syntax_ok": true,
-    "a2_words_added": true,
-    "a2_all_languages_present": true,
-    "a2_units_1_to_14_present": true,
-    "a2_synonyms_required_count": true,
-    "material_list_has_a2": true,
-    "a2_irregular_verbs_still_present": true,
-    "cache_busting_v87": true
+    "b1_words_added": true,
+    "b1_all_languages_present": true,
+    "b1_units_1_to_12_present": true,
+    "b1_synonyms_required_count": true,
+    "material_list_has_b1": true,
+    "b1_irregular_verbs_present": true,
+    "b1_irregular_all_languages_present": true,
+    "a2_words_still_present": true,
+    "a2_irregular_still_present": true,
+    "cache_busting_v88": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=87",
-  "zip_mb": 2.02
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=88",
+  "zip_mb": 2.29
 }
