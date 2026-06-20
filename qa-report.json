@@ -1,39 +1,65 @@
 {
-  "version": "85.0-report-problem-fixed-from-v83",
-  "base": "v83_final_addendum",
-  "implemented": [
-    "Fixed Report Problem flow with stable overlay instead of broken flashcard flip.",
-    "Problem melden button is German.",
-    "Report page has Betreff, Zusammenfassung, Absenden, and Zurück.",
-    "Flashcard and controls are hidden/disabled while reporting mode is active.",
-    "Submit shows German thank-you message and replaces form actions with Zurück.",
-    "Zurück restores the learning view and resumes playback when it was active before reporting.",
-    "Frontend posts to /api/report-problem; recipient email is only in server-side endpoint file.",
-    "Voice mapping UI and watermark section remain removed.",
-    "Wortart filter auto-closes and autoplays.",
-    "Background audio best-effort retained."
+  "version": "87.0-a2-words-added",
+  "base_package": "german_a1_b2_telc_words_v86_a2_irregular_verbs_added.zip",
+  "change_scope": "Dataset-only addition plus cache metadata; existing app logic/UI kept from base package.",
+  "source_workbook": "/mnt/data/A2_Wichtige_Woerter_Units_1-14_Multilingual(1).xlsx",
+  "workbook_sheet": "Vocabulary",
+  "workbook_headers": [
+    "Unit",
+    "Section",
+    "German Word",
+    "English Translation",
+    "Dari",
+    "Russian",
+    "Ukrainian",
+    "Turkish",
+    "Spanish"
   ],
-  "important_limitations": [
-    "GitHub Pages alone cannot send email because it cannot run server-side endpoints. Deploy api/report-problem.js on Vercel/Node or adapt it to your backend.",
-    "Browser/PWA background TTS remains best-effort. Guaranteed locked-screen playback requires native background audio or bundled/backend audio."
-  ],
-  "cards": 3171,
+  "before_total_cards": 3298,
+  "before_a2_cards": 0,
+  "added_a2_cards": 780,
+  "after_total_cards": 4078,
   "list_counts": {
     "B2 all 12 units": 1629,
     "B2 Irregular Verbs": 150,
     "B1 Plus 7 Units": 475,
     "A1 Irregular Verbs": 76,
-    "A1": 841
+    "A1": 841,
+    "A2 Irregular Verbs": 127,
+    "A2": 780
   },
-  "translation_coverage": {
-    "en": 3171,
-    "fa": 3171,
-    "es": 3171,
-    "ru": 3171,
-    "uk": 3171,
-    "tr": 3171
+  "a2_unit_counts": {
+    "A2 Einheit 1": 51,
+    "A2 Einheit 10": 53,
+    "A2 Einheit 11": 63,
+    "A2 Einheit 12": 65,
+    "A2 Einheit 13": 51,
+    "A2 Einheit 14": 52,
+    "A2 Einheit 2": 61,
+    "A2 Einheit 3": 52,
+    "A2 Einheit 4": 64,
+    "A2 Einheit 5": 52,
+    "A2 Einheit 6": 56,
+    "A2 Einheit 7": 53,
+    "A2 Einheit 8": 53,
+    "A2 Einheit 9": 54
   },
-  "translation_missing": {
+  "a2_category_counts": {
+    "noun": 411,
+    "other": 182,
+    "adjective": 49,
+    "phrase": 137,
+    "adverb": 1
+  },
+  "translation_coverage_global": {
+    "en": 4078,
+    "fa": 4078,
+    "es": 4078,
+    "ru": 4078,
+    "uk": 4078,
+    "tr": 4078
+  },
+  "translation_missing_global": {
     "en": 0,
     "fa": 0,
     "es": 0,
@@ -41,34 +67,34 @@
     "uk": 0,
     "tr": 0
   },
-  "synonym_exact_count_cards": 3171,
-  "a1_normal_verb_cards": 179,
-  "a1_normal_verb_cards_only_infinitive": 179,
+  "a2_translation_coverage": {
+    "en": 780,
+    "fa": 780,
+    "es": 780,
+    "ru": 780,
+    "uk": 780,
+    "tr": 780
+  },
+  "a2_translation_missing": {
+    "en": 0,
+    "fa": 0,
+    "es": 0,
+    "ru": 0,
+    "uk": 0,
+    "tr": 0
+  },
+  "a2_synonym_exact_count_cards": 780,
   "checks": {
     "javascript_syntax_ok": true,
-    "base_is_v83_final_addendum": true,
-    "problem_button_german": true,
-    "report_overlay_present": true,
-    "report_overlay_not_trapped": true,
-    "report_hides_controls": true,
-    "report_submit_and_back_german": true,
-    "report_posts_to_backend": true,
-    "backend_endpoint_included": true,
-    "email_not_visible_in_frontend": true,
-    "voice_mapping_removed_from_options_ui": true,
-    "watermark_under_filter_removed": true,
-    "filter_auto_closes_and_autoplays": true,
-    "unit_replaced_in_visible_ui": true,
-    "background_audio_best_effort": true,
-    "service_worker_present": true,
-    "tts_priority_rules_kept": true,
-    "headword_single_line_fit_kept": true,
-    "exact_synonym_counts_all_cards": true,
-    "a1_normal_verbs_only_infinitive": true,
-    "translations_complete": true,
-    "cache_busting_v85": true
+    "a2_words_added": true,
+    "a2_all_languages_present": true,
+    "a2_units_1_to_14_present": true,
+    "a2_synonyms_required_count": true,
+    "material_list_has_a2": true,
+    "a2_irregular_verbs_still_present": true,
+    "cache_busting_v87": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=85",
-  "zip_mb": 1.79
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=87",
+  "zip_mb": 2.02
 }
