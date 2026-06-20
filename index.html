@@ -7,9 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=88">
-  <link rel="apple-touch-icon" href="icon.svg?v=88">
-  <link rel="stylesheet" href="styles.css?v=88">
+  <link rel="manifest" href="manifest.webmanifest?v=89">
+  <link rel="apple-touch-icon" href="icon.svg?v=89">
+  <link rel="stylesheet" href="styles.css?v=89">
   <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v83</title>
 </head>
 <body class="wizardMode">
@@ -182,8 +182,9 @@
   </section>
 </main>
 
-<script src="data.js?v=88"></script>
-<script src="app.js?v=88"></script>
+<script src="data.js?v=89"></script>
+<script id="app-version">window.APP_VERSION="v1";</script>
+<script src="app.js?v=89"></script>
 <script id="v83-controller">
 (function(){
   window.__v83Controller=true;
@@ -481,6 +482,280 @@
 
   document.addEventListener('visibilitychange', keepBackgroundAudioAlive, true);
   window.addEventListener('pagehide', keepBackgroundAudioAlive, true);
+})();
+</script>
+<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v1</div>
+<script id="v89-app-fixes">
+(function(){
+  window.APP_VERSION = window.APP_VERSION || 'v1';
+  window.__v89AppFixes = true;
+
+  const OPENTHESAURUS_API = 'https://www.openthesaurus.de/synonyme/search';
+  const synonymCache = new Map();
+  let synonymAbort = null;
+  let synonymTimer = null;
+  let keepAudioCtx = null;
+  let keepOsc = null;
+  let keepGain = null;
+  let silentAudio = null;
+
+  function $(id){ return document.getElementById(id); }
+
+  function setVersionDisplay(){
+    try{
+      if(!document.title.includes(window.APP_VERSION)){
+        document.title = 'Flashcard Pro ' + window.APP_VERSION + ' – ' + document.title.replace(/^Flashcard Pro\s+v\d+\s+–\s+/,'');
+      }
+    }catch(e){}
+    const bar = $('appVersionStatus');
+    if(bar) bar.textContent = 'Flashcard Pro ' + window.APP_VERSION;
+  }
+
+  function getCardElement(){
+    return $('card') || document.querySelector('.card') || document.querySelector('[data-card]') || document.querySelector('main');
+  }
+
+  function ensureSynonymBox(){
+    let box = $('dynamicGermanSynonyms');
+    if(box) return box;
+    box = document.createElement('div');
+    box.id = 'dynamicGermanSynonyms';
+    box.className = 'dynamicGermanSynonyms';
+    box.setAttribute('aria-live', 'polite');
+    box.hidden = true;
+    const card = getCardElement();
+    if(card) card.appendChild(box);
+    return box;
+  }
+
+  function cleanGermanWord(raw, card){
+    let word = '';
+    if(card){
+      const pos = (card.category || '').toLowerCase();
+      if(pos === 'verb' && card.forms && card.forms.infinitive) word = card.forms.infinitive;
+      else if(pos === 'noun' && card.singular) word = card.singular;
+      else word = card.german || card.singular || '';
+    }
+    if(!word){
+      const front = $('frontText') || $('front') || $('de');
+      word = front ? front.textContent : '';
+    }
+    word = String(word || '').trim();
+    word = word.replace(/^(der|die|das)\s+/i, '');
+    word = word.replace(/,\s*(der|die|das)\b.*$/i, '');
+    word = word.replace(/,\s*(Sg\.?|Pl\.?|-[^,]*)\s*$/i, '');
+    word = word.replace(/\([^)]*\)/g, '');
+    word = word.replace(/\s+/g, ' ').trim();
+    return word;
+  }
+
+  function currentCard(){
+    try{
+      if(typeof window.current === 'function') return window.current();
+    }catch(e){}
+    const data = window.FLASHCARD_DATA && window.FLASHCARD_DATA.cards;
+    const front = cleanGermanWord('', null).toLowerCase();
+    if(Array.isArray(data) && front){
+      return data.find(c => String(c.german||c.singular||'').toLowerCase().includes(front) || String(c.singular||'').toLowerCase() === front) || null;
+    }
+    return null;
+  }
+
+  function synonymLimit(pos){
+    return String(pos || '').toLowerCase() === 'verb' ? 4 : 2;
+  }
+
+  async function fetchSynonyms(word, pos){
+    const limit = synonymLimit(pos);
+    const cacheKey = word.toLowerCase() + '|' + limit;
+    if(synonymCache.has(cacheKey)) return synonymCache.get(cacheKey);
+    if(!word) return [];
+    if(synonymAbort) synonymAbort.abort();
+    synonymAbort = new AbortController();
+    const timeout = setTimeout(() => {
+      try{ synonymAbort.abort(); }catch(e){}
+    }, 3500);
+    try{
+      const url = OPENTHESAURUS_API + '?q=' + encodeURIComponent(word) + '&format=json';
+      const res = await fetch(url, {signal: synonymAbort.signal, mode:'cors'});
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const out = [];
+      const synsets = Array.isArray(data.synsets) ? data.synsets : [];
+      synsets.forEach(set => {
+        (set.terms || []).forEach(term => {
+          const t = (term.term || '').trim();
+          if(t && t.toLowerCase() !== word.toLowerCase() && !out.some(x => x.toLowerCase() === t.toLowerCase())){
+            out.push(t);
+          }
+        });
+      });
+      const result = out.slice(0, limit);
+      synonymCache.set(cacheKey, result);
+      return result;
+    }catch(e){
+      synonymCache.set(cacheKey, []);
+      return [];
+    }finally{
+      clearTimeout(timeout);
+    }
+  }
+
+  async function updateDynamicSynonyms(){
+    const box = ensureSynonymBox();
+    if(!box) return;
+    const card = currentCard();
+    const pos = card && card.category ? card.category : 'other';
+    const word = cleanGermanWord('', card);
+    if(!word){
+      box.hidden = true;
+      box.textContent = '';
+      return;
+    }
+    box.hidden = false;
+    box.textContent = '(Synonyme) …';
+    const syns = await fetchSynonyms(word, pos);
+    if(!syns.length){
+      box.hidden = true;
+      box.textContent = '';
+      return;
+    }
+    box.textContent = '(Synonyme) ' + syns.join(', ');
+  }
+
+  function scheduleSynonymUpdate(){
+    clearTimeout(synonymTimer);
+    synonymTimer = setTimeout(updateDynamicSynonyms, 180);
+  }
+
+  function makeSilentWav(){
+    // 1 second PCM silence WAV, enough to keep a media session on browsers that allow it after user gesture.
+    return 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=';
+  }
+
+  function startAudioSession(){
+    try{
+      const C = window.AudioContext || window.webkitAudioContext;
+      if(C){
+        if(!keepAudioCtx) keepAudioCtx = new C();
+        if(keepAudioCtx.state === 'suspended') keepAudioCtx.resume();
+        if(!keepOsc){
+          keepGain = keepAudioCtx.createGain();
+          keepGain.gain.value = 0.00001;
+          keepOsc = keepAudioCtx.createOscillator();
+          keepOsc.frequency.value = 1;
+          keepOsc.connect(keepGain).connect(keepAudioCtx.destination);
+          keepOsc.start();
+        }
+      }
+    }catch(e){}
+
+    try{
+      if(!silentAudio){
+        silentAudio = new Audio(makeSilentWav());
+        silentAudio.loop = true;
+        silentAudio.volume = 0.001;
+        silentAudio.setAttribute('aria-hidden', 'true');
+      }
+      const p = silentAudio.play();
+      if(p && typeof p.catch === 'function') p.catch(()=>{});
+    }catch(e){}
+
+    try{
+      if('mediaSession' in navigator){
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: 'Flashcard Pro ' + window.APP_VERSION,
+          artist: 'Deutsch Sprache – Wichtige Wörter'
+        });
+        try{ navigator.mediaSession.playbackState = 'playing'; }catch(e){}
+        try{ navigator.mediaSession.setActionHandler('play', () => { const b=$('playList'); if(b) b.click(); }); }catch(e){}
+        try{ navigator.mediaSession.setActionHandler('pause', () => { const b=$('pauseList'); if(b) b.click(); }); }catch(e){}
+        try{ navigator.mediaSession.setActionHandler('nexttrack', () => { const b=$('next'); if(b) b.click(); }); }catch(e){}
+        try{ navigator.mediaSession.setActionHandler('previoustrack', () => { const b=$('prev'); if(b) b.click(); }); }catch(e){}
+      }
+    }catch(e){}
+  }
+
+  function stopAudioSession(){
+    try{
+      if('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
+    }catch(e){}
+    try{
+      if(silentAudio) silentAudio.pause();
+    }catch(e){}
+  }
+
+  function hookAudioButtons(){
+    ['playList'].forEach(id => {
+      const b = $(id);
+      if(b && !b.dataset.v89AudioHooked){
+        b.dataset.v89AudioHooked = '1';
+        b.addEventListener('click', startAudioSession, true);
+      }
+    });
+    ['pauseList','stopList'].forEach(id => {
+      const b = $(id);
+      if(b && !b.dataset.v89AudioStopHooked){
+        b.dataset.v89AudioStopHooked = '1';
+        b.addEventListener('click', stopAudioSession, true);
+      }
+    });
+  }
+
+  function hookSpeech(){
+    if('speechSynthesis' in window && !window.__v89SpeechPatched){
+      window.__v89SpeechPatched = true;
+      const originalSpeak = window.speechSynthesis.speak.bind(window.speechSynthesis);
+      window.speechSynthesis.speak = function(utterance){
+        startAudioSession();
+        return originalSpeak(utterance);
+      };
+    }
+  }
+
+  function observeCardChanges(){
+    const target = getCardElement();
+    if(!target || target.dataset.v89Observed) return;
+    target.dataset.v89Observed = '1';
+    const obs = new MutationObserver(scheduleSynonymUpdate);
+    obs.observe(target, {subtree:true, childList:true, characterData:true, attributes:true});
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    setVersionDisplay();
+    hookSpeech();
+    hookAudioButtons();
+    observeCardChanges();
+    scheduleSynonymUpdate();
+  });
+
+  document.addEventListener('click', function(ev){
+    setTimeout(function(){
+      setVersionDisplay();
+      hookAudioButtons();
+      observeCardChanges();
+      scheduleSynonymUpdate();
+    }, 80);
+  }, true);
+
+  document.addEventListener('change', function(){
+    setTimeout(scheduleSynonymUpdate, 120);
+  }, true);
+
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden) scheduleSynonymUpdate();
+    startAudioSession();
+  }, true);
+
+  window.addEventListener('pagehide', startAudioSession, true);
+
+  setVersionDisplay();
+  hookSpeech();
+  setTimeout(function(){
+    hookAudioButtons();
+    observeCardChanges();
+    scheduleSynonymUpdate();
+  }, 250);
 })();
 </script>
 </body>

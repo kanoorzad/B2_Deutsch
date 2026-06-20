@@ -1,26 +1,20 @@
 {
-  "version": "88.0-b1-words-added",
-  "base_package": "german_a1_b2_telc_words_v87_a2_words_added.zip",
-  "change_scope": "B1 main vocabulary added; B1 irregular verbs retained/added; existing app logic/UI preserved.",
-  "source_workbook_b1_words": "/mnt/data/B1_Wichtige_Woerter_Units_1-12_Multilingual(1).xlsx",
-  "workbook_sheet": "Vocabulary",
-  "workbook_headers": [
-    "Unit",
-    "Section",
-    "German Word",
-    "English Translation",
-    "Dari",
-    "Russian",
-    "Ukrainian",
-    "Turkish",
-    "Spanish"
+  "version": "89.0-app-version-dynamic-german-synonyms-audio",
+  "base_package": "german_a1_b2_telc_words_v88_b1_words_added.zip",
+  "app_version": "v1",
+  "implemented": [
+    "APP_VERSION set to v1 and displayed as Flashcard Pro v1 in title/status bar.",
+    "Dynamic German-only synonyms integrated with OpenThesaurus API.",
+    "POS-specific synonym count: verbs 4, nouns/adjectives/adverbs/others 2.",
+    "Synonyms render at the bottom of the flashcard with the label (Synonyme).",
+    "Audio keepalive enhanced with AudioContext, silent audio loop, MediaSession, and speechSynthesis hook."
   ],
-  "before_total_cards": 4078,
-  "before_b1_cards": 0,
-  "before_b1_irregular_cards": 0,
-  "added_b1_cards": 862,
-  "b1_irregular_cards": 183,
-  "after_total_cards": 5123,
+  "important_limitations": [
+    "The supplied Python snippets were adapted to the actual app stack: static HTML/CSS/vanilla JavaScript PWA.",
+    "OpenThesaurus calls require internet access and browser CORS availability; if the request fails, the synonym box is hidden gracefully.",
+    "Mobile browser/PWA locked-screen TTS remains best-effort. Guaranteed screen-off playback requires native app background audio or pre-generated/bundled audio."
+  ],
+  "cards": 5123,
   "list_counts": {
     "B2 all 12 units": 1629,
     "B2 Irregular Verbs": 150,
@@ -32,28 +26,7 @@
     "B1 Irregular Verbs": 183,
     "B1": 862
   },
-  "b1_unit_counts": {
-    "B1 Einheit 1": 92,
-    "B1 Einheit 10": 73,
-    "B1 Einheit 11": 76,
-    "B1 Einheit 12": 59,
-    "B1 Einheit 2": 57,
-    "B1 Einheit 3": 65,
-    "B1 Einheit 4": 83,
-    "B1 Einheit 5": 74,
-    "B1 Einheit 6": 65,
-    "B1 Einheit 7": 73,
-    "B1 Einheit 8": 70,
-    "B1 Einheit 9": 75
-  },
-  "b1_category_counts": {
-    "noun": 499,
-    "other": 72,
-    "verb": 156,
-    "adjective": 68,
-    "phrase": 67
-  },
-  "translation_coverage_global": {
+  "translation_coverage": {
     "en": 5123,
     "fa": 5123,
     "es": 5123,
@@ -61,7 +34,7 @@
     "uk": 5123,
     "tr": 5123
   },
-  "translation_missing_global": {
+  "translation_missing": {
     "en": 0,
     "fa": 0,
     "es": 0,
@@ -69,46 +42,24 @@
     "uk": 0,
     "tr": 0
   },
-  "b1_translation_coverage": {
-    "en": 862,
-    "fa": 862,
-    "es": 862,
-    "ru": 862,
-    "uk": 862,
-    "tr": 862
-  },
-  "b1_translation_missing": {
-    "en": 0,
-    "fa": 0,
-    "es": 0,
-    "ru": 0,
-    "uk": 0,
-    "tr": 0
-  },
-  "b1_irregular_translation_coverage": {
-    "en": 183,
-    "fa": 183,
-    "es": 183,
-    "ru": 183,
-    "uk": 183,
-    "tr": 183
-  },
-  "b1_synonym_exact_count_cards": 862,
-  "b1_irregular_synonym_exact_count_cards": 183,
   "checks": {
     "javascript_syntax_ok": true,
-    "b1_words_added": true,
-    "b1_all_languages_present": true,
-    "b1_units_1_to_12_present": true,
-    "b1_synonyms_required_count": true,
-    "material_list_has_b1": true,
-    "b1_irregular_verbs_present": true,
-    "b1_irregular_all_languages_present": true,
-    "a2_words_still_present": true,
-    "a2_irregular_still_present": true,
-    "cache_busting_v88": true
+    "base_is_v88": true,
+    "app_version_v1_set": true,
+    "app_version_displayed": true,
+    "document_title_uses_app_version": true,
+    "openthesaurus_api_integrated": true,
+    "dynamic_synonym_box_present": true,
+    "synonyme_label_present": true,
+    "pos_specific_synonym_limit": true,
+    "german_only_synonyms": true,
+    "audio_keepalive_present": true,
+    "speech_synthesis_hooked": true,
+    "cache_busting_v89": true,
+    "previous_cards_preserved": true,
+    "translations_complete": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=88",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=89",
   "zip_mb": 2.29
 }
