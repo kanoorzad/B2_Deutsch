@@ -1021,3 +1021,13 @@ body.reportingMode .navRow{
 @media (max-width:420px){
   .v94VerbFormRow{grid-template-columns:minmax(104px,auto) 1fr!important;text-align:left!important}
 }
+
+
+/* v97 compact verb-form labels */
+.v95VerbFormsInline{gap:4px}
+.v95VerbFormItem{
+  padding:3px 6px;
+  gap:2px;
+  font-size:clamp(.68rem,2.0vw,.88rem);
+}
+.v95VerbSep{font-size:.78rem}

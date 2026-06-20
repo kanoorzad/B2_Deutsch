@@ -1,8 +1,16 @@
 {
-  "version": "96.0-plusquamperfekt-playback",
-  "base_package": "german_a1_b2_telc_words_v95_inline_forms_filled.zip",
-  "problem_fixed": "Playback form sequence now includes Plusquamperfekt after Perfekt.",
-  "change_scope": "Only formList/playback form sequence changed; display, synonyms, data, and audio engine unchanged.",
+  "version": "97.0-short-verb-form-labels",
+  "base_package": "german_a1_b2_telc_words_v96_plusquamperfekt_playback.zip",
+  "change_scope": "Only shortened the visible verb-form labels. Playback, synonyms, and data are preserved.",
+  "implemented": [
+    "Infinitiv label shortened to Inf:",
+    "Präsens label shortened to Präs:",
+    "Präteritum label shortened to Präte:",
+    "Perfekt label shortened to Perf:",
+    "Plusquamperfekt label shortened to Pqperf:",
+    "One-line verb form display preserved.",
+    "Plusquamperfekt playback from v96 preserved."
+  ],
   "cards": 5123,
   "list_counts": {
     "B2 all 12 units": 1629,
@@ -23,62 +31,6 @@
     "other": 401,
     "adverb": 1
   },
-  "verb_cards_total": 1371,
-  "b2_verb_cards": 542,
-  "b2_verb_cards_with_plusquamperfekt": 539,
-  "non_a1_verb_cards_with_plusquamperfekt": 1029,
-  "samples": [
-    {
-      "verb": "gehen",
-      "playback_sequence_now": [
-        "gehen",
-        "geht",
-        "ging",
-        "ist gegangen",
-        "war gegangen"
-      ]
-    },
-    {
-      "verb": "fahren",
-      "playback_sequence_now": [
-        "fahren",
-        "fährt",
-        "fuhr",
-        "ist gefahren",
-        "war gefahren"
-      ]
-    },
-    {
-      "verb": "sprechen",
-      "playback_sequence_now": [
-        "sprechen",
-        "spricht",
-        "sprach",
-        "hat gesprochen",
-        "hatte gesprochen"
-      ]
-    },
-    {
-      "verb": "schreiben",
-      "playback_sequence_now": [
-        "schreiben",
-        "schreibt",
-        "schrieb",
-        "hat geschrieben",
-        "hatte geschrieben"
-      ]
-    },
-    {
-      "verb": "bekommen",
-      "playback_sequence_now": [
-        "bekommen",
-        "bekommt",
-        "bekam",
-        "ist bekommen",
-        "war bekommen"
-      ]
-    }
-  ],
   "translation_coverage": {
     "en": 5123,
     "fa": 5123,
@@ -95,21 +47,22 @@
     "uk": 0,
     "tr": 0
   },
+  "verb_cards": 1371,
+  "nonverb_cards": 3752,
   "checks": {
     "javascript_syntax_ok": true,
-    "base_is_v95": true,
-    "formlist_includes_plusquamperfekt": true,
-    "plus_after_perfect_in_formlist": true,
-    "playone_uses_formlist": true,
-    "b2_verbs_have_plusquamperfekt_available": true,
+    "base_is_v96": true,
+    "short_labels_present": true,
+    "long_labels_not_in_render_function": true,
+    "one_line_display_preserved": true,
+    "plusquamperfekt_playback_preserved": true,
     "cards_preserved": true,
     "translations_complete": true,
-    "no_playback_monkey_patch_added": true,
-    "display_one_line_preserved": true,
     "synonyms_preserved": true,
-    "cache_busting_v96": true
+    "no_playback_monkey_patch_added": true,
+    "cache_busting_v97": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=96",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=97",
   "zip_mb": 2.3
 }
