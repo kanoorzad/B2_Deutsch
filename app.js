@@ -1,6 +1,6 @@
 // v67: full user-provided script applied; Persian/Persian/Farsi debug helper included.
 // v67: remove old service workers/caches once so old broken versions cannot control audio.
-(function(){try{const key='v105AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh105=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh105='+Date.now())}}).catch(()=>{});}}catch(e){}})();
+(function(){try{const key='v1_0AudioResetDone';if(!sessionStorage.getItem(key)){sessionStorage.setItem(key,'1');Promise.all([('serviceWorker'in navigator)?navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))):Promise.resolve(),('caches'in window)?caches.keys().then(ks=>Promise.all(ks.map(k=>caches.delete(k)))):Promise.resolve()]).then(()=>{if(!location.search.includes('fresh105=')){const sep=location.search?'&':'?';location.replace(location.pathname+location.search+sep+'fresh105='+Date.now())}}).catch(()=>{});}}catch(e){}})();
 const initialData = window.FLASHCARD_DATA.cards;
 const STORE='b2-native-cards-extra-v105';
 let extra=JSON.parse(localStorage.getItem(STORE)||'[]');

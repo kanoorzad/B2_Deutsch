@@ -1,16 +1,15 @@
 {
-  "version": "105.0-clean-root-persisch-audio-pack",
-  "base_package": "german_a1_b2_telc_words_v104_github_audio_workflow.zip",
-  "change_scope": "Clean root-level Persisch audio pack workflow and generator, no tools folder dependency.",
-  "implemented": [
-    "Root-level generate_persian_audio_azure.py",
-    "Workflow references root-level generator",
-    "Copy-paste workflow file provided at root",
-    "Clean instructions for replacing old setup",
-    "App version/cache updated to v105"
+  "version": "1.0.0-release-fix-pack",
+  "public_app_version": "v1.0",
+  "base_package": "german_a1_b2_telc_words_v105_clean_root_audio_pack.zip",
+  "implemented_fixes": [
+    "Compact two-row verb form display",
+    "PWA homescreen top option button/safe-area fix",
+    "Fixed flashcard size with text auto-fit",
+    "Synonyms restored",
+    "Visible version reset to v1.0"
   ],
   "cards": 5123,
-  "persian_audio_jobs": 5123,
   "list_counts": {
     "B2 all 12 units": 1629,
     "B2 Irregular Verbs": 150,
@@ -48,23 +47,18 @@
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "base_package": "german_a1_b2_telc_words_v104_github_audio_workflow.zip",
-    "root_generator_present": true,
-    "workflow_checks_root_generator": true,
-    "workflow_runs_root_generator": true,
-    "copy_workflow_file_present": true,
-    "persian_audio_jobs_present": true,
-    "audio_manifest_present": true,
-    "app_uses_audio_before_tts_for_fa": true,
-    "visible_version_v105": true,
-    "vertical_forms_preserved": true,
-    "plusquamperfekt_playback_preserved": true,
+    "public_version_v1_0": true,
+    "cache_busting_v1_0": true,
+    "verb_forms_two_row_layout": true,
+    "homescreen_safe_area_css": true,
+    "fixed_card_autofit": true,
+    "synonyms_restored": true,
+    "audio_manifest_preserved": true,
     "cards_preserved": true,
     "translations_complete": true,
-    "synonyms_preserved": true,
-    "cache_busting_v105": true
+    "no_v89_api_code": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=105&fresh=1",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=1.0&fresh=1",
   "zip_mb": 2.53
 }

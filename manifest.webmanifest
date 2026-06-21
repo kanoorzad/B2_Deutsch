@@ -1,7 +1,7 @@
 {
-  "name": "Flashcard Pro v105 – Deutsch Sprache",
-  "short_name": "Flashcard Pro v105",
-  "start_url": "./index.html?v=105",
+  "name": "Flashcard Pro v1.0 – Deutsch Sprache",
+  "short_name": "Flashcard Pro v1.0",
+  "start_url": "./index.html?v=1.0",
   "display": "standalone",
   "background_color": "#f3f7fb",
   "theme_color": "#17324d",
@@ -12,5 +12,6 @@
       "type": "image/svg+xml"
     }
   ],
-  "scope": "./"
+  "scope": "./",
+  "orientation": "portrait"
 }
