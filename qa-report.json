@@ -1,7 +1,39 @@
 {
-  "version": "v1.2",
-  "base_package": "german_a1_b2_telc_words_v1_0_release_fix_pack.zip",
+  "version": "2.0.0-mobile-audio-synonym-rootcause-fix",
+  "base_package": "german_a1_b2_telc_words_v1_2_synonyms_audio_fix.zip",
+  "root_cause_notes": [
+    "Mobile browsers can block new Audio() playback when the audio element is created after asynchronous speech synthesis.",
+    "The previous synonym data for non-verbs included same-word/article-stripped variants, so nouns/adjectives could show the original word instead of a real alternative.",
+    "Generated audio only plays for cards whose MP3 exists; the app now tries direct audio_fa first and fetches audio/manifest fresh."
+  ],
+  "implemented": [
+    "Hidden Tippen zum Umdrehen in flashcard area.",
+    "Restored four German synonyms under Synonyms.",
+    "Filtered same-word German synonym variants and regenerated German synonym arrays.",
+    "Added shared unlocked mobile audio element for Farsi MP3 playback.",
+    "Updated public version to v2.0 and service-worker cache to v2.0."
+  ],
+  "important_upload_note": "Do not overwrite/delete audio/fa/ or audio-manifest.js when uploading this package.",
   "cards": 5123,
+  "list_counts": {
+    "B2 all 12 units": 1629,
+    "B2 Irregular Verbs": 150,
+    "B1 Plus 7 Units": 475,
+    "A1 Irregular Verbs": 76,
+    "A1": 841,
+    "A2 Irregular Verbs": 127,
+    "A2": 780,
+    "B1 Irregular Verbs": 183,
+    "B1": 862
+  },
+  "category_counts": {
+    "noun": 2644,
+    "verb": 1371,
+    "phrase": 307,
+    "adjective": 399,
+    "other": 401,
+    "adverb": 1
+  },
   "translation_coverage": {
     "en": 5123,
     "fa": 5123,
@@ -10,25 +42,21 @@
     "uk": 5123,
     "tr": 5123
   },
-  "verb_cards_with_4_de_synonyms": 1371,
-  "nonverb_cards_with_2_de_synonyms": 3752,
   "checks": {
-    "node_app_js_ok": true,
-    "tippen_removed_from_dom": true,
-    "tap_hint_hidden_css": true,
-    "bottom_synonyms_rendered": true,
-    "persisch_direct_audio_fallback": true,
-    "audio_crossorigin_removed": true,
-    "package_does_not_overwrite_audio_manifest": true,
-    "version_v1_2": true,
+    "javascript_syntax_ok": true,
+    "version_v2_0": true,
+    "tippen_removed_visible": true,
+    "synonyms_render_four": true,
+    "same_word_synonym_cards_remaining": 0,
+    "mobile_audio_unlocked_shared_element": true,
+    "direct_audio_fa_first": true,
+    "audio_manifest_not_in_zip": true,
+    "service_worker_fresh_audio_manifest": true,
     "cards_preserved": true,
     "translations_complete": true,
-    "verb_synonyms_4_present": true,
-    "nonverb_synonyms_2_present": true,
-    "visible_tap_hint_removed": true
+    "no_v89_live_api": true
   },
-  "node_stderr": "",
-  "root_cause_farsi_mobile": "Previous app required audio-manifest.js ready=true before trying MP3 files. If the manifest was stale/overwritten/cached false, mobile never tried existing MP3s. v1.2 tries direct card audio_fa paths first and uses no-store for audio manifest/audio fetches.",
-  "upload_note": "Keep existing generated audio/fa/ and audio-manifest.js in GitHub; do not overwrite them with placeholders.",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=1.2&fresh=1"
+  "node_check_stderr": "",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=2.0&fresh=1",
+  "zip_mb": 2.55
 }

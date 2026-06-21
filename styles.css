@@ -1157,3 +1157,22 @@ button,.btn,[role="button"],.optionButton,.optionsButton,.menuButton,.settingsBu
 #frontSynonyms.frontSynonyms,.v12SynonymsFixed{display:block!important;visibility:visible!important;opacity:1!important;text-align:center;max-width:min(96%,560px);margin:0 auto!important;padding:0!important;background:transparent!important;border:0!important;font-weight:800;line-height:1.25;overflow-wrap:anywhere;}
 #v83HeadSynonyms,#v82HeadSynonyms{display:none!important;}
 .card,.flashcard,.cardInner,.cardFace,.front,.back,.studyCard{overflow:hidden!important;}
+
+/* v2.0 requested fixes */
+#frontHint,.frontHint{
+  display:none!important;
+  visibility:hidden!important;
+}
+#frontSynonyms.v2SynonymsLine,
+.v2SynonymsLine{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  min-height:1.2em;
+}
+#cardBottom .bottomLabel{
+  display:block!important;
+}
+#cardBottom{
+  overflow:visible!important;
+}

@@ -1,16 +1,18 @@
 # Deutsch Sprache – Wichtige Wörter – telc System – A1-B2
 
-Release: v1.2
+Release: v2.0
 
-Fixes:
-- Removed “Tippen zum Umdrehen” from the bottom of the flashcard.
-- Restored German synonyms under the “Synonyms:” area at the bottom of the flashcard. Verb cards show 4 German synonyms when available.
-- Persisch/Farsi audio root-cause fix: mobile playback now tries each card’s direct `audio_fa` MP3 path even if `audio-manifest.js` is missing, stale, or has `ready:false`. If the MP3 is not available, it falls back to browser fa-IR TTS.
-- Bumped public app version to v1.2 to force a fresh mobile/PWA cache.
+Fixes in this package:
+- Removed/hidden “Tippen zum Umdrehen” from the flashcard area.
+- German synonyms are restored at the bottom under “Synonyms:” with four German items.
+- Same-word synonym fallbacks for nouns/adjectives/etc. are filtered out.
+- Mobile Farsi audio now uses a shared unlocked HTMLAudioElement and direct `audio_fa` MP3 paths first.
+- The service worker no longer precaches `audio-manifest.js`; it fetches generated audio/manifest fresh.
 
-Important upload note:
-- Do not overwrite/delete your generated `audio/fa/` folder.
-- Do not overwrite/delete your generated `audio-manifest.js`. This package intentionally does not include `audio-manifest.js`; keep the generated one already in GitHub.
+Important upload rule:
+Do not overwrite or delete:
+- audio/fa/
+- audio-manifest.js
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=1.2&fresh=1
+https://kanoorzad.github.io/B2_Deutsch/?v=2.0&fresh=1

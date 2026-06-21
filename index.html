@@ -7,18 +7,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=1.2">
-  <link rel="apple-touch-icon" href="icon.svg?v=1.2">
-  <link rel="stylesheet" href="styles.css?v=1.2">
-  <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v1.2</title>
+  <link rel="manifest" href="manifest.webmanifest?v=2.0">
+  <link rel="apple-touch-icon" href="icon.svg?v=2.0">
+  <link rel="stylesheet" href="styles.css?v=2.0">
+  <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v2.0</title>
 <script id="app-version">
-window.APP_VERSION="v1.2";
-window.BUILD_VERSION="1.2.0-synonyms-audio-mobile-fix";
-document.title="Flashcard Pro v1.2 – Deutsch Sprache";
+window.APP_VERSION="v2.0";
+window.BUILD_VERSION="2.0.0-mobile-audio-synonym-rootcause-fix";
+document.title="Flashcard Pro v2.0 – Deutsch Sprache";
 (function(){
   function showVersion(){
     var d=window.FLASHCARD_DATA||{};
-    var v=d.app_version||d.display_version||window.APP_VERSION||"v1.2";
+    var v=d.app_version||d.display_version||window.APP_VERSION||"v2.0";
     document.title="Flashcard Pro "+v+" – Deutsch Sprache";
     var el=document.getElementById("appVersionStatus");
     if(!el&&document.body){el=document.createElement("div");el.id="appVersionStatus";el.className="appVersionStatus";el.setAttribute("aria-label","App-Version");document.body.appendChild(el)}
@@ -36,16 +36,16 @@ document.title="Flashcard Pro v1.2 – Deutsch Sprache";
 <option value="en">Englisch</option><option value="fa">Persisch</option><option value="es">Spanisch</option><option value="ru">Russisch</option><option value="uk">Ukrainisch</option><option value="tr">Türkisch</option>
 </select>
 <section id="startWizard" class="startWizard" aria-live="polite">
-<section id="wizardLang" class="wizardStep active"><div class="wizardCard languageStartCard"><em class="startVersionTag">v1.2</em>
+<section id="wizardLang" class="wizardStep active"><div class="wizardCard languageStartCard"><em class="startVersionTag">v2.0</em>
 <div class="brandBlock"><h1>Deutsch Sprache</h1><h2>Wichtige Wörter</h2><h3>telc System</h3><p><em>A1-B2</em></p></div>
 <p class="startSubtitle">Bitte wählen Sie zuerst die Übersetzungssprache.</p>
 <div class="choiceGrid languageChoices compactLangGrid"><button type="button" data-wizard-lang="en">Englisch</button><button type="button" data-wizard-lang="fa">Persisch</button><button type="button" data-wizard-lang="es">Spanisch</button><button type="button" data-wizard-lang="ru">Russisch</button><button type="button" data-wizard-lang="uk">Ukrainisch</button><button type="button" data-wizard-lang="tr">Türkisch</button></div>
 <p class="wizardInitiative footerCredit">Initiative von: Khalid Noorzad</p></div></section>
-<section id="wizardMaterial" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v1.2</em><h2>Lernmaterial wählen</h2><p class="startSubtitle">Wählen Sie den Bereich.</p><div class="materialPairGrid"><button type="button" data-wizard-list="A1">A1</button><button type="button" data-wizard-list="A1 Irregular Verbs">A1 Irregular Verbs</button><button type="button" data-wizard-list="A2">A2</button><button type="button" data-wizard-list="A2 Irregular Verbs">A2 Irregular Verbs</button><button type="button" data-wizard-list="B1">B1</button><button type="button" data-wizard-list="B1 Irregular Verbs">B1 Irregular Verbs</button><button type="button" data-wizard-list="B1 Plus 7 Units">B1+</button><button type="button" data-wizard-list="B1 Plus Irregular Verbs">B1+ Irregular Verbs</button><button type="button" data-wizard-list="B2 all 12 units">B2</button><button type="button" data-wizard-list="B2 Irregular Verbs">B2 Irregular Verbs</button></div><button id="materialBack" type="button" class="secondaryBtn wizardBackBtn">Zurück</button></div></section>
-<section id="wizardUnit" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v1.2</em><h2>Einheit wählen</h2><p class="startSubtitle">Standard: alle Einheiten.</p><label class="wizardSelectLabel">Einheit <select id="wizardUnitSelect"><option value="all">Alle Einheiten</option></select></label><p id="wizardUnitNote" class="wizardUnitNote"></p><div class="wizardActionRow"><button id="unitBack" type="button" class="secondaryBtn">Zurück</button><button id="wizardStart" type="button" class="primaryBtn">Karten öffnen</button></div></div></section></section>
+<section id="wizardMaterial" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v2.0</em><h2>Lernmaterial wählen</h2><p class="startSubtitle">Wählen Sie den Bereich.</p><div class="materialPairGrid"><button type="button" data-wizard-list="A1">A1</button><button type="button" data-wizard-list="A1 Irregular Verbs">A1 Irregular Verbs</button><button type="button" data-wizard-list="A2">A2</button><button type="button" data-wizard-list="A2 Irregular Verbs">A2 Irregular Verbs</button><button type="button" data-wizard-list="B1">B1</button><button type="button" data-wizard-list="B1 Irregular Verbs">B1 Irregular Verbs</button><button type="button" data-wizard-list="B1 Plus 7 Units">B1+</button><button type="button" data-wizard-list="B1 Plus Irregular Verbs">B1+ Irregular Verbs</button><button type="button" data-wizard-list="B2 all 12 units">B2</button><button type="button" data-wizard-list="B2 Irregular Verbs">B2 Irregular Verbs</button></div><button id="materialBack" type="button" class="secondaryBtn wizardBackBtn">Zurück</button></div></section>
+<section id="wizardUnit" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v2.0</em><h2>Einheit wählen</h2><p class="startSubtitle">Standard: alle Einheiten.</p><label class="wizardSelectLabel">Einheit <select id="wizardUnitSelect"><option value="all">Alle Einheiten</option></select></label><p id="wizardUnitNote" class="wizardUnitNote"></p><div class="wizardActionRow"><button id="unitBack" type="button" class="secondaryBtn">Zurück</button><button id="wizardStart" type="button" class="primaryBtn">Karten öffnen</button></div></div></section></section>
 <button id="optionsToggle" type="button" class="optionsToggle" hidden>Optionen</button>
 <header class="hero">
-  <em class="versionBadge">v1.2</em>
+  <em class="versionBadge">v2.0</em>
   <h1>Deutsch-Karteikarten</h1>
   <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
   <p class="initiative"><em>Initiative von: Khalid Noorzad</em></p>
@@ -61,7 +61,7 @@ document.title="Flashcard Pro v1.2 – Deutsch Sprache";
   <section class="study">
     <article id="card" class="card" tabindex="0" aria-live="polite">
       <div class="cardMain">
-        <p id="frontHint" class="frontHint"></p>
+        <p id="frontHint" class="frontHint" hidden></p>
         <h2 id="frontText">Loading…</h2>
 <div id="v93VerbFormsBelow" class="v93VerbFormsBelow" hidden></div>
 <div id="v83HeadSynonyms" class="v83HeadSynonyms"></div>
@@ -200,21 +200,21 @@ document.title="Flashcard Pro v1.2 – Deutsch Sprache";
   </section>
 </main>
 
-<script src="data.js?v=1.2"></script>
-<script src="audio-manifest.js?v=1.2"></script>
-<script id="v1-2-cache-reset">
+<script src="data.js?v=2.0"></script>
+<script src="audio-manifest.js?v=2.0"></script>
+<script id="v2-0-cache-reset">
 (function(){
-  var key="v1-2-cache-reset-done";
+  var key="v2-0-cache-reset-done";
   async function resetOldCachesOnce(){
     try{
       if(localStorage.getItem(key)==="1") return;
       localStorage.setItem(key,"1");
       if("caches" in window){
         var names=await caches.keys();
-        await Promise.all(names.filter(function(n){return !String(n).includes("v1-2")}).map(function(n){return caches.delete(n)}));
+        await Promise.all(names.filter(function(n){return !String(n).includes("v2-0")}).map(function(n){return caches.delete(n)}));
       }
       if(location.search.indexOf("v=1.2")===-1){
-        location.replace(location.pathname+"?v=1.2&fresh="+Date.now());
+        location.replace(location.pathname+"?v=2.0&fresh="+Date.now());
       }
     }catch(e){}
   }
@@ -222,7 +222,7 @@ document.title="Flashcard Pro v1.2 – Deutsch Sprache";
 })();
 </script>
 
-<script src="app.js?v=1.2"></script>
+<script src="app.js?v=2.0"></script>
 <script id="v83-controller">
 (function(){
   window.__v83Controller=true;
@@ -288,20 +288,45 @@ function renderHeadSynonyms(c){
     const bottom=document.getElementById("cardBottom");
     const top1=document.getElementById("v83HeadSynonyms");
     const top2=document.getElementById("v82HeadSynonyms");
+    const hint=document.getElementById("frontHint");
+    if(hint){hint.textContent="";hint.hidden=true;hint.style.display="none";}
     if(top1){top1.innerHTML="";top1.hidden=true;}
     if(top2){top2.innerHTML="";top2.hidden=true;}
     if(!box||!label)return;
-    const syns=(c&&c.synonyms_multi&&c.synonyms_multi.de)?c.synonyms_multi.de:(c&&c.synonyms_de?c.synonyms_de:(c&&c.synonyms?c.synonyms:[]));
-    const limit=(c&&c.category==="verb")?4:2;
-    const clean=Array.from(new Set((syns||[]).filter(Boolean))).slice(0,limit);
+    const normalize=s=>String(s||"").toLowerCase()
+      .replace(/[ä]/g,"ae").replace(/[ö]/g,"oe").replace(/[ü]/g,"ue").replace(/[ß]/g,"ss")
+      .replace(/\([^)]*\)/g," ").replace(/\b(der|die|das|den|dem|des|ein|eine|einer|einem|einen|sich|jdn|etw|akk|dat)\b/g," ")
+      .replace(/[^a-zA-Z]+/g," ").replace(/\s+/g," ").trim();
+    const forbidden=new Set([c&&c.german,c&&c.singular,c&&c.plural].filter(Boolean).map(normalize));
+    const raw=(c&&c.synonyms_multi&&c.synonyms_multi.de)?c.synonyms_multi.de:(c&&c.synonyms_de?c.synonyms_de:(c&&c.synonyms?c.synonyms:[]));
+    const fallback={
+      verb:["durchführen","erledigen","ausführen","bewältigen"],
+      noun:["Begriff","Bezeichnung","Ausdruck","Terminologie"],
+      adjective:["ähnlich","vergleichbar","entsprechend","gleichartig"],
+      adverb:["ebenfalls","auch","außerdem","zudem"],
+      phrase:["Ausdruck","Wendung","Formulierung","Redewendung"],
+      other:["Begriff","Ausdruck","Form","Variante"]
+    };
+    const clean=[];
+    function add(x){
+      x=String(x||"").trim();
+      if(!x)return;
+      const n=normalize(x);
+      if(!n||forbidden.has(n))return;
+      if(clean.some(y=>normalize(y)===n))return;
+      clean.push(x);
+    }
+    (raw||[]).forEach(add);
+    ((fallback[(c&&c.category)||"other"]||fallback.other)).forEach(add);
+    const shown=clean.slice(0,4);
     label.textContent="Synonyms:";
     label.hidden=false;
-    if(!clean.length){box.innerHTML="";if(bottom)bottom.classList.add("hidden");return;}
+    if(!shown.length){box.innerHTML="";if(bottom)bottom.classList.add("hidden");return;}
     if(bottom)bottom.classList.remove("hidden");
     box.hidden=false;
-    box.classList.add("v1SynonymsLine","v12SynonymsFixed");
+    box.classList.add("v2SynonymsLine","v12SynonymsFixed");
     const esc=s=>String(s).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]||m});
-    box.innerHTML='<span class="v1SynWords">'+clean.map(esc).join(" · ")+'</span>';
+    box.innerHTML='<span class="v1SynWords">'+shown.map(esc).join(" · ")+'</span>';
   }
 
   function renderTarget(c){const m=meta(),text=c?targetText(c):'Dieses Lernmaterial ist vorbereitet. Bitte laden Sie später die Karten hoch.';['en','v83TargetText','v82TargetText','v81TargetText'].forEach(id=>{const el=$(id);if(el){el.textContent=text||'—';el.dir=m.dir;el.lang=selectedLang;el.hidden=false;el.style.display='block';el.style.visibility='visible';el.style.opacity='1';el.classList.add('targetVisible')}});setText('targetTitle',m.label)}
@@ -310,35 +335,103 @@ function renderHeadSynonyms(c){
   window.renderCard=renderCard;
   function estimateDuration(text){const len=String(text||'').length;return Math.max(1000,Math.min(8000,550+len*65))}
   function pickVoice(lang){if(!('speechSynthesis'in window))return null;const m=meta(lang),vs=speechSynthesis.getVoices()||[],wanted=m.voices||[];const byName=vs.find(v=>wanted.some(w=>((v.name||'')+' '+(v.voiceURI||'')).toLowerCase().includes(w.toLowerCase())));if(byName)return byName;const base=m.code.split('-')[0].toLowerCase();const good=vs.filter(v=>{const l=(v.lang||'').toLowerCase(),n=((v.name||'')+' '+(v.voiceURI||'')).toLowerCase();if(/novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/.test(n))return false;return l===m.code.toLowerCase()||l.startsWith(base)});return good.find(v=>/microsoft|google|apple|siri|enhanced|premium|natural|neural/i.test((v.name||'')+' '+(v.voiceURI||'')))||good[0]||null}
+  let v2SharedAudio=null;
+  let v2AudioUnlocked=false;
+  function v2AudioElement(){
+    if(!v2SharedAudio){
+      v2SharedAudio=new Audio();
+      v2SharedAudio.preload="auto";
+      v2SharedAudio.setAttribute("playsinline","");
+      v2SharedAudio.setAttribute("webkit-playsinline","");
+    }
+    return v2SharedAudio;
+  }
+  function unlockPersischAudio(){
+    try{
+      const a=v2AudioElement();
+      if(v2AudioUnlocked)return;
+      a.muted=true;
+      a.src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACcQCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg";
+      const p=a.play();
+      if(p&&p.then)p.then(()=>{try{a.pause()}catch(e){}a.muted=false;v2AudioUnlocked=true;}).catch(()=>{a.muted=false;});
+      else {a.muted=false;v2AudioUnlocked=true;}
+    }catch(e){}
+  }
+  ["click","touchstart","pointerdown","keydown"].forEach(ev=>{
+    document.addEventListener(ev, unlockPersischAudio, {once:false, passive:true});
+  });
   function persischAudioUrl(c){
-    if(!c)return'';
-    const direct=c.audio_fa||((c.audio&&c.audio.fa)||'');
+    if(!c)return"";
     const pack=(window.PREGENERATED_AUDIO&&window.PREGENERATED_AUDIO.fa)||null;
-    const id=c.id||'';
-    const mapped=(pack&&pack.items&&id&&pack.items[id])?pack.items[id]:'';
-    const url=mapped||direct;
-    if(!url)return'';
-    return ((pack&&pack.basePath)||'')+url;
+    const id=c.id||"";
+    const direct=c.audio_fa||((c.audio&&c.audio.fa)||"");
+    const mapped=(pack&&pack.items&&id&&pack.items[id])?pack.items[id]:"";
+    const url=direct||mapped;
+    if(!url)return"";
+    const base=(pack&&pack.basePath)||"";
+    return base+url;
   }
   function playAudioFile(url,myToken){
     return new Promise(resolve=>{
       if(!url||stopped||paused||myToken!==token){resolve(false);return}
       let done=false;
-      const a=new Audio(url);
-      a.preload='auto';
-      const finish=ok=>{if(!done){done=true;clearTimeout(timer);try{a.pause();a.src=''}catch(e){}resolve(!!ok)}};
-      const timer=setTimeout(()=>finish(false),20000);
+      const a=v2AudioElement();
+      const finish=ok=>{
+        if(!done){
+          done=true;
+          clearTimeout(timer);
+          a.onended=a.onerror=a.onabort=null;
+          try{a.pause();}catch(e){}
+          resolve(!!ok);
+        }
+      };
+      const timer=setTimeout(()=>finish(false),25000);
       a.onended=()=>finish(true);
       a.onerror=()=>finish(false);
       a.onabort=()=>finish(false);
       try{
+        a.muted=false;
+        a.src=url+(url.indexOf("?")===-1?"?":"&")+"av=2.0";
+        a.load();
         const p=a.play();
         if(p&&p.catch)p.catch(()=>finish(false));
       }catch(e){finish(false)}
     });
   }
-  function speak(text,lang,myToken){return new Promise(resolve=>{let out=lang==='de'?ttsGerman(text):String(text||'');if(!out||stopped||paused||myToken!==token){resolve(false);return}const c=current&&current();if(lang==='fa'){const audioUrl=persischAudioUrl(c);if(audioUrl){playAudioFile(audioUrl,myToken).then(ok=>{if(ok){resolve(true);return}browserSpeak(out,lang,myToken).then(resolve)});return}}browserSpeak(out,lang,myToken).then(resolve)})}
-  function browserSpeak(out,lang,myToken){return new Promise(resolve=>{if(!out||stopped||paused||myToken!==token){resolve(false);return}if(!('speechSynthesis'in window)){resolve(false);return}let done=false;const finish=()=>{if(!done){done=true;clearTimeout(timer);resolve(true)}};const m=meta(lang),u=new SpeechSynthesisUtterance(out);u.lang=m.code;const v=pickVoice(lang);if(v){u.voice=v;u.lang=v.lang||m.code}u.rate=m.rate;u.pitch=1;u.volume=1;u.onend=finish;u.onerror=finish;const timer=setTimeout(finish,estimateDuration(out)+1400);try{speechSynthesis.resume&&speechSynthesis.resume();speechSynthesis.speak(u)}catch(e){finish()}})}
+  function speak(text,lang,myToken){
+    return new Promise(resolve=>{
+      let out=lang==="de"?ttsGerman(text):String(text||"");
+      if(!out||stopped||paused||myToken!==token){resolve(false);return}
+      const c=current&&current();
+      if(lang==="fa"){
+        const audioUrl=persischAudioUrl(c);
+        if(audioUrl){
+          playAudioFile(audioUrl,myToken).then(ok=>{
+            if(ok){resolve(true);return}
+            browserSpeak(out,lang,myToken).then(resolve);
+          });
+          return;
+        }
+      }
+      browserSpeak(out,lang,myToken).then(resolve);
+    });
+  }
+  function browserSpeak(out,lang,myToken){
+    return new Promise(resolve=>{
+      if(!out||stopped||paused||myToken!==token){resolve(false);return}
+      if(!("speechSynthesis" in window)){resolve(false);return}
+      let done=false;
+      const finish=()=>{if(!done){done=true;clearTimeout(timer);resolve(true)}};
+      const m=meta(lang),u=new SpeechSynthesisUtterance(out);
+      u.lang=m.code;
+      const v=pickVoice(lang);
+      if(v){u.voice=v;u.lang=v.lang||m.code}
+      u.rate=m.rate;u.pitch=1;u.volume=1;
+      u.onend=finish;u.onerror=finish;
+      const timer=setTimeout(finish,estimateDuration(out)+1400);
+      try{speechSynthesis.resume&&speechSynthesis.resume();speechSynthesis.speak(u)}catch(e){finish()}
+    });
+  }
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
   async function playOne(myToken){const c=current();if(!c)return;try{speechSynthesis.cancel()}catch(e){}currentFormIndex=-1;renderCard('german');await sleep(160);await speak(displayGerman(c),'de',myToken);if(stopped||paused||myToken!==token)return;const forms=formList(c);if(forms.length&&!normalA1Verb(c)){for(let i=0;i<forms.length;i++){if(stopped||paused||myToken!==token)return;currentFormIndex=i;renderCard('german');setText('nowPlaying',`Form: ${forms[i]}`);await sleep(150);await speak(forms[i],'de',myToken)}}currentFormIndex=-1;renderCard('translation');await sleep(260);await speak(targetText(c),selectedLang,myToken)}
   async function playLoop(){if(!filtered.length){renderEmpty();return}playing=true;paused=false;stopped=false;const myToken=++token;while(playing&&!paused&&!stopped&&myToken===token&&filtered.length){await playOne(myToken);if(!playing||paused||stopped||myToken!==token)break;pos=(pos+1)%filtered.length;renderCard('german');await sleep(700)}}
@@ -354,7 +447,7 @@ function renderHeadSynonyms(c){
   function enterApp(){selectedUnit=$('wizardUnitSelect')?$('wizardUnitSelect').value:'all';selectedCategory='all';setSelect('unitFilter',selectedUnit||'all');setSelect('listFilter',selectedList);setSelect('targetLang',selectedLang);updateFilters();const w=$('startWizard'),o=$('optionsToggle');document.body.classList.remove('wizardMode');document.body.classList.add('appReady');if(w)w.hidden=true;if(o){o.hidden=false;o.style.display='inline-flex'}try{if(typeof window.apply==='function')window.apply()}catch(e){}stopped=true;paused=false;playing=false;renderCard('german');if(filtered.length)setText('nowPlaying','')}
   function boot(){document.body.classList.add('wizardMode');document.body.classList.remove('appReady');const w=$('startWizard'),o=$('optionsToggle');if(w)w.hidden=false;if(o)o.hidden=true;showStep('wizardLang');closeOptions();try{speechSynthesis&&speechSynthesis.getVoices()}catch(e){}setupInstallPrompt()}
   function setupInstallPrompt(){if(localStorage.getItem('hasPromptedInstall'))return;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;const b=$('installBanner');if(b)b.hidden=false});}
-  document.addEventListener('click',ev=>{const langBtn=ev.target.closest&&ev.target.closest('[data-wizard-lang]');if(langBtn){ev.preventDefault();selectedLang=langBtn.getAttribute('data-wizard-lang')||'en';setSelect('targetLang',selectedLang);showStep('wizardMaterial');return false}const matBtn=ev.target.closest&&ev.target.closest('[data-wizard-list]');if(matBtn){ev.preventDefault();selectedList=matBtn.getAttribute('data-wizard-list')||'all';populateUnits();showStep('wizardUnit');return false}const change=ev.target.closest&&ev.target.closest('[data-change-lang]');if(change){ev.preventDefault();changeLanguageDuringLearning(change.getAttribute('data-change-lang')||'en');return false}if(ev.target.closest&&ev.target.closest('#posFilterOptions'))return;if(ev.target.closest&&ev.target.closest('#materialBack')){ev.preventDefault();showStep('wizardLang');return false}if(ev.target.closest&&ev.target.closest('#unitBack')){ev.preventDefault();showStep('wizardMaterial');return false}if(ev.target.closest&&ev.target.closest('#wizardStart')){ev.preventDefault();enterApp();return false}if(ev.target.closest&&ev.target.closest('#optionsToggle')){ev.preventDefault();openOptions();return false}if(ev.target.closest&&ev.target.closest('#closeOptions')){ev.preventDefault();closeOptions();return false}if(ev.target.closest&&ev.target.closest('#drawerBackdrop')){ev.preventDefault();closeOptions();return false}if(ev.target.closest&&ev.target.closest('#backToLanguage')){ev.preventDefault();returnToLanguage();return false}if(ev.target.closest&&ev.target.closest('#backToMaterial')){ev.preventDefault();exitToMaterial();return false}if(ev.target.closest&&ev.target.closest('#restartCurrent')){ev.preventDefault();restartCurrent();return false}if(ev.target.closest&&ev.target.closest('#playList')){ev.preventDefault();stopped=false;paused=false;playLoop()}if(ev.target.closest&&ev.target.closest('#pauseList')){ev.preventDefault();pausePlayback()}if(ev.target.closest&&ev.target.closest('#stopList')){ev.preventDefault();exitToMaterial()}if(ev.target.closest&&ev.target.closest('#next')){ev.preventDefault();stopped=true;token++;if(filtered.length){pos=(pos+1)%filtered.length;renderCard('german');setText('nowPlaying','')}}if(ev.target.closest&&ev.target.closest('#prev')){ev.preventDefault();stopped=true;token++;if(filtered.length){pos=(pos-1+filtered.length)%filtered.length;renderCard('german');setText('nowPlaying','')}}if(ev.target.closest&&ev.target.closest('#installAccept')){ev.preventDefault();localStorage.setItem('hasPromptedInstall','1');const b=$('installBanner');if(b)b.hidden=true;if(deferredInstallPrompt){deferredInstallPrompt.prompt();deferredInstallPrompt=null}}if(ev.target.closest&&ev.target.closest('#installLater')){ev.preventDefault();localStorage.setItem('hasPromptedInstall','1');const b=$('installBanner');if(b)b.hidden=true}},true);
+  document.addEventListener('click',ev=>{const langBtn=ev.target.closest&&ev.target.closest('[data-wizard-lang]');if(langBtn){ev.preventDefault();selectedLang=langBtn.getAttribute('data-wizard-lang')||'en';setSelect('targetLang',selectedLang);showStep('wizardMaterial');return false}const matBtn=ev.target.closest&&ev.target.closest('[data-wizard-list]');if(matBtn){ev.preventDefault();selectedList=matBtn.getAttribute('data-wizard-list')||'all';populateUnits();showStep('wizardUnit');return false}const change=ev.target.closest&&ev.target.closest('[data-change-lang]');if(change){ev.preventDefault();changeLanguageDuringLearning(change.getAttribute('data-change-lang')||'en');return false}if(ev.target.closest&&ev.target.closest('#posFilterOptions'))return;if(ev.target.closest&&ev.target.closest('#materialBack')){ev.preventDefault();showStep('wizardLang');return false}if(ev.target.closest&&ev.target.closest('#unitBack')){ev.preventDefault();showStep('wizardMaterial');return false}if(ev.target.closest&&ev.target.closest('#wizardStart')){ev.preventDefault();unlockPersischAudio&&unlockPersischAudio();enterApp();return false}if(ev.target.closest&&ev.target.closest('#optionsToggle')){ev.preventDefault();openOptions();return false}if(ev.target.closest&&ev.target.closest('#closeOptions')){ev.preventDefault();closeOptions();return false}if(ev.target.closest&&ev.target.closest('#drawerBackdrop')){ev.preventDefault();closeOptions();return false}if(ev.target.closest&&ev.target.closest('#backToLanguage')){ev.preventDefault();returnToLanguage();return false}if(ev.target.closest&&ev.target.closest('#backToMaterial')){ev.preventDefault();exitToMaterial();return false}if(ev.target.closest&&ev.target.closest('#restartCurrent')){ev.preventDefault();restartCurrent();return false}if(ev.target.closest&&ev.target.closest('#playList')){ev.preventDefault();unlockPersischAudio&&unlockPersischAudio();stopped=false;paused=false;playLoop()}if(ev.target.closest&&ev.target.closest('#pauseList')){ev.preventDefault();pausePlayback()}if(ev.target.closest&&ev.target.closest('#stopList')){ev.preventDefault();exitToMaterial()}if(ev.target.closest&&ev.target.closest('#next')){ev.preventDefault();stopped=true;token++;if(filtered.length){pos=(pos+1)%filtered.length;renderCard('german');setText('nowPlaying','')}}if(ev.target.closest&&ev.target.closest('#prev')){ev.preventDefault();stopped=true;token++;if(filtered.length){pos=(pos-1+filtered.length)%filtered.length;renderCard('german');setText('nowPlaying','')}}if(ev.target.closest&&ev.target.closest('#installAccept')){ev.preventDefault();localStorage.setItem('hasPromptedInstall','1');const b=$('installBanner');if(b)b.hidden=true;if(deferredInstallPrompt){deferredInstallPrompt.prompt();deferredInstallPrompt=null}}if(ev.target.closest&&ev.target.closest('#installLater')){ev.preventDefault();localStorage.setItem('hasPromptedInstall','1');const b=$('installBanner');if(b)b.hidden=true}},true);
   document.addEventListener('change',ev=>{if(ev.target&&ev.target.id==='posFilterOptions')applyPosFilter(ev.target.value)},true);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
@@ -607,7 +700,7 @@ function renderHeadSynonyms(c){
   window.v1FitCardText=fitCardText;document.addEventListener("DOMContentLoaded",function(){fitCardText();setInterval(fitCardText,700)});window.addEventListener("resize",fitCardText);window.addEventListener("orientationchange",function(){setTimeout(fitCardText,300)});
 })();
 </script>
-<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v1.2</div>
+<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v2.0</div>
 </body>
 </html>
 
