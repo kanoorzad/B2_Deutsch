@@ -4,30 +4,20 @@ on:
 workflow_dispatch:
 inputs:
 limit:
-description: "First test: use 50. Full run: leave empty."
+description: "First test use 50. Full run leave empty."
 required: false
 default: "50"
 force:
-description: "Regenerate files even if MP3 exists"
+description: "Regenerate existing MP3 files"
 required: false
 default: "false"
-type: choice
-options:
-- "false"
-- "true"
 
 permissions:
 contents: write
 
-concurrency:
-group: persisch-audio-generation
-cancel-in-progress: false
-
 jobs:
 generate-persisch-audio:
-name: Generate Persisch Audio
 runs-on: ubuntu-latest
-timeout-minutes: 360
 
 ```
 steps:
@@ -63,7 +53,7 @@ steps:
       head -40 audio-manifest.js
 
       if [ "$MP3_COUNT" -eq 0 ]; then
-        echo "::error::No MP3 files were generated. Check Azure key, region, or voice in the previous step."
+        echo "No MP3 files were generated."
         exit 1
       fi
 
@@ -71,7 +61,6 @@ steps:
     run: |
       git config user.name "github-actions[bot]"
       git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
       git add audio/fa audio-manifest.js
 
       if git diff --cached --quiet; then
