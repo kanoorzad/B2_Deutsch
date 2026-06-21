@@ -7,8 +7,7 @@ permissions:
 contents: write
 
 jobs:
-persisch-audio-full-pack:
-name: Generate Full Persisch Audio Pack
+generate-full-persisch-audio:
 runs-on: ubuntu-latest
 timeout-minutes: 360
 
@@ -46,7 +45,7 @@ steps:
       head -40 audio-manifest.js
 
       if [ "$MP3_COUNT" -lt 100 ]; then
-        echo "Less than 100 MP3 files were found. Open the previous step and check Azure key, region, quota, or voice errors."
+        echo "Less than 100 MP3 files were found."
         exit 1
       fi
 
