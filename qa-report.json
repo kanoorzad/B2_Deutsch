@@ -1,21 +1,19 @@
 {
-  "version": "100.0-clean-flashcard-area",
-  "base_package": "german_a1_b2_telc_words_v99_force_version_cache_reset.zip",
-  "change_scope": "Hidden unneeded flashcard-area UI text/buttons while preserving app logic.",
+  "version": "102.0-persisch-label-fix",
+  "base_package": "german_a1_b2_telc_words_v101_clean_flashcard_area.zip",
+  "change_scope": "Corrected German UI language label to Persisch.",
   "implemented": [
-    "Hidden status line: Bereit. Bitte Start drücken.",
-    "Hidden visible nowPlaying/status text in flashcard area.",
-    "Hidden Lernmaterial ändern button from the flashcard area.",
-    "Added selectors to hide Langsam controls if present.",
-    "Updated version, manifest, service worker, and cache busting to v100."
+    "Visible label corrected to Persisch",
+    "fa language key preserved",
+    "fa-IR speech locale preserved"
   ],
   "preserved": [
-    "Vertical full verb forms.",
-    "Plusquamperfekt playback.",
-    "Synonyms.",
-    "Translations.",
-    "All card data.",
-    "No live API and no playback engine changes."
+    "Vertical full verb forms",
+    "Plusquamperfekt playback",
+    "Synonyms",
+    "Translations",
+    "All card data",
+    "No live API/playback engine changes"
   ],
   "cards": 5123,
   "list_counts": {
@@ -55,23 +53,21 @@
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "base_is_v99": true,
-    "nowplaying_hidden": true,
-    "change_material_flashcard_button_removed_or_hidden": true,
-    "langsam_hidden_selectors_added": true,
-    "default_ready_text_removed": true,
-    "visible_version_v100": true,
-    "manifest_v100": true,
-    "service_worker_cache_v100": true,
+    "fasisch_removed": true,
+    "persisch_present": true,
+    "fa_key_preserved": true,
+    "visible_version_v102": true,
+    "manifest_v102": true,
+    "service_worker_cache_v102": true,
     "vertical_forms_preserved": true,
     "plusquamperfekt_playback_preserved": true,
     "cards_preserved": true,
     "translations_complete": true,
     "synonyms_preserved": true,
     "no_v89_api_code": true,
-    "cache_busting_v100": true
+    "cache_busting_v102": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=100&fresh=1",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=102&fresh=1",
   "zip_mb": 2.3
 }

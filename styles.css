@@ -1093,7 +1093,7 @@ body.reportingMode .navRow{
 }
 
 
-/* v99 hard version status */
+/* v102 hard version status */
 .appVersionStatus{
   position:fixed;
   left:50%;
@@ -1110,7 +1110,7 @@ body.reportingMode .navRow{
 }
 
 
-/* v100 clean flashcard area */
+/* v102 clean flashcard/learning area */
 #nowPlaying,
 .now,
 #changeMaterial.changeMaterialBtn,
