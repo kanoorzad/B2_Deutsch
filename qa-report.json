@@ -1,20 +1,16 @@
 {
-  "version": "104.0-github-actions-persisch-audio-workflow",
-  "base_package": "german_a1_b2_telc_words_v103_persisch_audio_pack_ready.zip",
-  "change_scope": "Added GitHub Actions workflow to generate high-quality Persisch MP3 audio using Azure Speech secrets.",
+  "version": "105.0-clean-root-persisch-audio-pack",
+  "base_package": "german_a1_b2_telc_words_v104_github_audio_workflow.zip",
+  "change_scope": "Clean root-level Persisch audio pack workflow and generator, no tools folder dependency.",
   "implemented": [
-    "Added .github/workflows/generate-persisch-audio.yml",
-    "Updated Azure generator to support GitHub Actions, test limit, and force regeneration.",
-    "Added GITHUB_AUDIO_WORKFLOW_SETUP.md",
-    "App remains MP3-first/fallback-to-browser-TTS for Persisch."
+    "Root-level generate_persian_audio_azure.py",
+    "Workflow references root-level generator",
+    "Copy-paste workflow file provided at root",
+    "Clean instructions for replacing old setup",
+    "App version/cache updated to v105"
   ],
-  "required_github_secrets": [
-    "AZURE_SPEECH_KEY",
-    "AZURE_SPEECH_REGION"
-  ],
-  "optional_github_secret": "AZURE_SPEECH_VOICE",
-  "recommended_test": "Run workflow first with limit=50, force=false.",
   "cards": 5123,
+  "persian_audio_jobs": 5123,
   "list_counts": {
     "B2 all 12 units": 1629,
     "B2 Irregular Verbs": 150,
@@ -52,23 +48,23 @@
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "base_is_v103": true,
-    "github_workflow_present": true,
-    "workflow_dispatch_present": true,
-    "github_secrets_referenced": true,
-    "generator_supports_limit_and_force": true,
+    "base_package": "german_a1_b2_telc_words_v104_github_audio_workflow.zip",
+    "root_generator_present": true,
+    "workflow_checks_root_generator": true,
+    "workflow_runs_root_generator": true,
+    "copy_workflow_file_present": true,
     "persian_audio_jobs_present": true,
     "audio_manifest_present": true,
     "app_uses_audio_before_tts_for_fa": true,
-    "visible_version_v104": true,
+    "visible_version_v105": true,
     "vertical_forms_preserved": true,
     "plusquamperfekt_playback_preserved": true,
     "cards_preserved": true,
     "translations_complete": true,
     "synonyms_preserved": true,
-    "cache_busting_v104": true
+    "cache_busting_v105": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=104&fresh=1",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=105&fresh=1",
   "zip_mb": 2.53
 }

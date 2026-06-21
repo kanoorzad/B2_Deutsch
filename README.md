@@ -1,23 +1,12 @@
 # Deutsch Sprache – Wichtige Wörter – telc System – A1-B2
 
-Build: v104
+Build: v105
 
-New:
-- GitHub Actions workflow for high-quality Persisch MP3 generation.
-- Workflow file:
-  `.github/workflows/generate-persisch-audio.yml`
-- Add Azure key/region as GitHub secrets, then run workflow from GitHub Actions.
-- Test mode supports generating only first 50 audio files.
-- Full generation writes `audio/fa/*.mp3` and updates `audio-manifest.js`.
-
-Preserved:
-- Persisch audio-pack playback logic from v103.
-- Browser fa-IR fallback if MP3 is missing.
-- Persisch label fix.
-- Vertical full verb forms.
-- Plusquamperfekt playback.
-- Synonyms and translations.
-- All cards.
+New clean Persisch audio pack system:
+- No `tools/` folder required.
+- Generator is root-level: `generate_persian_audio_azure.py`
+- Workflow checks root-level generator.
+- Copy/paste workflow file provided: `COPY_THIS_TO_GITHUB_WORKFLOW_generate-persisch-audio.yml`
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=104&fresh=1
+https://kanoorzad.github.io/B2_Deutsch/?v=105&fresh=1

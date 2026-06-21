@@ -1,11 +1,11 @@
-// High-quality Persisch/Persian audio pack manifest.
-// Generated MP3 files should match persian_audio_jobs.csv.
-// Keep ready=false until MP3 files are actually present.
+// Persisch audio manifest. GitHub Actions rewrites this after MP3 generation.
 window.PREGENERATED_AUDIO = {
   fa: {
     ready: false,
-    quality: "neural-mp3",
+    quality: "not-generated-yet",
+    voice: "fa-IR-DilaraNeural",
     expectedCount: 5123,
+    generatedCount: 0,
     basePath: "",
     items: {}
   }
