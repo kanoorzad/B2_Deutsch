@@ -1,17 +1,20 @@
 {
-  "version": "103.0-persisch-audio-pack-ready",
-  "base_package": "german_a1_b2_telc_words_v102_persisch_label_fix.zip",
-  "change_scope": "Added high-quality Persisch MP3 audio-pack support with browser TTS fallback.",
+  "version": "104.0-github-actions-persisch-audio-workflow",
+  "base_package": "german_a1_b2_telc_words_v103_persisch_audio_pack_ready.zip",
+  "change_scope": "Added GitHub Actions workflow to generate high-quality Persisch MP3 audio using Azure Speech secrets.",
   "implemented": [
-    "Persisch playback attempts MP3 first when audio-manifest.js has ready:true.",
-    "Browser speechSynthesis fa-IR remains fallback.",
-    "Generated persian_audio_jobs.csv for all 5123 Persian/Dari card texts.",
-    "Added Azure neural TTS generation script.",
-    "Added audio manifest and audio/fa folder."
+    "Added .github/workflows/generate-persisch-audio.yml",
+    "Updated Azure generator to support GitHub Actions, test limit, and force regeneration.",
+    "Added GITHUB_AUDIO_WORKFLOW_SETUP.md",
+    "App remains MP3-first/fallback-to-browser-TTS for Persisch."
   ],
-  "important_note": "No actual MP3 files are included yet because high-quality TTS generation requires your TTS provider key. Run the included generator, then upload audio/fa and audio-manifest.js.",
+  "required_github_secrets": [
+    "AZURE_SPEECH_KEY",
+    "AZURE_SPEECH_REGION"
+  ],
+  "optional_github_secret": "AZURE_SPEECH_VOICE",
+  "recommended_test": "Run workflow first with limit=50, force=false.",
   "cards": 5123,
-  "persian_audio_jobs": 5123,
   "list_counts": {
     "B2 all 12 units": 1629,
     "B2 Irregular Verbs": 150,
@@ -49,23 +52,23 @@
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "base_is_v102": true,
+    "base_is_v103": true,
+    "github_workflow_present": true,
+    "workflow_dispatch_present": true,
+    "github_secrets_referenced": true,
+    "generator_supports_limit_and_force": true,
+    "persian_audio_jobs_present": true,
     "audio_manifest_present": true,
-    "persian_audio_jobs_created": true,
-    "azure_generator_present": true,
     "app_uses_audio_before_tts_for_fa": true,
-    "fallback_to_browser_tts_preserved": true,
-    "audio_paths_on_cards": true,
-    "visible_version_v103": true,
+    "visible_version_v104": true,
     "vertical_forms_preserved": true,
     "plusquamperfekt_playback_preserved": true,
     "cards_preserved": true,
     "translations_complete": true,
     "synonyms_preserved": true,
-    "no_v89_api_code": true,
-    "cache_busting_v103": true
+    "cache_busting_v104": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=103&fresh=1",
-  "zip_mb": 2.52
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=104&fresh=1",
+  "zip_mb": 2.53
 }

@@ -1,7 +1,7 @@
-const CACHE='german-a1-b2-telc-v103-persisch-audio-pack-ready';
+const CACHE='german-a1-b2-telc-v104-github-actions-persisch-audio-workflow';
 const FILES=[
- './index.html?v=103','./styles.css?v=103','./data.js?v=103','./app.js?v=103',
- './audio-manifest.js?v=103','./manifest.webmanifest?v=103','./icon.svg?v=103',
+ './index.html?v=104','./styles.css?v=104','./data.js?v=104','./app.js?v=104',
+ './audio-manifest.js?v=104','./manifest.webmanifest?v=104','./icon.svg?v=104',
  './README.md','./qa-report.json','./PERSISCH_AUDIO_GUIDE.md','./persian_audio_jobs.csv'
 ];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));
@@ -14,7 +14,7 @@ self.addEventListener('fetch',e=>{
       const copy=r.clone();
       caches.open(CACHE).then(c=>c.put(req,copy)).catch(()=>{});
       return r;
-    }).catch(()=>caches.match(req).then(r=>r||caches.match('./index.html?v=103'))));
+    }).catch(()=>caches.match(req).then(r=>r||caches.match('./index.html?v=104'))));
     return;
   }
   if(url.pathname.includes('/audio/fa/')){

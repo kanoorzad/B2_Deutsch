@@ -1,18 +1,23 @@
 # Deutsch Sprache – Wichtige Wörter – telc System – A1-B2
 
-Build: v103
+Build: v104
 
 New:
-- Persisch high-quality audio pack system added.
-- Persisch playback now tries pre-generated MP3 first.
-- If no MP3 is available, it falls back to browser fa-IR speechSynthesis.
-- `persian_audio_jobs.csv` includes all 5123 Persian/Dari texts and output paths.
-- `tools/generate_persian_audio_azure.py` generates high-quality MP3 files with neural TTS.
-- `audio-manifest.js` controls whether the MP3 pack is active.
+- GitHub Actions workflow for high-quality Persisch MP3 generation.
+- Workflow file:
+  `.github/workflows/generate-persisch-audio.yml`
+- Add Azure key/region as GitHub secrets, then run workflow from GitHub Actions.
+- Test mode supports generating only first 50 audio files.
+- Full generation writes `audio/fa/*.mp3` and updates `audio-manifest.js`.
 
-Important:
-- This package does not include generated MP3 files yet.
-- Generate audio with your TTS key, then upload `audio/fa/*.mp3` plus the updated `audio-manifest.js`.
+Preserved:
+- Persisch audio-pack playback logic from v103.
+- Browser fa-IR fallback if MP3 is missing.
+- Persisch label fix.
+- Vertical full verb forms.
+- Plusquamperfekt playback.
+- Synonyms and translations.
+- All cards.
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=103&fresh=1
+https://kanoorzad.github.io/B2_Deutsch/?v=104&fresh=1
