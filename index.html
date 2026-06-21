@@ -7,18 +7,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=1.0">
-  <link rel="apple-touch-icon" href="icon.svg?v=1.0">
-  <link rel="stylesheet" href="styles.css?v=1.0">
-  <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v1.0</title>
+  <link rel="manifest" href="manifest.webmanifest?v=1.2">
+  <link rel="apple-touch-icon" href="icon.svg?v=1.2">
+  <link rel="stylesheet" href="styles.css?v=1.2">
+  <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v1.2</title>
 <script id="app-version">
-window.APP_VERSION="v1.0";
-window.BUILD_VERSION="1.0.0-release-fix-pack";
-document.title="Flashcard Pro v1.0 – Deutsch Sprache";
+window.APP_VERSION="v1.2";
+window.BUILD_VERSION="1.2.0-synonyms-audio-mobile-fix";
+document.title="Flashcard Pro v1.2 – Deutsch Sprache";
 (function(){
   function showVersion(){
     var d=window.FLASHCARD_DATA||{};
-    var v=d.app_version||d.display_version||window.APP_VERSION||"v1.0";
+    var v=d.app_version||d.display_version||window.APP_VERSION||"v1.2";
     document.title="Flashcard Pro "+v+" – Deutsch Sprache";
     var el=document.getElementById("appVersionStatus");
     if(!el&&document.body){el=document.createElement("div");el.id="appVersionStatus";el.className="appVersionStatus";el.setAttribute("aria-label","App-Version");document.body.appendChild(el)}
@@ -36,16 +36,16 @@ document.title="Flashcard Pro v1.0 – Deutsch Sprache";
 <option value="en">Englisch</option><option value="fa">Persisch</option><option value="es">Spanisch</option><option value="ru">Russisch</option><option value="uk">Ukrainisch</option><option value="tr">Türkisch</option>
 </select>
 <section id="startWizard" class="startWizard" aria-live="polite">
-<section id="wizardLang" class="wizardStep active"><div class="wizardCard languageStartCard"><em class="startVersionTag">v1.0</em>
+<section id="wizardLang" class="wizardStep active"><div class="wizardCard languageStartCard"><em class="startVersionTag">v1.2</em>
 <div class="brandBlock"><h1>Deutsch Sprache</h1><h2>Wichtige Wörter</h2><h3>telc System</h3><p><em>A1-B2</em></p></div>
 <p class="startSubtitle">Bitte wählen Sie zuerst die Übersetzungssprache.</p>
 <div class="choiceGrid languageChoices compactLangGrid"><button type="button" data-wizard-lang="en">Englisch</button><button type="button" data-wizard-lang="fa">Persisch</button><button type="button" data-wizard-lang="es">Spanisch</button><button type="button" data-wizard-lang="ru">Russisch</button><button type="button" data-wizard-lang="uk">Ukrainisch</button><button type="button" data-wizard-lang="tr">Türkisch</button></div>
 <p class="wizardInitiative footerCredit">Initiative von: Khalid Noorzad</p></div></section>
-<section id="wizardMaterial" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v1.0</em><h2>Lernmaterial wählen</h2><p class="startSubtitle">Wählen Sie den Bereich.</p><div class="materialPairGrid"><button type="button" data-wizard-list="A1">A1</button><button type="button" data-wizard-list="A1 Irregular Verbs">A1 Irregular Verbs</button><button type="button" data-wizard-list="A2">A2</button><button type="button" data-wizard-list="A2 Irregular Verbs">A2 Irregular Verbs</button><button type="button" data-wizard-list="B1">B1</button><button type="button" data-wizard-list="B1 Irregular Verbs">B1 Irregular Verbs</button><button type="button" data-wizard-list="B1 Plus 7 Units">B1+</button><button type="button" data-wizard-list="B1 Plus Irregular Verbs">B1+ Irregular Verbs</button><button type="button" data-wizard-list="B2 all 12 units">B2</button><button type="button" data-wizard-list="B2 Irregular Verbs">B2 Irregular Verbs</button></div><button id="materialBack" type="button" class="secondaryBtn wizardBackBtn">Zurück</button></div></section>
-<section id="wizardUnit" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v1.0</em><h2>Einheit wählen</h2><p class="startSubtitle">Standard: alle Einheiten.</p><label class="wizardSelectLabel">Einheit <select id="wizardUnitSelect"><option value="all">Alle Einheiten</option></select></label><p id="wizardUnitNote" class="wizardUnitNote"></p><div class="wizardActionRow"><button id="unitBack" type="button" class="secondaryBtn">Zurück</button><button id="wizardStart" type="button" class="primaryBtn">Karten öffnen</button></div></div></section></section>
+<section id="wizardMaterial" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v1.2</em><h2>Lernmaterial wählen</h2><p class="startSubtitle">Wählen Sie den Bereich.</p><div class="materialPairGrid"><button type="button" data-wizard-list="A1">A1</button><button type="button" data-wizard-list="A1 Irregular Verbs">A1 Irregular Verbs</button><button type="button" data-wizard-list="A2">A2</button><button type="button" data-wizard-list="A2 Irregular Verbs">A2 Irregular Verbs</button><button type="button" data-wizard-list="B1">B1</button><button type="button" data-wizard-list="B1 Irregular Verbs">B1 Irregular Verbs</button><button type="button" data-wizard-list="B1 Plus 7 Units">B1+</button><button type="button" data-wizard-list="B1 Plus Irregular Verbs">B1+ Irregular Verbs</button><button type="button" data-wizard-list="B2 all 12 units">B2</button><button type="button" data-wizard-list="B2 Irregular Verbs">B2 Irregular Verbs</button></div><button id="materialBack" type="button" class="secondaryBtn wizardBackBtn">Zurück</button></div></section>
+<section id="wizardUnit" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v1.2</em><h2>Einheit wählen</h2><p class="startSubtitle">Standard: alle Einheiten.</p><label class="wizardSelectLabel">Einheit <select id="wizardUnitSelect"><option value="all">Alle Einheiten</option></select></label><p id="wizardUnitNote" class="wizardUnitNote"></p><div class="wizardActionRow"><button id="unitBack" type="button" class="secondaryBtn">Zurück</button><button id="wizardStart" type="button" class="primaryBtn">Karten öffnen</button></div></div></section></section>
 <button id="optionsToggle" type="button" class="optionsToggle" hidden>Optionen</button>
 <header class="hero">
-  <em class="versionBadge">v1.0</em>
+  <em class="versionBadge">v1.2</em>
   <h1>Deutsch-Karteikarten</h1>
   <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
   <p class="initiative"><em>Initiative von: Khalid Noorzad</em></p>
@@ -73,8 +73,7 @@ document.title="Flashcard Pro v1.0 – Deutsch Sprache";
           <p id="chipLabel" class="bottomLabel">Synonyms:</p>
           <p id="frontSynonyms" class="frontSynonyms"></p>
         </div>
-        <p class="tapHint">Tippen zum Umdrehen</p>
-      </footer>
+</footer>
     </article>
 
     <section class="quickControls">
@@ -201,17 +200,29 @@ document.title="Flashcard Pro v1.0 – Deutsch Sprache";
   </section>
 </main>
 
-<script src="data.js?v=1.0"></script>
-<script src="audio-manifest.js?v=1.0"></script>
-<script id="v1-0-cache-reset">
+<script src="data.js?v=1.2"></script>
+<script src="audio-manifest.js?v=1.2"></script>
+<script id="v1-2-cache-reset">
 (function(){
-  var key="v1-0-cache-reset-done";
-  async function resetOldCachesOnce(){try{if(localStorage.getItem(key)==="1")return;localStorage.setItem(key,"1");if("caches" in window){var names=await caches.keys();await Promise.all(names.filter(function(n){return !String(n).includes("v1-0")}).map(function(n){return caches.delete(n)}));}if(location.search.indexOf("v=1.0")===-1){location.replace(location.pathname+"?v=1.0&fresh="+Date.now())}}catch(e){}}
+  var key="v1-2-cache-reset-done";
+  async function resetOldCachesOnce(){
+    try{
+      if(localStorage.getItem(key)==="1") return;
+      localStorage.setItem(key,"1");
+      if("caches" in window){
+        var names=await caches.keys();
+        await Promise.all(names.filter(function(n){return !String(n).includes("v1-2")}).map(function(n){return caches.delete(n)}));
+      }
+      if(location.search.indexOf("v=1.2")===-1){
+        location.replace(location.pathname+"?v=1.2&fresh="+Date.now());
+      }
+    }catch(e){}
+  }
   window.addEventListener("load",function(){setTimeout(resetOldCachesOnce,600)});
 })();
 </script>
 
-<script src="app.js?v=1.0"></script>
+<script src="app.js?v=1.2"></script>
 <script id="v83-controller">
 (function(){
   window.__v83Controller=true;
@@ -226,7 +237,7 @@ document.title="Flashcard Pro v1.0 – Deutsch Sprache";
   function meta(lang=selectedLang){return LANG_META[lang]||LANG_META.en}
   function showStep(id){['wizardLang','wizardMaterial','wizardUnit'].forEach(x=>{const el=$(x);if(el){const on=x===id;el.classList.toggle('active',on);el.style.display=on?'block':'none'}})}
   function displayGerman(c){if(!c)return'';return c.category==='noun'?[c.article,c.singular||c.german].filter(Boolean).join(' '):(c.german||c.singular||'')}
-  function ttsGerman(text){return String(text||'').replace(/\(\s*von\s*\+\s*Dat\.\s*\)/gi,'').replace(/\(\s*für\s*\+\s*Akk\.\s*\)/gi,'').replace(/\(\s*jdn\.\s*\/\s*etw\.\s*\)/gi,'jdn. oder etw.').replace(/\(\s*\+\s*(Akk|Dat)\.\s*\)/gi,'').replace(/\[\s*\+\s*(Akk|Dat)\.\s*\]/gi,'').replace(/\betw\.?\/?/gi,'etwas').replace(/\bjdn\.\b/gi,'jemanden').replace(/\b(Akk|Dat)\.\b/gi,'').replace(/\bÄhnliche Bedeutungen\b/gi,'').replace(/\bTippen zum Umdrehen\b/gi,'').replace(/\bLernmaterial ändern\b/gi,'').replace(/\bLangsam\b/gi,'').replace(/\s+/g,' ').trim()}
+  function ttsGerman(text){return String(text||'').replace(/\(\s*von\s*\+\s*Dat\.\s*\)/gi,'').replace(/\(\s*für\s*\+\s*Akk\.\s*\)/gi,'').replace(/\(\s*jdn\.\s*\/\s*etw\.\s*\)/gi,'jdn. oder etw.').replace(/\(\s*\+\s*(Akk|Dat)\.\s*\)/gi,'').replace(/\[\s*\+\s*(Akk|Dat)\.\s*\]/gi,'').replace(/\betw\.?\/?/gi,'etwas').replace(/\bjdn\.\b/gi,'jemanden').replace(/\b(Akk|Dat)\.\b/gi,'').replace(/\bÄhnliche Bedeutungen\b/gi,'').replace(/\bLernmaterial ändern\b/gi,'').replace(/\bLangsam\b/gi,'').replace(/\s+/g,' ').trim()}
   function targetText(c,lang=selectedLang){const tr=(c&&c.translations)||{};return tr[lang]||c.english||''}
   function basePool(){return cards().filter(c=>(selectedList==='all'||c.list===selectedList)&&(selectedUnit==='all'||c.unit===selectedUnit))}
   function updateFilters(){filtered=basePool().filter(c=>selectedCategory==='all'||c.category===selectedCategory);pos=0}
@@ -272,13 +283,25 @@ document.title="Flashcard Pro v1.0 – Deutsch Sprache";
       +'</div>';
   }
 function renderHeadSynonyms(c){
-    const box=document.getElementById("headSynonyms")||document.getElementById("synonymsLine")||document.querySelector(".synonymsLine")||document.querySelector("[data-synonyms]");
-    if(!box)return;
-    const syns=(c&&c.synonyms_multi&&c.synonyms_multi.de)?c.synonyms_multi.de:(c&&c.synonyms?c.synonyms:[]);
-    const clean=Array.from(new Set((syns||[]).filter(Boolean))).slice(0,c&&c.category==="verb"?4:2);
-    if(!clean.length){box.hidden=true;box.innerHTML="";return;}
-    box.hidden=false;box.classList.add("v1SynonymsLine");
-    box.innerHTML='<span class="v1SynLabel">Synonyms:</span> <span class="v1SynWords">'+clean.join(" · ")+'</span>';
+    const label=document.getElementById("chipLabel");
+    const box=document.getElementById("frontSynonyms");
+    const bottom=document.getElementById("cardBottom");
+    const top1=document.getElementById("v83HeadSynonyms");
+    const top2=document.getElementById("v82HeadSynonyms");
+    if(top1){top1.innerHTML="";top1.hidden=true;}
+    if(top2){top2.innerHTML="";top2.hidden=true;}
+    if(!box||!label)return;
+    const syns=(c&&c.synonyms_multi&&c.synonyms_multi.de)?c.synonyms_multi.de:(c&&c.synonyms_de?c.synonyms_de:(c&&c.synonyms?c.synonyms:[]));
+    const limit=(c&&c.category==="verb")?4:2;
+    const clean=Array.from(new Set((syns||[]).filter(Boolean))).slice(0,limit);
+    label.textContent="Synonyms:";
+    label.hidden=false;
+    if(!clean.length){box.innerHTML="";if(bottom)bottom.classList.add("hidden");return;}
+    if(bottom)bottom.classList.remove("hidden");
+    box.hidden=false;
+    box.classList.add("v1SynonymsLine","v12SynonymsFixed");
+    const esc=s=>String(s).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]||m});
+    box.innerHTML='<span class="v1SynWords">'+clean.map(esc).join(" · ")+'</span>';
   }
 
   function renderTarget(c){const m=meta(),text=c?targetText(c):'Dieses Lernmaterial ist vorbereitet. Bitte laden Sie später die Karten hoch.';['en','v83TargetText','v82TargetText','v81TargetText'].forEach(id=>{const el=$(id);if(el){el.textContent=text||'—';el.dir=m.dir;el.lang=selectedLang;el.hidden=false;el.style.display='block';el.style.visibility='visible';el.style.opacity='1';el.classList.add('targetVisible')}});setText('targetTitle',m.label)}
@@ -289,14 +312,13 @@ function renderHeadSynonyms(c){
   function pickVoice(lang){if(!('speechSynthesis'in window))return null;const m=meta(lang),vs=speechSynthesis.getVoices()||[],wanted=m.voices||[];const byName=vs.find(v=>wanted.some(w=>((v.name||'')+' '+(v.voiceURI||'')).toLowerCase().includes(w.toLowerCase())));if(byName)return byName;const base=m.code.split('-')[0].toLowerCase();const good=vs.filter(v=>{const l=(v.lang||'').toLowerCase(),n=((v.name||'')+' '+(v.voiceURI||'')).toLowerCase();if(/novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/.test(n))return false;return l===m.code.toLowerCase()||l.startsWith(base)});return good.find(v=>/microsoft|google|apple|siri|enhanced|premium|natural|neural/i.test((v.name||'')+' '+(v.voiceURI||'')))||good[0]||null}
   function persischAudioUrl(c){
     if(!c)return'';
-    const pack=(window.PREGENERATED_AUDIO&&window.PREGENERATED_AUDIO.fa)||null;
-    if(!pack||!pack.ready)return'';
-    const id=c.id||'';
-    const mapped=(pack.items&&id&&pack.items[id])||'';
     const direct=c.audio_fa||((c.audio&&c.audio.fa)||'');
+    const pack=(window.PREGENERATED_AUDIO&&window.PREGENERATED_AUDIO.fa)||null;
+    const id=c.id||'';
+    const mapped=(pack&&pack.items&&id&&pack.items[id])?pack.items[id]:'';
     const url=mapped||direct;
     if(!url)return'';
-    return (pack.basePath||'')+url;
+    return ((pack&&pack.basePath)||'')+url;
   }
   function playAudioFile(url,myToken){
     return new Promise(resolve=>{
@@ -304,7 +326,6 @@ function renderHeadSynonyms(c){
       let done=false;
       const a=new Audio(url);
       a.preload='auto';
-      a.crossOrigin='anonymous';
       const finish=ok=>{if(!done){done=true;clearTimeout(timer);try{a.pause();a.src=''}catch(e){}resolve(!!ok)}};
       const timer=setTimeout(()=>finish(false),20000);
       a.onended=()=>finish(true);
@@ -586,6 +607,7 @@ function renderHeadSynonyms(c){
   window.v1FitCardText=fitCardText;document.addEventListener("DOMContentLoaded",function(){fitCardText();setInterval(fitCardText,700)});window.addEventListener("resize",fitCardText);window.addEventListener("orientationchange",function(){setTimeout(fitCardText,300)});
 })();
 </script>
+<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v1.2</div>
 </body>
 </html>
 

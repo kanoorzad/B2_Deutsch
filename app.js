@@ -153,8 +153,8 @@ function displayTarget(c,lang=targetLang()){return displayTranslation(c,lang)}
 function setDirForLang(lang){if(lang==='fa')els.frontText.setAttribute('dir','rtl'); else els.frontText.removeAttribute('dir')}
 function showWarning(msg){els.speechWarning.textContent=msg; els.speechWarning.classList.remove('hidden')}
 function clearWarning(){els.speechWarning.textContent=''; els.speechWarning.classList.add('hidden')}
-function chipsFor(c,lang){ if(c.category!=='verb') return []; if(lang==='de')return(c.synonyms_de||[]).slice(0,3); if(lang==='fa')return(c.synonyms_fa||[]).slice(0,3); return(c.synonyms_en||[]).slice(0,3).map(cleanEnglish); }
-function chipLabel(lang){ if(lang==='de')return 'Deutsche Verb-Synonyme'; if(lang==='fa')return 'Farsi-Verb-Synonyme'; return 'Verb-Synonyme'; }
+function chipsFor(c,lang){ const multi=c.synonyms_multi||{}; const syns=(multi.de||c.synonyms_de||c.synonyms||[]).filter(Boolean); return [...new Set(syns)].slice(0,c.category==='verb'?4:2); }
+function chipLabel(lang){ return 'Synonyms:'; }
 function renderChips(c,lang='en'){
   const chips=chipsFor(c,lang);
   const show=c.category==='verb' && chips.length>0;

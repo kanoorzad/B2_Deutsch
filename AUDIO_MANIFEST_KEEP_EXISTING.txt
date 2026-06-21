@@ -1,0 +1,1 @@
+Do not overwrite your generated audio-manifest.js from GitHub Actions. This v1.2 package intentionally does not include audio-manifest.js; keep the existing generated file in the repository.
