@@ -153,11 +153,11 @@ function displayTarget(c,lang=targetLang()){return displayTranslation(c,lang)}
 function setDirForLang(lang){if(lang==='fa')els.frontText.setAttribute('dir','rtl'); else els.frontText.removeAttribute('dir')}
 function showWarning(msg){els.speechWarning.textContent=msg; els.speechWarning.classList.remove('hidden')}
 function clearWarning(){els.speechWarning.textContent=''; els.speechWarning.classList.add('hidden')}
-function chipsFor(c,lang){ const multi=c.synonyms_multi||{}; const syns=(multi.de||c.synonyms_de||c.synonyms||[]).filter(Boolean); return [...new Set(syns)].slice(0,c.category==='verb'?4:2); }
+function chipsFor(c,lang){ const multi=c.synonyms_multi||{}; const syns=(multi.de||c.synonyms_de||c.synonyms||[]).filter(Boolean); return [...new Set(syns)].slice(0,4); }
 function chipLabel(lang){ return 'Synonyms:'; }
 function renderChips(c,lang='en'){
   const chips=chipsFor(c,lang);
-  const show=c.category==='verb' && chips.length>0;
+  const show=chips.length>0;
   els.cardBottom.classList.toggle('hidden',!show);
   els.synBox.classList.toggle('hidden',!show);
   if(!show){els.frontSyn.innerHTML=''; els.syn.innerHTML=''; return;}
@@ -168,11 +168,11 @@ function renderChips(c,lang='en'){
 function cleanSpeechText(text,lang){let t=String(text||'').replace(/\s+/g,' ').trim(); if(lang==='en')t=cleanEnglish(t); if(lang==='de')t=t.replace(/\s*\/\s*/g,' oder '); return t;}
 function formStep(c){
   const f=c.forms||{};
-  if(c.category==='noun'&&c.plural)return{display:c.plural,speech:c.plural,lang:'de',label:'Deutscher Plural',sub:'Langsam'};
+  if(c.category==='noun'&&c.plural)return{display:c.plural,speech:c.plural,lang:'de',label:'Deutscher Plural',sub:''};
   if(c.category==='verb'){
     const visible=[],spoken=[];
     for(const k of ['infinitive','past','perfect','plusquamperfekt'])if(f[k]){visible.push(f[k]);spoken.push(f[k]);}
-    if(visible.length)return{display:visible.join(' · '),speech:spoken.join('. '),lang:'de',label:'Deutsche Formen',sub:'Langsam'};
+    if(visible.length)return{display:visible.join(' · '),speech:spoken.join('. '),lang:'de',label:'Deutsche Formen',sub:''};
   }
   return null;
 }
@@ -207,7 +207,7 @@ function getManualFront(c){
     const fs=formStep(c);
     return fs||{display:'Keine Plural-/Formangabe',speech:'',label:'Plural / Formen',sub:'',lang:'de'}
   }
-  return{display:displayGerman(c),speech:displayGerman(c),label:'Deutsch',sub:'Langsam',lang:'de'}
+  return{display:displayGerman(c),speech:displayGerman(c),label:'Deutsch',sub:'',lang:'de'}
 }
 
 function escHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
@@ -266,7 +266,7 @@ function renderDetails(c){
   renderMultiSynonyms&&renderMultiSynonyms(c);
 }
 function renderProgress(){els.count.textContent=filtered.length?`${idx+1} / ${filtered.length}`:'0 / 0';els.bar.style.width=filtered.length?`${((idx+1)/filtered.length)*100}%`:'0'}
-function render(){const c=filtered[idx];if(!c){els.frontText.textContent='Keine Karten';els.frontHint.textContent='Filter ändern.';els.frontSub.textContent='';els.cardBottom.classList.add('hidden');renderProgress();return}const f=getManualFront(c);lastFront=f;renderDetails(c,f.lang);setDirForLang(f.lang);els.frontText.textContent=f.display||'—';els.frontHint.textContent=f.label;els.frontSub.textContent=f.sub||'';els.answer.classList.toggle('hidden',!flipped);els.card.classList.toggle('playing',playing);renderProgress();}
+function render(){const c=filtered[idx];if(!c){els.frontText.textContent='Keine Karten';els.frontHint.textContent='Filter ändern.';els.frontSub.textContent='';els.cardBottom.classList.add('hidden');renderProgress();return}const f=getManualFront(c);lastFront=f;renderDetails(c,f.lang);setDirForLang(f.lang);els.frontText.textContent=f.display||'—';els.frontHint.textContent=f.label;els.frontSub.textContent=(f.sub==='Langsam'?'':(f.sub||'')); if(els.frontSub&&els.frontSub.textContent===''){els.frontSub.hidden=true}else if(els.frontSub){els.frontSub.hidden=false};els.answer.classList.toggle('hidden',!flipped);els.card.classList.toggle('playing',playing);renderProgress();}
 function next(){if(!filtered.length)return;idx=(idx+1)%filtered.length;flipped=false;render()}function prev(){if(!filtered.length)return;idx=(idx-1+filtered.length)%filtered.length;flipped=false;render()}function flip(){flipped=!flipped;render()}
 
 

@@ -7,18 +7,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=2.0">
-  <link rel="apple-touch-icon" href="icon.svg?v=2.0">
-  <link rel="stylesheet" href="styles.css?v=2.0">
-  <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v2.0</title>
+  <link rel="manifest" href="manifest.webmanifest?v=2.1">
+  <link rel="apple-touch-icon" href="icon.svg?v=2.1">
+  <link rel="stylesheet" href="styles.css?v=2.1">
+  <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v2.1</title>
 <script id="app-version">
-window.APP_VERSION="v2.0";
-window.BUILD_VERSION="2.0.0-mobile-audio-synonym-rootcause-fix";
-document.title="Flashcard Pro v2.0 – Deutsch Sprache";
+window.APP_VERSION="v2.1";
+window.BUILD_VERSION="2.1.0-ui-small-fixes";
+document.title="Flashcard Pro v2.1 – Deutsch Sprache";
 (function(){
   function showVersion(){
     var d=window.FLASHCARD_DATA||{};
-    var v=d.app_version||d.display_version||window.APP_VERSION||"v2.0";
+    var v=d.app_version||d.display_version||window.APP_VERSION||"v2.1";
     document.title="Flashcard Pro "+v+" – Deutsch Sprache";
     var el=document.getElementById("appVersionStatus");
     if(!el&&document.body){el=document.createElement("div");el.id="appVersionStatus";el.className="appVersionStatus";el.setAttribute("aria-label","App-Version");document.body.appendChild(el)}
@@ -36,16 +36,16 @@ document.title="Flashcard Pro v2.0 – Deutsch Sprache";
 <option value="en">Englisch</option><option value="fa">Persisch</option><option value="es">Spanisch</option><option value="ru">Russisch</option><option value="uk">Ukrainisch</option><option value="tr">Türkisch</option>
 </select>
 <section id="startWizard" class="startWizard" aria-live="polite">
-<section id="wizardLang" class="wizardStep active"><div class="wizardCard languageStartCard"><em class="startVersionTag">v2.0</em>
+<section id="wizardLang" class="wizardStep active"><div class="wizardCard languageStartCard"><em class="startVersionTag">v2.1</em>
 <div class="brandBlock"><h1>Deutsch Sprache</h1><h2>Wichtige Wörter</h2><h3>telc System</h3><p><em>A1-B2</em></p></div>
 <p class="startSubtitle">Bitte wählen Sie zuerst die Übersetzungssprache.</p>
 <div class="choiceGrid languageChoices compactLangGrid"><button type="button" data-wizard-lang="en">Englisch</button><button type="button" data-wizard-lang="fa">Persisch</button><button type="button" data-wizard-lang="es">Spanisch</button><button type="button" data-wizard-lang="ru">Russisch</button><button type="button" data-wizard-lang="uk">Ukrainisch</button><button type="button" data-wizard-lang="tr">Türkisch</button></div>
 <p class="wizardInitiative footerCredit">Initiative von: Khalid Noorzad</p></div></section>
-<section id="wizardMaterial" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v2.0</em><h2>Lernmaterial wählen</h2><p class="startSubtitle">Wählen Sie den Bereich.</p><div class="materialPairGrid"><button type="button" data-wizard-list="A1">A1</button><button type="button" data-wizard-list="A1 Irregular Verbs">A1 Irregular Verbs</button><button type="button" data-wizard-list="A2">A2</button><button type="button" data-wizard-list="A2 Irregular Verbs">A2 Irregular Verbs</button><button type="button" data-wizard-list="B1">B1</button><button type="button" data-wizard-list="B1 Irregular Verbs">B1 Irregular Verbs</button><button type="button" data-wizard-list="B1 Plus 7 Units">B1+</button><button type="button" data-wizard-list="B1 Plus Irregular Verbs">B1+ Irregular Verbs</button><button type="button" data-wizard-list="B2 all 12 units">B2</button><button type="button" data-wizard-list="B2 Irregular Verbs">B2 Irregular Verbs</button></div><button id="materialBack" type="button" class="secondaryBtn wizardBackBtn">Zurück</button></div></section>
-<section id="wizardUnit" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v2.0</em><h2>Einheit wählen</h2><p class="startSubtitle">Standard: alle Einheiten.</p><label class="wizardSelectLabel">Einheit <select id="wizardUnitSelect"><option value="all">Alle Einheiten</option></select></label><p id="wizardUnitNote" class="wizardUnitNote"></p><div class="wizardActionRow"><button id="unitBack" type="button" class="secondaryBtn">Zurück</button><button id="wizardStart" type="button" class="primaryBtn">Karten öffnen</button></div></div></section></section>
+<section id="wizardMaterial" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v2.1</em><h2>Lernmaterial wählen</h2><p class="startSubtitle">Wählen Sie den Bereich.</p><div class="materialPairGrid"><button type="button" data-wizard-list="A1">A1</button><button type="button" data-wizard-list="A1 Irregular Verbs">A1 Irregular Verbs</button><button type="button" data-wizard-list="A2">A2</button><button type="button" data-wizard-list="A2 Irregular Verbs">A2 Irregular Verbs</button><button type="button" data-wizard-list="B1">B1</button><button type="button" data-wizard-list="B1 Irregular Verbs">B1 Irregular Verbs</button><button type="button" data-wizard-list="B1 Plus 7 Units">B1+</button><button type="button" data-wizard-list="B1 Plus Irregular Verbs">B1+ Irregular Verbs</button><button type="button" data-wizard-list="B2 all 12 units">B2</button><button type="button" data-wizard-list="B2 Irregular Verbs">B2 Irregular Verbs</button></div><button id="materialBack" type="button" class="secondaryBtn wizardBackBtn">Zurück</button></div></section>
+<section id="wizardUnit" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v2.1</em><h2>Einheit wählen</h2><p class="startSubtitle">Standard: alle Einheiten.</p><label class="wizardSelectLabel">Einheit <select id="wizardUnitSelect"><option value="all">Alle Einheiten</option></select></label><p id="wizardUnitNote" class="wizardUnitNote"></p><div class="wizardActionRow"><button id="unitBack" type="button" class="secondaryBtn">Zurück</button><button id="wizardStart" type="button" class="primaryBtn">Karten öffnen</button></div></div></section></section>
 <button id="optionsToggle" type="button" class="optionsToggle" hidden>Optionen</button>
 <header class="hero">
-  <em class="versionBadge">v2.0</em>
+  <em class="versionBadge">v2.1</em>
   <h1>Deutsch-Karteikarten</h1>
   <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
   <p class="initiative"><em>Initiative von: Khalid Noorzad</em></p>
@@ -200,8 +200,8 @@ document.title="Flashcard Pro v2.0 – Deutsch Sprache";
   </section>
 </main>
 
-<script src="data.js?v=2.0"></script>
-<script src="audio-manifest.js?v=2.0"></script>
+<script src="data.js?v=2.1"></script>
+<script src="audio-manifest.js?v=2.1"></script>
 <script id="v2-0-cache-reset">
 (function(){
   var key="v2-0-cache-reset-done";
@@ -214,7 +214,7 @@ document.title="Flashcard Pro v2.0 – Deutsch Sprache";
         await Promise.all(names.filter(function(n){return !String(n).includes("v2-0")}).map(function(n){return caches.delete(n)}));
       }
       if(location.search.indexOf("v=1.2")===-1){
-        location.replace(location.pathname+"?v=2.0&fresh="+Date.now());
+        location.replace(location.pathname+"?v=2.1&fresh="+Date.now());
       }
     }catch(e){}
   }
@@ -222,7 +222,7 @@ document.title="Flashcard Pro v2.0 – Deutsch Sprache";
 })();
 </script>
 
-<script src="app.js?v=2.0"></script>
+<script src="app.js?v=2.1"></script>
 <script id="v83-controller">
 (function(){
   window.__v83Controller=true;
@@ -700,7 +700,18 @@ function renderHeadSynonyms(c){
   window.v1FitCardText=fitCardText;document.addEventListener("DOMContentLoaded",function(){fitCardText();setInterval(fitCardText,700)});window.addEventListener("resize",fitCardText);window.addEventListener("orientationchange",function(){setTimeout(fitCardText,300)});
 })();
 </script>
-<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v2.0</div>
+<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v2.1</div>
+<script id="v2-1-hide-langsam-only">
+(function(){
+  function hideLangsamOnly(){
+    document.querySelectorAll('#frontSub,.frontSub,.subLabel,[data-sub-label]').forEach(function(el){
+      if((el.textContent||'').trim()==='Langsam'){ el.textContent=''; el.hidden=true; }
+    });
+  }
+  document.addEventListener('DOMContentLoaded',hideLangsamOnly);
+  setInterval(hideLangsamOnly,700);
+})();
+</script>
 </body>
 </html>
 
