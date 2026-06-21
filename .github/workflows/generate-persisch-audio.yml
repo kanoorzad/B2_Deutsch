@@ -25,6 +25,7 @@ cancel-in-progress: false
 
 jobs:
 generate-persisch-audio:
+name: Generate Persisch Audio
 runs-on: ubuntu-latest
 timeout-minutes: 360
 
@@ -32,8 +33,6 @@ timeout-minutes: 360
 steps:
   - name: Checkout repository
     uses: actions/checkout@v4
-    with:
-      fetch-depth: 0
 
   - name: Set up Python
     uses: actions/setup-python@v5
@@ -46,11 +45,11 @@ steps:
       test -f generate_persian_audio_azure.py
       mkdir -p audio/fa
 
-  - name: Generate Persisch MP3 files with Azure Neural TTS
+  - name: Generate Persisch MP3 files
     env:
       AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
       AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
-      AZURE_SPEECH_VOICE: ${{ secrets.AZURE_SPEECH_VOICE || 'fa-IR-DilaraNeural' }}
+      AZURE_SPEECH_VOICE: ${{ secrets.AZURE_SPEECH_VOICE }}
       AZURE_OUTPUT_FORMAT: audio-24khz-160kbitrate-mono-mp3
       AUDIO_GENERATION_LIMIT: ${{ github.event.inputs.limit }}
       AUDIO_GENERATION_FORCE: ${{ github.event.inputs.force }}
