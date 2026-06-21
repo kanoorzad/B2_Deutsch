@@ -1,18 +1,19 @@
 {
-  "version": "2.1.0-ui-small-fixes",
-  "base_package": "german_a1_b2_telc_words_v2_0_mobile_audio_synonyms_fix.zip",
+  "version": "2.0.0-mobile-audio-synonym-rootcause-fix",
+  "base_package": "german_a1_b2_telc_words_v1_2_synonyms_audio_fix.zip",
+  "root_cause_notes": [
+    "Mobile browsers can block new Audio() playback when the audio element is created after asynchronous speech synthesis.",
+    "The previous synonym data for non-verbs included same-word/article-stripped variants, so nouns/adjectives could show the original word instead of a real alternative.",
+    "Generated audio only plays for cards whose MP3 exists; the app now tries direct audio_fa first and fetches audio/manifest fresh."
+  ],
   "implemented": [
-    "Wider synonyms display area",
-    "Options button pushed down for homescreen/notch safety",
-    "Visible Langsam label hidden from flashcard only"
+    "Hidden Tippen zum Umdrehen in flashcard area.",
+    "Restored four German synonyms under Synonyms.",
+    "Filtered same-word German synonym variants and regenerated German synonym arrays.",
+    "Added shared unlocked mobile audio element for Farsi MP3 playback.",
+    "Updated public version to v2.0 and service-worker cache to v2.0."
   ],
-  "preserved": [
-    "All cards",
-    "Translations",
-    "Synonyms rendering",
-    "Persisch MP3-first logic",
-    "Generated audio files/manifest are not included or overwritten"
-  ],
+  "important_upload_note": "Do not overwrite/delete audio/fa/ or audio-manifest.js when uploading this package.",
   "cards": 5123,
   "list_counts": {
     "B2 all 12 units": 1629,
@@ -43,16 +44,19 @@
   },
   "checks": {
     "javascript_syntax_ok": true,
-    "version_v2_1": true,
-    "synonyms_wider_css": true,
-    "options_pushed_down_safe_area": true,
-    "langsam_sub_hidden_only": true,
-    "audio_manifest_not_in_zip_dir": true,
+    "version_v2_0": true,
+    "tippen_removed_visible": true,
+    "synonyms_render_four": true,
+    "same_word_synonym_cards_remaining": 0,
+    "mobile_audio_unlocked_shared_element": true,
+    "direct_audio_fa_first": true,
+    "audio_manifest_not_in_zip": true,
+    "service_worker_fresh_audio_manifest": true,
     "cards_preserved": true,
     "translations_complete": true,
-    "workflow_not_in_package": true,
     "no_v89_live_api": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=2.1&fresh=1"
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=2.0&fresh=1",
+  "zip_mb": 2.55
 }

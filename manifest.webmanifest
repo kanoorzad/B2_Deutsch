@@ -1,7 +1,7 @@
 {
-  "name": "Flashcard Pro v2.1 – Deutsch Sprache",
-  "short_name": "Flashcard Pro v2.1",
-  "start_url": "./index.html?v=2.1",
+  "name": "Flashcard Pro v2.0 – Deutsch Sprache",
+  "short_name": "Flashcard Pro v2.0",
+  "start_url": "./index.html?v=2.0",
   "display": "standalone",
   "background_color": "#f3f7fb",
   "theme_color": "#17324d",

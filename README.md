@@ -1,17 +1,13 @@
 # Deutsch Sprache – Wichtige Wörter – telc System – A1-B2
 
-Release: v2.1
+Release: v2.0
 
-Small requested fixes:
-- Synonyms display area is wider.
-- Options button is pushed downward in homescreen/PWA mode so it stays below the camera/notch area and remains usable.
-- Only the visible word “Langsam” is hidden from the flashcard label area.
-
-Preserved:
-- Cards and translations.
-- German synonym data and rendering.
-- Persisch MP3-first audio logic and generated audio workflow setup.
-- Current app design and behavior.
+Fixes in this package:
+- Removed/hidden “Tippen zum Umdrehen” from the flashcard area.
+- German synonyms are restored at the bottom under “Synonyms:” with four German items.
+- Same-word synonym fallbacks for nouns/adjectives/etc. are filtered out.
+- Mobile Farsi audio now uses a shared unlocked HTMLAudioElement and direct `audio_fa` MP3 paths first.
+- The service worker no longer precaches `audio-manifest.js`; it fetches generated audio/manifest fresh.
 
 Important upload rule:
 Do not overwrite or delete:
@@ -19,4 +15,4 @@ Do not overwrite or delete:
 - audio-manifest.js
 
 Open:
-https://kanoorzad.github.io/B2_Deutsch/?v=2.1&fresh=1
+https://kanoorzad.github.io/B2_Deutsch/?v=2.0&fresh=1
