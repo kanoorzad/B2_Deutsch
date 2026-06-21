@@ -1,0 +1,65 @@
+name: Persisch Audio Full Pack
+
+on:
+workflow_dispatch:
+
+permissions:
+contents: write
+
+jobs:
+persisch-audio-full-pack:
+name: Generate Full Persisch Audio Pack
+runs-on: ubuntu-latest
+timeout-minutes: 360
+
+```
+steps:
+  - name: Checkout repository
+    uses: actions/checkout@v4
+
+  - name: Set up Python
+    uses: actions/setup-python@v5
+    with:
+      python-version: "3.11"
+
+  - name: Verify required files
+    run: |
+      test -f persian_audio_jobs.csv
+      test -f generate_persian_audio_azure.py
+      mkdir -p audio/fa
+
+  - name: Generate all missing Persisch MP3 files
+    env:
+      AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+      AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+      AZURE_SPEECH_VOICE: fa-IR-DilaraNeural
+      AZURE_OUTPUT_FORMAT: audio-24khz-160kbitrate-mono-mp3
+      AUDIO_GENERATION_LIMIT: ""
+      AUDIO_GENERATION_FORCE: "false"
+    run: |
+      python generate_persian_audio_azure.py
+
+  - name: Check generated MP3 files
+    run: |
+      MP3_COUNT=$(find audio/fa -name "*.mp3" | wc -l)
+      echo "MP3 count: $MP3_COUNT"
+      head -40 audio-manifest.js
+
+      if [ "$MP3_COUNT" -lt 100 ]; then
+        echo "Less than 100 MP3 files were found. Open the previous step and check Azure key, region, quota, or voice errors."
+        exit 1
+      fi
+
+  - name: Commit generated audio pack
+    run: |
+      git config user.name "github-actions[bot]"
+      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      git add audio/fa audio-manifest.js
+
+      if git diff --cached --quiet; then
+        echo "No audio changes to commit."
+      else
+        git commit -m "Generate full Persisch audio pack"
+        git push
+      fi
+```
