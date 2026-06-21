@@ -54,7 +54,7 @@ jobs:
           AUDIO_GENERATION_LIMIT: ${{ github.event.inputs.limit }}
           AUDIO_GENERATION_FORCE: ${{ github.event.inputs.force }}
         run: |
-          python tools/generate_persian_audio_azure.py
+          python generate_persian_audio_azure.py
 
       - name: Show generated file count
         run: |
