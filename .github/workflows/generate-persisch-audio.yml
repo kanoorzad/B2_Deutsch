@@ -62,8 +62,8 @@ jobs:
           echo "Manifest:"
           head -40 audio-manifest.js
 
-      - name: Commit generated audio pack
+          - name: Commit generated audio pack
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Generate Persisch audio pack"
-          file_pattern: "audio/fa/*.mp3 audio-manifest.js"
+          file_pattern: "audio/fa audio-manifest.js"
