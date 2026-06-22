@@ -1,20 +1,199 @@
 {
-  "version": "2.0.0-mobile-audio-synonym-rootcause-fix",
-  "base_package": "german_a1_b2_telc_words_v1_2_synonyms_audio_fix.zip",
-  "root_cause_notes": [
-    "Mobile browsers can block new Audio() playback when the audio element is created after asynchronous speech synthesis.",
-    "The previous synonym data for non-verbs included same-word/article-stripped variants, so nouns/adjectives could show the original word instead of a real alternative.",
-    "Generated audio only plays for cards whose MP3 exists; the app now tries direct audio_fa first and fetches audio/manifest fresh."
+  "build": "v2.0 + Arabisch/Kurmandschi",
+  "base_package": "german_a1_b2_telc_words_v2_0_mobile_audio_synonyms_fix.zip",
+  "source_xlsx": "A1_to_B2_Arabic_Kurmanji_Vocabulary_and_Irregular_Verbs(2).xlsx",
+  "source_workbook_sheets": [
+    "Important Words",
+    "Irregular Verbs",
+    "Summary",
+    "Quality Check",
+    "Language Metadata",
+    "App Import List",
+    "Review Queue",
+    "Final Quality List",
+    "Translation Fix Log"
   ],
-  "implemented": [
-    "Hidden Tippen zum Umdrehen in flashcard area.",
-    "Restored four German synonyms under Synonyms.",
-    "Filtered same-word German synonym variants and regenerated German synonym arrays.",
-    "Added shared unlocked mobile audio element for Farsi MP3 playback.",
-    "Updated public version to v2.0 and service-worker cache to v2.0."
-  ],
-  "important_upload_note": "Do not overwrite/delete audio/fa/ or audio-manifest.js when uploading this package.",
-  "cards": 5123,
+  "source_summary": {
+    "rows_total": 5128,
+    "important_words": 4592,
+    "irregular_verbs": 536,
+    "qa_status_counts": {
+      "OK": 2797,
+      "WARNING": 2331
+    }
+  },
+  "matching": {
+    "groups": [
+      {
+        "group": [
+          "Irregular Verb",
+          "A1"
+        ],
+        "cards": 76,
+        "rows": 76,
+        "matched": 76,
+        "unmatched": 0,
+        "extra": 0
+      },
+      {
+        "group": [
+          "Irregular Verb",
+          "A2"
+        ],
+        "cards": 127,
+        "rows": 127,
+        "matched": 127,
+        "unmatched": 0,
+        "extra": 0
+      },
+      {
+        "group": [
+          "Irregular Verb",
+          "B1"
+        ],
+        "cards": 183,
+        "rows": 183,
+        "matched": 183,
+        "unmatched": 0,
+        "extra": 0
+      },
+      {
+        "group": [
+          "Irregular Verb",
+          "B2"
+        ],
+        "cards": 150,
+        "rows": 150,
+        "matched": 150,
+        "unmatched": 0,
+        "extra": 0
+      },
+      {
+        "group": [
+          "Vocabulary",
+          "A1"
+        ],
+        "cards": 841,
+        "rows": 841,
+        "matched": 841,
+        "unmatched": 0,
+        "extra": 0
+      },
+      {
+        "group": [
+          "Vocabulary",
+          "A2"
+        ],
+        "cards": 780,
+        "rows": 780,
+        "matched": 780,
+        "unmatched": 0,
+        "extra": 0
+      },
+      {
+        "group": [
+          "Vocabulary",
+          "B1"
+        ],
+        "cards": 862,
+        "rows": 866,
+        "matched": 862,
+        "unmatched": 0,
+        "extra": 4
+      },
+      {
+        "group": [
+          "Vocabulary",
+          "B1 Plus"
+        ],
+        "cards": 475,
+        "rows": 476,
+        "matched": 475,
+        "unmatched": 0,
+        "extra": 1
+      },
+      {
+        "group": [
+          "Vocabulary",
+          "B2"
+        ],
+        "cards": 1629,
+        "rows": 1629,
+        "matched": 1629,
+        "unmatched": 0,
+        "extra": 0
+      }
+    ],
+    "method_counts": {
+      "ordered_equal_count": 3786,
+      "sequence_equal": 1129,
+      "fuzzy_0.92": 177,
+      "fuzzy_0.94": 11,
+      "fuzzy_0.93": 16,
+      "fuzzy_0.95": 2,
+      "fuzzy_0.91": 1,
+      "fuzzy_0.96": 1
+    },
+    "matched_cards": 5123,
+    "unmatched_cards": [],
+    "extra_source_rows_not_in_app": [
+      {
+        "Entry_ID": "VOC-02023",
+        "Entry_Type": "Vocabulary",
+        "Level": "B1",
+        "Unit": "6",
+        "Section": "B Geburtstagswünsche",
+        "German_Text": "Geburtstagswunsch, der, -\"e",
+        "QA_Status": "WARNING"
+      },
+      {
+        "Entry_ID": "VOC-02024",
+        "Entry_Type": "Vocabulary",
+        "Level": "B1",
+        "Unit": "6",
+        "Section": "B Geburtstagswünsche",
+        "German_Text": "Vertrag, der, -\"e",
+        "QA_Status": "WARNING"
+      },
+      {
+        "Entry_ID": "VOC-02025",
+        "Entry_Type": "Vocabulary",
+        "Level": "B1",
+        "Unit": "6",
+        "Section": "B Geburtstagswünsche",
+        "German_Text": "leisten (sich)",
+        "QA_Status": "WARNING"
+      },
+      {
+        "Entry_ID": "VOC-02060",
+        "Entry_Type": "Vocabulary",
+        "Level": "B1",
+        "Unit": "6",
+        "Section": "C Verbraucherschutz",
+        "German_Text": "aussuchen",
+        "QA_Status": "WARNING"
+      },
+      {
+        "Entry_ID": "VOC-02954",
+        "Entry_Type": "Vocabulary",
+        "Level": "B1 Plus",
+        "Unit": "Unit 7",
+        "Section": "Cambio tecnológico, internet y vida profesional",
+        "German_Text": "die IT-Kaufleute",
+        "QA_Status": "OK"
+      }
+    ]
+  },
+  "translation_coverage": {
+    "en": 5123,
+    "fa": 5123,
+    "es": 5123,
+    "ru": 5123,
+    "uk": 5123,
+    "tr": 5123,
+    "ar": 5123,
+    "kmr": 5123
+  },
   "list_counts": {
     "B2 all 12 units": 1629,
     "B2 Irregular Verbs": 150,
@@ -34,29 +213,28 @@
     "other": 401,
     "adverb": 1
   },
-  "translation_coverage": {
-    "en": 5123,
-    "fa": 5123,
-    "es": 5123,
-    "ru": 5123,
-    "uk": 5123,
-    "tr": 5123
-  },
   "checks": {
-    "javascript_syntax_ok": true,
-    "version_v2_0": true,
-    "tippen_removed_visible": true,
-    "synonyms_render_four": true,
-    "same_word_synonym_cards_remaining": 0,
-    "mobile_audio_unlocked_shared_element": true,
-    "direct_audio_fa_first": true,
-    "audio_manifest_not_in_zip": true,
-    "service_worker_fresh_audio_manifest": true,
+    "built_from_accepted_v2_0_base": true,
     "cards_preserved": true,
-    "translations_complete": true,
+    "matched_cards": true,
+    "unmatched_app_cards": 0,
+    "extra_source_rows_not_in_app": 5,
+    "expected_extra_source_rows": true,
+    "arabic_complete": true,
+    "kurmanji_complete": true,
+    "all_existing_languages_complete": true,
+    "language_buttons_added": true,
+    "hidden_select_added": true,
+    "inline_meta_added": true,
+    "app_target_langs_added": true,
+    "visible_irregular_verbs_germanized": true,
+    "internal_list_values_preserved": true,
+    "design_classes_preserved": true,
+    "audio_manifest_not_in_zip": true,
+    "javascript_syntax_ok": true,
     "no_v89_live_api": true
   },
   "node_check_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=2.0&fresh=1",
-  "zip_mb": 2.55
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=2.0-ar-kmr&fresh=1",
+  "upload_note": "Do not overwrite/delete audio/fa/ or audio-manifest.js."
 }

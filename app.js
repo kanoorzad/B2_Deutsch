@@ -27,11 +27,13 @@ window.els=els;
 
 const TARGET_LANGS={
   en:{label:'Englisch',voice:'en-US',dir:'ltr',missing:'Englische Übersetzung fehlt.'},
-  fa:{label:'Farsi',voice:'fa-IR',dir:'rtl',missing:'Farsi-Übersetzung fehlt.'},
+  fa:{label:'Persisch',voice:'fa-IR',dir:'rtl',missing:'Persische Übersetzung fehlt.'},
   es:{label:'Spanisch',voice:'es-ES',dir:'ltr',missing:'Spanische Übersetzung fehlt.'},
   ru:{label:'Russisch',voice:'ru-RU',dir:'ltr',missing:'Russische Übersetzung fehlt.'},
   uk:{label:'Ukrainisch',voice:'uk-UA',dir:'ltr',missing:'Ukrainische Übersetzung fehlt.'},
-  tr:{label:'Türkisch',voice:'tr-TR',dir:'ltr',missing:'Türkische Übersetzung fehlt.'}
+  tr:{label:'Türkisch',voice:'tr-TR',dir:'ltr',missing:'Türkische Übersetzung fehlt.'},
+  ar:{label:'Arabisch',voice:'ar-SA',dir:'rtl',missing:'Arabische Übersetzung fehlt.'},
+  kmr:{label:'Kurmandschi',voice:'ku-TR',dir:'ltr',missing:'Kurmandschi-Übersetzung fehlt.'}
 };
 const VOICE_PROFILES={
   de:{code:'de-DE',fallback:['de-DE','de-AT','de-CH','de'],premium:/anna|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.78},
@@ -40,7 +42,9 @@ const VOICE_PROFILES={
   es:{code:'es-ES',fallback:['es-ES','es-MX','es-US','es-419','es'],premium:/monica|paulina|jorge|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.92},
   ru:{code:'ru-RU',fallback:['ru-RU','ru'],premium:/milena|yuri|russian|рус|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.86},
   uk:{code:'uk-UA',fallback:['uk-UA','uk'],premium:/ukrainian|україн|украин|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.86},
-  tr:{code:'tr-TR',fallback:['tr-TR','tr'],premium:/turkish|türk|yelda|cem|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.90}
+  tr:{code:'tr-TR',fallback:['tr-TR','tr'],premium:/turkish|türk|yelda|cem|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.90},
+  ar:{code:'ar-SA',fallback:['ar-SA','ar-AE','ar-EG','ar'],premium:/arabic|العربية|hamed|zariyah|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.84},
+  kmr:{code:'ku-TR',fallback:['ku-TR','ku','kmr'],premium:/kurdish|kurmanji|kurmandschi|kurmancî|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.86}
 };
 function voiceCodeFor(lang){return (VOICE_PROFILES[lang]||VOICE_PROFILES.de).code}
 function voices(){try{return speechSynthesis.getVoices()||[]}catch(e){return[]}}
@@ -121,7 +125,7 @@ function updateVoiceStatus(){
   if(!el)return;
   const vs=voices();
   if(!vs.length){el.textContent='Stimmen werden geladen …';return}
-  el.textContent=['de','en','fa','es','ru','uk','tr'].map(lang=>{
+  el.textContent=['de','en','fa','es','ru','uk','tr','ar','kmr'].map(lang=>{
     const v=pickVoice(lang);
     const label=lang==='de'?'Deutsch':(TARGET_LANGS[lang]?.label||lang);
     return `${label}: ${v?`${v.name} (${v.lang})`:`System ${voiceCodeFor(lang)}`}`;
@@ -179,7 +183,7 @@ function formStep(c){
 
 
 function setup(){
-  els.list.innerHTML='<option value="all">Alle Karten</option><option value="A1">A1</option><option value="A1 Irregular Verbs">A1 Irregular Verbs</option><option value="A2">A2</option><option value="A2 Irregular Verbs">A2 Irregular Verbs</option><option value="B1">B1</option><option value="B1 Irregular Verbs">B1 Irregular Verbs</option><option value="B1 Plus 7 Units">B1+</option><option value="B2 all 12 units">B2</option><option value="B2 Irregular Verbs">B2 Irregular Verbs</option>';
+  els.list.innerHTML='<option value="all">Alle Karten</option><option value="A1">A1</option><option value="A1 Irregular Verbs">A1 Unregelmäßige Verben</option><option value="A2">A2</option><option value="A2 Irregular Verbs">A2 Unregelmäßige Verben</option><option value="B1">B1</option><option value="B1 Irregular Verbs">B1 Unregelmäßige Verben</option><option value="B1 Plus 7 Units">B1+</option><option value="B2 all 12 units">B2</option><option value="B2 Irregular Verbs">B2 Unregelmäßige Verben</option>';
   updateUnits();
   detectDevice();
   updateVoiceStatus();
