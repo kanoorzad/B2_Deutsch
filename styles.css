@@ -1158,7 +1158,7 @@ button,.btn,[role="button"],.optionButton,.optionsButton,.menuButton,.settingsBu
 #v83HeadSynonyms,#v82HeadSynonyms{display:none!important;}
 .card,.flashcard,.cardInner,.cardFace,.front,.back,.studyCard{overflow:hidden!important;}
 
-/* v2.0 requested fixes */
+/* v2.0.3 requested fixes */
 #frontHint,.frontHint{
   display:none!important;
   visibility:hidden!important;
@@ -1178,7 +1178,7 @@ button,.btn,[role="button"],.optionButton,.optionsButton,.menuButton,.settingsBu
 }
 
 
-/* v2.0.2 requested fixes: verb form layout and target text on card during playback */
+/* v2.0.3 requested fixes: verb form layout and target text on card during playback */
 .v93VerbFormsBelow.v2VerbFormsBox,
 .v2VerbFormsBox{
   margin:7px auto 4px!important;
@@ -1223,3 +1223,5 @@ button,.btn,[role="button"],.optionButton,.optionsButton,.menuButton,.settingsBu
   .v2VerbLabel,.v2VerbValue{font-size:.76rem;}
 }
 
+
+/* v2.0.3: no visual redesign; verb form grid uses existing v2 classes. */
