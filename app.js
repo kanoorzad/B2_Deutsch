@@ -172,11 +172,11 @@ function renderChips(c,lang='en'){
 function cleanSpeechText(text,lang){let t=String(text||'').replace(/\s+/g,' ').trim(); if(lang==='en')t=cleanEnglish(t); if(lang==='de')t=t.replace(/\s*\/\s*/g,' oder '); return t;}
 function formStep(c){
   const f=c.forms||{};
-  if(c.category==='noun'&&c.plural)return{display:c.plural,speech:c.plural,lang:'de',label:'Deutscher Plural',sub:'Langsam'};
+  if(c.category==='noun'&&c.plural)return{display:c.plural,speech:c.plural,lang:'de',label:'Deutscher Plural',sub:''};
   if(c.category==='verb'){
     const visible=[],spoken=[];
     for(const k of ['infinitive','past','perfect','plusquamperfekt'])if(f[k]){visible.push(f[k]);spoken.push(f[k]);}
-    if(visible.length)return{display:visible.join(' · '),speech:spoken.join('. '),lang:'de',label:'Deutsche Formen',sub:'Langsam'};
+    if(visible.length)return{display:visible.join(' · '),speech:spoken.join('. '),lang:'de',label:'Deutsche Formen',sub:''};
   }
   return null;
 }
@@ -188,9 +188,10 @@ function setup(){
   detectDevice();
   updateVoiceStatus();
 }
+function displayUnitLabel(u){return String(u||'').replace(/\bUnits\b/g,'Einheiten').replace(/\bUnit\b/g,'Einheit').replace(/\ball 12 Einheiten\b/gi,'alle 12 Einheiten').replace(/\bIrregular Verbs\b/g,'Unregelmäßige Verben').replace(/\bGeneral\b/g,'Allgemein');}
 function updateUnits(){
   const l=els.list.value,pool=l==='all'?cards:cards.filter(c=>c.list===l);
-  els.unit.innerHTML='<option value="all">Alle Einheiten</option>'+unique(pool.map(c=>c.unit)).map(x=>`<option>${esc(x)}</option>`).join('');
+  els.unit.innerHTML='<option value="all">Alle Einheiten</option>'+unique(pool.map(c=>c.unit)).map(x=>`<option value="${esc(x)}">${esc(displayUnitLabel(x))}</option>`).join('');
   updateParts();
 }
 function updateParts(){
@@ -211,7 +212,7 @@ function getManualFront(c){
     const fs=formStep(c);
     return fs||{display:'Keine Plural-/Formangabe',speech:'',label:'Plural / Formen',sub:'',lang:'de'}
   }
-  return{display:displayGerman(c),speech:displayGerman(c),label:'Deutsch',sub:'Langsam',lang:'de'}
+  return{display:displayGerman(c),speech:displayGerman(c),label:'Deutsch',sub:'',lang:'de'}
 }
 
 function escHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
@@ -368,7 +369,7 @@ function populateWizardUnits(){
   const list=(els.list&&els.list.value)||'all';
   const pool=CARDS.filter(c=>list==='all'||c.list===list);
   const units=[...new Set(pool.map(c=>c.unit).filter(Boolean))];
-  sel.innerHTML='<option value="all">Alle Einheiten</option>'+units.map(u=>`<option value="${u}">${u}</option>`).join('');
+  sel.innerHTML='<option value="all">Alle Einheiten</option>'+units.map(u=>`<option value="${esc(u)}">${esc(displayUnitLabel(u))}</option>`).join('');
   sel.value='all';
   const note=$('wizardUnitNote');
   if(note)note.textContent=pool.length?`${pool.length} Karten verfügbar.`:'Noch keine Karten für dieses Material. Bitte anderes Material wählen.';
@@ -384,6 +385,7 @@ function cardScript(c){
   if(forms.present3)formBits.push(forms.present3);
   if(forms.past)formBits.push(forms.past);
   if(forms.perfect)formBits.push(forms.perfect);
+  if(forms.plusquamperfekt)formBits.push(forms.plusquamperfekt);
   if(formBits.length)bits.push({text:formBits.join('. '),lang:'de',label:'Formen'});
   bits.push({text:targetText(c,lang),lang:lang,label:targetMeta(lang).label});
   return bits.filter(x=>x.text&&x.text!=='—');
@@ -396,7 +398,7 @@ function speakPart(kind){
   if(kind==='de')return say(displayGerman(c),'de');
   if(kind==='forms'){
     const forms=c.forms||{};
-    const txt=[forms.infinitive,forms.present3,forms.past,forms.perfect].filter(Boolean).join('. ');
+    const txt=[forms.infinitive,forms.present3,forms.perfect,forms.plusquamperfekt].filter(Boolean).join('. ');
     return say(txt||displayGerman(c),'de');
   }
   return say(displayGerman(c),'de');
