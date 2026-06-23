@@ -1158,7 +1158,7 @@ button,.btn,[role="button"],.optionButton,.optionsButton,.menuButton,.settingsBu
 #v83HeadSynonyms,#v82HeadSynonyms{display:none!important;}
 .card,.flashcard,.cardInner,.cardFace,.front,.back,.studyCard{overflow:hidden!important;}
 
-/* v2.0.3 requested fixes */
+/* v2.0.5 requested fixes */
 #frontHint,.frontHint{
   display:none!important;
   visibility:hidden!important;
@@ -1178,7 +1178,7 @@ button,.btn,[role="button"],.optionButton,.optionsButton,.menuButton,.settingsBu
 }
 
 
-/* v2.0.3 requested fixes: verb form layout and target text on card during playback */
+/* v2.0.5 requested fixes: verb form layout and target text on card during playback */
 .v93VerbFormsBelow.v2VerbFormsBox,
 .v2VerbFormsBox{
   margin:7px auto 4px!important;
@@ -1224,4 +1224,80 @@ button,.btn,[role="button"],.optionButton,.optionsButton,.menuButton,.settingsBu
 }
 
 
-/* v2.0.3: no visual redesign; verb form grid uses existing v2 classes. */
+/* v2.0.5: no visual redesign; verb form grid uses existing v2 classes. */
+
+/* v2.0.5: scoped verb-form/audio display fixes only */
+#card.card{
+  position:relative;
+}
+.unitBadgeOnCard{
+  position:absolute;
+  top:8px;
+  left:10px;
+  z-index:5;
+  max-width:42%;
+  padding:2px 7px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(15,23,42,.38);
+  color:rgba(255,255,255,.78);
+  font-size:10.5px;
+  line-height:1.2;
+  font-weight:850;
+  letter-spacing:.01em;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  pointer-events:none;
+}
+.unitBadgeOnCard[hidden]{
+  display:none!important;
+}
+.v204VerbFormsBox{
+  max-width:min(96%,560px)!important;
+}
+.v204VerbFormsGrid{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+}
+.v204VerbFormsGrid .v2VerbCell{
+  min-width:0;
+}
+.v204VerbFormsGrid .v2VerbLabel{
+  flex:0 0 auto;
+  font-size:clamp(.68rem,2.35vw,.82rem);
+}
+.v204VerbFormsGrid .v2VerbValue{
+  flex:1 1 auto;
+  min-width:0;
+  font-size:clamp(.68rem,2.35vw,.84rem);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.v204VerbFormsGrid .v2VerbWide{
+  grid-column:1 / -1;
+}
+.v204VerbFormsGrid .v2VerbActive{
+  outline:2px solid rgba(255,255,255,.32);
+  background:rgba(255,255,255,.12);
+}
+@media(max-width:430px){
+  .unitBadgeOnCard{
+    top:7px;
+    left:8px;
+    max-width:46%;
+    font-size:10px;
+    padding:2px 6px;
+  }
+  .v204VerbFormsGrid{
+    gap:4px 5px;
+  }
+  .v204VerbFormsGrid .v2VerbCell{
+    padding:4px 4px;
+    gap:3px;
+  }
+  .v204VerbFormsGrid .v2VerbLabel,
+  .v204VerbFormsGrid .v2VerbValue{
+    font-size:clamp(.62rem,2.75vw,.75rem);
+  }
+}
