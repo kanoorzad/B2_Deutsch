@@ -1,6 +1,12 @@
 {
-  "version": "2.0.3-irregular-interlink-verb-forms-fix",
-  "base_package": "german_a1_b2_telc_words_v2_0_2_verb_unit_playback_text_fix.zip",
+  "version": "2.0.4-verb-audio-forms-unit-badge-fix",
+  "base_package": "german_a1_b2_telc_words_v2_0_3_irregular_interlink_verb_forms_fix.zip",
+  "implemented": [
+    "Level-specific verb-form playback sequence.",
+    "B1+/B2 display now includes Infinitiv, Präsens, Präteritum, Perfekt, Plusqp.",
+    "Long verb-form auto-fit/ellipsis inside existing card structure.",
+    "Small current-unit badge on top-left flashcard."
+  ],
   "cards": 5123,
   "list_counts": {
     "B2 all 12 units": 1629,
@@ -13,17 +19,6 @@
     "B1 Irregular Verbs": 183,
     "B1": 862
   },
-  "verb_counts_by_list": {
-    "B2 all 12 units": 392,
-    "B2 Irregular Verbs": 150,
-    "B1 Plus 7 Units": 108,
-    "A1 Irregular Verbs": 76,
-    "A1": 179,
-    "A2 Irregular Verbs": 127,
-    "A2": 0,
-    "B1 Irregular Verbs": 183,
-    "B1": 156
-  },
   "translation_coverage": {
     "en": 5123,
     "fa": 5123,
@@ -34,89 +29,23 @@
     "ar": 5123,
     "kmr": 5123
   },
-  "wizard_value_report": [
-    {
-      "list": "A1",
-      "category": "all",
-      "count": 841,
-      "ok": true
-    },
-    {
-      "list": "A1 Irregular Verbs",
-      "category": "all",
-      "count": 76,
-      "ok": true
-    },
-    {
-      "list": "A2",
-      "category": "all",
-      "count": 780,
-      "ok": true
-    },
-    {
-      "list": "A2 Irregular Verbs",
-      "category": "all",
-      "count": 127,
-      "ok": true
-    },
-    {
-      "list": "B1",
-      "category": "all",
-      "count": 862,
-      "ok": true
-    },
-    {
-      "list": "B1 Irregular Verbs",
-      "category": "all",
-      "count": 183,
-      "ok": true
-    },
-    {
-      "list": "B1 Plus 7 Units",
-      "category": "all",
-      "count": 475,
-      "ok": true
-    },
-    {
-      "list": "B1 Plus 7 Units",
-      "category": "verb",
-      "count": 108,
-      "ok": true
-    },
-    {
-      "list": "B2 all 12 units",
-      "category": "all",
-      "count": 1629,
-      "ok": true
-    },
-    {
-      "list": "B2 Irregular Verbs",
-      "category": "all",
-      "count": 150,
-      "ok": true
-    }
-  ],
   "checks": {
-    "javascript_app_syntax_ok": true,
-    "version_v2_0_3": true,
-    "irregular_wizard_links_all_nonempty": true,
-    "a1_irregular_link_count": true,
-    "a2_irregular_link_count": true,
-    "b1_irregular_link_count": true,
-    "b1plus_verb_link_count": true,
-    "b2_irregular_link_count": true,
-    "verb_forms_book_specific": true,
-    "unit_label_german": true,
-    "translations_complete_8_langs": true,
+    "javascript_syntax_ok": true,
+    "version_v2_0_4": true,
+    "form_helper_replaced": true,
+    "a1_a2_audio_forms_only": true,
+    "b1_audio_forms_only": true,
+    "b1p_b2_includes_infinitiv": true,
+    "normal_a1_no_longer_skipped_in_playback": true,
+    "unit_badge_added": true,
+    "unit_badge_css_scoped": true,
     "cards_preserved": true,
+    "translations_complete_8_langs": true,
+    "arabisch_kurmandschi_preserved": true,
     "audio_manifest_not_included": true,
-    "workflows_not_included": true,
-    "no_v89_live_api": true,
-    "inline_script_syntax_ok": true
+    "no_v89_live_api": true
   },
-  "node_index_stderr": "node:internal/modules/esm/get_format:219\n  throw new ERR_UNKNOWN_FILE_EXTENSION(ext, filepath);\n        ^\n\nTypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension \".html\" for /mnt/data/german_a1_b2_telc_words_v2_0_3_irregular_interlink_verb_forms_fix/index.html\n    at Object.getFileProtocolModuleFormat [as file:] (node:internal/modules/esm/get_format:219:9)\n    at defaultGetFormat (node:internal/modules/esm/get_format:245:36)\n    at checkSyntax (node:internal/main/check_syntax:69:20) {\n  code: 'ERR_UNKNOWN_FILE_EXTENSION'\n}\n\nNode.js v22.16.0\n",
-  "node_app_stderr": "",
-  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=2.0.3&fresh=1",
-  "zip_mb": 2.74,
-  "node_inline_stderr": ""
+  "node_check_stderr": "",
+  "open_url": "https://kanoorzad.github.io/B2_Deutsch/?v=2.0.4&fresh=1",
+  "zip_mb": 2.74
 }
