@@ -7,18 +7,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="DE Karten v64">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=2.0.4">
-  <link rel="apple-touch-icon" href="icon.svg?v=2.0.4">
-  <link rel="stylesheet" href="styles.css?v=2.0.4">
-  <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v2.0.4</title>
+  <link rel="manifest" href="manifest.webmanifest?v=2.0.3">
+  <link rel="apple-touch-icon" href="icon.svg?v=2.0.3">
+  <link rel="stylesheet" href="styles.css?v=2.0.3">
+  <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v2.0.3</title>
 <script id="app-version">
-window.APP_VERSION="v2.0.4";
-window.BUILD_VERSION="2.0.4-verb-audio-forms-unit-badge-fix";
-document.title="Flashcard Pro v2.0.4 – Deutsch Sprache";
+window.APP_VERSION="v2.0.3";
+window.BUILD_VERSION="2.0.3-irregular-interlink-verb-forms-fix";
+document.title="Flashcard Pro v2.0.3 – Deutsch Sprache";
 (function(){
   function showVersion(){
     var d=window.FLASHCARD_DATA||{};
-    var v=d.app_version||d.display_version||window.APP_VERSION||"v2.0.4";
+    var v=d.app_version||d.display_version||window.APP_VERSION||"v2.0.3";
     document.title="Flashcard Pro "+v+" – Deutsch Sprache";
     var el=document.getElementById("appVersionStatus");
     if(!el&&document.body){el=document.createElement("div");el.id="appVersionStatus";el.className="appVersionStatus";el.setAttribute("aria-label","App-Version");document.body.appendChild(el)}
@@ -36,16 +36,16 @@ document.title="Flashcard Pro v2.0.4 – Deutsch Sprache";
 <option value="en">Englisch</option><option value="fa">Persisch</option><option value="es">Spanisch</option><option value="ru">Russisch</option><option value="uk">Ukrainisch</option><option value="tr">Türkisch</option><option value="ar">Arabisch</option><option value="kmr">Kurmandschi</option>
 </select>
 <section id="startWizard" class="startWizard" aria-live="polite">
-<section id="wizardLang" class="wizardStep active"><div class="wizardCard languageStartCard"><em class="startVersionTag">v2.0.4</em>
+<section id="wizardLang" class="wizardStep active"><div class="wizardCard languageStartCard"><em class="startVersionTag">v2.0.3</em>
 <div class="brandBlock"><h1>Deutsch Sprache</h1><h2>Wichtige Wörter</h2><h3>telc System</h3><p><em>A1-B2</em></p></div>
 <p class="startSubtitle">Bitte wählen Sie zuerst die Übersetzungssprache.</p>
 <div class="choiceGrid languageChoices compactLangGrid"><button type="button" data-wizard-lang="en">Englisch</button><button type="button" data-wizard-lang="fa">Persisch</button><button type="button" data-wizard-lang="es">Spanisch</button><button type="button" data-wizard-lang="ru">Russisch</button><button type="button" data-wizard-lang="uk">Ukrainisch</button><button type="button" data-wizard-lang="tr">Türkisch</button><button type="button" data-wizard-lang="ar">Arabisch</button><button type="button" data-wizard-lang="kmr" title="Nordkurdisch (Kurmandschi)">Kurmandschi</button></div>
 <p class="wizardInitiative footerCredit">Initiative von: Khalid Noorzad</p></div></section>
-<section id="wizardMaterial" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v2.0.4</em><h2>Lernmaterial wählen</h2><p class="startSubtitle">Wählen Sie den Bereich.</p><div class="materialPairGrid"><button type="button" data-wizard-list="A1">A1</button><button type="button" data-wizard-list="A1 Irregular Verbs">A1 Unregelmäßige Verben</button><button type="button" data-wizard-list="A2">A2</button><button type="button" data-wizard-list="A2 Irregular Verbs">A2 Unregelmäßige Verben</button><button type="button" data-wizard-list="B1">B1</button><button type="button" data-wizard-list="B1 Irregular Verbs">B1 Unregelmäßige Verben</button><button type="button" data-wizard-list="B1 Plus 7 Units">B1+</button><button type="button" data-wizard-list="B1 Plus 7 Units" data-wizard-category="verb">B1+ Unregelmäßige Verben</button><button type="button" data-wizard-list="B2 all 12 units">B2</button><button type="button" data-wizard-list="B2 Irregular Verbs">B2 Unregelmäßige Verben</button></div><button id="materialBack" type="button" class="secondaryBtn wizardBackBtn">Zurück</button></div></section>
-<section id="wizardUnit" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v2.0.4</em><h2>Einheit wählen</h2><p class="startSubtitle">Standard: alle Einheiten.</p><label class="wizardSelectLabel">Einheit <select id="wizardUnitSelect"><option value="all">Alle Einheiten</option></select></label><p id="wizardUnitNote" class="wizardUnitNote"></p><div class="wizardActionRow"><button id="unitBack" type="button" class="secondaryBtn">Zurück</button><button id="wizardStart" type="button" class="primaryBtn">Karten öffnen</button></div></div></section></section>
+<section id="wizardMaterial" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v2.0.3</em><h2>Lernmaterial wählen</h2><p class="startSubtitle">Wählen Sie den Bereich.</p><div class="materialPairGrid"><button type="button" data-wizard-list="A1">A1</button><button type="button" data-wizard-list="A1 Irregular Verbs">A1 Unregelmäßige Verben</button><button type="button" data-wizard-list="A2">A2</button><button type="button" data-wizard-list="A2 Irregular Verbs">A2 Unregelmäßige Verben</button><button type="button" data-wizard-list="B1">B1</button><button type="button" data-wizard-list="B1 Irregular Verbs">B1 Unregelmäßige Verben</button><button type="button" data-wizard-list="B1 Plus 7 Units">B1+</button><button type="button" data-wizard-list="B1 Plus 7 Units" data-wizard-category="verb">B1+ Unregelmäßige Verben</button><button type="button" data-wizard-list="B2 all 12 units">B2</button><button type="button" data-wizard-list="B2 Irregular Verbs">B2 Unregelmäßige Verben</button></div><button id="materialBack" type="button" class="secondaryBtn wizardBackBtn">Zurück</button></div></section>
+<section id="wizardUnit" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v2.0.3</em><h2>Einheit wählen</h2><p class="startSubtitle">Standard: alle Einheiten.</p><label class="wizardSelectLabel">Einheit <select id="wizardUnitSelect"><option value="all">Alle Einheiten</option></select></label><p id="wizardUnitNote" class="wizardUnitNote"></p><div class="wizardActionRow"><button id="unitBack" type="button" class="secondaryBtn">Zurück</button><button id="wizardStart" type="button" class="primaryBtn">Karten öffnen</button></div></div></section></section>
 <button id="optionsToggle" type="button" class="optionsToggle" hidden>Optionen</button>
 <header class="hero">
-  <em class="versionBadge">v2.0.4</em>
+  <em class="versionBadge">v2.0.3</em>
   <h1>Deutsch-Karteikarten</h1>
   <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
   <p class="initiative"><em>Initiative von: Khalid Noorzad</em></p>
@@ -60,7 +60,6 @@ document.title="Flashcard Pro v2.0.4 – Deutsch Sprache";
 <main class="shell">
   <section class="study">
     <article id="card" class="card" tabindex="0" aria-live="polite">
-      <div id="unitBadgeOnCard" class="unitBadgeOnCard" aria-label="Aktuelle Einheit"></div>
       <div class="cardMain">
         <p id="frontHint" class="frontHint" hidden></p>
         <h2 id="frontText">Loading…</h2>
@@ -201,8 +200,8 @@ document.title="Flashcard Pro v2.0.4 – Deutsch Sprache";
   </section>
 </main>
 
-<script src="data.js?v=2.0.4"></script>
-<script src="audio-manifest.js?v=2.0.4"></script>
+<script src="data.js?v=2.0.3"></script>
+<script src="audio-manifest.js?v=2.0.3"></script>
 <script id="v2-0-3-cache-reset">
 (function(){
   var key="v2-0-3-cache-reset-done";
@@ -215,7 +214,7 @@ document.title="Flashcard Pro v2.0.4 – Deutsch Sprache";
         await Promise.all(names.filter(function(n){return !String(n).includes("v2-0")}).map(function(n){return caches.delete(n)}));
       }
       if(location.search.indexOf("v=1.2")===-1){
-        location.replace(location.pathname+"?v=2.0.4&fresh="+Date.now());
+        location.replace(location.pathname+"?v=2.0.3&fresh="+Date.now());
       }
     }catch(e){}
   }
@@ -223,7 +222,7 @@ document.title="Flashcard Pro v2.0.4 – Deutsch Sprache";
 })();
 </script>
 
-<script src="app.js?v=2.0.4"></script>
+<script src="app.js?v=2.0.3"></script>
 <script id="v83-controller">
 (function(){
   window.__v83Controller=true;
@@ -255,57 +254,7 @@ document.title="Flashcard Pro v2.0.4 – Deutsch Sprache";
   function populatePosFilter(){const sel=$('posFilterOptions');if(!sel)return;const cats=[...new Set(basePool().map(c=>c.category||'other'))];sel.innerHTML='<option value="all">Alle</option>'+cats.map(c=>`<option value="${c}">${CAT_LABEL[c]||c}</option>`).join('');sel.value=selectedCategory}
   function normalA1Verb(c){return c&&c.list==='A1'&&c.category==='verb'}
   function req(c){return c&&c.category==='verb'?4:2}
-  function levelKey(c){
-    const list=String((c&&c.list)||"");
-    if(list.indexOf("A1")===0)return"A1";
-    if(list.indexOf("A2")===0)return"A2";
-    if(list.indexOf("B1 Plus")===0)return"B1P";
-    if(list.indexOf("B1")===0)return"B1";
-    if(list.indexOf("B2")===0)return"B2";
-    return"";
-  }
-  function verbFormItems(c){
-    if(!c||c.category!=="verb")return[];
-    const f=c.forms||{};
-    const inf=f.infinitive||c.german||"";
-    const pres=f.present3||"";
-    const past=f.past||"";
-    const perf=f.perfect||"";
-    const plus=f.plusquamperfekt||"";
-    const level=levelKey(c);
-    if(level==="A1"||level==="A2"){
-      return [
-        {label:"Infinitiv:",value:inf},
-        {label:"Präsens:",value:pres},
-        {label:"Perfekt:",value:perf,wide:true}
-      ];
-    }
-    if(level==="B1"){
-      return [
-        {label:"Infinitiv:",value:inf},
-        {label:"Präsens:",value:pres},
-        {label:"Präteritum:",value:past},
-        {label:"Perfekt:",value:perf}
-      ];
-    }
-    if(level==="B1P"||level==="B2"){
-      return [
-        {label:"Infinitiv:",value:inf},
-        {label:"Präsens:",value:pres},
-        {label:"Präteritum:",value:past},
-        {label:"Perfekt:",value:perf},
-        {label:"Plusqp.:",value:plus,wide:true}
-      ];
-    }
-    return [
-      {label:"Infinitiv:",value:inf},
-      {label:"Präsens:",value:pres},
-      {label:"Präteritum:",value:past},
-      {label:"Perfekt:",value:perf},
-      {label:"Plusqp.:",value:plus,wide:true}
-    ];
-  }
-  function formList(c){return verbFormItems(c).map(x=>x.value).filter(v=>v&&String(v).trim()&&String(v).trim()!=="—")};if(normalA1Verb(c))return[f.infinitive||c.german].filter(Boolean);return[f.infinitive,f.present3,f.past,f.perfect,f.plusquamperfekt].filter(Boolean)}
+  function formList(c){if(!c||c.category!=='verb')return[];const f=c.forms||{};if(normalA1Verb(c))return[f.infinitive||c.german].filter(Boolean);return[f.infinitive,f.present3,f.past,f.perfect,f.plusquamperfekt].filter(Boolean)}
   function fitOneLine(el){if(!el)return;const isTarget=el.classList&&el.classList.contains('targetOnCard');el.style.whiteSpace=isTarget?'normal':'nowrap';el.style.overflow='hidden';el.style.textOverflow='clip';let size=isTarget?34:46,min=isTarget?14:15;el.style.fontSize=size+'px';el.style.lineHeight=isTarget?'1.18':'1.06';const avail=Math.max(120,(el.parentElement||el).clientWidth-18);while(size>min&&((isTarget&&el.scrollHeight>Math.max(80,el.parentElement?el.parentElement.clientHeight-20:140))||(!isTarget&&el.scrollWidth>avail))){size--;el.style.fontSize=size+'px'}}
   function fitHeadword(){fitOneLine($('front'));fitOneLine($('frontText'))}
   window.addEventListener('resize',()=>setTimeout(fitHeadword,50));
@@ -327,17 +276,41 @@ document.title="Flashcard Pro v2.0.4 – Deutsch Sprache";
     const box=ensureVerbBox&&ensureVerbBox();
     if(!box)return;
     if(!c||c.category!=="verb"){box.hidden=true;box.innerHTML="";return;}
+    const f=c.forms||{};
     const esc=s=>String(s||"—").replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]||m});
-    const items=verbFormItems(c);
-    function cell(item,i){
-      const active=currentFormIndex===i?' v2VerbActive':'';
-      const wide=item.wide?' v2VerbWide':'';
-      return '<div class="v2VerbCell'+wide+active+'"><span class="v2VerbLabel">'+item.label+'</span><span class="v2VerbValue">'+esc(item.value||"—")+'</span></div>';
+    const list=String(c.list||"");
+    const isA1=list.indexOf("A1")===0;
+    const isA2=list.indexOf("A2")===0;
+    const isB1Plus=list.indexOf("B1 Plus")===0;
+    const isB1=!isB1Plus && list.indexOf("B1")===0;
+    const isB2=list.indexOf("B2")===0;
+    function cell(label,value,wide){return '<div class="v2VerbCell '+(wide?'v2VerbWide':'')+'"><span class="v2VerbLabel">'+label+'</span><span class="v2VerbValue">'+esc(value)+'</span></div>';}
+    let html='<div class="v2VerbFormsGrid" aria-label="Verbformen">';
+    if(isA1||isA2){
+      html+=cell('Infinitiv:',f.infinitive||c.german||'—',false)
+          +cell('Präsens:',f.present3||'—',false)
+          +cell('Perfekt:',f.perfect||'—',true);
+    }else if(isB1){
+      html+=cell('Infinitiv:',f.infinitive||c.german||'—',false)
+          +cell('Präsens:',f.present3||'—',false)
+          +cell('Präteritum:',f.past||'—',false)
+          +cell('Perfekt:',f.perfect||'—',false);
+    }else if(isB1Plus||isB2){
+      html+=cell('Präsens:',f.present3||'—',false)
+          +cell('Präteritum:',f.past||'—',false)
+          +cell('Perfekt:',f.perfect||'—',true)
+          +cell('Plusqp.:',f.plusquamperfekt||'—',true);
+    }else{
+      html+=cell('Infinitiv:',f.infinitive||c.german||'—',false)
+          +cell('Präsens:',f.present3||'—',false)
+          +cell('Perfekt:',f.perfect||'—',true)
+          +cell('Plusqp.:',f.plusquamperfekt||'—',true);
     }
+    html+='</div>';
     box.hidden=false;
     box.classList.remove("v1VerbFormsBox");
-    box.classList.add("v2VerbFormsBox","v204VerbFormsBox");
-    box.innerHTML='<div class="v2VerbFormsGrid v204VerbFormsGrid" aria-label="Verbformen">'+items.map(cell).join('')+'</div>';
+    box.classList.add("v2VerbFormsBox");
+    box.innerHTML=html;
   }
 function renderHeadSynonyms(c){
     const label=document.getElementById("chipLabel");
@@ -388,28 +361,12 @@ function renderHeadSynonyms(c){
 
   function renderTarget(c){const m=meta(),text=c?targetText(c):'Dieses Lernmaterial ist vorbereitet. Bitte laden Sie später die Karten hoch.';['en','v83TargetText','v82TargetText','v81TargetText'].forEach(id=>{const el=$(id);if(el){el.textContent=text||'—';el.dir=m.dir;el.lang=selectedLang;el.hidden=false;el.style.display='block';el.style.visibility='visible';el.style.opacity='1';el.classList.add('targetVisible')}});setText('targetTitle',m.label)}
   function renderEmpty(msg='Keine Karten für diese Filterung'){setText('front','Keine Karten');setText('frontText','Keine Karten');setText('de','Keine Karten');renderTarget(null);setText('v83TargetText',msg);setText('count','0 / 0');setText('nowPlaying',msg);['inf','pres3','past','perf','plus','article','singular','plural','ex'].forEach(id=>setText(id,'—'));const hs=$('v83HeadSynonyms');if(hs)hs.innerHTML='';setMode('german');fitHeadword()}
-  function unitBadgeText(c){
-    if(!c)return"";
-    const raw=String(c.unit||c.list||"").trim();
-    const m=raw.match(/(?:Unit|Einheit)\s*[- ]?\s*(\d+)/i);
-    if(m)return "(Einheit-"+m[1]+")";
-    if(/Irregular Verbs|Unregelmäßige Verben/i.test(raw))return "(Unregelmäßige Verben)";
-    return raw?"("+displayUnitLabel(raw)+")":"";
-  }
-  function updateUnitBadge(c){
-    const el=$("unitBadgeOnCard");
-    if(!el)return;
-    const txt=unitBadgeText(c);
-    el.textContent=txt;
-    el.hidden=!txt;
-  }
   function renderCard(mode='german'){
     const c=current();
     if(!c){renderEmpty();return}
     const german=displayGerman(c);
     const target=targetText(c);
     const m=meta();
-    updateUnitBadge(c);
     const faceText=mode==='translation'?(target||'—'):german;
     const faceLang=mode==='translation'?selectedLang:'de';
     const faceDir=mode==='translation'?(m.dir||'ltr'):'ltr';
@@ -535,36 +492,8 @@ function renderHeadSynonyms(c){
     });
   }
   const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-  async function playOne(myToken){
-    const c=current();
-    if(!c)return;
-    try{speechSynthesis.cancel()}catch(e){}
-    currentFormIndex=-1;
-    renderCard('german');
-    await sleep(160);
-    await speak(displayGerman(c),'de',myToken);
-    if(stopped||paused||myToken!==token)return;
-
-    const forms=formList(c);
-    if(forms.length){
-      for(let i=0;i<forms.length;i++){
-        if(stopped||paused||myToken!==token)return;
-        currentFormIndex=i;
-        renderCard('german');
-        setText('nowPlaying',`Form: ${forms[i]}`);
-        await sleep(150);
-        await speak(forms[i],'de',myToken);
-      }
-    }
-
-    currentFormIndex=-1;
-    renderCard('translation');
-    await sleep(260);
-    if(stopped||paused||myToken!==token)return;
-    renderCard('translation');
-    await speak(targetText(c),selectedLang,myToken);
-  }
-  async function playLoopasync function playLoop(){if(!filtered.length){renderEmpty();return}playing=true;paused=false;stopped=false;const myToken=++token;while(playing&&!paused&&!stopped&&myToken===token&&filtered.length){await playOne(myToken);if(!playing||paused||stopped||myToken!==token)break;pos=(pos+1)%filtered.length;renderCard('german');await sleep(700)}}
+  async function playOne(myToken){const c=current();if(!c)return;try{speechSynthesis.cancel()}catch(e){}currentFormIndex=-1;renderCard('german');await sleep(160);await speak(displayGerman(c),'de',myToken);if(stopped||paused||myToken!==token)return;const forms=formList(c);if(forms.length&&!normalA1Verb(c)){for(let i=0;i<forms.length;i++){if(stopped||paused||myToken!==token)return;currentFormIndex=i;renderCard('german');setText('nowPlaying',`Form: ${forms[i]}`);await sleep(150);await speak(forms[i],'de',myToken)}}currentFormIndex=-1;renderCard('translation');await sleep(260);if(stopped||paused||myToken!==token)return;renderCard('translation');await speak(targetText(c),selectedLang,myToken)}
+  async function playLoop(){if(!filtered.length){renderEmpty();return}playing=true;paused=false;stopped=false;const myToken=++token;while(playing&&!paused&&!stopped&&myToken===token&&filtered.length){await playOne(myToken);if(!playing||paused||stopped||myToken!==token)break;pos=(pos+1)%filtered.length;renderCard('german');await sleep(700)}}
   window.playList=playLoop;window.playSelected=()=>{if(!filtered.length)updateFilters();stopped=false;paused=false;playing=false;const myToken=++token;playOne(myToken)}
   function pausePlayback(){paused=true;playing=false;token++;try{speechSynthesis.pause&&speechSynthesis.pause();speechSynthesis.cancel()}catch(e){}setText('nowPlaying','Pause')}
   function openOptions(){populatePosFilter();const d=$('optionsDrawer'),b=$('drawerBackdrop');if(d){d.hidden=false;d.classList.add('open');d.style.display='block'}if(b){b.hidden=false;b.style.display='block'}}
@@ -830,7 +759,7 @@ function renderHeadSynonyms(c){
   window.v1FitCardText=fitCardText;document.addEventListener("DOMContentLoaded",function(){fitCardText();setInterval(fitCardText,700)});window.addEventListener("resize",fitCardText);window.addEventListener("orientationchange",function(){setTimeout(fitCardText,300)});
 })();
 </script>
-<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v2.0.4 </div>
+<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v2.0.3 </div>
 </body>
 </html>
 
