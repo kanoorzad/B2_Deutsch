@@ -1,841 +1,745 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
-  <meta name="theme-color" content="#17324d">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="DE Karten v64">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="manifest" href="manifest.webmanifest?v=2.0.5">
-  <link rel="apple-touch-icon" href="icon.svg?v=2.0.5">
-  <link rel="stylesheet" href="styles.css?v=2.0.5">
-  <title>Deutsch Sprache – Wichtige Wörter – telc System – A1-B2 v2.0.5</title>
-<script id="app-version">
-window.APP_VERSION="v2.0.5";
-window.BUILD_VERSION="2.0.5-language-selection-interlink-runtime-fix";
-document.title="Flashcard Pro v2.0.5 – Deutsch Sprache";
-(function(){
-  function showVersion(){
-    var d=window.FLASHCARD_DATA||{};
-    var v=d.app_version||d.display_version||window.APP_VERSION||"v2.0.5";
-    document.title="Flashcard Pro "+v+" – Deutsch Sprache";
-    var el=document.getElementById("appVersionStatus");
-    if(!el&&document.body){el=document.createElement("div");el.id="appVersionStatus";el.className="appVersionStatus";el.setAttribute("aria-label","App-Version");document.body.appendChild(el)}
-    if(el)el.textContent="Flashcard Pro "+v;
-  }
-  document.addEventListener("DOMContentLoaded",showVersion);
-  window.addEventListener("pageshow",showVersion);
-  setTimeout(showVersion,50);setTimeout(showVersion,500);
-})();
-</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Deutsch lernen</title>
+<link rel="manifest" href="manifest.webmanifest?v=22">
+<meta name="theme-color" content="#0f141b">
+<link rel="icon" href="icon.svg?v=22" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg?v=22">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+:root{
+  --bg1:#0e1729; --bg2:#0a1120; --card1:#1a2740; --card2:#131c30;
+  --ink:#eef3fb; --ink2:#c4d2ec; --muted:#8a9bc0; --faint:#5a6b8c;
+  --blue:#2563d4; --blue2:#4a9bff; --green:#3ddc97; --gold:#ffb84d;
+  --line:rgba(255,255,255,.07);
+  --su:0 14px 34px rgba(0,0,0,.5); --sm:0 4px 12px rgba(0,0,0,.3);
+  --hi:inset 0 1px 0 rgba(255,255,255,.1);
+  --r:22px;
+}
+[data-theme="light"]{
+  --bg1:#eef3fb; --bg2:#e3ebf7; --card1:#ffffff; --card2:#f4f8fd;
+  --ink:#1a2740; --ink2:#3a4a68; --muted:#5a6b86; --faint:#9aa8c0;
+  --blue:#2563d4; --blue2:#4a9bff; --green:#1f9d6b; --gold:#c9912b;
+  --line:rgba(20,40,80,.08);
+  --su:0 14px 34px rgba(20,40,80,.14); --sm:0 4px 12px rgba(20,40,80,.1);
+  --hi:inset 0 1px 0 #fff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
+  background:radial-gradient(120% 80% at 50% 0%, var(--bg1) 0%, var(--bg2) 75%);
+  color:var(--ink);min-height:100dvh;transition:background .3s}
+.app{max-width:440px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;
+  padding:env(safe-area-inset-top) 0 0}
 
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.1rem .3rem;gap:.5rem}
+.top .left{display:flex;gap:.45rem;align-items:center}
+.ic{width:40px;height:40px;border:none;border-radius:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,var(--card1),var(--card2));box-shadow:var(--sm),var(--hi);color:var(--ink2);transition:transform .12s}
+.ic:active{transform:scale(.9)}
+.ic svg{width:19px;height:19px}
+.streak{display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:999px;font-weight:700;font-size:14px;
+  background:linear-gradient(145deg,var(--gold),#e8941e);color:#3a2200;box-shadow:var(--sm)}
+.crumb{font-size:13px;color:var(--muted);font-weight:700}
+
+/* progress */
+.pbar{height:5px;margin:.5rem 1.1rem .1rem;background:var(--line);border-radius:4px;overflow:hidden}
+.pbar b{display:block;height:100%;width:0;border-radius:4px;background:linear-gradient(90deg,var(--blue2),var(--blue));transition:width .4s}
+
+/* selection pills (only visible when studying) */
+.pills{display:flex;gap:9px;padding:.4rem 1.1rem .1rem}
+.pill{flex:1;border:none;border-radius:13px;padding:.6rem;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink2);
+  background:linear-gradient(145deg,var(--card1),var(--card2));box-shadow:var(--sm),var(--hi);
+  display:flex;align-items:center;justify-content:center;gap:6px;transition:transform .12s}
+.pill:active{transform:scale(.97)}
+.pill svg{width:15px;height:15px;opacity:.8}
+
+/* scroll area */
+.scroll{flex:1;overflow-y:auto;padding:.5rem 1.1rem 1rem;-webkit-overflow-scrolling:touch}
+
+/* the universal card */
+.card{background:linear-gradient(165deg,var(--card1),var(--card2));border-radius:var(--r);
+  box-shadow:var(--su),var(--hi);border:1px solid var(--line);overflow:hidden;
+  transition:transform .45s cubic-bezier(.4,.2,.2,1),opacity .35s}
+.card.swap{opacity:0;transform:translateY(10px) scale(.985)}
+.cardPad{padding:1.4rem 1.2rem}
+
+/* ===== SELECTION MODE ===== */
+.selHead{text-align:center;margin-bottom:1.1rem}
+.selStep{font-size:10px;letter-spacing:.14em;color:var(--blue2);font-weight:800;margin:0 0 .4rem}
+.selTitle{font-size:21px;font-weight:700;color:var(--ink);margin:0}
+.selSub{font-size:13px;color:var(--muted);margin:.3rem 0 0}
+.grid{display:grid;gap:9px}
+.grid.two{grid-template-columns:1fr 1fr}
+.grid.one{grid-template-columns:1fr}
+.opt{border:1px solid var(--line);border-radius:14px;padding:.85rem;cursor:pointer;color:var(--ink2);font-weight:700;font-size:14px;
+  background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));
+  display:flex;align-items:center;gap:9px;transition:transform .12s,border-color .15s,background .15s;text-align:left;min-height:52px}
+[data-theme="light"] .opt{background:linear-gradient(160deg,#fff,#f0f5fc)}
+.opt:active{transform:scale(.98)}
+.opt:hover{border-color:rgba(74,155,255,.4)}
+.opt .fl{font-size:20px;flex:0 0 auto}
+.opt .fl .flag{display:block;border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
+.grid.two .wideOpt{grid-column:1 / -1}
+.opt.center{justify-content:center;text-align:center}
+.opt.section{grid-column:1/-1;background:none;border:none;box-shadow:none;color:var(--blue2);font-size:11px;
+  letter-spacing:.06em;padding:.5rem 0 .1rem;min-height:0;cursor:default;font-weight:800}
+.selBack{background:none;border:none;color:var(--blue2);font-weight:700;font-size:13px;cursor:pointer;padding:.2rem 0;margin-bottom:.6rem;display:inline-flex;align-items:center;gap:5px}
+
+/* ===== STUDY MODE (card content) ===== */
+.badges{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem}
+.lc{display:flex;align-items:center;gap:5px;background:rgba(74,155,255,.16);padding:5px 11px;border-radius:999px;
+  font-size:12px;font-weight:800;color:var(--blue2)}
+.lc svg{width:13px;height:13px}
+.ring{width:42px;height:42px;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--green)}
+.eyebrow{font-size:10px;color:var(--faint);letter-spacing:.13em;font-weight:800;text-align:center;margin:.7rem 0 .35rem}
+.word{font-size:clamp(27px,7.5vw,33px);text-align:center;font-weight:800;color:var(--ink);margin:.1rem 0;line-height:1.15}
+.panel{margin-top:.85rem;border-radius:15px;padding:.7rem .85rem}
+.panel .lab{font-size:10px;letter-spacing:.06em;font-weight:800;margin:0 0 .3rem;display:flex;justify-content:space-between;align-items:center}
+.panel p{margin:0;font-size:14px;line-height:1.5}
+.forms{background:linear-gradient(160deg,rgba(140,114,200,.14),rgba(140,114,200,.06))}
+.forms .lab{color:#a98fd6}
+.forms.noun{background:linear-gradient(160deg,rgba(200,140,70,.14),rgba(200,140,70,.05))}
+.forms.noun .lab{color:#cda06a}
+.lvl{font-size:9px;font-weight:800;color:#c4a8f0;background:rgba(140,114,200,.2);padding:2px 8px;border-radius:999px}
+.fGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:.2rem}
+.fItem{background:rgba(255,255,255,.05);border-radius:9px;padding:.4rem .6rem}
+[data-theme="light"] .fItem{background:rgba(255,255,255,.6)}
+.fItem.wide{grid-column:1/-1}.fItem.active{outline:2px solid rgba(74,155,255,.5);background:rgba(74,155,255,.1)}
+.fItem dt{font-size:9px;color:var(--faint);font-weight:800;margin:0}
+.fItem dd{font-size:14px;color:var(--ink2);font-weight:700;margin:.1rem 0 0}
+.syn{background:linear-gradient(160deg,rgba(74,155,255,.1),rgba(74,155,255,.03))}
+.syn .lab{color:#7fa8e0}.syn p{color:var(--ink2);font-weight:600}
+.ex{background:linear-gradient(160deg,rgba(61,220,151,.12),rgba(61,220,151,.04))}
+.ex .lab{color:#5fc99a}.ex p{color:var(--ink)}.ex b{color:var(--green)}
+.ex .exTr{color:var(--muted);font-size:13px;margin-top:.35rem;font-style:italic}
+[dir="rtl"] .ex .exTr{text-align:right}
+.trans{background:linear-gradient(160deg,rgba(74,155,255,.12),rgba(74,155,255,.04));border:1.5px solid rgba(74,155,255,.18);transition:border-color .3s,box-shadow .3s}
+.trans.speaking{border-color:rgba(74,155,255,.6);box-shadow:0 0 0 3px rgba(74,155,255,.12)}
+.trans .lab{color:#7fa8e0}
+.trans .main{font-size:17px;font-weight:700;color:#9fc2ff;margin:.3rem 0 0}
+.trans .transEx{font-size:14px;color:#cfe0fb;margin:.4rem 0 0;line-height:1.45}
+[dir="rtl"] .trans .transEx{text-align:right}
+.trans .sub{font-size:13px;color:var(--muted);margin:.2rem 0 0}
+.live{display:none;align-items:center;gap:4px;font-size:10px;color:var(--blue2);font-weight:800}
+.trans.speaking .live{display:flex}
+.live .dot{width:6px;height:6px;border-radius:50%;background:var(--blue2);box-shadow:0 0 6px var(--blue2);animation:pl 1s infinite}
+@keyframes pl{0%,100%{opacity:.35}50%{opacity:1}}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:.9rem}
+.sb{min-height:48px;border:none;border-radius:14px;cursor:pointer;font-size:14px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:6px;color:var(--ink2);
+  background:linear-gradient(160deg,var(--card1),var(--card2));box-shadow:var(--sm),var(--hi);transition:transform .12s}
+.sb:active{transform:translateY(1px) scale(.99)}
+.sb.on{background:linear-gradient(160deg,var(--green),#1f7a52);color:#eafff5}
+.sb svg{width:16px;height:16px}
+
+/* player */
+.player{position:sticky;bottom:0;margin:.5rem 1.1rem calc(.7rem + env(safe-area-inset-bottom));
+  display:flex;align-items:center;gap:11px;padding:.6rem .8rem;border-radius:20px;
+  background:linear-gradient(160deg,var(--card1),var(--card2));box-shadow:var(--su),var(--hi)}
+.pbtn{width:42px;height:42px;border:none;border-radius:50%;cursor:pointer;color:var(--ink2);flex:0 0 auto;
+  background:linear-gradient(145deg,var(--card1),var(--card2));box-shadow:var(--sm),var(--hi);
+  display:flex;align-items:center;justify-content:center;transition:transform .12s}
+.pbtn:active{transform:scale(.9)}
+.pbtn svg{width:19px;height:19px}
+.pbtn.main{width:56px;height:56px;color:#fff;background:linear-gradient(145deg,var(--blue2),var(--blue));
+  box-shadow:0 8px 22px rgba(40,100,220,.5),inset 0 2px 0 rgba(255,255,255,.4),inset 0 -3px 6px rgba(0,0,0,.2)}
+.pbtn.main svg{width:26px;height:26px}
+.pmeta{flex:1;min-width:0}
+.pmeta .t{font-size:13px;font-weight:800;color:var(--ink)}
+.pmeta .s{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* tabbar */
+.tabs{display:flex;margin:0 1.1rem calc(.7rem + env(safe-area-inset-bottom));
+  background:linear-gradient(160deg,var(--card1),var(--card2));border-radius:18px;padding:.4rem .3rem;box-shadow:var(--su),var(--hi)}
+.tab{flex:1;border:none;background:none;cursor:pointer;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:.4rem;border-radius:12px;font-size:10px;font-weight:700;transition:color .15s}
+.tab svg{width:20px;height:20px}
+.tab.on{color:var(--blue2)}
+
+/* drawer + scrim + sheet */
+.scrim{position:fixed;inset:0;background:rgba(5,10,20,.55);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100dvh;width:min(86vw,360px);z-index:50;overflow-y:auto;
+  background:linear-gradient(165deg,var(--bg1),var(--bg2));box-shadow:-16px 0 44px rgba(0,0,0,.5);
+  transform:translateX(100%);transition:transform .28s cubic-bezier(.4,.2,.2,1);padding:env(safe-area-inset-top) 1.1rem 1.1rem}
+.drawer.open{transform:translateX(0)}
+[dir="rtl"] .drawer{left:0;right:auto;transform:translateX(-100%)}
+[dir="rtl"] .drawer.open{transform:translateX(0)}
+.dHead{display:flex;justify-content:space-between;align-items:center;padding:1rem 0 .8rem}
+.dHead strong{font-size:18px}
+.grp{margin-bottom:1.2rem}
+.grp h4{font-size:11px;letter-spacing:.06em;color:var(--faint);font-weight:800;margin:0 0 .5rem}
+.oRow{background:linear-gradient(160deg,var(--card1),var(--card2));border-radius:13px;padding:.7rem .85rem;margin-bottom:8px;
+  box-shadow:var(--sm),var(--hi);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.oRow label{font-size:14px;font-weight:700;color:var(--ink2)}
+.oRow select{border:none;border-radius:9px;padding:.4rem .6rem;font-size:13px;font-weight:700;
+  background:rgba(255,255,255,.08);color:var(--ink);appearance:none;-webkit-appearance:none}
+.oRow select option{background:#1a2740;color:#eef3fb}
+[data-theme="light"] .oRow select{background:rgba(20,40,80,.06)}
+[data-theme="light"] .oRow select option{background:#fff;color:#1a2740}
+.oRow input[type=range]{flex:1;min-width:0}
+.oRow output{font-size:13px;font-weight:800;color:var(--blue2);min-width:46px;text-align:right}
+.seg{display:flex;gap:6px;width:100%}
+.seg button{flex:1;border:none;border-radius:10px;padding:.55rem;font-size:12px;font-weight:800;cursor:pointer;
+  background:rgba(255,255,255,.08);color:var(--ink2)}
+[data-theme="light"] .seg button{background:rgba(20,40,80,.06)}
+.seg button.on{background:linear-gradient(145deg,var(--blue2),var(--blue));color:#fff}
+
+/* panel views */
+.pv{position:fixed;inset:0;max-width:440px;margin:0 auto;z-index:35;overflow-y:auto;
+  background:radial-gradient(120% 80% at 50% 0%,var(--bg1),var(--bg2));padding:1.2rem 1.1rem calc(5rem + env(safe-area-inset-bottom))}
+.pvH{display:flex;align-items:center;gap:.5rem;padding:.5rem 0 1rem}
+.pvH strong{font-size:22px}
+.pvBack{background:none;border:none;color:var(--blue2);font-weight:800;font-size:15px;cursor:pointer;padding:0}
+.stat{background:linear-gradient(160deg,var(--card1),var(--card2));border-radius:16px;padding:1rem;margin-bottom:11px;box-shadow:var(--sm),var(--hi)}
+.statRow{display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--line)}
+.statRow:last-child{border:none}.statRow b{color:var(--blue2)}
+.big{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:11px}
+.bigC{background:linear-gradient(160deg,var(--card1),var(--card2));border-radius:16px;padding:1rem;text-align:center;box-shadow:var(--sm),var(--hi)}
+.bigC .n{font-size:28px;font-weight:800}.bigC .l{font-size:12px;color:var(--muted);margin-top:3px}
+.voice{font-size:11px;color:var(--faint);text-align:center;margin:.6rem 1.1rem 0}
+.stamp{text-align:center;font-size:10px;color:var(--faint);opacity:.55;margin:.3rem 0 0}
+[dir="rtl"] .opt,[dir="rtl"] .panel,[dir="rtl"] .pmeta{text-align:right}
+[dir="rtl"] .word,[dir="rtl"] .eyebrow{text-align:center}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
+</style>
 </head>
-<body class="wizardMode">
-<select id="targetLang" hidden>
-<option value="en">Englisch</option><option value="fa">Persisch</option><option value="es">Spanisch</option><option value="ru">Russisch</option><option value="uk">Ukrainisch</option><option value="tr">Türkisch</option><option value="ar">Arabisch</option><option value="kmr">Kurmandschi</option>
-</select>
-<section id="startWizard" class="startWizard" aria-live="polite">
-<section id="wizardLang" class="wizardStep active"><div class="wizardCard languageStartCard"><em class="startVersionTag">v2.0.5</em>
-<div class="brandBlock"><h1>Deutsch Sprache</h1><h2>Wichtige Wörter</h2><h3>telc System</h3><p><em>A1-B2</em></p></div>
-<p class="startSubtitle">Bitte wählen Sie zuerst die Übersetzungssprache.</p>
-<div class="choiceGrid languageChoices compactLangGrid"><button type="button" data-wizard-lang="en">Englisch</button><button type="button" data-wizard-lang="fa">Persisch</button><button type="button" data-wizard-lang="es">Spanisch</button><button type="button" data-wizard-lang="ru">Russisch</button><button type="button" data-wizard-lang="uk">Ukrainisch</button><button type="button" data-wizard-lang="tr">Türkisch</button><button type="button" data-wizard-lang="ar">Arabisch</button><button type="button" data-wizard-lang="kmr" title="Nordkurdisch (Kurmandschi)">Kurmandschi</button></div>
-<p class="wizardInitiative footerCredit">Initiative von: Khalid Noorzad</p></div></section>
-<section id="wizardMaterial" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v2.0.5</em><h2>Lernmaterial wählen</h2><p class="startSubtitle">Wählen Sie den Bereich.</p><div class="materialPairGrid"><button type="button" data-wizard-list="A1">A1</button><button type="button" data-wizard-list="A1 Irregular Verbs">A1 Unregelmäßige Verben</button><button type="button" data-wizard-list="A2">A2</button><button type="button" data-wizard-list="A2 Irregular Verbs">A2 Unregelmäßige Verben</button><button type="button" data-wizard-list="B1">B1</button><button type="button" data-wizard-list="B1 Irregular Verbs">B1 Unregelmäßige Verben</button><button type="button" data-wizard-list="B1 Plus 7 Units">B1+</button><button type="button" data-wizard-list="B1 Plus 7 Units" data-wizard-category="verb">B1+ Unregelmäßige Verben</button><button type="button" data-wizard-list="B2 all 12 units">B2</button><button type="button" data-wizard-list="B2 Irregular Verbs">B2 Unregelmäßige Verben</button></div><button id="materialBack" type="button" class="secondaryBtn wizardBackBtn">Zurück</button></div></section>
-<section id="wizardUnit" class="wizardStep"><div class="wizardCard"><em class="startVersionTag">v2.0.5</em><h2>Einheit wählen</h2><p class="startSubtitle">Standard: alle Einheiten.</p><label class="wizardSelectLabel">Einheit <select id="wizardUnitSelect"><option value="all">Alle Einheiten</option></select></label><p id="wizardUnitNote" class="wizardUnitNote"></p><div class="wizardActionRow"><button id="unitBack" type="button" class="secondaryBtn">Zurück</button><button id="wizardStart" type="button" class="primaryBtn">Karten öffnen</button></div></div></section></section>
-<button id="optionsToggle" type="button" class="optionsToggle" hidden>Optionen</button>
-<header class="hero">
-  <em class="versionBadge">v2.0.5</em>
-  <h1>Deutsch-Karteikarten</h1>
-  <p>B1+ · B2 · Unregelmäßige Verben · Mehrsprachige Übersetzung</p>
-  <p class="initiative"><em>Initiative von: Khalid Noorzad</em></p>
-</header>
-
-<aside id="optionsDrawer" class="optionsDrawer" hidden><button id="closeOptions" type="button" class="closeOptions">Schließen</button><h2>Optionen</h2>
-<section class="optionSection"><h3>Übersetzungssprache wechseln</h3><p class="small">Sie können die Sprache während des Lernens wechseln. Die aktuelle Karte wird sofort in der neuen Sprache angezeigt.</p><div class="optionLanguageGrid"><button type="button" data-change-lang="en">Englisch</button><button type="button" data-change-lang="fa">Persisch</button><button type="button" data-change-lang="es">Spanisch</button><button type="button" data-change-lang="ru">Russisch</button><button type="button" data-change-lang="uk">Ukrainisch</button><button type="button" data-change-lang="tr">Türkisch</button><button type="button" data-change-lang="ar">Arabisch</button><button type="button" data-change-lang="kmr" title="Nordkurdisch (Kurmandschi)">Kurmandschi</button></div></section>
-<section class="optionSection"><label for="posFilterOptions"><strong>Wortart filtern</strong></label><select id="posFilterOptions"><option value="all">Alle</option></select></section>
-<div class="optionActions"><button id="backToLanguage" type="button" class="secondaryBtn">Zur Sprachauswahl</button><button id="backToMaterial" type="button" class="secondaryBtn">Lernmaterial ändern</button><button id="reportProblemBtn" type="button" class="secondaryBtn">Problem melden</button>
-<button id="restartCurrent" type="button" class="secondaryBtn">Aktuelle Karte neu anzeigen</button></div>
-<p id="voiceStatus" class="small voiceStatus">Stimmen werden geladen …</p><p class="footerCredit">Initiative von: Khalid Noorzad</p></aside><div id="drawerBackdrop" class="drawerBackdrop" hidden></div>
-<main class="shell">
-  <section class="study">
-    <article id="card" class="card" tabindex="0" aria-live="polite">
-      <div id="unitBadgeOnCard" class="unitBadgeOnCard" aria-label="Aktuelle Einheit"></div>
-      <div class="cardMain">
-        <p id="frontHint" class="frontHint" hidden></p>
-        <h2 id="frontText">Loading…</h2>
-<div id="v93VerbFormsBelow" class="v93VerbFormsBelow" hidden></div>
-<div id="v83HeadSynonyms" class="v83HeadSynonyms"></div>
-<div id="v82HeadSynonyms" class="v82HeadSynonyms"></div>
-        <p id="frontSub" class="frontSub"></p>
-      </div>
-      <footer id="cardBottom" class="cardBottom">
-        <div>
-          <p id="chipLabel" class="bottomLabel">Synonyms:</p>
-          <p id="frontSynonyms" class="frontSynonyms"></p>
-        </div>
-</footer>
-    </article>
-
-    <section class="quickControls">
-      <div class="progress"><span id="count">0 / 0</span><div><b id="bar"></b></div></div>
-      <div class="playRow"><button id="playList" class="primary">▶ Start</button><button id="pauseList">⏸ Pause</button><button id="stopList">✕ Beenden</button></div>
-      <div class="navRow"><button id="prev">⏮ Zurück</button><button id="flip" class="primary ghost">Umdrehen</button><button id="next">⏭ Weiter</button></div>
-      <button id="speakFront" class="wide">Sichtbaren Text sprechen</button>
-      <p id="nowPlaying" class="now"></p>
-      <p id="speechWarning" class="warning hidden"></p>
-    </section>
-
-    <section id="answer" class="answer hidden">
-      <div class="languageGrid twoLang">
-        <article class="langCard germanCard">
-          <header><h3>Deutsch</h3><button data-say="de">Sprechen</button></header>
-          <p id="de" class="langText deLang"></p>
-          <p id="dePluralLine" class="small strongLine"></p>
-        </article>
-        <article class="langCard targetCard">
-          <header><h3 id="targetTitle">Übersetzung</h3>
-<div id="v83TargetText" class="v80TargetText targetVisible" dir="ltr" lang="en">—</div><button data-say="target">Sprechen</button></header>
-          <p id="en" class="langText"></p>
-          <p id="fa" class="langText hidden" dir="rtl"></p>
-        </article>
-      </div>
-
-      <div class="infoGrid">
-        <article id="nounBox" class="miniCard hidden"><h3>Nomenformen</h3><dl><div><dt>Artikel</dt><dd id="article"></dd></div><div><dt>Singular</dt><dd id="singular"></dd></div><div><dt>Plural</dt><dd id="plural"></dd></div></dl></article>
-        <article id="verbBox" class="miniCard hidden"><h3>Verbformen</h3><dl class="verbForms"><div><dt>Infinitiv</dt><dd id="inf"></dd></div><div><dt>3. Person Präsens</dt><dd id="pres3"></dd></div><div><dt>Präteritum</dt><dd id="past"></dd></div><div><dt>Perfekt</dt><dd id="perf"></dd></div><div><dt>Plusquamperfekt</dt><dd id="plus"></dd></div></dl></article>
-        <article id="synBox" class="miniCard hidden"><h3>Verb-Synonyme</h3><p id="syn" class="synChips"></p></article>
-        <article class="miniCard"><h3>Beispiel</h3><p id="ex"></p></article>
-      </div>
-    </section>
-  </section>
-
-  <aside id="optionsDrawer" class="optionsDrawer" aria-hidden="true">
-  <div class="drawerHead"><strong>Optionen</strong><button type="button" id="optionsClose">Schließen</button></div>
-  <section class="settings">
-    <details open class="startPanel">
-      <summary>Start</summary>
-      <p class="small">Wähle zuerst die Übersetzungssprache und dann den Lernbereich. Danach auf <strong>Abspielen</strong> tippen — die Karten laufen automatisch weiter.</p>
-
-      <label>Zielsprache
-        </label>
-
-      <label>Lernbereich
-        <select id="listFilter">
-          <option value="all">Alle Karten</option>
-          <option value="B1 Plus 7 Units">B1+</option>
-          <option value="B2 all 12 units">B2</option>
-          <option value="B2 Irregular Verbs">B2 Unregelmäßige Verben</option>
-        </select>
-      </label>
-
-      <div class="grid">
-        <label>Einheit
-          <select id="unitFilter"><option value="all">Alle Einheiten</option></select>
-        </label>
-        <label>Teil
-          <select id="partFilter"><option value="all">Alle Teile</option></select>
-        </label>
-      </div>
-
-      <div class="grid">
-        <label>Wortart
-          <select id="typeFilter">
-            <option value="all">Alle Wortarten</option>
-            <option value="noun">Nomen</option>
-            <option value="verb">Verben</option>
-            <option value="adjective">Adjektive</option>
-            <option value="phrase">Ausdrücke</option>
-            <option value="other">Andere</option>
-          </select>
-        </label>
-        <label>Vorderseite
-          <select id="front">
-            <option value="german">Deutsch</option>
-            <option value="translation">Übersetzung</option>
-            <option value="plural">Plural / Verbformen</option>
-            <option value="random">Zufällig</option>
-          </select>
-        </label>
-      </div>
-
-      <label>Suchen
-        <input id="search" type="search" placeholder="Wort suchen...">
-      </label>
-    </details>
-
-    <details open>
-      <summary>Automatische Wiedergabe</summary>
-      <p class="small">Deutsch mit Artikel → Plural/Verbformen → gewählte Zielsprache → nächste Karte.</p>
-      <div class="checks">
-        <label><input type="checkbox" id="playDe" checked> Deutsch</label>
-        <label><input type="checkbox" id="playForms" checked> Formen</label>
-        <label><input type="checkbox" id="playEn" checked> Zielsprache</label>
-        <label class="hidden"><input type="checkbox" id="playFa" checked> Ziel</label>
-      </div>
-      <label>Wiederholen
-        <select id="repeat"><option>1</option><option>2</option><option>3</option></select>
-      </label>
-    </details>
-
-    <div id="autoVoiceHidden" hidden>
-      <p id="deviceInfo">Automatic</p>
-      <span id="voiceDe">Automatic</span>
-      <span id="voiceEn">Automatic</span>
-      <span id="voiceFa">Automatic</span>
-      <span id="onlineStatus">Automatic</span>
-      <select id="voiceSelectDe"></select>
-      <select id="voiceSelectEn"></select>
-      <select id="voiceSelectFa"></select>
-      <span id="dariCandidate">Automatic</span>
-      <button id="scanDariVoices" type="button">Auto</button>
-      <button id="nextDariCandidate" type="button">Auto</button>
-      <button id="unlockSpeech" type="button">Auto</button>
-      <button id="testDe" type="button">Auto</button>
-      <button id="testEn" type="button">Auto</button>
-      <button id="testFa" type="button">Auto</button>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="left">
+      <button class="ic" id="menuBtn" aria-label="Optionen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <button class="ic" id="progBtn" aria-label="Fortschritt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 4-5"/></svg></button>
+      <button class="ic" id="themeBtn" aria-label="Design"></button>
     </div>
-
-    <details><summary>Eigene Karte hinzufügen</summary><form id="addForm"><div class="grid"><label>Wortart<select name="category"><option>noun</option><option>verb</option><option>adjective</option><option>phrase</option><option>other</option></select></label><label>Einheit<input name="unit" placeholder="My list"></label></div><label>Deutsch<input name="german" required></label><div class="grid"><label>Artikel<input name="article" placeholder="der/die/das"></label><label>Plural<input name="plural"></label></div><div class="grid"><label>Englisch<input name="english" required></label><label>Persisch<input name="persian" required dir="rtl"></label></div><details><summary>Verbformen</summary><label>Infinitiv<input name="infinitive"></label><label>Präteritum<input name="past"></label><label>Perfekt<input name="perfect"></label><label>Plusquamperfekt<input name="plusquamperfekt"></label></details><label>Ähnliche Bedeutungen<input name="synonyms" placeholder="three verb synonyms, comma separated"></label><button class="primary">Karte hinzufügen</button></form></details>
-    
-  </section>
-</main>
-
-<script src="data.js?v=2.0.5"></script>
-<script src="audio-manifest.js?v=2.0.5"></script>
-<script id="v2-0-3-cache-reset">
-(function(){
-  var key="v2-0-3-cache-reset-done";
-  async function resetOldCachesOnce(){
-    try{
-      if(localStorage.getItem(key)==="1") return;
-      localStorage.setItem(key,"1");
-      if("caches" in window){
-        var names=await caches.keys();
-        await Promise.all(names.filter(function(n){return !String(n).includes("v2-0")}).map(function(n){return caches.delete(n)}));
-      }
-      if(location.search.indexOf("v=1.2")===-1){
-        location.replace(location.pathname+"?v=2.0.5&fresh="+Date.now());
-      }
-    }catch(e){}
-  }
-  window.addEventListener("load",function(){setTimeout(resetOldCachesOnce,600)});
-})();
-</script>
-
-<script src="app.js?v=2.0.5"></script>
-<script id="v83-controller">
-(function(){
-  window.__v83Controller=true;
-  const $=id=>document.getElementById(id);
-  const CAT_LABEL={verb:'Verben',noun:'Nomen',adjective:'Adjektive',adverb:'Adverbien',phrase:'Phrasen',other:'Sonstige'};
-  const EMPTY=new Set([]);
-  const LANG_META={de:{label:'Deutsch',code:'de-DE',dir:'ltr',rate:.68,voices:['Microsoft Seraphina','Seraphina']},en:{label:'Englisch',code:'en-US',dir:'ltr',rate:.90,voices:['Microsoft Ava','Ava']},fa:{label:'Persisch',code:'fa-IR',dir:'rtl',rate:.84,voices:['Microsoft دلارا','دلارا','Dilara']},es:{label:'Spanisch',code:'es-ES',dir:'ltr',rate:.90,voices:['Microsoft Elvira','Elvira']},ru:{label:'Russisch',code:'ru-RU',dir:'ltr',rate:.84,voices:['Microsoft Светлана','Светлана','Svetlana']},uk:{label:'Ukrainisch',code:'uk-UA',dir:'ltr',rate:.84,voices:['Microsoft Поліна','Поліна','Polina']},tr:{label:'Türkisch',code:'tr-TR',dir:'ltr',rate:.88,voices:['Microsoft Emel','Emel']},ar:{label:'Arabisch',code:'ar-SA',dir:'rtl',rate:.84,voices:['Microsoft Hamed','Microsoft Zariyah','Google العربية','Arabic']},kmr:{label:'Kurmandschi',code:'ku-TR',dir:'ltr',rate:.86,voices:['Kurdish','Kurmanji','Kurmandschi','Kurmancî']}};
-  let selectedLang='en',selectedList='all',selectedUnit='all',selectedCategory='all',selectedMaterialCategory='all',filtered=[],pos=0,playing=false,paused=false,stopped=true,token=0,currentFormIndex=-1,deferredInstallPrompt=null;
-  function cards(){return(window.FLASHCARD_DATA&&window.FLASHCARD_DATA.cards)||[]}
-  function setText(id,val){const el=$(id);if(el)el.textContent=val||'—'}
-  function setSelect(id,val){const el=$(id);if(el)try{el.value=val}catch(e){}}
-  function meta(lang=selectedLang){return LANG_META[lang]||LANG_META.en}
-  function showStep(id){['wizardLang','wizardMaterial','wizardUnit'].forEach(x=>{const el=$(x);if(el){const on=x===id;el.classList.toggle('active',on);el.style.display=on?'block':'none'}})}
-  function displayGerman(c){if(!c)return'';return c.category==='noun'?[c.article,c.singular||c.german].filter(Boolean).join(' '):(c.german||c.singular||'')}
-  function ttsGerman(text){return String(text||'').replace(/\(\s*von\s*\+\s*Dat\.\s*\)/gi,'').replace(/\(\s*für\s*\+\s*Akk\.\s*\)/gi,'').replace(/\(\s*jdn\.\s*\/\s*etw\.\s*\)/gi,'jdn. oder etw.').replace(/\(\s*\+\s*(Akk|Dat)\.\s*\)/gi,'').replace(/\[\s*\+\s*(Akk|Dat)\.\s*\]/gi,'').replace(/\betw\.?\/?/gi,'etwas').replace(/\bjdn\.\b/gi,'jemanden').replace(/\b(Akk|Dat)\.\b/gi,'').replace(/\bÄhnliche Bedeutungen\b/gi,'').replace(/\bLernmaterial ändern\b/gi,'').replace(/\bLangsam\b/gi,'').replace(/\s+/g,' ').trim()}
-  function targetText(c,lang=selectedLang){const tr=(c&&c.translations)||{};return tr[lang]||c.english||''}
-
-  function displayUnitLabel(u){return String(u||'')
-    .replace(/\bUnits\b/g,'Einheiten')
-    .replace(/\bUnit\b/g,'Einheit')
-    .replace(/\ball 12 Einheiten\b/gi,'alle 12 Einheiten')
-    .replace(/\bIrregular Verbs\b/g,'Unregelmäßige Verben')
-    .replace(/\bGeneral\b/g,'Allgemein');}
-  function escOption(s){return String(s??'').replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]||m});}
-  function basePool(){return cards().filter(c=>(selectedList==='all'||c.list===selectedList)&&(selectedUnit==='all'||c.unit===selectedUnit))}
-  function updateFilters(){filtered=basePool().filter(c=>selectedCategory==='all'||c.category===selectedCategory);pos=0}
-  function current(){return filtered[pos]||null} window.current=current;
-  function populateUnits(){const pool=cards().filter(c=>(selectedList==='all'||c.list===selectedList)&&(selectedMaterialCategory==='all'||c.category===selectedMaterialCategory));const units=[...new Set(pool.map(c=>c.unit).filter(Boolean))];const sel=$('wizardUnitSelect');if(sel){sel.innerHTML='<option value="all">Alle Einheiten</option>'+units.map(u=>`<option value="${escOption(u)}">${escOption(displayUnitLabel(u))}</option>`).join('');sel.value='all'}const note=$('wizardUnitNote');if(note)note.textContent=pool.length?`${pool.length} Karten verfügbar.`:(EMPTY.has(selectedList)?'Dieses Lernmaterial ist vorbereitet, aber die Karten wurden noch nicht hochgeladen.':'Noch keine Karten für dieses Material.')}
-  function populatePosFilter(){const sel=$('posFilterOptions');if(!sel)return;const cats=[...new Set(basePool().map(c=>c.category||'other'))];sel.innerHTML='<option value="all">Alle</option>'+cats.map(c=>`<option value="${c}">${CAT_LABEL[c]||c}</option>`).join('');sel.value=selectedCategory}
-  function normalA1Verb(c){return c&&c.list==='A1'&&c.category==='verb'}
-  function req(c){return c&&c.category==='verb'?4:2}
-  function levelKey(c){
-    const list=String((c&&c.list)||"");
-    if(list.indexOf("A1")===0)return"A1";
-    if(list.indexOf("A2")===0)return"A2";
-    if(list.indexOf("B1 Plus")===0)return"B1P";
-    if(list.indexOf("B1")===0)return"B1";
-    if(list.indexOf("B2")===0)return"B2";
-    return"";
-  }
-  function verbFormItems(c){
-    if(!c||c.category!=="verb")return[];
-    const f=c.forms||{};
-    const inf=f.infinitive||c.german||"";
-    const pres=f.present3||"";
-    const past=f.past||"";
-    const perf=f.perfect||"";
-    const plus=f.plusquamperfekt||"";
-    const level=levelKey(c);
-    if(level==="A1"||level==="A2"){
-      return [
-        {label:"Infinitiv:",value:inf},
-        {label:"Präsens:",value:pres},
-        {label:"Perfekt:",value:perf,wide:true}
-      ];
-    }
-    if(level==="B1"){
-      return [
-        {label:"Infinitiv:",value:inf},
-        {label:"Präsens:",value:pres},
-        {label:"Präteritum:",value:past},
-        {label:"Perfekt:",value:perf}
-      ];
-    }
-    if(level==="B1P"||level==="B2"){
-      return [
-        {label:"Infinitiv:",value:inf},
-        {label:"Präsens:",value:pres},
-        {label:"Präteritum:",value:past},
-        {label:"Perfekt:",value:perf},
-        {label:"Plusqp.:",value:plus,wide:true}
-      ];
-    }
-    return [
-      {label:"Infinitiv:",value:inf},
-      {label:"Präsens:",value:pres},
-      {label:"Präteritum:",value:past},
-      {label:"Perfekt:",value:perf},
-      {label:"Plusqp.:",value:plus,wide:true}
-    ];
-  }
-  function formList(c){return verbFormItems(c).map(x=>x.value).filter(v=>v&&String(v).trim()&&String(v).trim()!=="—")}
-  function fitOneLine(el){if(!el)return;const isTarget=el.classList&&el.classList.contains('targetOnCard');el.style.whiteSpace=isTarget?'normal':'nowrap';el.style.overflow='hidden';el.style.textOverflow='clip';let size=isTarget?34:46,min=isTarget?14:15;el.style.fontSize=size+'px';el.style.lineHeight=isTarget?'1.18':'1.06';const avail=Math.max(120,(el.parentElement||el).clientWidth-18);while(size>min&&((isTarget&&el.scrollHeight>Math.max(80,el.parentElement?el.parentElement.clientHeight-20:140))||(!isTarget&&el.scrollWidth>avail))){size--;el.style.fontSize=size+'px'}}
-  function fitHeadword(){fitOneLine($('front'));fitOneLine($('frontText'))}
-  window.addEventListener('resize',()=>setTimeout(fitHeadword,50));
-  function setMode(mode){const card=$('card');if(card)card.dataset.mode=mode;['frontText','en','v83TargetText'].forEach(id=>{const el=$(id);if(el)el.classList.remove('isReading','isActiveSide')});if(mode==='german')['frontText'].forEach(id=>{const el=$(id);if(el)el.classList.add('isReading','isActiveSide')});if(mode==='translation')['frontText','en','v83TargetText'].forEach(id=>{const el=$(id);if(el)el.classList.add('isReading','isActiveSide')})}
-  function ensureVerbBox(){
-    let box=$('v93VerbFormsBelow');
-    if(!box){
-      const anchor=$('frontText')||$('front')||$('card');
-      if(anchor&&anchor.parentElement){
-        box=document.createElement('div');
-        box.id='v93VerbFormsBelow';
-        box.className='v93VerbFormsBelow';
-        anchor.insertAdjacentElement('afterend',box);
-      }
-    }
-    return box;
-  }
-  function renderVerbForms(c){
-    const box=ensureVerbBox&&ensureVerbBox();
-    if(!box)return;
-    if(!c||c.category!=="verb"){box.hidden=true;box.innerHTML="";return;}
-    const esc=s=>String(s||"—").replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]||m});
-    const items=verbFormItems(c);
-    function cell(item,i){
-      const active=currentFormIndex===i?' v2VerbActive':'';
-      const wide=item.wide?' v2VerbWide':'';
-      return '<div class="v2VerbCell'+wide+active+'"><span class="v2VerbLabel">'+item.label+'</span><span class="v2VerbValue">'+esc(item.value||"—")+'</span></div>';
-    }
-    box.hidden=false;
-    box.classList.remove("v1VerbFormsBox");
-    box.classList.add("v2VerbFormsBox","v204VerbFormsBox");
-    box.innerHTML='<div class="v2VerbFormsGrid v204VerbFormsGrid" aria-label="Verbformen">'+items.map(cell).join('')+'</div>';
-  }
-function renderHeadSynonyms(c){
-    const label=document.getElementById("chipLabel");
-    const box=document.getElementById("frontSynonyms");
-    const bottom=document.getElementById("cardBottom");
-    const top1=document.getElementById("v83HeadSynonyms");
-    const top2=document.getElementById("v82HeadSynonyms");
-    const hint=document.getElementById("frontHint");
-    if(hint){hint.textContent="";hint.hidden=true;hint.style.display="none";}
-    if(top1){top1.innerHTML="";top1.hidden=true;}
-    if(top2){top2.innerHTML="";top2.hidden=true;}
-    if(!box||!label)return;
-    const normalize=s=>String(s||"").toLowerCase()
-      .replace(/[ä]/g,"ae").replace(/[ö]/g,"oe").replace(/[ü]/g,"ue").replace(/[ß]/g,"ss")
-      .replace(/\([^)]*\)/g," ").replace(/\b(der|die|das|den|dem|des|ein|eine|einer|einem|einen|sich|jdn|etw|akk|dat)\b/g," ")
-      .replace(/[^a-zA-Z]+/g," ").replace(/\s+/g," ").trim();
-    const forbidden=new Set([c&&c.german,c&&c.singular,c&&c.plural].filter(Boolean).map(normalize));
-    const raw=(c&&c.synonyms_multi&&c.synonyms_multi.de)?c.synonyms_multi.de:(c&&c.synonyms_de?c.synonyms_de:(c&&c.synonyms?c.synonyms:[]));
-    const fallback={
-      verb:["durchführen","erledigen","ausführen","bewältigen"],
-      noun:["Begriff","Bezeichnung","Ausdruck","Terminologie"],
-      adjective:["ähnlich","vergleichbar","entsprechend","gleichartig"],
-      adverb:["ebenfalls","auch","außerdem","zudem"],
-      phrase:["Ausdruck","Wendung","Formulierung","Redewendung"],
-      other:["Begriff","Ausdruck","Form","Variante"]
-    };
-    const clean=[];
-    function add(x){
-      x=String(x||"").trim();
-      if(!x)return;
-      const n=normalize(x);
-      if(!n||forbidden.has(n))return;
-      if(clean.some(y=>normalize(y)===n))return;
-      clean.push(x);
-    }
-    (raw||[]).forEach(add);
-    ((fallback[(c&&c.category)||"other"]||fallback.other)).forEach(add);
-    const shown=clean.slice(0,4);
-    label.textContent="Synonyms:";
-    label.hidden=false;
-    if(!shown.length){box.innerHTML="";if(bottom)bottom.classList.add("hidden");return;}
-    if(bottom)bottom.classList.remove("hidden");
-    box.hidden=false;
-    box.classList.add("v2SynonymsLine","v12SynonymsFixed");
-    const esc=s=>String(s).replace(/[&<>"']/g,function(m){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]||m});
-    box.innerHTML='<span class="v1SynWords">'+shown.map(esc).join(" · ")+'</span>';
-  }
-
-  function renderTarget(c){const m=meta(),text=c?targetText(c):'Dieses Lernmaterial ist vorbereitet. Bitte laden Sie später die Karten hoch.';['en','v83TargetText','v82TargetText','v81TargetText'].forEach(id=>{const el=$(id);if(el){el.textContent=text||'—';el.dir=m.dir;el.lang=selectedLang;el.hidden=false;el.style.display='block';el.style.visibility='visible';el.style.opacity='1';el.classList.add('targetVisible')}});setText('targetTitle',m.label)}
-  function renderEmpty(msg='Keine Karten für diese Filterung'){setText('front','Keine Karten');setText('frontText','Keine Karten');setText('de','Keine Karten');renderTarget(null);setText('v83TargetText',msg);setText('count','0 / 0');setText('nowPlaying',msg);['inf','pres3','past','perf','plus','article','singular','plural','ex'].forEach(id=>setText(id,'—'));const hs=$('v83HeadSynonyms');if(hs)hs.innerHTML='';setMode('german');fitHeadword()}
-  function unitBadgeText(c){
-    if(!c)return"";
-    const raw=String(c.unit||c.list||"").trim();
-    const m=raw.match(/(?:Unit|Einheit)\s*[- ]?\s*(\d+)/i);
-    if(m)return "(Einheit-"+m[1]+")";
-    if(/Irregular Verbs|Unregelmäßige Verben/i.test(raw))return "(Unregelmäßige Verben)";
-    return raw?"("+displayUnitLabel(raw)+")":"";
-  }
-  function updateUnitBadge(c){
-    const el=$("unitBadgeOnCard");
-    if(!el)return;
-    const txt=unitBadgeText(c);
-    el.textContent=txt;
-    el.hidden=!txt;
-  }
-  function renderCard(mode='german'){
-    const c=current();
-    if(!c){renderEmpty();return}
-    const german=displayGerman(c);
-    const target=targetText(c);
-    const m=meta();
-    updateUnitBadge(c);
-    const faceText=mode==='translation'?(target||'—'):german;
-    const faceLang=mode==='translation'?selectedLang:'de';
-    const faceDir=mode==='translation'?(m.dir||'ltr'):'ltr';
-    setText('frontText',faceText);
-    const ft=$('frontText');
-    if(ft){ft.dir=faceDir;ft.lang=faceLang;ft.classList.toggle('targetOnCard',mode==='translation')}
-    const sub=$('frontSub');
-    if(sub){sub.textContent=mode==='translation'?m.label:'';sub.dir='ltr';sub.lang='de'}
-    setText('de',german);
-    renderTarget(c);
-    setText('count',`${filtered.length?pos+1:0} / ${filtered.length}`);
-    setText('nowPlaying',mode==='translation'?`${m.label}: ${target}`:`Deutsch: ${german}`);
-    const f=c.forms||{};
-    setText('inf',f.infinitive||(c.category==='verb'?c.german:''));
-    if(normalA1Verb(c)){setText('pres3','—');setText('past','—');setText('perf','—');setText('plus','—')}else{setText('pres3',f.present3);setText('past',f.past);setText('perf',f.perfect);setText('plus',f.plusquamperfekt)}
-    setText('article',c.article);
-    setText('singular',c.singular||c.german);
-    setText('plural',c.plural);
-    setText('ex',c.example);
-    renderVerbForms(c);
-    renderHeadSynonyms(c);
-    setMode(mode);
-    setTimeout(fitHeadword,30);
-  }
-  window.renderCard=renderCard;
-  function estimateDuration(text){const len=String(text||'').length;return Math.max(1000,Math.min(8000,550+len*65))}
-  function pickVoice(lang){if(!('speechSynthesis'in window))return null;const m=meta(lang),vs=speechSynthesis.getVoices()||[],wanted=m.voices||[];const byName=vs.find(v=>wanted.some(w=>((v.name||'')+' '+(v.voiceURI||'')).toLowerCase().includes(w.toLowerCase())));if(byName)return byName;const base=m.code.split('-')[0].toLowerCase();const good=vs.filter(v=>{const l=(v.lang||'').toLowerCase(),n=((v.name||'')+' '+(v.voiceURI||'')).toLowerCase();if(/novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/.test(n))return false;return l===m.code.toLowerCase()||l.startsWith(base)});return good.find(v=>/microsoft|google|apple|siri|enhanced|premium|natural|neural/i.test((v.name||'')+' '+(v.voiceURI||'')))||good[0]||null}
-  let v2SharedAudio=null;
-  let v2AudioUnlocked=false;
-  function v2AudioElement(){
-    if(!v2SharedAudio){
-      v2SharedAudio=new Audio();
-      v2SharedAudio.preload="auto";
-      v2SharedAudio.setAttribute("playsinline","");
-      v2SharedAudio.setAttribute("webkit-playsinline","");
-    }
-    return v2SharedAudio;
-  }
-  function unlockPersischAudio(){
-    try{
-      const a=v2AudioElement();
-      if(v2AudioUnlocked)return;
-      a.muted=true;
-      a.src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACcQCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg";
-      const p=a.play();
-      if(p&&p.then)p.then(()=>{try{a.pause()}catch(e){}a.muted=false;v2AudioUnlocked=true;}).catch(()=>{a.muted=false;});
-      else {a.muted=false;v2AudioUnlocked=true;}
-    }catch(e){}
-  }
-  ["click","touchstart","pointerdown","keydown"].forEach(ev=>{
-    document.addEventListener(ev, unlockPersischAudio, {once:false, passive:true});
-  });
-  function persischAudioUrl(c){
-    if(!c)return"";
-    const pack=(window.PREGENERATED_AUDIO&&window.PREGENERATED_AUDIO.fa)||null;
-    const id=c.id||"";
-    const direct=c.audio_fa||((c.audio&&c.audio.fa)||"");
-    const mapped=(pack&&pack.items&&id&&pack.items[id])?pack.items[id]:"";
-    const url=direct||mapped;
-    if(!url)return"";
-    const base=(pack&&pack.basePath)||"";
-    return base+url;
-  }
-  function playAudioFile(url,myToken){
-    return new Promise(resolve=>{
-      if(!url||stopped||paused||myToken!==token){resolve(false);return}
-      let done=false;
-      const a=v2AudioElement();
-      const finish=ok=>{
-        if(!done){
-          done=true;
-          clearTimeout(timer);
-          a.onended=a.onerror=a.onabort=null;
-          try{a.pause();}catch(e){}
-          resolve(!!ok);
-        }
-      };
-      const timer=setTimeout(()=>finish(false),25000);
-      a.onended=()=>finish(true);
-      a.onerror=()=>finish(false);
-      a.onabort=()=>finish(false);
-      try{
-        a.muted=false;
-        a.src=url+(url.indexOf("?")===-1?"?":"&")+"av=2.0";
-        a.load();
-        const p=a.play();
-        if(p&&p.catch)p.catch(()=>finish(false));
-      }catch(e){finish(false)}
-    });
-  }
-  function speak(text,lang,myToken){
-    return new Promise(resolve=>{
-      let out=lang==="de"?ttsGerman(text):String(text||"");
-      if(!out||stopped||paused||myToken!==token){resolve(false);return}
-      const c=current&&current();
-      if(lang==="fa"){
-        const audioUrl=persischAudioUrl(c);
-        if(audioUrl){
-          playAudioFile(audioUrl,myToken).then(ok=>{
-            if(ok){resolve(true);return}
-            browserSpeak(out,lang,myToken).then(resolve);
-          });
-          return;
-        }
-      }
-      browserSpeak(out,lang,myToken).then(resolve);
-    });
-  }
-  function browserSpeak(out,lang,myToken){
-    return new Promise(resolve=>{
-      if(!out||stopped||paused||myToken!==token){resolve(false);return}
-      if(!("speechSynthesis" in window)){resolve(false);return}
-      let done=false;
-      const finish=()=>{if(!done){done=true;clearTimeout(timer);resolve(true)}};
-      const m=meta(lang),u=new SpeechSynthesisUtterance(out);
-      u.lang=m.code;
-      const v=pickVoice(lang);
-      if(v){u.voice=v;u.lang=v.lang||m.code}
-      u.rate=m.rate;u.pitch=1;u.volume=1;
-      u.onend=finish;u.onerror=finish;
-      const timer=setTimeout(finish,estimateDuration(out)+1400);
-      try{speechSynthesis.resume&&speechSynthesis.resume();speechSynthesis.speak(u)}catch(e){finish()}
-    });
-  }
-  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-  async function playOne(myToken){
-    const c=current();
-    if(!c)return;
-    try{speechSynthesis.cancel()}catch(e){}
-    currentFormIndex=-1;
-    renderCard('german');
-    await sleep(160);
-    await speak(displayGerman(c),'de',myToken);
-    if(stopped||paused||myToken!==token)return;
-
-    const forms=formList(c);
-    if(forms.length){
-      for(let i=0;i<forms.length;i++){
-        if(stopped||paused||myToken!==token)return;
-        currentFormIndex=i;
-        renderCard('german');
-        setText('nowPlaying',`Form: ${forms[i]}`);
-        await sleep(150);
-        await speak(forms[i],'de',myToken);
-      }
-    }
-
-    currentFormIndex=-1;
-    renderCard('translation');
-    await sleep(260);
-    if(stopped||paused||myToken!==token)return;
-    renderCard('translation');
-    await speak(targetText(c),selectedLang,myToken);
-  }
-  async function playLoop(){if(!filtered.length){renderEmpty();return}playing=true;paused=false;stopped=false;const myToken=++token;while(playing&&!paused&&!stopped&&myToken===token&&filtered.length){await playOne(myToken);if(!playing||paused||stopped||myToken!==token)break;pos=(pos+1)%filtered.length;renderCard('german');await sleep(700)}}
-  window.playList=playLoop;window.playSelected=()=>{if(!filtered.length)updateFilters();stopped=false;paused=false;playing=false;const myToken=++token;playOne(myToken)}
-  function pausePlayback(){paused=true;playing=false;token++;try{speechSynthesis.pause&&speechSynthesis.pause();speechSynthesis.cancel()}catch(e){}setText('nowPlaying','Pause')}
-  function openOptions(){populatePosFilter();const d=$('optionsDrawer'),b=$('drawerBackdrop');if(d){d.hidden=false;d.classList.add('open');d.style.display='block'}if(b){b.hidden=false;b.style.display='block'}}
-  function closeOptions(){const d=$('optionsDrawer'),b=$('drawerBackdrop');if(d){d.hidden=true;d.classList.remove('open');d.style.display='none'}if(b){b.hidden=true;b.style.display='none'}}
-  function exitToMaterial(){stopped=true;paused=false;playing=false;token++;try{speechSynthesis.cancel()}catch(e){}closeOptions();const w=$('startWizard'),o=$('optionsToggle');document.body.classList.add('wizardMode');document.body.classList.remove('appReady');if(w)w.hidden=false;if(o)o.hidden=true;showStep('wizardMaterial')}
-  function returnToLanguage(){exitToMaterial();showStep('wizardLang')}
-  function changeLanguageDuringLearning(lang){selectedLang=lang;setSelect('targetLang',selectedLang);try{localStorage.setItem('targetLang',selectedLang)}catch(e){}closeOptions();const was=playing&&!paused&&!stopped,c=current();renderCard('translation');setText('nowPlaying',`${meta().label}: ${c?targetText(c):''}`);if(was){token++;try{speechSynthesis.cancel()}catch(e){}const myToken=++token;stopped=false;paused=false;playing=true;(async()=>{await sleep(120);await speak(targetText(c),selectedLang,myToken);if(playing&&!paused&&!stopped&&myToken===token&&filtered.length){pos=(pos+1)%filtered.length;renderCard('german');await sleep(500);playLoop()}})()}}
-  function applyPosFilter(cat){selectedCategory=cat||'all';updateFilters();if(!filtered.length)renderEmpty('Keine Karten für diese Filterung');else renderCard('german')}
-  function restartCurrent(){closeOptions();stopped=true;paused=false;updateFilters();renderCard('german');setText('nowPlaying','')}
-  function enterApp(){selectedUnit=$('wizardUnitSelect')?$('wizardUnitSelect').value:'all';selectedCategory=selectedMaterialCategory||'all';setSelect('unitFilter',selectedUnit||'all');setSelect('listFilter',selectedList);setSelect('targetLang',selectedLang);setSelect('typeFilter',selectedCategory||'all');updateFilters();const w=$('startWizard'),o=$('optionsToggle');document.body.classList.remove('wizardMode');document.body.classList.add('appReady');if(w)w.hidden=true;if(o){o.hidden=false;o.style.display='inline-flex'}try{if(typeof window.apply==='function')window.apply()}catch(e){}stopped=true;paused=false;playing=false;renderCard('german');if(filtered.length)setText('nowPlaying','')}
-  function boot(){document.body.classList.add('wizardMode');document.body.classList.remove('appReady');const w=$('startWizard'),o=$('optionsToggle');if(w)w.hidden=false;if(o)o.hidden=true;showStep('wizardLang');closeOptions();try{speechSynthesis&&speechSynthesis.getVoices()}catch(e){}setupInstallPrompt()}
-  function setupInstallPrompt(){if(localStorage.getItem('hasPromptedInstall'))return;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;const b=$('installBanner');if(b)b.hidden=false});}
-  document.addEventListener('click',ev=>{const langBtn=ev.target.closest&&ev.target.closest('[data-wizard-lang]');if(langBtn){ev.preventDefault();selectedLang=langBtn.getAttribute('data-wizard-lang')||'en';setSelect('targetLang',selectedLang);showStep('wizardMaterial');return false}const matBtn=ev.target.closest&&ev.target.closest('[data-wizard-list]');if(matBtn){ev.preventDefault();selectedList=matBtn.getAttribute('data-wizard-list')||'all';selectedMaterialCategory=matBtn.getAttribute('data-wizard-category')||'all';selectedCategory=selectedMaterialCategory;populateUnits();showStep('wizardUnit');return false}const change=ev.target.closest&&ev.target.closest('[data-change-lang]');if(change){ev.preventDefault();changeLanguageDuringLearning(change.getAttribute('data-change-lang')||'en');return false}if(ev.target.closest&&ev.target.closest('#posFilterOptions'))return;if(ev.target.closest&&ev.target.closest('#materialBack')){ev.preventDefault();showStep('wizardLang');return false}if(ev.target.closest&&ev.target.closest('#unitBack')){ev.preventDefault();showStep('wizardMaterial');return false}if(ev.target.closest&&ev.target.closest('#wizardStart')){ev.preventDefault();unlockPersischAudio&&unlockPersischAudio();enterApp();return false}if(ev.target.closest&&ev.target.closest('#optionsToggle')){ev.preventDefault();openOptions();return false}if(ev.target.closest&&ev.target.closest('#closeOptions')){ev.preventDefault();closeOptions();return false}if(ev.target.closest&&ev.target.closest('#drawerBackdrop')){ev.preventDefault();closeOptions();return false}if(ev.target.closest&&ev.target.closest('#backToLanguage')){ev.preventDefault();returnToLanguage();return false}if(ev.target.closest&&ev.target.closest('#backToMaterial')){ev.preventDefault();exitToMaterial();return false}if(ev.target.closest&&ev.target.closest('#restartCurrent')){ev.preventDefault();restartCurrent();return false}if(ev.target.closest&&ev.target.closest('#playList')){ev.preventDefault();unlockPersischAudio&&unlockPersischAudio();stopped=false;paused=false;playLoop()}if(ev.target.closest&&ev.target.closest('#pauseList')){ev.preventDefault();pausePlayback()}if(ev.target.closest&&ev.target.closest('#stopList')){ev.preventDefault();exitToMaterial()}if(ev.target.closest&&ev.target.closest('#next')){ev.preventDefault();stopped=true;token++;if(filtered.length){pos=(pos+1)%filtered.length;renderCard('german');setText('nowPlaying','')}}if(ev.target.closest&&ev.target.closest('#prev')){ev.preventDefault();stopped=true;token++;if(filtered.length){pos=(pos-1+filtered.length)%filtered.length;renderCard('german');setText('nowPlaying','')}}if(ev.target.closest&&ev.target.closest('#installAccept')){ev.preventDefault();localStorage.setItem('hasPromptedInstall','1');const b=$('installBanner');if(b)b.hidden=true;if(deferredInstallPrompt){deferredInstallPrompt.prompt();deferredInstallPrompt=null}}if(ev.target.closest&&ev.target.closest('#installLater')){ev.preventDefault();localStorage.setItem('hasPromptedInstall','1');const b=$('installBanner');if(b)b.hidden=true}},true);
-  document.addEventListener('change',ev=>{if(ev.target&&ev.target.id==='posFilterOptions')applyPosFilter(ev.target.value)},true);
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-})();
-</script>
-<div id="installBanner" class="installBanner" hidden><span>Möchten Sie diese App auf Ihrem Startbildschirm installieren?</span><button id="installAccept" type="button">Installieren</button><button id="installLater" type="button">Später</button></div>
-<section id="problemReportView" class="problemReportView" hidden aria-hidden="true">
-  <div class="problemReportCard" role="dialog" aria-modal="true" aria-labelledby="problemReportHeading">
-    <h2 id="problemReportHeading">Problem melden</h2>
-
-    <label class="problemReportLabel" for="problemSubject">Betreff</label>
-    <input id="problemSubject" class="problemSubject" type="text" placeholder="Betreff des Problems">
-
-    <label class="problemReportLabel" for="problemSummary">Zusammenfassung</label>
-    <textarea id="problemSummary" rows="7" placeholder="Beschreiben Sie Ihr Problem hier..."></textarea>
-
-    <div id="problemReportFormActions" class="problemReportActions">
-      <button id="submitProblemReport" type="button" class="primaryBtn">Absenden</button>
-    </div>
-
-    <p id="problemReportThanks" class="problemReportThanks" hidden>Vielen Dank für Ihr Feedback. Vielen Dank für die Meldung des Problems, wir werden uns schnellstmöglich darum kümmern.</p>
-
-    <div id="problemReportBackActions" class="problemReportActions" hidden>
-      <button id="backFromProblemReport" type="button" class="secondaryBtn">Zurück</button>
-    </div>
+    <span class="streak"><span id="streakFire">🔥</span><span id="streak">1</span></span>
   </div>
-</section>
-<script id="v85-report-problem-fix">
+  <div class="pbar"><b id="bar"></b></div>
+
+  <!-- selection pills: shown only in study mode -->
+  <div class="pills" id="pills" style="display:none">
+    <button class="pill" id="pillLang"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18"/></svg><span id="pillLangLabel">—</span></button>
+    <button class="pill" id="pillLevel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/></svg><span id="pillLevelLabel">—</span></button>
+  </div>
+
+  <div class="scroll">
+    <div class="card" id="card"><div class="cardPad" id="cardPad"></div></div>
+    <p class="voice" id="voiceStatus"></p>
+    <p class="stamp">Build v22 · 7 Sprachen · Audio</p>
+  </div>
+
+  <div class="player" id="player" style="display:none">
+    <button class="pbtn" id="prev" aria-label="Zurück"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zM20 6v12l-9-6z"/></svg></button>
+    <button class="pbtn main" id="toggle" aria-label="Play"><svg id="toggleIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+    <button class="pbtn" id="next" aria-label="Weiter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM4 6l9 6-9 6z"/></svg></button>
+    <div class="pmeta"><div class="t" id="pmTitle">—</div><div class="s" id="pmSub">—</div></div>
+  </div>
+
+  <nav class="tabs" id="tabs" style="display:none">
+    <button class="tab on" data-tab="learn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg><span id="tabLearn">Lernen</span></button>
+    <button class="tab" data-tab="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 4-5"/></svg><span id="tabProgress">Fortschritt</span></button>
+    <button class="tab" data-tab="marked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span id="tabMarked">Markiert</span></button>
+    <button class="tab" data-tab="options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.6-2-3.4-2.4 1a7 7 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a7 7 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7 7 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7 7 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6a7 7 0 0 0 .1-1z"/></svg><span id="tabOptions">Optionen</span></button>
+  </nav>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dHead"><strong id="optTitle">Optionen</strong><button class="ic" id="drawerClose" aria-label="Schließen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="grp">
+    <h4 id="grpPlayback">WIEDERGABE</h4>
+    <div class="oRow" style="flex-direction:column;align-items:stretch">
+      <div class="seg" id="repeatSeg"><button data-mode="list" class="on" id="segList">Liste endlos</button><button data-mode="card" id="segCard">Karte wdh.</button><button data-mode="once" id="segOnce">Einmal</button></div>
+    </div>
+    <div class="oRow"><label id="lblTempo">Tempo</label><input type="range" id="rate" min="60" max="120" step="5" value="100"><output id="rateOut">100%</output></div>
+    <div class="oRow"><label id="lblPause">Pause</label><input type="range" id="gap" min="200" max="2500" step="100" value="500"><output id="gapOut">0,5s</output></div>
+    <div class="oRow"><label id="lblAudioSrc">Audio</label>
+      <div class="seg" id="audioSeg" style="max-width:200px"><button data-audio="mp3" class="on" id="segMp3">MP3</button><button data-audio="tts" id="segTts">Gerät</button></div></div>
+  </div>
+  <div class="grp">
+    <h4 id="grpAppearance">DARSTELLUNG</h4>
+    <div class="oRow"><label id="lblUILang">App-Sprache</label>
+      <select id="uiLangSel"><option value="auto" id="optAutoUI">Wie Übersetzung</option><option value="de">Deutsch</option><option value="en">English</option><option value="fa">فارسی</option><option value="ar">العربية</option><option value="es">Español</option><option value="ru">Русский</option><option value="uk">Українська</option><option value="tr">Türkçe</option></select></div>
+    <div class="oRow"><label id="lblDesign">Design</label>
+      <div class="seg" id="themeSeg" style="max-width:160px"><button data-t="light" id="segLight">Hell</button><button data-t="dark" id="segDark">Dunkel</button></div></div>
+  </div>
+  <div class="grp">
+    <button id="restart" style="width:100%;border:none;border-radius:13px;padding:.8rem;font-weight:800;font-size:14px;cursor:pointer;background:linear-gradient(145deg,var(--blue2),var(--blue));color:#fff;box-shadow:var(--su)"><span id="restartLabel">Neu wählen</span></button>
+  </div>
+</aside>
+
+<div class="pv" id="progressView" style="display:none">
+  <div class="pvH"><button class="pvBack" data-back="learn">‹</button><strong id="progressTitle">Fortschritt</strong></div>
+  <div id="progressBody"></div>
+</div>
+<div class="pv" id="markedView" style="display:none">
+  <div class="pvH"><button class="pvBack" data-back="learn">‹</button><strong id="markedTitle">Markiert</strong></div>
+  <div id="markedBody"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="integration.js"></script>
+<script>
+const UI={
+  de:{"appTitle":"Deutsch lernen","chooseLang":"In welcher Sprache möchten Sie übersetzen?","area":"Lernbereich","chooseLevel":"Wählen Sie Ihr Niveau.","backLang":"‹ Sprache","irregular":"⚡ Unregelmäßige Verben","flip":"Umdrehen","mastered":"Gemeistert","autoloop":"Auto-Loop","running":"läuft weiter","tabLearn":"Lernen","tabProgress":"Fortschritt","tabMarked":"Markiert","tabOptions":"Optionen","back":"‹ Zurück","progress":"Fortschritt","markedWords":"Markierte Wörter","options":"Optionen","playback":"WIEDERGABE","tempo":"Tempo","pauseCards":"Pause zw. Karten","langContent":"SPRACHE & INHALT","translation":"Übersetzung","audioSrc":"Audio-Quelle","autoUI":"Wie Übersetzung","audioDevice":"Gerät","chooseUnit":"Wählen Sie eine Einheit.","allUnits":"Alle Einheiten","unit":"Einheit","appearance":"DARSTELLUNG","design":"Design","light":"Hell","dark":"Dunkel","switchLang":"SPRACHE WECHSELN","switchLevel":"LERNBEREICH WECHSELN","topHeard":"AM HÄUFIGSTEN GEHÖRT","masteredN":"Gemeistert","inProgress":"In Arbeit","totalHeard":"Gehört gesamt","streak":"Streak","synonyms":"SYNONYME","example":"BEISPIEL","verbForms":"VERBFORMEN","nounForms":"NOMENFORMEN","uiLangLabel":"App-Sprache","listEndless":"Liste endlos","repeatCard":"Karte wdh.","once":"Einmal","days":"Tage","nothingHeard":"Noch nichts gehört","noMarked":"Noch keine Wörter markiert.","voice":"Stimme","germanWord":"DEUTSCH","speaking":"spricht…","fArticle":"Artikel","fSingular":"Singular","fPlural":"Plural","fInfinitive":"Infinitiv","fPresent":"Präsens","fPast":"Präteritum","fPerfect":"Perfekt","fPlus":"Plusquamperfekt","voiceLabel":"Stimme","step1":"SCHRITT 1 · SPRACHE","step2":"SCHRITT 2 · ART","step3":"SCHRITT 3 · NIVEAU","back2":"Zurück","materialType":"Lernmaterial","vocabType":"Wortschatz","irregularType":"Unregelmäßige Verben","restart":"Neu wählen","backToSelect":"Buch / Bereich neu wählen"},
+  en:{"appTitle":"Learn German","chooseLang":"Which language do you want to translate into?","area":"Study area","chooseLevel":"Choose your level.","backLang":"‹ Language","irregular":"⚡ Irregular verbs","flip":"Flip","mastered":"Mastered","autoloop":"Auto-loop","running":"keeps playing","tabLearn":"Learn","tabProgress":"Progress","tabMarked":"Marked","tabOptions":"Options","back":"‹ Back","progress":"Progress","markedWords":"Marked words","options":"Options","playback":"PLAYBACK","tempo":"Speed","pauseCards":"Pause between cards","langContent":"LANGUAGE & CONTENT","translation":"Translation","audioSrc":"Audio source","autoUI":"Same as translation","audioDevice":"Device","chooseUnit":"Choose a unit.","allUnits":"All units","unit":"Unit","appearance":"APPEARANCE","design":"Theme","light":"Light","dark":"Dark","switchLang":"SWITCH LANGUAGE","switchLevel":"SWITCH STUDY AREA","topHeard":"MOST LISTENED","masteredN":"Mastered","inProgress":"In progress","totalHeard":"Total heard","streak":"Streak","synonyms":"SYNONYMS","example":"EXAMPLE","verbForms":"VERB FORMS","nounForms":"NOUN FORMS","uiLangLabel":"App language","listEndless":"Loop list","repeatCard":"Repeat card","once":"Once","days":"days","nothingHeard":"Nothing heard yet","noMarked":"No words marked yet.","voice":"Voice","germanWord":"GERMAN","speaking":"speaking…","fArticle":"Article","fSingular":"Singular","fPlural":"Plural","fInfinitive":"Infinitive","fPresent":"Present","fPast":"Past","fPerfect":"Perfect","fPlus":"Past perfect","voiceLabel":"Voice","step1":"STEP 1 · LANGUAGE","step2":"STEP 2 · TYPE","step3":"STEP 3 · LEVEL","back2":"Back","materialType":"Material","vocabType":"Vocabulary","irregularType":"Irregular verbs","restart":"Choose again","backToSelect":"Choose book / area again"},
+  fa:{"appTitle":"آموزش آلمانی","chooseLang":"به چه زبانی ترجمه شود؟","area":"بخش یادگیری","chooseLevel":"سطح خود را انتخاب کنید.","backLang":"‹ زبان","irregular":"⚡ افعال بی‌قاعده","flip":"برگرداندن","mastered":"یادگرفته","autoloop":"پخش خودکار","running":"ادامه می‌یابد","tabLearn":"یادگیری","tabProgress":"پیشرفت","tabMarked":"نشان‌شده","tabOptions":"تنظیمات","back":"‹ بازگشت","progress":"پیشرفت","markedWords":"کلمات نشان‌شده","options":"تنظیمات","playback":"پخش","tempo":"سرعت","pauseCards":"مکث بین کارت‌ها","langContent":"زبان و محتوا","translation":"ترجمه","audioSrc":"منبع صدا","autoUI":"مانند ترجمه","audioDevice":"دستگاه","chooseUnit":"یک واحد را انتخاب کنید.","allUnits":"همه واحدها","unit":"واحد","appearance":"نمایش","design":"طرح","light":"روشن","dark":"تیره","switchLang":"تغییر زبان","switchLevel":"تغییر بخش","topHeard":"بیشترین شنیده‌شده","masteredN":"یادگرفته","inProgress":"در حال یادگیری","totalHeard":"کل شنیده‌شده","streak":"پیاپی","synonyms":"مترادف‌ها","example":"مثال","verbForms":"صرف فعل","nounForms":"حالت‌های اسم","uiLangLabel":"زبان برنامه","listEndless":"تکرار لیست","repeatCard":"تکرار کارت","once":"یک‌بار","days":"روز","nothingHeard":"هنوز چیزی شنیده نشده","noMarked":"هنوز کلمه‌ای نشان نشده.","voice":"صدا","germanWord":"آلمانی","speaking":"در حال خواندن…","fArticle":"حرف تعریف","fSingular":"مفرد","fPlural":"جمع","fInfinitive":"مصدر","fPresent":"حال","fPast":"گذشته","fPerfect":"ماضی نقلی","fPlus":"ماضی بعید","voiceLabel":"صدا","step1":"گام ۱ · زبان","step2":"گام ۲ · نوع","step3":"گام ۳ · سطح","back2":"بازگشت","materialType":"مواد آموزشی","vocabType":"واژگان","irregularType":"افعال بی‌قاعده","restart":"انتخاب دوباره","backToSelect":"انتخاب دوباره کتاب / بخش"},
+  ar:{"appTitle":"تعلم الألمانية","chooseLang":"إلى أي لغة تريد الترجمة؟","area":"مجال الدراسة","chooseLevel":"اختر مستواك.","backLang":"‹ اللغة","irregular":"⚡ الأفعال الشاذة","flip":"اقلب","mastered":"متقَن","autoloop":"تشغيل تلقائي","running":"يستمر","tabLearn":"تعلّم","tabProgress":"التقدم","tabMarked":"محدد","tabOptions":"الإعدادات","back":"‹ رجوع","progress":"التقدم","markedWords":"الكلمات المحددة","options":"الإعدادات","playback":"التشغيل","tempo":"السرعة","pauseCards":"توقف بين البطاقات","langContent":"اللغة والمحتوى","translation":"الترجمة","audioSrc":"مصدر الصوت","autoUI":"مثل الترجمة","audioDevice":"الجهاز","chooseUnit":"اختر وحدة.","allUnits":"كل الوحدات","unit":"وحدة","appearance":"المظهر","design":"السمة","light":"فاتح","dark":"داكن","switchLang":"تغيير اللغة","switchLevel":"تغيير المجال","topHeard":"الأكثر استماعًا","masteredN":"متقَن","inProgress":"قيد التعلم","totalHeard":"إجمالي الاستماع","streak":"متتالية","synonyms":"المرادفات","example":"مثال","verbForms":"تصريف الفعل","nounForms":"صيغ الاسم","uiLangLabel":"لغة التطبيق","listEndless":"تكرار القائمة","repeatCard":"تكرار البطاقة","once":"مرة","days":"أيام","nothingHeard":"لا شيء بعد","noMarked":"لا كلمات محددة بعد.","voice":"الصوت","germanWord":"الألمانية","speaking":"يقرأ…","fArticle":"أداة التعريف","fSingular":"مفرد","fPlural":"جمع","fInfinitive":"المصدر","fPresent":"المضارع","fPast":"الماضي","fPerfect":"الماضي التام","fPlus":"الماضي الأسبق","voiceLabel":"الصوت","step1":"الخطوة ١ · اللغة","step2":"الخطوة ٢ · النوع","step3":"الخطوة ٣ · المستوى","back2":"رجوع","materialType":"المادة","vocabType":"المفردات","irregularType":"الأفعال الشاذة","restart":"اختيار من جديد","backToSelect":"اختيار الكتاب / المجال"},
+  es:{"appTitle":"Aprender alemán","chooseLang":"¿A qué idioma quieres traducir?","area":"Área de estudio","chooseLevel":"Elige tu nivel.","backLang":"‹ Idioma","irregular":"⚡ Verbos irregulares","flip":"Girar","mastered":"Dominado","autoloop":"Reproducción automática","running":"continúa","tabLearn":"Aprender","tabProgress":"Progreso","tabMarked":"Marcado","tabOptions":"Opciones","back":"‹ Atrás","progress":"Progreso","markedWords":"Palabras marcadas","options":"Opciones","playback":"REPRODUCCIÓN","tempo":"Velocidad","pauseCards":"Pausa entre tarjetas","langContent":"IDIOMA Y CONTENIDO","translation":"Traducción","audioSrc":"Fuente de audio","autoUI":"Igual que traducción","audioDevice":"Dispositivo","chooseUnit":"Elige una unidad.","allUnits":"Todas las unidades","unit":"Unidad","appearance":"APARIENCIA","design":"Tema","light":"Claro","dark":"Oscuro","switchLang":"CAMBIAR IDIOMA","switchLevel":"CAMBIAR ÁREA","topHeard":"MÁS ESCUCHADAS","masteredN":"Dominadas","inProgress":"En progreso","totalHeard":"Total escuchado","streak":"Racha","synonyms":"SINÓNIMOS","example":"EJEMPLO","verbForms":"FORMAS VERBALES","nounForms":"FORMAS DEL SUSTANTIVO","uiLangLabel":"Idioma de la app","listEndless":"Bucle de lista","repeatCard":"Repetir tarjeta","once":"Una vez","days":"días","nothingHeard":"Nada escuchado aún","noMarked":"Aún no hay palabras marcadas.","voice":"Voz","germanWord":"ALEMÁN","speaking":"hablando…","fArticle":"Artículo","fSingular":"Singular","fPlural":"Plural","fInfinitive":"Infinitivo","fPresent":"Presente","fPast":"Pretérito","fPerfect":"Perfecto","fPlus":"Pluscuamperfecto","voiceLabel":"Voz","step1":"PASO 1 · IDIOMA","step2":"PASO 2 · TIPO","step3":"PASO 3 · NIVEL","back2":"Atrás","materialType":"Material","vocabType":"Vocabulario","irregularType":"Verbos irregulares","restart":"Elegir de nuevo","backToSelect":"Elegir libro / área"},
+  ru:{"appTitle":"Учить немецкий","chooseLang":"На какой язык переводить?","area":"Раздел обучения","chooseLevel":"Выберите уровень.","backLang":"‹ Язык","irregular":"⚡ Неправильные глаголы","flip":"Перевернуть","mastered":"Освоено","autoloop":"Автовоспроизведение","running":"продолжается","tabLearn":"Учить","tabProgress":"Прогресс","tabMarked":"Отмеченные","tabOptions":"Настройки","back":"‹ Назад","progress":"Прогресс","markedWords":"Отмеченные слова","options":"Настройки","playback":"ВОСПРОИЗВЕДЕНИЕ","tempo":"Скорость","pauseCards":"Пауза между картами","langContent":"ЯЗЫК И СОДЕРЖАНИЕ","translation":"Перевод","audioSrc":"Источник звука","autoUI":"Как перевод","audioDevice":"Устройство","chooseUnit":"Выберите раздел.","allUnits":"Все разделы","unit":"Раздел","appearance":"ОФОРМЛЕНИЕ","design":"Тема","light":"Светлая","dark":"Тёмная","switchLang":"СМЕНИТЬ ЯЗЫК","switchLevel":"СМЕНИТЬ РАЗДЕЛ","topHeard":"ЧАЩЕ ВСЕГО СЛУШАЛИ","masteredN":"Освоено","inProgress":"В процессе","totalHeard":"Всего прослушано","streak":"Серия","synonyms":"СИНОНИМЫ","example":"ПРИМЕР","verbForms":"ФОРМЫ ГЛАГОЛА","nounForms":"ФОРМЫ СУЩЕСТВИТЕЛЬНОГО","uiLangLabel":"Язык приложения","listEndless":"Цикл списка","repeatCard":"Повтор карты","once":"Один раз","days":"дн.","nothingHeard":"Пока ничего не прослушано","noMarked":"Пока нет отмеченных слов.","voice":"Голос","germanWord":"НЕМЕЦКИЙ","speaking":"говорит…","fArticle":"Артикль","fSingular":"Ед. число","fPlural":"Мн. число","fInfinitive":"Инфинитив","fPresent":"Настоящее","fPast":"Прошедшее","fPerfect":"Перфект","fPlus":"Плюсквамперфект","voiceLabel":"Голос","step1":"ШАГ 1 · ЯЗЫК","step2":"ШАГ 2 · ТИП","step3":"ШАГ 3 · УРОВЕНЬ","back2":"Назад","materialType":"Материал","vocabType":"Словарь","irregularType":"Неправильные глаголы","restart":"Выбрать заново","backToSelect":"Выбрать книгу / раздел"},
+  uk:{"appTitle":"Вчити німецьку","chooseLang":"Якою мовою перекладати?","area":"Розділ навчання","chooseLevel":"Оберіть рівень.","backLang":"‹ Мова","irregular":"⚡ Неправильні дієслова","flip":"Перевернути","mastered":"Опановано","autoloop":"Автовідтворення","running":"триває","tabLearn":"Навчання","tabProgress":"Прогрес","tabMarked":"Позначені","tabOptions":"Налаштування","back":"‹ Назад","progress":"Прогрес","markedWords":"Позначені слова","options":"Налаштування","playback":"ВІДТВОРЕННЯ","tempo":"Швидкість","pauseCards":"Пауза між картками","langContent":"МОВА ТА ВМІСТ","translation":"Переклад","audioSrc":"Джерело звуку","autoUI":"Як переклад","audioDevice":"Пристрій","chooseUnit":"Оберіть розділ.","allUnits":"Усі розділи","unit":"Розділ","appearance":"ОФОРМЛЕННЯ","design":"Тема","light":"Світла","dark":"Темна","switchLang":"ЗМІНИТИ МОВУ","switchLevel":"ЗМІНИТИ РОЗДІЛ","topHeard":"НАЙЧАСТІШЕ СЛУХАЛИ","masteredN":"Опановано","inProgress":"У процесі","totalHeard":"Усього прослухано","streak":"Серія","synonyms":"СИНОНІМИ","example":"ПРИКЛАД","verbForms":"ФОРМИ ДІЄСЛОВА","nounForms":"ФОРМИ ІМЕННИКА","uiLangLabel":"Мова застосунку","listEndless":"Цикл списку","repeatCard":"Повтор картки","once":"Один раз","days":"дн.","nothingHeard":"Ще нічого не прослухано","noMarked":"Ще немає позначених слів.","voice":"Голос","germanWord":"НІМЕЦЬКА","speaking":"говорить…","fArticle":"Артикль","fSingular":"Однина","fPlural":"Множина","fInfinitive":"Інфінітив","fPresent":"Теперішній","fPast":"Минулий","fPerfect":"Перфект","fPlus":"Плюсквамперфект","voiceLabel":"Голос","step1":"КРОК 1 · МОВА","step2":"КРОК 2 · ТИП","step3":"КРОК 3 · РІВЕНЬ","back2":"Назад","materialType":"Матеріал","vocabType":"Словник","irregularType":"Неправильні дієслова","restart":"Обрати знову","backToSelect":"Обрати книгу / розділ"},
+  tr:{"appTitle":"Almanca öğren","chooseLang":"Hangi dile çevrilsin?","area":"Çalışma alanı","chooseLevel":"Seviyenizi seçin.","backLang":"‹ Dil","irregular":"⚡ Düzensiz fiiller","flip":"Çevir","mastered":"Öğrenildi","autoloop":"Otomatik oynatma","running":"devam ediyor","tabLearn":"Öğren","tabProgress":"İlerleme","tabMarked":"İşaretli","tabOptions":"Ayarlar","back":"‹ Geri","progress":"İlerleme","markedWords":"İşaretli kelimeler","options":"Ayarlar","playback":"OYNATMA","tempo":"Hız","pauseCards":"Kartlar arası bekleme","langContent":"DİL VE İÇERİK","translation":"Çeviri","audioSrc":"Ses kaynağı","autoUI":"Çeviri ile aynı","audioDevice":"Cihaz","chooseUnit":"Bir ünite seçin.","allUnits":"Tüm üniteler","unit":"Ünite","appearance":"GÖRÜNÜM","design":"Tema","light":"Açık","dark":"Koyu","switchLang":"DİLİ DEĞİŞTİR","switchLevel":"ALANI DEĞİŞTİR","topHeard":"EN ÇOK DİNLENEN","masteredN":"Öğrenildi","inProgress":"Devam ediyor","totalHeard":"Toplam dinlenen","streak":"Seri","synonyms":"EŞ ANLAMLILAR","example":"ÖRNEK","verbForms":"FİİL ÇEKİMLERİ","nounForms":"İSİM BİÇİMLERİ","uiLangLabel":"Uygulama dili","listEndless":"Listeyi döngüle","repeatCard":"Kartı tekrarla","once":"Bir kez","days":"gün","nothingHeard":"Henüz hiçbir şey dinlenmedi","noMarked":"Henüz işaretli kelime yok.","voice":"Ses","germanWord":"ALMANCA","speaking":"okunuyor…","fArticle":"Artikel","fSingular":"Tekil","fPlural":"Çoğul","fInfinitive":"Mastar","fPresent":"Şimdiki","fPast":"Geçmiş","fPerfect":"Perfekt","fPlus":"Plusquamperfekt","voiceLabel":"Ses","step1":"ADIM 1 · DİL","step2":"ADIM 2 · TÜR","step3":"ADIM 3 · SEVİYE","back2":"Geri","materialType":"Materyal","vocabType":"Kelime","irregularType":"Düzensiz fiiller","restart":"Yeniden seç","backToSelect":"Kitap / alan seç"}
+};
+
+/* ============ helpers ============ */
+var $=function(id){return document.getElementById(id)};
+function uiKeyFor(code){var b=(code||'').split('-')[0];return UI[b]?b:'de'}
+var UILANG='de', UILANG_MODE='auto';
+function t(k){return (UI[UILANG]&&UI[UILANG][k])||UI.de[k]||k}
+var RTL_LANGS=['fa','ar'];
+function isRTL(){return RTL_LANGS.indexOf(UILANG)>=0}
+function langToDataKey(code){var b=(code||'').split('-')[0];return b==='ku'?'kmr':(b||'en')}
+
+/* ============ storage ============ */
+var LS={listen:'u_listen',master:'u_master',theme:'u_theme',streak:'u_streak',lastday:'u_lastday',resume:'u_resume',uilang:'u_uilang',audio:'u_audio'};
+function rd(k,f){try{var v=localStorage.getItem(k);return v==null?f:JSON.parse(v)}catch(e){return f}}
+function wr(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+var listen=rd(LS.listen,{}), master=rd(LS.master,{});
+var MASTER_AT=10;
+
+/* streak */
+(function(){var today=new Date().toISOString().slice(0,10);var last=rd(LS.lastday,null);var s=rd(LS.streak,0);
+  if(last!==today){var y=new Date(Date.now()-864e5).toISOString().slice(0,10);s=(last===y)?s+1:1;wr(LS.streak,s);wr(LS.lastday,today)}
+  $('streak').textContent=rd(LS.streak,1)||1})();
+
+/* ============ language + level catalogs ============ */
+var LANGS=[["en-US","Englisch","🇬🇧"],["fa-IR","Persisch","🇮🇷"],["es-ES","Spanisch","🇪🇸"],["ru-RU","Russisch","🇷🇺"],["uk-UA","Ukrainisch","🇺🇦"],["tr-TR","Türkisch","🇹🇷"],["ar-SA","Arabisch","🇸🇦"]];
+var MATERIALS=[
+  {type:"vocab",label:"Wortschatz",icon:"📚",lists:[["A1","A1"],["A2","A2"],["B1","B1"],["B1 Plus 7 Units","B1+"],["B2 all 12 units","B2"]]},
+  {type:"irregular",label:"Unregelmäßige Verben",icon:"⚡",lists:[["A1 Irregular Verbs","A1 ⚡"],["A2 Irregular Verbs","A2 ⚡"],["B1 Irregular Verbs","B1 ⚡"],["B2 Irregular Verbs","B2 ⚡"]]}
+];
+function levelShort(list){
+  for(var i=0;i<MATERIALS.length;i++)for(var j=0;j<MATERIALS[i].lists.length;j++)
+    if(MATERIALS[i].lists[j][0]===list)return MATERIALS[i].lists[j][1];
+  return list;
+}
+
+/* ============ state ============ */
+var LANG={code:"en-US",label:"Englisch"};
+var currentList="B2 all 12 units";
+var currentMaterial=null;
+var MODE="select-lang";   // select-lang | select-material | select-level | study
+var CARDS=[], pos=0, playing=false, token=0;
+var currentUnit=null;  // null = all units
+function unitNum(c){var s=String(c.unit||c._unit||'');
+  var m=s.match(/(?:unit|einheit|lektion|kapitel)\s*(\d+)/i);
+  if(m)return parseInt(m[1],10);
+  m=s.replace(/^[A-Za-z]\d+\s*/,'').match(/(\d+)/);
+  return m?parseInt(m[1],10):null}
+var rateMul=1, gapMs=500, repeatMode='list';
+
+/* ============ data ============ */
+function loadRealCards(list){
+  if(window.IntegrationAdapter && window.FLASHCARD_DATA){
+    var c=window.IntegrationAdapter.loadCards(list);
+    if(c&&c.length)return c;
+  }
+  return [];
+}
+function resolveTrans(card){
+  if(card && card._translations){
+    var key=langToDataKey(LANG.code);
+    return {main:card._translations[key]||card._translations.en||'', sub:(card._exampleTrans&&card._exampleTrans[key])||''};
+  }
+  return {main:'',sub:''};
+}
+function verbFormItems(c){
+  if(!c||c.cat!=="verb")return[];
+  var f=c.forms||{}, inf=f.infinitive||c.word||"",pres=f.present3||"",past=f.past||"",perf=f.perfect||"",plus=f.plusquamperfekt||"";
+  var lv=c.level||"B2";
+  if(lv==="A1"||lv==="A2")return[{label:t('fInfinitive'),value:inf},{label:t('fPresent'),value:pres},{label:t('fPerfect'),value:perf,wide:true}];
+  if(lv==="B1")return[{label:t('fInfinitive'),value:inf},{label:t('fPresent'),value:pres},{label:t('fPast'),value:past},{label:t('fPerfect'),value:perf}];
+  return[{label:t('fInfinitive'),value:inf},{label:t('fPresent'),value:pres},{label:t('fPast'),value:past},{label:t('fPerfect'),value:perf},{label:t('fPlus'),value:plus,wide:true}];
+}
+
+/* ============ voice ============ */
+var VOICES=[];
+function loadVoices(){VOICES=(window.speechSynthesis&&speechSynthesis.getVoices())||[]}
+if('speechSynthesis'in window){loadVoices();speechSynthesis.onvoiceschanged=function(){loadVoices();showVoice()}}
+function pickVoice(code){
+  if(!VOICES.length)loadVoices();
+  var base=code.split('-')[0].toLowerCase();
+  var bad=/novelty|whisper|zarvox|bells|boing|bahh|cellos|compact|eloquence/;
+  var pool=VOICES.filter(function(v){var l=(v.lang||'').toLowerCase(),n=((v.name||'')+' '+(v.voiceURI||'')).toLowerCase();
+    if(bad.test(n))return false;return l===code.toLowerCase()||l.indexOf(base)===0});
+  var rank=function(v){var n=((v.name||'')+' '+(v.voiceURI||'')).toLowerCase(),s=0;
+    if(/neural|natural/.test(n))s+=6;if(/premium|enhanced/.test(n))s+=5;if(/siri/.test(n))s+=4;
+    if(/google/.test(n))s+=3;if(/microsoft/.test(n))s+=3;if(/apple/.test(n))s+=2;
+    if((v.lang||'').toLowerCase()===code.toLowerCase())s+=2;if(v.localService)s+=1;return s};
+  pool.sort(function(a,b){return rank(b)-rank(a)});
+  return pool[0]||VOICES.find(function(v){return (v.lang||'').toLowerCase().indexOf(base)===0})||null;
+}
+function shortName(v){if(!v)return"—";var n=v.name||"";return n.replace(/Microsoft|Online|\(Natural\)|\(.*?\)|Mehrsprachig|Multilingual/g,'').replace(/\s+/g,' ').trim()||v.name}
+function showVoice(){
+  if(MODE!=='study'){$('voiceStatus').textContent='';return}
+  var dv=pickVoice('de-DE'), tv=pickVoice(LANG.code);
+  $('voiceStatus').textContent=t('voiceLabel')+': DE '+shortName(dv)+' · '+LANG.label+' '+shortName(tv);
+}
+/* ---- MP3-first audio (Azure Neural TTS), browser-TTS fallback ---- */
+var AUDIO_BASE=(window.AUDIO_BASE||'audio/');
+var AUDIO_ENABLED=(rd(LS.audio,'mp3')!=='tts')&&(window.AUDIO_ENABLED!==false);
+/* locale -> Azure neural voice used to render the clips (must match audio_jobs.csv) */
+var AZURE_VOICE={'de-DE':'de-DE-KatjaNeural','en-US':'en-US-JennyNeural','fa-IR':'fa-IR-DilaraNeural','es-ES':'es-ES-ElviraNeural','ru-RU':'ru-RU-SvetlanaNeural','uk-UA':'uk-UA-PolinaNeural','tr-TR':'tr-TR-EmelNeural','ar-SA':'ar-SA-ZariyahNeural'};
+function azLocale(code){var b=(code||'').split('-')[0];if(b==='de')return'de-DE';if(b==='en')return'en-US';if(b==='fa')return'fa-IR';if(b==='es')return'es-ES';if(b==='ru')return'ru-RU';if(b==='uk')return'uk-UA';if(b==='tr')return'tr-TR';if(b==='ar')return'ar-SA';return null}
+/* FNV-1a 64-bit via BigInt, mirrors the Python that named the mp3 files */
+function fnv1a(str){
+  var h=0xcbf29ce484222325n, prime=0x100000001b3n, mask=0xffffffffffffffffn;
+  var bytes=unescape(encodeURIComponent(str));
+  for(var i=0;i<bytes.length;i++){
+    h^=BigInt(bytes.charCodeAt(i));
+    h=(h*prime)&mask;
+  }
+  var s=h.toString(16);
+  return '0000000000000000'.slice(s.length)+s;
+}
+function mp3Url(text,locale){var v=AZURE_VOICE[locale];if(!v)return null;return AUDIO_BASE+fnv1a(v+'\x1f'+text)+'.mp3'}
+function speak(text,code,onend){
+  text=(text||'').trim();
+  if(!text){onend&&onend();return}
+  var done=false;function finish(){if(done)return;done=true;onend&&onend()}
+  var loc=azLocale(code);
+  if(AUDIO_ENABLED&&loc){
+    var url=mp3Url(text,loc);
+    if(url){
+      var fellBack=false;
+      function fallback(){if(fellBack||done)return;fellBack=true;ttsSpeak(text,code,finish)}
+      var a=new Audio(url);
+      a.playbackRate=(code&&code.indexOf('de')===0?0.95:1.0)*rateMul;
+      a.onended=finish;
+      a.onerror=fallback;
+      window.__curAudio=a;
+      var p=a.play();
+      if(p&&p.catch)p.catch(fallback);
+      return;
+    }
+  }
+  ttsSpeak(text,code,finish);
+}
+function ttsSpeak(text,code,onend){
+  if(!('speechSynthesis'in window)||!text){onend&&onend();return}
+  var u=new SpeechSynthesisUtterance(text);var v=pickVoice(code);
+  if(v){u.voice=v;u.lang=v.lang}else u.lang=code;
+  u.rate=(code==='de-DE'?.72:.95)*rateMul;u.onend=function(){onend&&onend()};u.onerror=function(){onend&&onend()};
+  speechSynthesis.speak(u);
+}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+
+/* ============ THE UNIVERSAL CARD RENDERER ============ */
+function swapCard(buildFn){
+  var card=$('card');
+  card.classList.add('swap');
+  setTimeout(function(){ buildFn(); card.classList.remove('swap'); },180);
+}
+function setChrome(){
+  var studying=MODE==='study';
+  $('pills').style.display=studying?'':'none';
+  $('player').style.display=studying?'':'none';
+  $('tabs').style.display=studying?'':'none';
+  $('bar').parentNode.style.visibility=studying?'visible':'hidden';
+  if(studying){
+    $('pillLangLabel').textContent=LANG.label;
+    $('pillLevelLabel').textContent=levelShort(currentList);
+  }
+  showVoice();
+}
+
+/* ---- selection screens (rendered INSIDE the card) ---- */
+/* inline SVG flags so they render on every OS (emoji flags fail on Windows/Chrome) */
+function flagSVG(code){
+  var c=(code||'').split('-')[1]||'';
+  var W=22,H=15,r='rx="2"';
+  function svg(inner){return '<svg class="flag" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" '+r+'>'+inner+'</svg>'}
+  switch(c){
+    case 'US': // simplified stars & stripes
+      var s='';for(var i=0;i<7;i++){s+='<rect y="'+(i*H/7)+'" width="'+W+'" height="'+(H/7)+'" fill="'+(i%2?'#fff':'#b22234')+'"/>'}
+      return svg(s+'<rect width="9" height="'+(H*4/7)+'" fill="#3c3b6e"/>');
+    case 'IR': return svg('<rect width="'+W+'" height="5" fill="#239f40"/><rect y="5" width="'+W+'" height="5" fill="#fff"/><rect y="10" width="'+W+'" height="5" fill="#da0000"/>');
+    case 'ES': return svg('<rect width="'+W+'" height="'+H+'" fill="#aa151b"/><rect y="3.75" width="'+W+'" height="7.5" fill="#f1bf00"/>');
+    case 'RU': return svg('<rect width="'+W+'" height="5" fill="#fff"/><rect y="5" width="'+W+'" height="5" fill="#0039a6"/><rect y="10" width="'+W+'" height="5" fill="#d52b1e"/>');
+    case 'UA': return svg('<rect width="'+W+'" height="7.5" fill="#0057b7"/><rect y="7.5" width="'+W+'" height="7.5" fill="#ffd700"/>');
+    case 'TR': return svg('<rect width="'+W+'" height="'+H+'" fill="#e30a17"/><circle cx="9" cy="7.5" r="3.4" fill="#fff"/><circle cx="10.2" cy="7.5" r="2.7" fill="#e30a17"/><path d="M13 7.5l2.4-.8-1.5 2 0-2.4 1.5 2z" fill="#fff"/>');
+    case 'SA': return svg('<rect width="'+W+'" height="'+H+'" fill="#006c35"/>');
+    default: return svg('<rect width="'+W+'" height="'+H+'" fill="#888"/>');
+  }
+}
+function renderSelectLang(){
+  MODE='select-lang'; setChrome();
+  var html='<div class="selHead"><p class="selStep">'+t('step1')+'</p><p class="selTitle">'+t('appTitle')+'</p><p class="selSub">'+t('chooseLang')+'</p></div>';
+  html+='<div class="grid two">';
+  LANGS.forEach(function(L){ html+='<button class="opt" data-lang="'+L[0]+'" data-label="'+L[1]+'"><span class="fl">'+flagSVG(L[0])+'</span>'+L[1]+'</button>'; });
+  html+='</div>';
+  $('cardPad').innerHTML=html;
+}
+function renderSelectMaterial(){
+  MODE='select-material'; setChrome();
+  var html='<button class="selBack" id="backToLang">‹ '+t('back2')+'</button>';
+  html+='<div class="selHead"><p class="selStep">'+t('step2')+'</p><p class="selTitle">'+t('materialType')+'</p></div>';
+  html+='<div class="grid one">';
+  MATERIALS.forEach(function(M){ html+='<button class="opt center" data-material="'+M.type+'"><span class="fl">'+M.icon+'</span>'+t(M.type==='irregular'?'irregularType':'vocabType')+'</button>'; });
+  html+='</div>';
+  $('cardPad').innerHTML=html;
+  $('backToLang').onclick=function(){swapCard(renderSelectLang)};
+}
+function renderSelectLevel(){
+  MODE='select-level'; setChrome();
+  var mat=MATERIALS.find(function(m){return m.type===currentMaterial})||MATERIALS[0];
+  var html='<button class="selBack" id="backToMat">‹ '+t('back2')+'</button>';
+  html+='<div class="selHead"><p class="selStep">'+t('step3')+'</p><p class="selTitle">'+t('chooseLevel')+'</p></div>';
+  html+='<div class="grid two">';
+  mat.lists.forEach(function(L){ html+='<button class="opt center" data-list="'+L[0]+'">'+L[1]+'</button>'; });
+  html+='</div>';
+  $('cardPad').innerHTML=html;
+  $('backToMat').onclick=function(){swapCard(renderSelectMaterial)};
+}
+function renderSelectUnit(list){
+  MODE='select-unit'; setChrome();
+  var all=loadRealCards(list);
+  // collect distinct unit numbers
+  var nums=[];var seen={};
+  all.forEach(function(c){var n=unitNum(c);if(n!=null&&!seen[n]){seen[n]=1;nums.push(n)}});
+  nums.sort(function(a,b){return a-b});
+  if(nums.length<2){ enterStudy(list,null); return; } // no real units → straight to study
+  var html='<button class="selBack" id="backToLvl">‹ '+t('back2')+'</button>';
+  html+='<div class="selHead"><p class="selStep">'+t('step3')+'</p><p class="selTitle">'+t('chooseUnit')+'</p></div>';
+  html+='<div class="grid two">';
+  html+='<button class="opt center wideOpt" data-unit="all">'+t('allUnits')+'</button>';
+  nums.forEach(function(n){ html+='<button class="opt center" data-unit="'+n+'">'+t('unit')+' '+n+'</button>'; });
+  html+='</div>';
+  $('cardPad').innerHTML=html;
+  $('backToLvl').onclick=function(){swapCard(renderSelectLevel)};
+}
+
+/* ---- study card ---- */
+function renderStudy(){
+  MODE='study'; setChrome();
+  if(!CARDS.length){ $('cardPad').innerHTML='<p class="selSub" style="text-align:center">—</p>'; return; }
+  var c=CARDS[pos];
+  var n=listen[c.id]||0, pct=Math.min(100,Math.round(n/MASTER_AT*100));
+  var html='';
+  html+='<div class="badges">';
+  html+='<div class="ring"><svg width="42" height="42"><circle cx="21" cy="21" r="17" fill="none" stroke="var(--line)" stroke-width="3"/><circle id="ringfg" cx="21" cy="21" r="17" fill="none" stroke="var(--green)" stroke-width="3" stroke-linecap="round" stroke-dasharray="107" stroke-dashoffset="'+(107-107*pct/100)+'"/></svg><span class="pct">'+pct+'</span></div>';
+  html+='<div class="lc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M3 14a2 2 0 0 1 2-2h1v6H5a2 2 0 0 1-2-2zM21 14a2 2 0 0 0-2-2h-1v6h1a2 2 0 0 0 2-2z"/></svg>×'+n+'</div>';
+  html+='</div>';
+  html+='<p class="eyebrow">'+t('germanWord')+'</p>';
+  html+='<h2 class="word">'+esc(c.word)+'</h2>';
+  // forms
+  if(c.cat==='verb'){
+    var items=verbFormItems(c);
+    html+='<div class="panel forms"><p class="lab"><span>'+t('verbForms')+'</span><span class="lvl">'+(c.irregular?'⚡ ':'')+(c.level||'B2')+'</span></p><div class="fGrid">';
+    items.forEach(function(it,i){ html+='<div class="fItem'+(it.wide?' wide':'')+'" data-fi="'+i+'"><dt>'+esc(it.label)+'</dt><dd>'+esc(it.value||'—')+'</dd></div>'; });
+    html+='</div></div>';
+  } else if(c.cat==='noun'){
+    html+='<div class="panel forms noun"><p class="lab"><span>'+t('nounForms')+'</span></p><div class="fGrid">';
+    html+='<div class="fItem"><dt>'+t('fArticle')+'</dt><dd>'+esc(c.article||'—')+'</dd></div>';
+    html+='<div class="fItem"><dt>'+t('fSingular')+'</dt><dd>'+esc(c.singular||'—')+'</dd></div>';
+    html+='<div class="fItem wide"><dt>'+t('fPlural')+'</dt><dd>'+esc(c.plural||'—')+'</dd></div>';
+    html+='</div></div>';
+  }
+  // synonyms
+  if(c.syn){
+    var sc=c.syn.split('·').filter(function(s){return s.trim()}).length;
+    html+='<div class="panel syn"><p class="lab"><span>'+t('synonyms')+(c.cat==='verb'?' · '+sc:'')+'</span></p><p>'+esc(c.syn)+'</p></div>';
+  }
+  // example
+  if(c.ex && (c.ex[0]||c.ex[1])){
+    var exTr=(c._exampleTrans&&c._exampleTrans[langToDataKey(LANG.code)])||'';
+    html+='<div class="panel ex"><p class="lab"><span>'+t('example')+'</span></p><p>'+esc(c.ex[0])+'<b>'+esc(c.ex[1])+'</b>'+esc(c.ex[2]||'')+'</p>';
+    if(exTr)html+='<p class="exTr">'+esc(exTr)+'</p>';
+    html+='</div>';
+  }
+  // translation (word translation only — example translation shows under EXAMPLE)
+  var tr=resolveTrans(c);
+  html+='<div class="panel trans" id="trans"><p class="lab"><span>'+t('translation')+'</span><span class="live"><span class="dot"></span>'+t('speaking')+'</span></p>';
+  html+='<p class="main">'+esc(tr.main||'—')+'</p>';
+  html+='</div>';
+  // actions
+  html+='<div class="row2"><button class="sb" id="flipBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>'+t('flip')+'</button>';
+  html+='<button class="sb'+((master[c.id]||pct>=100)?' on':'')+'" id="masterBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>'+t('mastered')+'</button></div>';
+  $('cardPad').innerHTML=html;
+  $('flipBtn').onclick=function(){var card=$('card');card.style.transform='rotateY(6deg) scale(.99)';setTimeout(function(){card.style.transform=''},400);var r=resolveTrans(CARDS[pos]);speak(r.main||'',LANG.code)};
+  $('masterBtn').onclick=function(){var id=CARDS[pos].id;master[id]=!master[id];wr(LS.master,master);renderStudy()};
+  $('bar').style.width=((pos+1)/CARDS.length*100)+'%';
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]})}
+
+/* ============ playback ============ */
+function bumpListen(){var c=CARDS[pos];listen[c.id]=(listen[c.id]||0)+1;wr(LS.listen,listen);
+  var fg=$('ringfg');if(fg){var n=listen[c.id],pct=Math.min(100,Math.round(n/MASTER_AT*100));fg.style.strokeDashoffset=(107-107*pct/100);
+  var pe=document.querySelector('.ring .pct');if(pe)pe.textContent=pct;var lce=document.querySelector('.lc');if(lce)lce.innerHTML=lce.innerHTML.replace(/×\d+/,'×'+n)}}
+async function playOne(myToken){
+  var c=CARDS[pos];
+  await new Promise(function(res){speak(c.word,'de-DE',res)}); if(myToken!==token)return;
+  bumpListen(); await sleep(150); if(myToken!==token)return;
+  if(c.cat==='verb'){
+    var items=verbFormItems(c);
+    for(var i=0;i<items.length;i++){
+      if(myToken!==token)return;
+      var val=items[i].value; if(!val||!String(val).trim())continue;
+      var el=document.querySelector('.fItem[data-fi="'+i+'"]'); if(el)el.classList.add('active');
+      await new Promise(function(res){speak(val,'de-DE',res)});
+      if(el)el.classList.remove('active'); await sleep(120); if(myToken!==token)return;
+    }
+  }
+  // German example sentence
+  if(c.ex&&c.ex.join('').trim()){ await new Promise(function(res){speak(c.ex.join(''),'de-DE',res)}); if(myToken!==token)return; }
+  await sleep(200); if(myToken!==token)return;
+  // translation turn: word translation, then example translation, in the selected language
+  var tr=resolveTrans(c);
+  var exTr=(c._exampleTrans&&c._exampleTrans[langToDataKey(LANG.code)])||'';
+  var trEl=$('trans'); if(trEl)trEl.classList.add('speaking');
+  if(tr.main&&String(tr.main).trim()){ await new Promise(function(res){speak(tr.main,LANG.code,res)}); if(myToken!==token){if(trEl)trEl.classList.remove('speaking');return} }
+  if(exTr&&String(exTr).trim()){ await sleep(120); if(myToken!==token){if(trEl)trEl.classList.remove('speaking');return} await new Promise(function(res){speak(exTr,LANG.code,res)}); }
+  if(trEl)trEl.classList.remove('speaking');
+}
+async function loop(){
+  playing=true; var myToken=++token; setToggle();
+  while(playing&&myToken===token){
+    await playOne(myToken); if(!playing||myToken!==token)break;
+    await sleep(gapMs); if(!playing||myToken!==token)break;
+    if(repeatMode==='card'){renderStudy();continue}
+    if(repeatMode==='once'&&pos===CARDS.length-1){stop();break}
+    pos=(pos+1)%CARDS.length; renderStudy();
+  }
+}
+function stop(){playing=false;token++;setToggle();if('speechSynthesis'in window)speechSynthesis.cancel();if(window.__curAudio){try{window.__curAudio.pause()}catch(_){}}var tr=$('trans');if(tr)tr.classList.remove('speaking')}
+function setToggle(){$('toggleIcon').innerHTML=playing?'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>'}
+$('toggle').onclick=function(){playing?stop():loop()};
+$('next').onclick=function(){stop();pos=(pos+1)%CARDS.length;renderStudy()};
+$('prev').onclick=function(){stop();pos=(pos-1+CARDS.length)%CARDS.length;renderStudy()};
+
+/* ============ selection click handling (event delegation on card) ============ */
+$('cardPad').addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b)return;
+  if(b.dataset.lang){
+    LANG.code=b.dataset.lang; LANG.label=b.dataset.label;
+    if(UILANG_MODE==='auto'){UILANG=uiKeyFor(LANG.code);applyUILang()}
+    showVoice(); swapCard(renderSelectMaterial); return;
+  }
+  if(b.dataset.material){ currentMaterial=b.dataset.material; swapCard(renderSelectLevel); return; }
+  if(b.dataset.list){ currentList=b.dataset.list; swapCard(function(){renderSelectUnit(currentList)}); return; }
+  if(b.dataset.unit){ enterStudy(currentList, b.dataset.unit==='all'?null:parseInt(b.dataset.unit,10)); return; }
+});
+function enterStudy(list,unit){
+  currentList=list; currentUnit=(unit==null?null:unit);
+  var real=loadRealCards(list);
+  if(currentUnit!=null){ real=real.filter(function(c){return unitNum(c)===currentUnit}); }
+  CARDS=real.length?real:[];
+  pos=0; playing=false;
+  wr(LS.resume,{lang:LANG.code,label:LANG.label,list:currentList,material:currentMaterial,unit:currentUnit});
+  $('pmTitle').textContent=t('autoloop');
+  $('pmSub').textContent='DE → '+LANG.label+' · '+t('running');
+  swapCard(renderStudy);
+  try{if('speechSynthesis'in window){var u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}}catch(_){}
+}
+
+/* pills reopen selection */
+$('pillLang').onclick=function(){stop();swapCard(renderSelectLang)};
+$('pillLevel').onclick=function(){stop();swapCard(renderSelectLevel)};
+
+/* ============ drawer ============ */
+function openDrawer(){$('drawer').classList.add('open');$('scrim').classList.add('open')}
+function closeDrawer(){$('drawer').classList.remove('open');$('scrim').classList.remove('open')}
+$('menuBtn').onclick=openDrawer; $('drawerClose').onclick=closeDrawer; $('scrim').onclick=closeDrawer;
+$('restart').onclick=function(){closeDrawer();stop();swapCard(renderSelectLang)};
+$('repeatSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;repeatMode=b.dataset.mode;
+  document.querySelectorAll('#repeatSeg button').forEach(function(x){x.classList.toggle('on',x===b)})});
+$('rate').oninput=function(){rateMul=this.value/100;$('rateOut').textContent=this.value+'%'};
+$('gap').oninput=function(){gapMs=+this.value;$('gapOut').textContent=(gapMs/1000).toFixed(1).replace('.',',')+'s'};
+$('uiLangSel').onchange=function(){UILANG_MODE=this.value;UILANG=(this.value==='auto')?uiKeyFor(LANG.code):this.value;applyUILang();wr(LS.uilang,{mode:UILANG_MODE})};
+$('themeSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;applyTheme(b.dataset.t)});
+$('audioSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+  var mode=b.dataset.audio; AUDIO_ENABLED=(mode!=='tts'); wr(LS.audio,mode);
+  document.querySelectorAll('#audioSeg button').forEach(function(x){x.classList.toggle('on',x===b)});
+  if(playing){stop();}});
+
+/* ============ tabs + panels ============ */
+$('tabs').addEventListener('click',function(e){var b=e.target.closest('.tab');if(!b)return;var n=b.dataset.tab;
+  if(n==='options'){openDrawer();return}
+  document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x.dataset.tab===n)});
+  $('progressView').style.display=n==='progress'?'':'none';
+  $('markedView').style.display=n==='marked'?'':'none';
+  if(n==='progress')renderProgress(); if(n==='marked')renderMarked();
+});
+document.querySelectorAll('.pvBack').forEach(function(b){b.onclick=function(){
+  $('progressView').style.display='none';$('markedView').style.display='none';
+  document.querySelectorAll('.tab').forEach(function(x){x.classList.toggle('on',x.dataset.tab==='learn')});
+}});
+function renderProgress(){
+  var total=Object.values(listen).reduce(function(a,b){return a+b},0);
+  var mastered=Object.keys(master).filter(function(k){return master[k]}).length;
+  var inProg=Object.keys(listen).filter(function(k){return !master[k]}).length;
+  var top=Object.entries(listen).sort(function(a,b){return b[1]-a[1]}).slice(0,5).map(function(e){
+    var c=CARDS.find(function(x){return x.id===e[0]});return '<div class="statRow"><span>'+esc(c?c.word:e[0])+'</span><b>×'+e[1]+'</b></div>'}).join('')||'<div class="statRow"><span>'+t('nothingHeard')+'</span></div>';
+  $('progressBody').innerHTML='<div class="big"><div class="bigC"><div class="n" style="color:var(--green)">'+mastered+'</div><div class="l">'+t('masteredN')+'</div></div><div class="bigC"><div class="n" style="color:var(--gold)">'+inProg+'</div><div class="l">'+t('inProgress')+'</div></div></div><div class="stat"><div class="statRow"><span>'+t('totalHeard')+'</span><b>'+total+'</b></div><div class="statRow"><span>'+t('streak')+'</span><b>'+(rd(LS.streak,1)||1)+' '+t('days')+'</b></div></div><div class="stat"><h4 style="margin:0 0 .5rem;color:var(--faint);font-size:11px">'+t('topHeard')+'</h4>'+top+'</div>';
+}
+function renderMarked(){
+  var ids=Object.keys(master).filter(function(k){return master[k]});
+  $('markedBody').innerHTML=ids.length?'<div class="stat">'+ids.map(function(id){var c=CARDS.find(function(x){return x.id===id});return '<div class="statRow"><span>'+esc(c?c.word:id)+'</span><span style="color:var(--green)">✓</span></div>'}).join('')+'</div>':'<div class="stat"><div class="statRow"><span>'+t('noMarked')+'</span></div></div>';
+}
+
+/* ============ theme + i18n ============ */
+function applyTheme(th){document.documentElement.setAttribute('data-theme',th);wr(LS.theme,th);
+  $('themeBtn').innerHTML=th==='dark'?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 4l1.5 1.5M18.5 18.5L20 20M2 12h2M20 12h2M4 20l1.5-1.5M18.5 5.5L20 4"/></svg>':'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+  document.querySelectorAll('#themeSeg button').forEach(function(x){x.classList.toggle('on',x.dataset.t===th)})}
+$('themeBtn').onclick=function(){applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')};
+
+function setTxt(id,v){var e=$(id);if(e)e.textContent=v}
+function applyUILang(){
+  document.documentElement.setAttribute('dir',isRTL()?'rtl':'ltr');
+  document.documentElement.setAttribute('lang',UILANG);
+  setTxt('tabLearn',t('tabLearn'));setTxt('tabProgress',t('tabProgress'));setTxt('tabMarked',t('tabMarked'));setTxt('tabOptions',t('tabOptions'));
+  setTxt('optTitle',t('options'));setTxt('grpPlayback',t('playback'));setTxt('lblTempo',t('tempo'));setTxt('lblPause',t('pauseCards'));setTxt('lblAudioSrc',t('audioSrc'));
+  setTxt('grpAppearance',t('appearance'));setTxt('lblUILang',t('uiLangLabel'));setTxt('lblDesign',t('design'));
+  setTxt('optAutoUI',t('autoUI'));setTxt('segTts',t('audioDevice'));
+  setTxt('segLight',t('light'));setTxt('segDark',t('dark'));setTxt('segList',t('listEndless'));setTxt('segCard',t('repeatCard'));setTxt('segOnce',t('once'));
+  setTxt('progressTitle',t('progress'));setTxt('markedTitle',t('markedWords'));setTxt('restartLabel',t('restart'));
+  if(MODE==='study'){$('pmTitle').textContent=t('autoloop');$('pmSub').textContent='DE → '+LANG.label+' · '+t('running');renderStudy()}
+  else if(MODE==='select-lang')renderSelectLang();
+  else if(MODE==='select-material')renderSelectMaterial();
+  else if(MODE==='select-level')renderSelectLevel();
+  else if(MODE==='select-unit')renderSelectUnit(currentList);
+}
+
+/* ============ boot ============ */
+applyTheme(rd(LS.theme,(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'));
+(function(){var mode=rd(LS.audio,'mp3');document.querySelectorAll('#audioSeg button').forEach(function(x){x.classList.toggle('on',x.dataset.audio===mode)});})();
 (function(){
-  window.__v85ReportProblemFix = true;
-  const REPORT_ENDPOINT = '/api/report-problem';
-  let reportState = null;
-  let bgAudioCtx = null, bgOsc = null, bgGain = null;
-
-  function $(id){ return document.getElementById(id); }
-  function closeOptions(){
-    const d = $('optionsDrawer'), b = $('drawerBackdrop');
-    if(d){ d.hidden = true; d.classList.remove('open'); d.style.display = 'none'; }
-    if(b){ b.hidden = true; b.style.display = 'none'; }
+  var r=rd(LS.resume,null);
+  if(r&&r.lang){
+    LANG.code=r.lang;LANG.label=r.label;currentList=r.list||'B2 all 12 units';currentMaterial=r.material;currentUnit=(r.unit==null?null:r.unit);
+    if(UILANG_MODE==='auto')UILANG=uiKeyFor(LANG.code);
+    applyUILang();
+    var real=loadRealCards(currentList);
+    if(currentUnit!=null){real=real.filter(function(c){return unitNum(c)===currentUnit})}
+    CARDS=real.length?real:[];pos=0;
+    $('pmTitle').textContent=t('autoloop');$('pmSub').textContent='DE → '+LANG.label+' · '+t('running');
+    renderStudy();
+  } else {
+    applyUILang(); renderSelectLang();
   }
-
-  function keepBackgroundAudioAlive(){
-    try{
-      const C = window.AudioContext || window.webkitAudioContext;
-      if(C){
-        if(!bgAudioCtx) bgAudioCtx = new C();
-        if(bgAudioCtx.state === 'suspended') bgAudioCtx.resume();
-        if(!bgOsc){
-          bgGain = bgAudioCtx.createGain();
-          bgGain.gain.value = 0.00001;
-          bgOsc = bgAudioCtx.createOscillator();
-          bgOsc.frequency.value = 1;
-          bgOsc.connect(bgGain).connect(bgAudioCtx.destination);
-          bgOsc.start();
-        }
-      }
-    }catch(e){}
-    try{
-      if('mediaSession' in navigator){
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: 'Deutsch Sprache – Wichtige Wörter',
-          artist: 'Initiative von: Khalid Noorzad'
-        });
-      }
-    }catch(e){}
-  }
-
-  if('speechSynthesis' in window && !window.__v85SpeakPatched){
-    window.__v85SpeakPatched = true;
-    const originalSpeak = window.speechSynthesis.speak.bind(window.speechSynthesis);
-    window.speechSynthesis.speak = function(utterance){
-      keepBackgroundAudioAlive();
-      return originalSpeak(utterance);
-    };
-  }
-
-  function setReportMode(active){
-    document.body.classList.toggle('reportingMode', !!active);
-    const view = $('problemReportView');
-    if(view){
-      view.hidden = !active;
-      view.setAttribute('aria-hidden', active ? 'false' : 'true');
-      view.style.display = active ? 'grid' : 'none';
-      view.style.visibility = active ? 'visible' : 'hidden';
-      view.style.opacity = active ? '1' : '0';
-    }
-  }
-
-  function inferWasPlaying(){
-    const txt = (($('nowPlaying') && $('nowPlaying').textContent) || '').trim();
-    if(!txt) return false;
-    return !/Bereit|Pause|Gestoppt|Keine Karten/i.test(txt);
-  }
-
-  function enterReportingMode(){
-    reportState = {
-      wasPlaying: inferWasPlaying(),
-      nowPlaying: $('nowPlaying') ? $('nowPlaying').textContent : '',
-      cardHtml: $('card') ? $('card').innerHTML : '',
-      count: $('count') ? $('count').textContent : '',
-      focusedId: document.activeElement && document.activeElement.id ? document.activeElement.id : ''
-    };
-
-    closeOptions();
-
-    try{
-      const pause = $('pauseList');
-      if(pause) pause.click();
-      if('speechSynthesis' in window) speechSynthesis.cancel();
-    }catch(e){}
-
-    const subject = $('problemSubject');
-    const summary = $('problemSummary');
-    const submit = $('submitProblemReport');
-    const thanks = $('problemReportThanks');
-    const backWrap = $('problemReportBackActions');
-    const formWrap = $('problemReportFormActions');
-
-    if(subject){ subject.value = ''; subject.hidden = false; }
-    if(summary){ summary.value = ''; summary.hidden = false; summary.style.display = 'block'; }
-    if(submit){ submit.hidden = false; submit.disabled = false; submit.style.display = 'inline-flex'; }
-    if(formWrap){ formWrap.hidden = false; formWrap.style.display = 'flex'; }
-    if(thanks){ thanks.hidden = true; }
-    if(backWrap){ backWrap.hidden = true; backWrap.style.display = 'none'; }
-
-    setReportMode(true);
-
-    setTimeout(function(){
-      if(subject) subject.focus();
-    }, 80);
-  }
-
-  async function submitReport(){
-    const subject = $('problemSubject');
-    const summary = $('problemSummary');
-    const submit = $('submitProblemReport');
-    const thanks = $('problemReportThanks');
-    const backWrap = $('problemReportBackActions');
-    const formWrap = $('problemReportFormActions');
-
-    if(submit) submit.disabled = true;
-
-    const payload = {
-      subject: subject ? subject.value.trim() : '',
-      summary: summary ? summary.value.trim() : '',
-      card: (window.current && window.current()) ? (window.current().german || window.current().id || '') : '',
-      timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent
-    };
-
-    try{
-      await fetch(REPORT_ENDPOINT, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-      });
-    }catch(e){
-      try{ localStorage.setItem('lastProblemReport', JSON.stringify(payload)); }catch(_){}
-    }
-
-    if(subject){ subject.hidden = true; }
-    if(summary){ summary.hidden = true; summary.style.display = 'none'; }
-    if(submit){ submit.hidden = true; submit.style.display = 'none'; }
-    if(formWrap){ formWrap.hidden = true; formWrap.style.display = 'none'; }
-    if(thanks){
-      thanks.textContent = 'Vielen Dank für Ihr Feedback. Vielen Dank für die Meldung des Problems, wir werden uns schnellstmöglich darum kümmern.';
-      thanks.hidden = false;
-    }
-    if(backWrap){
-      backWrap.hidden = false;
-      backWrap.style.display = 'flex';
-    }
-  }
-
-  function exitReportingMode(){
-    setReportMode(false);
-
-    try{
-      if(typeof window.renderCard === 'function'){
-        window.renderCard('german');
-      }else if(reportState && reportState.cardHtml && $('card')){
-        $('card').innerHTML = reportState.cardHtml;
-      }
-    }catch(e){
-      if(reportState && reportState.cardHtml && $('card')) $('card').innerHTML = reportState.cardHtml;
-    }
-
-    if(reportState && $('nowPlaying')){
-      $('nowPlaying').textContent = reportState.nowPlaying || $('nowPlaying').textContent;
-    }
-
-    const shouldResume = reportState && reportState.wasPlaying;
-    const focusId = reportState && reportState.focusedId;
-    reportState = null;
-
-    if(focusId && $(focusId)){
-      try{ $(focusId).focus(); }catch(e){}
-    }
-
-    if(shouldResume){
-      setTimeout(function(){
-        const play = $('playList');
-        if(play) play.click();
-      }, 220);
-    }
-  }
-
-  function handlePosFilterChange(){
-    closeOptions();
-    setTimeout(function(){
-      const play = $('playList');
-      if(play) play.click();
-    }, 220);
-  }
-
-  document.addEventListener('change', function(ev){
-    if(ev.target && ev.target.id === 'posFilterOptions'){
-      handlePosFilterChange();
-    }
-  }, true);
-
-  document.addEventListener('click', function(ev){
-    if(ev.target.closest && ev.target.closest('#reportProblemBtn')){
-      ev.preventDefault();
-      ev.stopPropagation();
-      enterReportingMode();
-      return false;
-    }
-    if(ev.target.closest && ev.target.closest('#submitProblemReport')){
-      ev.preventDefault();
-      ev.stopPropagation();
-      submitReport();
-      return false;
-    }
-    if(ev.target.closest && ev.target.closest('#backFromProblemReport')){
-      ev.preventDefault();
-      ev.stopPropagation();
-      exitReportingMode();
-      return false;
-    }
-  }, true);
-
-  document.addEventListener('visibilitychange', keepBackgroundAudioAlive, true);
-  window.addEventListener('pagehide', keepBackgroundAudioAlive, true);
 })();
+setTimeout(showVoice,800);
+/* PWA: register service worker for offline use */
+if('serviceWorker'in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('service-worker.js').catch(function(){})})}
 </script>
-<script id="v1-fit-text-card">
-(function(){
-  function fitEl(el,min,max){if(!el)return;el.style.fontSize=max+"px";el.style.lineHeight="1.08";el.style.overflowWrap="anywhere";var guard=0;while(guard++<40&&el.scrollHeight>el.clientHeight&&parseFloat(el.style.fontSize)>min){el.style.fontSize=(parseFloat(el.style.fontSize)-1)+"px";}}
-  function fitCardText(){document.querySelectorAll(".word,.deWord,.frontWord,.card-word,#germanWord,[data-fit-headword]").forEach(function(el){fitEl(el,22,44)});document.querySelectorAll(".translation,.meaning,.backText,.card-translation,#translationText,[data-fit-body]").forEach(function(el){fitEl(el,16,28)});}
-  window.v1FitCardText=fitCardText;document.addEventListener("DOMContentLoaded",function(){fitCardText();setInterval(fitCardText,700)});window.addEventListener("resize",fitCardText);window.addEventListener("orientationchange",function(){setTimeout(fitCardText,300)});
-})();
-</script>
-<div id="appVersionStatus" class="appVersionStatus" aria-label="App-Version">Flashcard Pro v2.0.5 </div>
 </body>
 </html>
-
-    <details>
-      <summary>Stimmenqualität</summary>
-      <p class="small">Die App wählt automatisch die beste verfügbare Stimme pro Gerät. iOS und Android können unterschiedliche Stimmen bereitstellen.</p>
-      <p id="voiceStatus" class="small voiceStatus">Stimmen werden geladen …</p>
-    </details>

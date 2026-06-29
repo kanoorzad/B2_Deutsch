@@ -1,0 +1,43 @@
+name: Build German audio pack (Azure Neural TTS)
+
+# Generates ONLY the German clips (de-DE) — the largest and most important set.
+# Run it manually from the Actions tab with the "Run workflow" button.
+# Re-runs skip clips that already exist, so it is safe to run repeatedly.
+
+on:
+  workflow_dispatch:        # adds the "Run workflow" button in the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  build-german-audio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Generate German audio
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+          JOBS_CSV: audio_jobs_de.csv
+        run: |
+          python generate_audio_azure.py
+
+      - name: Commit new audio
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add audio
+          if git diff --cached --quiet; then
+            echo "No new audio to commit."
+          else
+            git commit -m "Add/update German (de-DE) audio clips"
+            git push
+          fi

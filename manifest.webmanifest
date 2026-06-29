@@ -1,15 +1,16 @@
 {
-  "name": "Flashcard Pro v2.0.5 – Deutsch Sprache",
-  "short_name": "Flashcard Pro v2.0.5",
-  "start_url": "./index.html?v=2.0.5",
+  "name": "Deutsch lernen – Wortschatz & Verben",
+  "short_name": "Deutsch lernen",
+  "start_url": "./index.html?v=22",
   "display": "standalone",
-  "background_color": "#f3f7fb",
-  "theme_color": "#17324d",
+  "background_color": "#0f141b",
+  "theme_color": "#0f141b",
   "icons": [
     {
-      "src": "icon.svg?v=69",
+      "src": "icon.svg?v=22",
       "sizes": "any",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ],
   "scope": "./",
