@@ -412,23 +412,36 @@ function fnv1a(str){
   return '0000000000000000'.slice(s.length)+s;
 }
 function mp3Url(text,locale){var v=AZURE_VOICE[locale];if(!v)return null;return AUDIO_BASE+fnv1a(v+'\x1f'+text)+'.mp3'}
+/* remember per-session which audio folders actually have files, to avoid
+   silent gaps: once a locale's first probe fails, stop trying MP3 for it */
+var MP3_MISSING={};
 function speak(text,code,onend){
   text=(text||'').trim();
   if(!text){onend&&onend();return}
   var done=false;function finish(){if(done)return;done=true;onend&&onend()}
   var loc=azLocale(code);
-  if(AUDIO_ENABLED&&loc){
+  if(AUDIO_ENABLED&&loc&&!MP3_MISSING[loc]){
     var url=mp3Url(text,loc);
     if(url){
-      var fellBack=false;
-      function fallback(){if(fellBack||done)return;fellBack=true;ttsSpeak(text,code,finish)}
-      var a=new Audio(url);
+      var settled=false;
+      function fallback(markMissing){if(settled||done)return;settled=true;if(markMissing)MP3_MISSING[loc]=true;ttsSpeak(text,code,finish)}
+      function ok(){if(settled||done)return;settled=true;}
+      var a=new Audio();
+      a.preload='auto';
       a.playbackRate=(code&&code.indexOf('de')===0?0.95:1.0)*rateMul;
       a.onended=finish;
-      a.onerror=fallback;
+      a.oncanplaythrough=ok;        // file exists & buffered
+      a.onerror=function(){fallback(true)};   // 404 / decode fail -> mark missing, use TTS
       window.__curAudio=a;
+      a.src=url;
       var p=a.play();
-      if(p&&p.catch)p.catch(fallback);
+      if(p&&p.catch)p.catch(function(e){
+        // autoplay blocked is NOT a missing file: fall back to TTS but don't mark missing
+        var blocked=(e&&(e.name==='NotAllowedError'));
+        fallback(!blocked);
+      });
+      // safety: if neither ended/error fired in 6s, fall back
+      setTimeout(function(){if(!done&&!settled){fallback(false)}},6000);
       return;
     }
   }
@@ -436,10 +449,18 @@ function speak(text,code,onend){
 }
 function ttsSpeak(text,code,onend){
   if(!('speechSynthesis'in window)||!text){onend&&onend();return}
-  var u=new SpeechSynthesisUtterance(text);var v=pickVoice(code);
+  var v=pickVoice(code);
+  /* if the device has NO voice for this language, reading it with a wrong-language
+     voice produces gibberish ("funny voice"). Skip rather than mispronounce —
+     except for the UI's own language where any voice is acceptable. */
+  if(!v){var base=(code||'').split('-')[0].toLowerCase();
+    var hasAny=VOICES.some(function(x){return (x.lang||'').toLowerCase().indexOf(base)===0});
+    if(!hasAny){ onend&&onend(); return; }
+  }
+  var u=new SpeechSynthesisUtterance(text);
   if(v){u.voice=v;u.lang=v.lang}else u.lang=code;
   u.rate=(code==='de-DE'?.72:.95)*rateMul;u.onend=function(){onend&&onend()};u.onerror=function(){onend&&onend()};
-  speechSynthesis.speak(u);
+  try{speechSynthesis.speak(u)}catch(e){onend&&onend()}
 }
 function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
 

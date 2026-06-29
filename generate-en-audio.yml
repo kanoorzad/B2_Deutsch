@@ -1,29 +1,13 @@
-name: Build Deutsch audio
+name: Build English audio pack
 
 on:
   workflow_dispatch:
-    inputs:
-      language:
-        description: 'Which language pack to generate'
-        required: true
-        default: 'de'
-        type: choice
-        options:
-          - de
-          - en
-          - es
-          - ru
-          - uk
-          - tr
-          - ar
-          - fa
-          - all
 
 permissions:
   contents: write
 
 jobs:
-  build-audio:
+  build-en-audio:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,20 +18,11 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Pick jobs file
-        id: pick
-        run: |
-          if [ "${{ github.event.inputs.language }}" = "all" ]; then
-            echo "jobs=audio_jobs.csv" >> "$GITHUB_OUTPUT"
-          else
-            echo "jobs=audio_jobs_${{ github.event.inputs.language }}.csv" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Generate audio
+      - name: Generate English audio
         env:
           AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
           AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
-          JOBS_CSV: ${{ steps.pick.outputs.jobs }}
+          JOBS_CSV: audio_jobs_en.csv
         run: python generate_audio_azure.py
 
       - name: Commit new audio
@@ -58,6 +33,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No new audio to commit."
           else
-            git commit -m "Add audio clips"
+            git commit -m "Add English audio clips"
             git push
           fi
