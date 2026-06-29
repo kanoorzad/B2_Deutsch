@@ -1,5 +1,63 @@
-mkdir -p .github/workflows
-mv generate-german-audio.yml generate-deutsch-audio.yml .github/workflows/
-git add .github/workflows/ audio_jobs_de.csv generate_audio_azure.py
-git commit -m "Add audio generation workflows"
-git push
+name: Build Deutsch audio
+
+on:
+  workflow_dispatch:
+    inputs:
+      language:
+        description: 'Which language pack to generate'
+        required: true
+        default: 'de'
+        type: choice
+        options:
+          - de
+          - en
+          - es
+          - ru
+          - uk
+          - tr
+          - ar
+          - fa
+          - all
+
+permissions:
+  contents: write
+
+jobs:
+  build-audio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Pick jobs file
+        id: pick
+        run: |
+          if [ "${{ github.event.inputs.language }}" = "all" ]; then
+            echo "jobs=audio_jobs.csv" >> "$GITHUB_OUTPUT"
+          else
+            echo "jobs=audio_jobs_${{ github.event.inputs.language }}.csv" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate audio
+        env:
+          AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
+          JOBS_CSV: ${{ steps.pick.outputs.jobs }}
+        run: python generate_audio_azure.py
+
+      - name: Commit new audio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add audio
+          if git diff --cached --quiet; then
+            echo "No new audio to commit."
+          else
+            git commit -m "Add audio clips"
+            git push
+          fi
