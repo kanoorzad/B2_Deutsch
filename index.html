@@ -371,50 +371,81 @@ function verbFormItems(c){
   return[{label:t('fInfinitive'),value:inf},{label:t('fPresent'),value:pres},{label:t('fPast'),value:past},{label:t('fPerfect'),value:perf},{label:t('fPlus'),value:plus,wide:true}];
 }
 
-/* ============ voice ============ */
+/* ============ voice engine (ported from the proven previous app) ============ */
+/* Per-language profiles: locale fallback chains + premium/reject name matching +
+   natural reading rate. The fallback chain lets the app find e.g. a Mexican
+   Spanish voice when Castilian isn't installed, so device voices work broadly. */
+var VOICE_PROFILES={
+  de:{code:'de-DE',fallback:['de-DE','de-AT','de-CH','de'],premium:/anna|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.78},
+  en:{code:'en-US',fallback:['en-US','en-GB','en-AU','en-CA','en'],premium:/samantha|daniel|alex|aria|jenny|guy|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.92},
+  fa:{code:'fa-IR',fallback:['fa-IR','fa-AF','fa'],premium:/persian|farsi|فارسی|دری|dilara|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/daria|bulgarian|bg-bg|compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.86},
+  es:{code:'es-ES',fallback:['es-ES','es-MX','es-US','es-419','es'],premium:/monica|paulina|jorge|elvira|alvaro|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.92},
+  ru:{code:'ru-RU',fallback:['ru-RU','ru'],premium:/milena|yuri|svetlana|dmitry|russian|рус|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.86},
+  uk:{code:'uk-UA',fallback:['uk-UA','uk'],premium:/ukrainian|україн|украин|polina|ostap|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.86},
+  tr:{code:'tr-TR',fallback:['tr-TR','tr'],premium:/turkish|türk|yelda|cem|emel|ahmet|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.90},
+  ar:{code:'ar-SA',fallback:['ar-SA','ar-AE','ar-EG','ar'],premium:/arabic|العربية|hamed|zariyah|salma|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.84}
+};
+function profFor(code){var b=(code||'').split('-')[0].toLowerCase();return VOICE_PROFILES[b]||VOICE_PROFILES.de}
 var VOICES=[];
-function loadVoices(){VOICES=(window.speechSynthesis&&speechSynthesis.getVoices())||[]}
-if('speechSynthesis'in window){loadVoices();speechSynthesis.onvoiceschanged=function(){loadVoices();showVoice()}}
+function voices(){try{return (window.speechSynthesis&&speechSynthesis.getVoices())||[]}catch(e){return[]}}
+function loadVoices(){VOICES=voices()}
+function warmVoices(){ if(!('speechSynthesis'in window))return;
+  try{ speechSynthesis.getVoices();
+    setTimeout(function(){loadVoices();showVoice&&showVoice()},250);
+    setTimeout(function(){loadVoices();showVoice&&showVoice()},900);
+    setTimeout(function(){loadVoices();showVoice&&showVoice()},2000);
+  }catch(e){} }
+if('speechSynthesis'in window){loadVoices();speechSynthesis.onvoiceschanged=function(){loadVoices();showVoice&&showVoice()};warmVoices()}
+function voiceScore(v,code){
+  var p=profFor(code);
+  var name=((v.name||'')+' '+(v.voiceURI||''));
+  var vl=(v.lang||'').toLowerCase();
+  var score=0;
+  if(p.reject&&p.reject.test(name))score-=1000;
+  if(p.premium&&p.premium.test(name))score+=100;
+  if(v.localService===false)score+=16;   // CLOUD voices = the high-quality ones
+  if(v.default)score+=8;
+  p.fallback.forEach(function(cd,i){var lc=cd.toLowerCase(),base=lc.split('-')[0];
+    if(vl===lc)score+=90-i*7; else if(vl.indexOf(base)===0)score+=45-i*4;});
+  if(/google/i.test(name))score+=20;
+  if(/microsoft/i.test(name))score+=18;
+  if(/apple|siri|enhanced|premium|neural|natural/i.test(name))score+=22;
+  if(/compact/i.test(name))score-=50;
+  return score;
+}
 function pickVoice(code){
-  if(!VOICES.length)loadVoices();
-  var base=code.split('-')[0].toLowerCase();
-  var bad=/novelty|whisper|zarvox|bells|boing|bahh|cellos|compact|eloquence/;
-  var pool=VOICES.filter(function(v){var l=(v.lang||'').toLowerCase(),n=((v.name||'')+' '+(v.voiceURI||'')).toLowerCase();
-    if(bad.test(n))return false;return l===code.toLowerCase()||l.indexOf(base)===0});
-  var rank=function(v){var n=((v.name||'')+' '+(v.voiceURI||'')).toLowerCase(),s=0;
-    if(/neural|natural/.test(n))s+=6;if(/premium|enhanced/.test(n))s+=5;if(/siri/.test(n))s+=4;
-    if(/google/.test(n))s+=3;if(/microsoft/.test(n))s+=3;if(/apple/.test(n))s+=2;
-    if((v.lang||'').toLowerCase()===code.toLowerCase())s+=2;if(v.localService)s+=1;return s};
-  pool.sort(function(a,b){return rank(b)-rank(a)});
-  return pool[0]||VOICES.find(function(v){return (v.lang||'').toLowerCase().indexOf(base)===0})||null;
+  if(!('speechSynthesis'in window))return null;
+  var p=profFor(code); var vs=voices(); if(!vs.length){loadVoices();vs=VOICES}
+  if(!vs.length)return null;
+  var pool=vs.filter(function(v){
+    var vl=(v.lang||'').toLowerCase(), name=((v.name||'')+' '+(v.voiceURI||''));
+    if(p.reject&&p.reject.test(name))return false;
+    return p.fallback.some(function(cd){return vl===cd.toLowerCase()||vl.indexOf(cd.split('-')[0].toLowerCase())===0});
+  });
+  // ONLY return a voice that genuinely matches this language. If none, return null
+  // so we stay silent instead of mispronouncing with a wrong-language voice.
+  if(!pool.length)return null;
+  return pool.slice().sort(function(a,b){return voiceScore(b,code)-voiceScore(a,code)})[0]||null;
 }
 function shortName(v){if(!v)return"—";var n=v.name||"";return n.replace(/Microsoft|Online|\(Natural\)|\(.*?\)|Mehrsprachig|Multilingual/g,'').replace(/\s+/g,' ').trim()||v.name}
 function showVoice(){
-  if(MODE!=='study'){$('voiceStatus').textContent='';return}
+  if(MODE!=='study'){var el=$('voiceStatus');if(el)el.textContent='';return}
   var dv=pickVoice('de-DE'), tv=pickVoice(LANG.code);
-  $('voiceStatus').textContent=t('voiceLabel')+': DE '+shortName(dv)+' · '+LANG.label+' '+shortName(tv);
+  var el=$('voiceStatus');if(el)el.textContent=t('voiceLabel')+': DE '+shortName(dv)+' · '+LANG.label+' '+shortName(tv);
 }
-/* ---- MP3-first audio (Azure Neural TTS), browser-TTS fallback ---- */
+/* ---- MP3-first audio (Azure Neural TTS), high-quality device-voice fallback ---- */
 var AUDIO_BASE=(window.AUDIO_BASE||'audio/');
 var AUDIO_ENABLED=(rd(LS.audio,'mp3')!=='tts')&&(window.AUDIO_ENABLED!==false);
-/* locale -> Azure neural voice used to render the clips (must match audio_jobs.csv) */
 var AZURE_VOICE={'de-DE':'de-DE-KatjaNeural','en-US':'en-US-JennyNeural','fa-IR':'fa-IR-DilaraNeural','es-ES':'es-ES-ElviraNeural','ru-RU':'ru-RU-SvetlanaNeural','uk-UA':'uk-UA-PolinaNeural','tr-TR':'tr-TR-EmelNeural','ar-SA':'ar-SA-ZariyahNeural'};
 function azLocale(code){var b=(code||'').split('-')[0];if(b==='de')return'de-DE';if(b==='en')return'en-US';if(b==='fa')return'fa-IR';if(b==='es')return'es-ES';if(b==='ru')return'ru-RU';if(b==='uk')return'uk-UA';if(b==='tr')return'tr-TR';if(b==='ar')return'ar-SA';return null}
-/* FNV-1a 64-bit via BigInt, mirrors the Python that named the mp3 files */
 function fnv1a(str){
   var h=0xcbf29ce484222325n, prime=0x100000001b3n, mask=0xffffffffffffffffn;
   var bytes=unescape(encodeURIComponent(str));
-  for(var i=0;i<bytes.length;i++){
-    h^=BigInt(bytes.charCodeAt(i));
-    h=(h*prime)&mask;
-  }
-  var s=h.toString(16);
-  return '0000000000000000'.slice(s.length)+s;
+  for(var i=0;i<bytes.length;i++){h^=BigInt(bytes.charCodeAt(i));h=(h*prime)&mask;}
+  var s=h.toString(16); return '0000000000000000'.slice(s.length)+s;
 }
 function mp3Url(text,locale){var v=AZURE_VOICE[locale];if(!v)return null;return AUDIO_BASE+fnv1a(v+'\x1f'+text)+'.mp3'}
-/* remember per-session which audio folders actually have files, to avoid
-   silent gaps: once a locale's first probe fails, stop trying MP3 for it */
-var MP3_MISSING={};
+var MP3_MISSING={};  // once a locale's clips are found absent, stop retrying this session
 function speak(text,code,onend){
   text=(text||'').trim();
   if(!text){onend&&onend();return}
@@ -424,43 +455,47 @@ function speak(text,code,onend){
     var url=mp3Url(text,loc);
     if(url){
       var settled=false;
-      function fallback(markMissing){if(settled||done)return;settled=true;if(markMissing)MP3_MISSING[loc]=true;ttsSpeak(text,code,finish)}
-      function ok(){if(settled||done)return;settled=true;}
+      function toTTS(markMissing){if(settled||done)return;settled=true;if(markMissing)MP3_MISSING[loc]=true;ttsSpeak(text,code,finish)}
       var a=new Audio();
       a.preload='auto';
       a.playbackRate=(code&&code.indexOf('de')===0?0.95:1.0)*rateMul;
       a.onended=finish;
-      a.oncanplaythrough=ok;        // file exists & buffered
-      a.onerror=function(){fallback(true)};   // 404 / decode fail -> mark missing, use TTS
+      a.oncanplay=function(){if(!settled)settled=true;};
+      a.onerror=function(){toTTS(true)};
       window.__curAudio=a;
       a.src=url;
-      var p=a.play();
-      if(p&&p.catch)p.catch(function(e){
-        // autoplay blocked is NOT a missing file: fall back to TTS but don't mark missing
-        var blocked=(e&&(e.name==='NotAllowedError'));
-        fallback(!blocked);
-      });
-      // safety: if neither ended/error fired in 6s, fall back
-      setTimeout(function(){if(!done&&!settled){fallback(false)}},6000);
+      var pr=a.play();
+      if(pr&&pr.catch)pr.catch(function(e){toTTS(!(e&&e.name==='NotAllowedError'))});
+      setTimeout(function(){if(!done&&!settled)toTTS(false)},6000);
       return;
     }
   }
   ttsSpeak(text,code,finish);
 }
+/* device-voice playback — two-stage like the old app, with mobile resume()+delay */
 function ttsSpeak(text,code,onend){
   if(!('speechSynthesis'in window)||!text){onend&&onend();return}
+  var p=profFor(code);
   var v=pickVoice(code);
-  /* if the device has NO voice for this language, reading it with a wrong-language
-     voice produces gibberish ("funny voice"). Skip rather than mispronounce —
-     except for the UI's own language where any voice is acceptable. */
-  if(!v){var base=(code||'').split('-')[0].toLowerCase();
-    var hasAny=VOICES.some(function(x){return (x.lang||'').toLowerCase().indexOf(base)===0});
-    if(!hasAny){ onend&&onend(); return; }
+  /* No genuine voice for this language on this device → skip rather than read
+     it with a wrong-language voice (which sounds like gibberish). The MP3 pack
+     is what fills this gap. German/UI language usually always has a voice. */
+  if(!v){ onend&&onend(); return; }
+  try{speechSynthesis.cancel()}catch(e){}
+  function makeUtter(withVoice){
+    var u=new SpeechSynthesisUtterance(String(text));
+    u.lang=p.code;
+    var vv=withVoice?v:null;
+    if(vv){u.voice=vv;u.lang=vv.lang||p.code}
+    u.rate=p.rate*rateMul; u.pitch=1; u.volume=1;
+    return u;
   }
-  var u=new SpeechSynthesisUtterance(text);
-  if(v){u.voice=v;u.lang=v.lang}else u.lang=code;
-  u.rate=(code==='de-DE'?.72:.95)*rateMul;u.onend=function(){onend&&onend()};u.onerror=function(){onend&&onend()};
-  try{speechSynthesis.speak(u)}catch(e){onend&&onend()}
+  var finished=false; function finish(){if(finished)return;finished=true;onend&&onend()}
+  var u=makeUtter(true);
+  u.onend=finish;
+  u.onerror=function(){ try{var r=makeUtter(false);r.onend=finish;r.onerror=finish;speechSynthesis.cancel();setTimeout(function(){speechSynthesis.speak(r)},80);}catch(e){finish()} };
+  try{ speechSynthesis.resume&&speechSynthesis.resume(); setTimeout(function(){try{speechSynthesis.speak(u)}catch(e){finish()}},40); }
+  catch(e){finish()}
 }
 function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
 
@@ -759,6 +794,19 @@ applyTheme(rd(LS.theme,(window.matchMedia&&matchMedia('(prefers-color-scheme: da
   }
 })();
 setTimeout(showVoice,800);
+/* mobile speech reliability: unlock on first user gesture, and keep the queue
+   alive (mobile browsers pause speechSynthesis after ~15s) */
+(function(){
+  var unlocked=false;
+  function unlock(){ if(unlocked)return; unlocked=true;
+    try{if('speechSynthesis'in window){var u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}}catch(e){}
+    loadVoices(); warmVoices();
+  }
+  ['pointerdown','touchstart','keydown','click'].forEach(function(ev){
+    document.addEventListener(ev,unlock,{once:false,passive:true});
+  });
+  setInterval(function(){ try{ if('speechSynthesis'in window && speechSynthesis.speaking){speechSynthesis.resume()} }catch(e){} },8000);
+})();
 /* PWA: register service worker for offline use */
 if('serviceWorker'in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('service-worker.js').catch(function(){})})}
 </script>
