@@ -1,0 +1,5 @@
+mkdir -p .github/workflows
+mv generate-german-audio.yml generate-deutsch-audio.yml .github/workflows/
+git add .github/workflows/ audio_jobs_de.csv generate_audio_azure.py
+git commit -m "Add audio generation workflows"
+git push
