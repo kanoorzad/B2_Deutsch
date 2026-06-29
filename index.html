@@ -262,8 +262,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
     </div>
     <div class="oRow"><label id="lblTempo">Tempo</label><input type="range" id="rate" min="60" max="120" step="5" value="100"><output id="rateOut">100%</output></div>
     <div class="oRow"><label id="lblPause">Pause</label><input type="range" id="gap" min="200" max="2500" step="100" value="500"><output id="gapOut">0,5s</output></div>
-    <div class="oRow"><label id="lblAudioSrc">Audio</label>
-      <div class="seg" id="audioSeg" style="max-width:200px"><button data-audio="mp3" class="on" id="segMp3">MP3</button><button data-audio="tts" id="segTts">Gerät</button></div></div>
   </div>
   <div class="grp">
     <h4 id="grpAppearance">DARSTELLUNG</h4>
@@ -417,15 +415,18 @@ function pickVoice(code){
   if(!('speechSynthesis'in window))return null;
   var p=profFor(code); var vs=voices(); if(!vs.length){loadVoices();vs=VOICES}
   if(!vs.length)return null;
-  var pool=vs.filter(function(v){
-    var vl=(v.lang||'').toLowerCase(), name=((v.name||'')+' '+(v.voiceURI||''));
-    if(p.reject&&p.reject.test(name))return false;
-    return p.fallback.some(function(cd){return vl===cd.toLowerCase()||vl.indexOf(cd.split('-')[0].toLowerCase())===0});
-  });
-  // ONLY return a voice that genuinely matches this language. If none, return null
-  // so we stay silent instead of mispronouncing with a wrong-language voice.
-  if(!pool.length)return null;
-  return pool.slice().sort(function(a,b){return voiceScore(b,code)-voiceScore(a,code)})[0]||null;
+  var base=(code||'').split('-')[0].toLowerCase();
+  function norm(s){return (s||'').toLowerCase().replace('_','-')}
+  // 1) voices whose lang matches this language base (de, en, fa, ...)
+  var matches=vs.filter(function(v){return norm(v.lang).indexOf(base)===0});
+  if(matches.length){
+    // drop only obvious novelty voices; keep everything else
+    var clean=matches.filter(function(v){return !p.reject.test(((v.name||'')+' '+(v.voiceURI||'')))});
+    var use=clean.length?clean:matches;   // if reject killed all, still use a matching-language voice
+    return use.slice().sort(function(a,b){return voiceScore(b,code)-voiceScore(a,code)})[0]||use[0];
+  }
+  // 2) no voice for this language at all → null (caller stays silent rather than mispronounce)
+  return null;
 }
 function shortName(v){if(!v)return"—";var n=v.name||"";return n.replace(/Microsoft|Online|\(Natural\)|\(.*?\)|Mehrsprachig|Multilingual/g,'').replace(/\s+/g,' ').trim()||v.name}
 function showVoice(){
@@ -435,7 +436,7 @@ function showVoice(){
 }
 /* ---- MP3-first audio (Azure Neural TTS), high-quality device-voice fallback ---- */
 var AUDIO_BASE=(window.AUDIO_BASE||'audio/');
-var AUDIO_ENABLED=(rd(LS.audio,'mp3')!=='tts')&&(window.AUDIO_ENABLED!==false);
+var AUDIO_ENABLED=(window.AUDIO_ENABLED!==false);  // always MP3-first; falls back to best browser voice
 var AZURE_VOICE={'de-DE':'de-DE-KatjaNeural','en-US':'en-US-JennyNeural','fa-IR':'fa-IR-DilaraNeural','es-ES':'es-ES-ElviraNeural','ru-RU':'ru-RU-SvetlanaNeural','uk-UA':'uk-UA-PolinaNeural','tr-TR':'tr-TR-EmelNeural','ar-SA':'ar-SA-ZariyahNeural'};
 function azLocale(code){var b=(code||'').split('-')[0];if(b==='de')return'de-DE';if(b==='en')return'en-US';if(b==='fa')return'fa-IR';if(b==='es')return'es-ES';if(b==='ru')return'ru-RU';if(b==='uk')return'uk-UA';if(b==='tr')return'tr-TR';if(b==='ar')return'ar-SA';return null}
 function fnv1a(str){
@@ -722,10 +723,6 @@ $('rate').oninput=function(){rateMul=this.value/100;$('rateOut').textContent=thi
 $('gap').oninput=function(){gapMs=+this.value;$('gapOut').textContent=(gapMs/1000).toFixed(1).replace('.',',')+'s'};
 $('uiLangSel').onchange=function(){UILANG_MODE=this.value;UILANG=(this.value==='auto')?uiKeyFor(LANG.code):this.value;applyUILang();wr(LS.uilang,{mode:UILANG_MODE})};
 $('themeSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;applyTheme(b.dataset.t)});
-$('audioSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
-  var mode=b.dataset.audio; AUDIO_ENABLED=(mode!=='tts'); wr(LS.audio,mode);
-  document.querySelectorAll('#audioSeg button').forEach(function(x){x.classList.toggle('on',x===b)});
-  if(playing){stop();}});
 
 /* ============ tabs + panels ============ */
 $('tabs').addEventListener('click',function(e){var b=e.target.closest('.tab');if(!b)return;var n=b.dataset.tab;
@@ -763,9 +760,9 @@ function applyUILang(){
   document.documentElement.setAttribute('dir',isRTL()?'rtl':'ltr');
   document.documentElement.setAttribute('lang',UILANG);
   setTxt('tabLearn',t('tabLearn'));setTxt('tabProgress',t('tabProgress'));setTxt('tabMarked',t('tabMarked'));setTxt('tabOptions',t('tabOptions'));
-  setTxt('optTitle',t('options'));setTxt('grpPlayback',t('playback'));setTxt('lblTempo',t('tempo'));setTxt('lblPause',t('pauseCards'));setTxt('lblAudioSrc',t('audioSrc'));
+  setTxt('optTitle',t('options'));setTxt('grpPlayback',t('playback'));setTxt('lblTempo',t('tempo'));setTxt('lblPause',t('pauseCards'));
   setTxt('grpAppearance',t('appearance'));setTxt('lblUILang',t('uiLangLabel'));setTxt('lblDesign',t('design'));
-  setTxt('optAutoUI',t('autoUI'));setTxt('segTts',t('audioDevice'));
+  setTxt('optAutoUI',t('autoUI'));
   setTxt('segLight',t('light'));setTxt('segDark',t('dark'));setTxt('segList',t('listEndless'));setTxt('segCard',t('repeatCard'));setTxt('segOnce',t('once'));
   setTxt('progressTitle',t('progress'));setTxt('markedTitle',t('markedWords'));setTxt('restartLabel',t('restart'));
   if(MODE==='study'){$('pmTitle').textContent=t('autoloop');$('pmSub').textContent='DE → '+LANG.label+' · '+t('running');renderStudy()}
@@ -777,7 +774,6 @@ function applyUILang(){
 
 /* ============ boot ============ */
 applyTheme(rd(LS.theme,(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'));
-(function(){var mode=rd(LS.audio,'mp3');document.querySelectorAll('#audioSeg button').forEach(function(x){x.classList.toggle('on',x.dataset.audio===mode)});})();
 (function(){
   var r=rd(LS.resume,null);
   if(r&&r.lang){
