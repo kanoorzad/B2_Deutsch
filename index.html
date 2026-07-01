@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Deutsch lernen</title>
-<link rel="manifest" href="manifest.webmanifest?v=30">
+<link rel="manifest" href="manifest.webmanifest?v=31">
 <meta name="theme-color" content="#0f141b">
-<link rel="icon" href="icon.svg?v=30" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg?v=30">
+<link rel="icon" href="icon.svg?v=31" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg?v=31">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
@@ -235,7 +235,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div class="scroll">
     <div class="card" id="card"><div class="cardPad" id="cardPad"></div></div>
     <p class="voice" id="voiceStatus"></p>
-    <p class="stamp">Build v30 · 7 Sprachen · Audio</p>
+    <p class="stamp">Build v31 · 7 Sprachen · Audio</p>
   </div>
 
   <div class="player" id="player" style="display:none">
@@ -285,8 +285,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div id="markedBody"></div>
 </div>
 
-<script src="data.js?v=30"></script>
-<script src="integration.js?v=30"></script>
+<script src="data.js?v=31"></script>
+<script src="integration.js?v=31"></script>
 <script>
 const UI={
   de:{"appTitle":"Deutsch lernen","chooseLang":"In welcher Sprache möchten Sie übersetzen?","area":"Lernbereich","chooseLevel":"Wählen Sie Ihr Niveau.","backLang":"‹ Sprache","irregular":"⚡ Unregelmäßige Verben","flip":"Umdrehen","mastered":"Gemeistert","autoloop":"Auto-Loop","running":"läuft weiter","tabLearn":"Lernen","tabProgress":"Fortschritt","tabMarked":"Markiert","tabOptions":"Optionen","back":"‹ Zurück","progress":"Fortschritt","markedWords":"Markierte Wörter","options":"Optionen","playback":"WIEDERGABE","tempo":"Tempo","pauseCards":"Pause zw. Karten","langContent":"SPRACHE & INHALT","translation":"Übersetzung","audioSrc":"Audio-Quelle","autoUI":"Wie Übersetzung","audioDevice":"Gerät","chooseUnit":"Wählen Sie eine Einheit.","allUnits":"Alle Einheiten","unit":"Einheit","appearance":"DARSTELLUNG","design":"Design","light":"Hell","dark":"Dunkel","switchLang":"SPRACHE WECHSELN","switchLevel":"LERNBEREICH WECHSELN","topHeard":"AM HÄUFIGSTEN GEHÖRT","masteredN":"Gemeistert","inProgress":"In Arbeit","totalHeard":"Gehört gesamt","streak":"Streak","synonyms":"SYNONYME","example":"BEISPIEL","verbForms":"VERBFORMEN","nounForms":"NOMENFORMEN","uiLangLabel":"App-Sprache","listEndless":"Liste endlos","repeatCard":"Karte wdh.","once":"Einmal","days":"Tage","nothingHeard":"Noch nichts gehört","noMarked":"Noch keine Wörter markiert.","voice":"Stimme","germanWord":"DEUTSCH","speaking":"spricht…","fArticle":"Artikel","fSingular":"Singular","fPlural":"Plural","fInfinitive":"Infinitiv","fPresent":"Präsens","fPast":"Präteritum","fPerfect":"Perfekt","fPlus":"Plusquamperfekt","voiceLabel":"Stimme","step1":"SCHRITT 1 · SPRACHE","step2":"SCHRITT 2 · ART","step3":"SCHRITT 3 · NIVEAU","back2":"Zurück","materialType":"Lernmaterial","vocabType":"Wortschatz","irregularType":"Unregelmäßige Verben","restart":"Neu wählen","backToSelect":"Buch / Bereich neu wählen","initiativeBy":"Initiative von Khalid Noorzad","noVoiceHint":"Keine {lang}-Stimme auf diesem Gerät — in den Systemeinstellungen installierbar."},
@@ -376,7 +376,7 @@ function verbFormItems(c){
    Spanish voice when Castilian isn't installed, so device voices work broadly. */
 var VOICE_PROFILES={
   de:{code:'de-DE',fallback:['de-DE','de-AT','de-CH','de'],premium:/anna|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.78},
-  en:{code:'en-US',fallback:['en-US','en-GB','en-AU','en-CA','en'],premium:/samantha|daniel|alex|aria|jenny|guy|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.92},
+  en:{code:'en-US',fallback:['en-US','en-GB','en-AU','en-CA','en'],premium:/samantha|daniel|alex|aria|jenny|guy|natural|neural|enhanced|premium|siri|multilingual|online|google us english|google uk english/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi|eloquence/i,rate:.92},
   fa:{code:'fa-IR',fallback:['fa-IR','fa-AF','fa'],premium:/persian|farsi|فارسی|دری|dilara|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/daria|bulgarian|bg-bg|compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.86},
   es:{code:'es-ES',fallback:['es-ES','es-MX','es-US','es-419','es'],premium:/monica|paulina|jorge|elvira|alvaro|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.92},
   ru:{code:'ru-RU',fallback:['ru-RU','ru'],premium:/milena|yuri|svetlana|dmitry|russian|рус|siri|apple|google|microsoft|natural|premium|enhanced|neural|online/i,reject:/compact|novelty|whisper|trinoids|zarvox|bells|boing|bad news|bahh|cellos|deranged|hysterical|pipe organ|princess|rishi/i,rate:.86},
@@ -418,6 +418,13 @@ function voiceScore(v,code){
   if(/microsoft/i.test(name))score+=18;
   if(/apple|siri|enhanced|premium|neural|natural/i.test(name))score+=22;
   if(/compact/i.test(name))score-=50;
+  // English-only: the robotic "cartoon" voice is almost always the LOCAL offline one,
+  // while the good voice is the network voice. Strongly prefer non-local for English,
+  // and penalize the plain local fallback — without affecting other languages.
+  if((code||'').split('-')[0].toLowerCase()==='en'){
+    if(v.localService===false)score+=60;   // network English voice = the good one
+    else score-=30;                         // local English voice = the robotic one
+  }
   return score;
 }
 function pickVoice(code){
