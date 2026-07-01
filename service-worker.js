@@ -1,5 +1,5 @@
 /* Deutsch lernen — service worker (Build v22) */
-const CACHE = 'deutsch-lernen-v24';
+const CACHE = 'deutsch-lernen-v25';
 
 /* App shell — small, always cached for offline use.
    Audio MP3s are NOT precached (there can be tens of thousands); they are

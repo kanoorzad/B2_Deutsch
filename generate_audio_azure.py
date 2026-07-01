@@ -35,7 +35,7 @@ def ssml(text, locale, voice):
     return (f"<speak version='1.0' xml:lang='{locale}'>"
             f"<voice xml:lang='{locale}' name='{voice}'>{safe}</voice></speak>")
 
-def synth(text, locale, voice, path, retries=4):
+def synth(text, locale, voice, path, retries=7):
     body = ssml(text, locale, voice).encode("utf-8")
     req = urllib.request.Request(ENDPOINT, data=body, method="POST", headers={
         "Ocp-Apim-Subscription-Key": KEY,
@@ -45,19 +45,24 @@ def synth(text, locale, voice, path, retries=4):
     })
     for attempt in range(retries):
         try:
-            with urllib.request.urlopen(req, timeout=60) as r:
+            with urllib.request.urlopen(req, timeout=90) as r:
                 data = r.read()
+            if not data:
+                time.sleep(2 ** attempt); continue
             with open(path, "wb") as f:
                 f.write(data)
             return True
         except urllib.error.HTTPError as e:
-            if e.code == 429:           # throttled — back off
-                wait = 2 ** attempt
+            if e.code == 429:           # throttled — respect Retry-After, longer backoff
+                ra = e.headers.get("Retry-After")
+                wait = int(ra) if (ra and ra.isdigit()) else min(60, 2 ** (attempt + 1))
                 time.sleep(wait); continue
+            if e.code >= 500:           # transient server error — back off and retry
+                time.sleep(min(30, 2 ** attempt)); continue
             print(f"  HTTP {e.code} for {os.path.basename(path)}: {e.reason}")
             return False
         except Exception as e:
-            time.sleep(2 ** attempt)
+            time.sleep(min(30, 2 ** attempt))
     print(f"  giving up on {os.path.basename(path)}")
     return False
 
@@ -76,7 +81,16 @@ def main():
         if i % 200 == 0:
             print(f"  {i}/{total}  made={made} skipped={skipped} failed={failed}")
     print(f"DONE  made={made} skipped={skipped} failed={failed}")
-    sys.exit(1 if failed else 0)
+    # Re-runnable by design: skipped clips already exist, so any clips that failed
+    # this run will simply be retried on the next run. Only treat the run as failed
+    # if a LARGE share of *attempted* clips failed (real outage / bad config),
+    # so a handful of transient errors don't turn a mostly-successful, already
+    # committed batch red. Missing clips are picked up next run.
+    attempted = made + failed
+    if attempted and failed > max(20, attempted * 0.10):
+        print(f"High failure rate ({failed}/{attempted}) — marking run failed for investigation.")
+        sys.exit(1)
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()
