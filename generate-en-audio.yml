@@ -7,12 +7,13 @@ permissions:
   contents: write
 
 concurrency:
-  group: audio-commit
+  group: audio-en
   cancel-in-progress: false
 
 jobs:
   build-en-audio:
     runs-on: ubuntu-latest
+    timeout-minutes: 350
     steps:
       - name: Checkout
         uses: actions/checkout@v4
