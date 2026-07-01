@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Deutsch lernen</title>
-<link rel="manifest" href="manifest.webmanifest?v=26">
+<link rel="manifest" href="manifest.webmanifest?v=27">
 <meta name="theme-color" content="#0f141b">
-<link rel="icon" href="icon.svg?v=26" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg?v=26">
+<link rel="icon" href="icon.svg?v=27" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg?v=27">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
@@ -235,7 +235,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div class="scroll">
     <div class="card" id="card"><div class="cardPad" id="cardPad"></div></div>
     <p class="voice" id="voiceStatus"></p>
-    <p class="stamp">Build v26 · 7 Sprachen · Audio</p>
+    <p class="stamp">Build v27 · 7 Sprachen · Audio</p>
   </div>
 
   <div class="player" id="player" style="display:none">
@@ -285,8 +285,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div id="markedBody"></div>
 </div>
 
-<script src="data.js?v=26"></script>
-<script src="integration.js?v=26"></script>
+<script src="data.js?v=27"></script>
+<script src="integration.js?v=27"></script>
 <script>
 const UI={
   de:{"appTitle":"Deutsch lernen","chooseLang":"In welcher Sprache möchten Sie übersetzen?","area":"Lernbereich","chooseLevel":"Wählen Sie Ihr Niveau.","backLang":"‹ Sprache","irregular":"⚡ Unregelmäßige Verben","flip":"Umdrehen","mastered":"Gemeistert","autoloop":"Auto-Loop","running":"läuft weiter","tabLearn":"Lernen","tabProgress":"Fortschritt","tabMarked":"Markiert","tabOptions":"Optionen","back":"‹ Zurück","progress":"Fortschritt","markedWords":"Markierte Wörter","options":"Optionen","playback":"WIEDERGABE","tempo":"Tempo","pauseCards":"Pause zw. Karten","langContent":"SPRACHE & INHALT","translation":"Übersetzung","audioSrc":"Audio-Quelle","autoUI":"Wie Übersetzung","audioDevice":"Gerät","chooseUnit":"Wählen Sie eine Einheit.","allUnits":"Alle Einheiten","unit":"Einheit","appearance":"DARSTELLUNG","design":"Design","light":"Hell","dark":"Dunkel","switchLang":"SPRACHE WECHSELN","switchLevel":"LERNBEREICH WECHSELN","topHeard":"AM HÄUFIGSTEN GEHÖRT","masteredN":"Gemeistert","inProgress":"In Arbeit","totalHeard":"Gehört gesamt","streak":"Streak","synonyms":"SYNONYME","example":"BEISPIEL","verbForms":"VERBFORMEN","nounForms":"NOMENFORMEN","uiLangLabel":"App-Sprache","listEndless":"Liste endlos","repeatCard":"Karte wdh.","once":"Einmal","days":"Tage","nothingHeard":"Noch nichts gehört","noMarked":"Noch keine Wörter markiert.","voice":"Stimme","germanWord":"DEUTSCH","speaking":"spricht…","fArticle":"Artikel","fSingular":"Singular","fPlural":"Plural","fInfinitive":"Infinitiv","fPresent":"Präsens","fPast":"Präteritum","fPerfect":"Perfekt","fPlus":"Plusquamperfekt","voiceLabel":"Stimme","step1":"SCHRITT 1 · SPRACHE","step2":"SCHRITT 2 · ART","step3":"SCHRITT 3 · NIVEAU","back2":"Zurück","materialType":"Lernmaterial","vocabType":"Wortschatz","irregularType":"Unregelmäßige Verben","restart":"Neu wählen","backToSelect":"Buch / Bereich neu wählen","initiativeBy":"Initiative von Khalid Noorzad","noVoiceHint":"Keine {lang}-Stimme auf diesem Gerät — in den Systemeinstellungen installierbar."},
@@ -569,30 +569,53 @@ function noAudioHint(code){
     setTimeout(function(){ el.textContent=prev; el.style.color=''; showVoice&&showVoice(); },7000);
   }catch(e){}
 }
-/* device-voice playback — two-stage like the old app, with mobile resume()+delay */
+/* device-voice playback. Two fixes for the "first tap sounds like a cartoon voice":
+   (1) the very first utterance of the session warms the engine with a silent clip,
+       so the real word isn't spoken by the browser's cold default voice;
+   (2) if speaking errors (common when the engine is cold), we retry ONCE while
+       KEEPING the chosen high-quality voice, and only drop the voice if that fails too. */
+var _ttsWarmed=false;
 function ttsSpeak(text,code,onend){
   if(!('speechSynthesis'in window)||!text){onend&&onend();return}
   var p=profFor(code);
   var v=pickVoice(code);
-  /* No genuine voice for this language on this device → skip rather than read
-     it with a wrong-language voice (which sounds like gibberish). The MP3 pack
-     is what fills this gap. German/UI language usually always has a voice. */
-  if(!v){ onend&&onend(); return; }
+  if(!v){ onend&&onend(); return; }   // no genuine same-language voice → stay silent
   try{speechSynthesis.cancel()}catch(e){}
+  var finished=false; function finish(){if(finished)return;finished=true;onend&&onend()}
+  var attempt=0;
   function makeUtter(withVoice){
     var u=new SpeechSynthesisUtterance(String(text));
     u.lang=p.code;
-    var vv=withVoice?v:null;
-    if(vv){u.voice=vv;u.lang=vv.lang||p.code}
+    if(withVoice&&v){ u.voice=v; u.lang=v.lang||p.code; }
     u.rate=p.rate*rateMul; u.pitch=1; u.volume=1;
+    u.onend=finish;
+    u.onerror=function(){
+      attempt++;
+      if(attempt===1){ // retry keeping the good voice — engine was just cold
+        try{speechSynthesis.cancel()}catch(e){}
+        setTimeout(function(){ try{speechSynthesis.speak(makeUtter(true))}catch(e){finish()} },120);
+      } else if(attempt===2){ // last resort: default voice
+        try{speechSynthesis.cancel()}catch(e){}
+        setTimeout(function(){ try{speechSynthesis.speak(makeUtter(false))}catch(e){finish()} },80);
+      } else { finish(); }
+    };
     return u;
   }
-  var finished=false; function finish(){if(finished)return;finished=true;onend&&onend()}
-  var u=makeUtter(true);
-  u.onend=finish;
-  u.onerror=function(){ try{var r=makeUtter(false);r.onend=finish;r.onerror=finish;speechSynthesis.cancel();setTimeout(function(){speechSynthesis.speak(r)},80);}catch(e){finish()} };
-  try{ speechSynthesis.resume&&speechSynthesis.resume(); setTimeout(function(){try{speechSynthesis.speak(u)}catch(e){finish()}},40); }
-  catch(e){finish()}
+  function go(){
+    try{ speechSynthesis.resume&&speechSynthesis.resume();
+      setTimeout(function(){ try{speechSynthesis.speak(makeUtter(true))}catch(e){finish()} },40);
+    }catch(e){ finish(); }
+  }
+  if(!_ttsWarmed){
+    _ttsWarmed=true;
+    try{
+      var warm=new SpeechSynthesisUtterance(' '); warm.volume=0; if(v){warm.voice=v;} warm.lang=(v&&v.lang)||p.code;
+      warm.onend=go; warm.onerror=go;
+      speechSynthesis.resume&&speechSynthesis.resume();
+      speechSynthesis.speak(warm);
+      setTimeout(function(){ if(!finished&&!speechSynthesis.speaking){go();} },300); // safety if warm never fires
+    }catch(e){ go(); }
+  } else { go(); }
 }
 function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
 /* Keep the screen/audio session alive during auto-loop so playback doesn't stop
@@ -902,7 +925,7 @@ setTimeout(showVoice,800);
 (function(){
   var unlocked=false;
   function unlock(){ if(unlocked)return; unlocked=true;
-    try{if('speechSynthesis'in window){var u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}}catch(e){}
+    try{if('speechSynthesis'in window){var u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);_ttsWarmed=true;}}catch(e){}
     loadVoices(); warmVoices();
   }
   ['pointerdown','touchstart','keydown','click'].forEach(function(ev){
