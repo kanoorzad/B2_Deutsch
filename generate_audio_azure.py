@@ -38,6 +38,16 @@ if not (0 <= SHARD_INDEX < SHARD_TOTAL): SHARD_INDEX = 0
 if not KEY or not REGION:
     sys.exit("Set AZURE_SPEECH_KEY and AZURE_SPEECH_REGION")
 
+# Request pacing. Azure's FREE (F0) tier is capped at ~20 requests/minute; exceeding it
+# returns 429 on every call. REQUEST_INTERVAL is the minimum seconds between requests.
+# Default 3.2s ≈ 18 requests/min, safely under the F0 cap. On a paid S0 key set
+# REQUEST_INTERVAL=0 (or a small value) for full speed.
+try:
+    REQUEST_INTERVAL = float(os.environ.get("REQUEST_INTERVAL", "3.2"))
+except ValueError:
+    REQUEST_INTERVAL = 3.2
+_last_request_at = [0.0]  # mutable holder for the timestamp of the last request
+
 ENDPOINT = f"https://{REGION}.tts.speech.microsoft.com/cognitiveservices/v1"
 # 24kHz mono mp3 — small files, good quality for flashcards
 FORMAT = "audio-24khz-48kbitrate-mono-mp3"
@@ -56,6 +66,12 @@ def synth(text, locale, voice, path, retries=7):
         "User-Agent": "deutsch-lernen-audio",
     })
     for attempt in range(retries):
+        # Pace requests: wait until at least REQUEST_INTERVAL has passed since the last one.
+        if REQUEST_INTERVAL > 0:
+            wait = REQUEST_INTERVAL - (time.time() - _last_request_at[0])
+            if wait > 0:
+                time.sleep(wait)
+            _last_request_at[0] = time.time()
         try:
             with urllib.request.urlopen(req, timeout=45) as r:
                 data = r.read()
@@ -106,6 +122,26 @@ def main():
             print("SELFTEST FAILED — Azure is not returning audio. Common causes: wrong key/region, "
                   "quota exhausted, or heavy throttling (429). Check the HTTP error line above.", flush=True)
 
+    import subprocess
+    def commit_progress(tag=""):
+        """Commit whatever audio exists so far, so a timeout never loses progress."""
+        try:
+            subprocess.run(["git","add","audio"], check=False)
+            r=subprocess.run(["git","diff","--cached","--quiet"])
+            if r.returncode==0:
+                return  # nothing new
+            subprocess.run(["git","-c","user.name=github-actions[bot]",
+                            "-c","user.email=github-actions[bot]@users.noreply.github.com",
+                            "commit","-m",f"Add Persian audio clips (checkpoint {tag})"], check=False)
+            for _ in range(5):
+                subprocess.run(["git","pull","--rebase","origin","main"], check=False)
+                p=subprocess.run(["git","push","origin","HEAD:main"])
+                if p.returncode==0:
+                    print(f"  checkpoint committed & pushed ({tag})", flush=True); return
+                time.sleep(5)
+        except Exception as e:
+            print(f"  checkpoint commit skipped: {e!r}", flush=True)
+
     for i, row in enumerate(rows, 1):
         path = os.path.join(OUT, row["filename"])
         if os.path.exists(path) and os.path.getsize(path) > 0:
@@ -115,6 +151,9 @@ def main():
         # Log frequently and FLUSH so progress is visible live, not buffered.
         if i <= 10 or i % 50 == 0:
             print(f"  {i}/{total}  made={made} skipped={skipped} failed={failed}", flush=True)
+        # Push a checkpoint every 500 newly-made clips so a timeout never loses work.
+        if made and made % 500 == 0 and ok:
+            commit_progress(tag=f"{made} made")
     print(f"DONE  made={made} skipped={skipped} failed={failed}", flush=True)
     # Re-runnable by design: skipped clips already exist, so any clips that failed
     # this run will simply be retried on the next run. Only treat the run as failed

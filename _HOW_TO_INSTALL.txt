@@ -1,31 +1,29 @@
-HOW TO INSTALL — B2_Deutsch repo drop-in
-==========================================
+HOW TO INSTALL — B2_Deutsch (Persian audio, FREE-TIER paced build)
+===================================================================
+This zip mirrors your repo layout. Copy files keeping the SAME folders:
+  • top-level files         -> repo ROOT (overwrite)
+  • .github/workflows/*.yml -> repo .github/workflows/ (overwrite; TEST file is new)
 
-This zip mirrors your repository layout. Extract it and copy the files into your
-repo keeping the SAME folders. Nothing needs manual folder-creating.
+WHAT CHANGED
+------------
+Your Azure key is the FREE (F0) tier, which is rate-limited to ~20 requests/min —
+that's why every request got "429 THROTTLED". The generator now PACES itself at
+~18 requests/min (REQUEST_INTERVAL=3.2s) so Azure stops throttling. It runs as a
+SINGLE stream (parallel shards would re-trigger the limit).
 
-WHERE EACH THING GOES
+RUN IT
+------
+1) (optional) Actions -> "TEST Persian audio" -> Run workflow. In ~1 min it should
+   now show "SELFTEST: OK" and make ~11 clips (no more 429s).
+2) Actions -> "Build Persian audio pack" -> Run workflow.
+   • At ~18 clips/min, 8,405 clips take ~7.5h, so it needs about 2 runs.
+   • It commits a checkpoint every 500 clips and skips clips that already exist,
+     so when the first run ends, just RUN IT AGAIN to finish. Nothing is lost.
+3) When it finishes with no missing clips, Persian audio is live.
+
+WANT IT FAST INSTEAD?
 ---------------------
-• Everything at the top level (index.html, data.js, generate_audio_azure.py, the
-  audio_jobs_*.csv files, etc.)  ->  your repo ROOT (overwrite existing).
-
-• The .github/workflows/ folder  ->  your repo's .github/workflows/ folder
-  (overwrite existing workflows; the NEW file is generate-fa-audio-TEST.yml).
-
-STEP 1 — TEST FIRST (1 minute)
-------------------------------
-After committing these files:
-  GitHub -> Actions tab -> "TEST Persian audio (diagnostic, 1 shard)" -> Run workflow
-Open the run -> job "test" -> step "Diagnostic run" and read the log. It generates
-only ~11 clips and tells you immediately:
-  SELFTEST: OK ...................... Azure works; the big job just needs fewer shards
-  SELFTEST FAILED — HTTP 401 ........ wrong AZURE_SPEECH_KEY or region
-  HTTP 403 .......................... Azure quota exhausted
-  429 THROTTLED ..................... free tier; too many parallel shards
-
-STEP 2 — FULL BUILD
--------------------
-Once the test shows OK:
-  Actions -> "Build Persian audio pack" -> Run workflow
-It runs 6 shards in parallel + a commit job, finishing in ~1 hour.
-(If the test showed 429 THROTTLED, tell Claude — reduce the matrix to 2–3 shards.)
+Upgrading the Azure Speech resource to the S0 (standard) tier removes the limit
+(neural TTS includes 500,000 free chars/month on S0 — your whole pack is under
+that, so likely free). On S0, set REQUEST_INTERVAL=0 in the workflow and it
+finishes in minutes.
