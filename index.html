@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Deutsch lernen</title>
-<link rel="manifest" href="manifest.webmanifest?v=28">
+<link rel="manifest" href="manifest.webmanifest?v=29">
 <meta name="theme-color" content="#0f141b">
-<link rel="icon" href="icon.svg?v=28" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg?v=28">
+<link rel="icon" href="icon.svg?v=29" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg?v=29">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
@@ -235,7 +235,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div class="scroll">
     <div class="card" id="card"><div class="cardPad" id="cardPad"></div></div>
     <p class="voice" id="voiceStatus"></p>
-    <p class="stamp">Build v28 · 7 Sprachen · Audio</p>
+    <p class="stamp">Build v29 · 7 Sprachen · Audio</p>
   </div>
 
   <div class="player" id="player" style="display:none">
@@ -285,8 +285,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div id="markedBody"></div>
 </div>
 
-<script src="data.js?v=28"></script>
-<script src="integration.js?v=28"></script>
+<script src="data.js?v=29"></script>
+<script src="integration.js?v=29"></script>
 <script>
 const UI={
   de:{"appTitle":"Deutsch lernen","chooseLang":"In welcher Sprache möchten Sie übersetzen?","area":"Lernbereich","chooseLevel":"Wählen Sie Ihr Niveau.","backLang":"‹ Sprache","irregular":"⚡ Unregelmäßige Verben","flip":"Umdrehen","mastered":"Gemeistert","autoloop":"Auto-Loop","running":"läuft weiter","tabLearn":"Lernen","tabProgress":"Fortschritt","tabMarked":"Markiert","tabOptions":"Optionen","back":"‹ Zurück","progress":"Fortschritt","markedWords":"Markierte Wörter","options":"Optionen","playback":"WIEDERGABE","tempo":"Tempo","pauseCards":"Pause zw. Karten","langContent":"SPRACHE & INHALT","translation":"Übersetzung","audioSrc":"Audio-Quelle","autoUI":"Wie Übersetzung","audioDevice":"Gerät","chooseUnit":"Wählen Sie eine Einheit.","allUnits":"Alle Einheiten","unit":"Einheit","appearance":"DARSTELLUNG","design":"Design","light":"Hell","dark":"Dunkel","switchLang":"SPRACHE WECHSELN","switchLevel":"LERNBEREICH WECHSELN","topHeard":"AM HÄUFIGSTEN GEHÖRT","masteredN":"Gemeistert","inProgress":"In Arbeit","totalHeard":"Gehört gesamt","streak":"Streak","synonyms":"SYNONYME","example":"BEISPIEL","verbForms":"VERBFORMEN","nounForms":"NOMENFORMEN","uiLangLabel":"App-Sprache","listEndless":"Liste endlos","repeatCard":"Karte wdh.","once":"Einmal","days":"Tage","nothingHeard":"Noch nichts gehört","noMarked":"Noch keine Wörter markiert.","voice":"Stimme","germanWord":"DEUTSCH","speaking":"spricht…","fArticle":"Artikel","fSingular":"Singular","fPlural":"Plural","fInfinitive":"Infinitiv","fPresent":"Präsens","fPast":"Präteritum","fPerfect":"Perfekt","fPlus":"Plusquamperfekt","voiceLabel":"Stimme","step1":"SCHRITT 1 · SPRACHE","step2":"SCHRITT 2 · ART","step3":"SCHRITT 3 · NIVEAU","back2":"Zurück","materialType":"Lernmaterial","vocabType":"Wortschatz","irregularType":"Unregelmäßige Verben","restart":"Neu wählen","backToSelect":"Buch / Bereich neu wählen","initiativeBy":"Initiative von Khalid Noorzad","noVoiceHint":"Keine {lang}-Stimme auf diesem Gerät — in den Systemeinstellungen installierbar."},
@@ -537,17 +537,9 @@ function _speak(text,code,onend){
   var dv=pickVoice(code);
   var hq=dv&&isHQVoice(dv,code);
 
-  if(IS_MOBILE){
-    // MOBILE: local voices are usually weak/absent → MP3 first, device voice as fallback.
-    playMp3(text,loc,code,function(){
-      if(dv){ ttsSpeak(text,code,finish); }        // any device voice beats silence
-      else { noAudioHint(code); finish(); }        // nothing available → gentle hint
-    },finish);
-    return;
-  }
-  // DESKTOP: browsers expose excellent cloud voices → prefer a genuine HQ native voice.
+  // DEVICE-FIRST (all platforms): use the best genuine high-quality native voice first.
   if(hq){ ttsSpeak(text,code,finish); return; }
-  // else fall back to MP3, then to any device voice, then a hint.
+  // Fallback: no HQ native voice → MP3 pack, then any device voice, then a hint.
   playMp3(text,loc,code,function(){
     if(dv){ ttsSpeak(text,code,finish); }
     else { noAudioHint(code); finish(); }
