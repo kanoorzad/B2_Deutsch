@@ -37,7 +37,8 @@ jobs:
           JOBS_CSV: audio_jobs_fa.csv
           SHARD_INDEX: ${{ matrix.shard }}
           SHARD_TOTAL: '6'
-        run: python generate_audio_azure.py
+          PYTHONUNBUFFERED: '1'
+        run: python -u generate_audio_azure.py
 
       - name: Upload shard clips
         if: always()
