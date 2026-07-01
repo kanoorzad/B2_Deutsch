@@ -23,6 +23,18 @@ REGION = os.environ.get("AZURE_SPEECH_REGION")
 OUT    = os.environ.get("AUDIO_OUT", "audio")
 JOBS   = os.environ.get("JOBS_CSV", "audio_jobs.csv")
 
+# Optional sharding: split the job across N parallel runners.
+# SHARD_INDEX is 0-based; SHARD_TOTAL is how many shards. Each runner processes
+# only the rows where (row_number % SHARD_TOTAL == SHARD_INDEX). This lets 8k+
+# Persian clips finish in ~1 hour across e.g. 6 parallel jobs instead of timing out.
+try:
+    SHARD_INDEX = int(os.environ.get("SHARD_INDEX", "0"))
+    SHARD_TOTAL = int(os.environ.get("SHARD_TOTAL", "1"))
+except ValueError:
+    SHARD_INDEX, SHARD_TOTAL = 0, 1
+if SHARD_TOTAL < 1: SHARD_TOTAL = 1
+if not (0 <= SHARD_INDEX < SHARD_TOTAL): SHARD_INDEX = 0
+
 if not KEY or not REGION:
     sys.exit("Set AZURE_SPEECH_KEY and AZURE_SPEECH_REGION")
 
@@ -70,6 +82,9 @@ def main():
     os.makedirs(OUT, exist_ok=True)
     with open(JOBS, encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
+    if SHARD_TOTAL > 1:
+        rows = [r for i, r in enumerate(rows) if i % SHARD_TOTAL == SHARD_INDEX]
+        print(f"SHARD {SHARD_INDEX+1}/{SHARD_TOTAL}: {len(rows)} of the jobs")
     total = len(rows); made = 0; skipped = 0; failed = 0
     print(f"{total} jobs in {JOBS}")
     for i, row in enumerate(rows, 1):
