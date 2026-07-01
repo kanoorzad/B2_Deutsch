@@ -11,9 +11,16 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-fa-audio:
+  # Generate Persian clips in 6 parallel shards. Each shard does ~1,400 clips
+  # (~1 hour) so the whole 8,405-clip pack finishes in about an hour instead of
+  # timing out at 5h50m. Each shard uploads its clips as an artifact.
+  generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 350
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,15 +30,49 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Generate Persian audio
+      - name: Generate Persian audio (shard ${{ matrix.shard }})
         env:
           AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
           AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
           JOBS_CSV: audio_jobs_fa.csv
+          SHARD_INDEX: ${{ matrix.shard }}
+          SHARD_TOTAL: '6'
         run: python generate_audio_azure.py
 
-      - name: Commit and push new audio
+      - name: Upload shard clips
         if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fa-audio-shard-${{ matrix.shard }}
+          path: audio/
+          if-no-files-found: ignore
+          retention-days: 1
+
+  # Collect every shard's clips and commit them once, cleanly.
+  commit:
+    needs: generate
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download all shard clips
+        uses: actions/download-artifact@v4
+        with:
+          path: _shards
+          pattern: fa-audio-shard-*
+          merge-multiple: false
+
+      - name: Merge shards into audio/
+        run: |
+          mkdir -p audio
+          # each artifact extracts to _shards/fa-audio-shard-N/... ; move all mp3s into audio/
+          find _shards -type f -name '*.mp3' -exec cp -n {} audio/ \; || true
+          rm -rf _shards
+          echo "audio/ now has $(ls audio | wc -l) files"
+
+      - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -40,8 +81,7 @@ jobs:
             echo "No new audio to commit."
             exit 0
           fi
-          git commit -m "Add Persian audio clips"
-          # main may have moved during the long run: rebase our commit on top and retry
+          git commit -m "Add Persian audio clips (parallel build)"
           for i in 1 2 3 4 5; do
             git pull --rebase origin main && git push origin HEAD:main && exit 0
             echo "push attempt $i failed, retrying..."
