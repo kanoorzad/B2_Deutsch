@@ -1,0 +1,31 @@
+HOW TO INSTALL — B2_Deutsch repo drop-in
+==========================================
+
+This zip mirrors your repository layout. Extract it and copy the files into your
+repo keeping the SAME folders. Nothing needs manual folder-creating.
+
+WHERE EACH THING GOES
+---------------------
+• Everything at the top level (index.html, data.js, generate_audio_azure.py, the
+  audio_jobs_*.csv files, etc.)  ->  your repo ROOT (overwrite existing).
+
+• The .github/workflows/ folder  ->  your repo's .github/workflows/ folder
+  (overwrite existing workflows; the NEW file is generate-fa-audio-TEST.yml).
+
+STEP 1 — TEST FIRST (1 minute)
+------------------------------
+After committing these files:
+  GitHub -> Actions tab -> "TEST Persian audio (diagnostic, 1 shard)" -> Run workflow
+Open the run -> job "test" -> step "Diagnostic run" and read the log. It generates
+only ~11 clips and tells you immediately:
+  SELFTEST: OK ...................... Azure works; the big job just needs fewer shards
+  SELFTEST FAILED — HTTP 401 ........ wrong AZURE_SPEECH_KEY or region
+  HTTP 403 .......................... Azure quota exhausted
+  429 THROTTLED ..................... free tier; too many parallel shards
+
+STEP 2 — FULL BUILD
+-------------------
+Once the test shows OK:
+  Actions -> "Build Persian audio pack" -> Run workflow
+It runs 6 shards in parallel + a commit job, finishing in ~1 hour.
+(If the test showed 429 THROTTLED, tell Claude — reduce the matrix to 2–3 shards.)

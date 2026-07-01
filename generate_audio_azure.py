@@ -57,7 +57,7 @@ def synth(text, locale, voice, path, retries=7):
     })
     for attempt in range(retries):
         try:
-            with urllib.request.urlopen(req, timeout=90) as r:
+            with urllib.request.urlopen(req, timeout=45) as r:
                 data = r.read()
             if not data:
                 time.sleep(2 ** attempt); continue
@@ -68,14 +68,17 @@ def synth(text, locale, voice, path, retries=7):
             if e.code == 429:           # throttled — respect Retry-After, longer backoff
                 ra = e.headers.get("Retry-After")
                 wait = int(ra) if (ra and ra.isdigit()) else min(60, 2 ** (attempt + 1))
+                print(f"  429 THROTTLED (attempt {attempt+1}) waiting {wait}s — Azure rate limit hit", flush=True)
                 time.sleep(wait); continue
             if e.code >= 500:           # transient server error — back off and retry
+                print(f"  HTTP {e.code} (attempt {attempt+1}) — server error, retrying", flush=True)
                 time.sleep(min(30, 2 ** attempt)); continue
-            print(f"  HTTP {e.code} for {os.path.basename(path)}: {e.reason}")
+            print(f"  HTTP {e.code}: {e.reason} — {'BAD KEY/UNAUTHORIZED' if e.code==401 else 'QUOTA/FORBIDDEN' if e.code==403 else ''}", flush=True)
             return False
         except Exception as e:
+            print(f"  network error (attempt {attempt+1}): {e!r}", flush=True)
             time.sleep(min(30, 2 ** attempt))
-    print(f"  giving up on {os.path.basename(path)}")
+    print(f"  giving up on {os.path.basename(path)}", flush=True)
     return False
 
 def main():
@@ -86,16 +89,33 @@ def main():
         rows = [r for i, r in enumerate(rows) if i % SHARD_TOTAL == SHARD_INDEX]
         print(f"SHARD {SHARD_INDEX+1}/{SHARD_TOTAL}: {len(rows)} of the jobs")
     total = len(rows); made = 0; skipped = 0; failed = 0
-    print(f"{total} jobs in {JOBS}")
+    print(f"{total} jobs in {JOBS}", flush=True)
+
+    # Startup self-test: synthesize ONE clip first and report the result immediately,
+    # so the log shows within seconds whether Azure is reachable / authorized / throttled
+    # instead of appearing frozen for a long time.
+    if total:
+        import time as _t
+        t0 = _t.time()
+        r0 = rows[0]
+        test_path = os.path.join(OUT, r0["filename"])
+        print(f"SELFTEST: requesting 1 clip from Azure (voice={r0.get('voice')}, region set)…", flush=True)
+        ok0 = synth(r0["text"], r0["locale"], r0["voice"], test_path)
+        print(f"SELFTEST: {'OK' if ok0 else 'FAILED'} in {(_t.time()-t0):.1f}s", flush=True)
+        if not ok0:
+            print("SELFTEST FAILED — Azure is not returning audio. Common causes: wrong key/region, "
+                  "quota exhausted, or heavy throttling (429). Check the HTTP error line above.", flush=True)
+
     for i, row in enumerate(rows, 1):
         path = os.path.join(OUT, row["filename"])
         if os.path.exists(path) and os.path.getsize(path) > 0:
             skipped += 1; continue
         ok = synth(row["text"], row["locale"], row["voice"], path)
         made += ok; failed += (not ok)
-        if i % 200 == 0:
-            print(f"  {i}/{total}  made={made} skipped={skipped} failed={failed}")
-    print(f"DONE  made={made} skipped={skipped} failed={failed}")
+        # Log frequently and FLUSH so progress is visible live, not buffered.
+        if i <= 10 or i % 50 == 0:
+            print(f"  {i}/{total}  made={made} skipped={skipped} failed={failed}", flush=True)
+    print(f"DONE  made={made} skipped={skipped} failed={failed}", flush=True)
     # Re-runnable by design: skipped clips already exist, so any clips that failed
     # this run will simply be retried on the next run. Only treat the run as failed
     # if a LARGE share of *attempted* clips failed (real outage / bad config),
