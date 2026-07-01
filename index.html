@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Deutsch lernen</title>
-<link rel="manifest" href="manifest.webmanifest?v=34">
+<link rel="manifest" href="manifest.webmanifest?v=36">
 <meta name="theme-color" content="#0f141b">
-<link rel="icon" href="icon.svg?v=34" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg?v=34">
+<link rel="icon" href="icon.svg?v=36" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg?v=36">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
@@ -235,7 +235,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div class="scroll">
     <div class="card" id="card"><div class="cardPad" id="cardPad"></div></div>
     <p class="voice" id="voiceStatus"></p>
-    <p class="stamp">Build v34 · 7 Sprachen · Audio</p>
+    <p class="stamp">Build v36 · 7 Sprachen · Audio</p>
   </div>
 
   <div class="player" id="player" style="display:none">
@@ -285,8 +285,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div id="markedBody"></div>
 </div>
 
-<script src="data.js?v=34"></script>
-<script src="integration.js?v=34"></script>
+<script src="data.js?v=36"></script>
+<script src="integration.js?v=36"></script>
 <script>
 const UI={
   de:{"appTitle":"Deutsch lernen","chooseLang":"In welcher Sprache möchten Sie übersetzen?","area":"Lernbereich","chooseLevel":"Wählen Sie Ihr Niveau.","backLang":"‹ Sprache","irregular":"⚡ Unregelmäßige Verben","flip":"Umdrehen","mastered":"Gemeistert","autoloop":"Auto-Loop","running":"läuft weiter","tabLearn":"Lernen","tabProgress":"Fortschritt","tabMarked":"Markiert","tabOptions":"Optionen","back":"‹ Zurück","progress":"Fortschritt","markedWords":"Markierte Wörter","options":"Optionen","playback":"WIEDERGABE","tempo":"Tempo","pauseCards":"Pause zw. Karten","langContent":"SPRACHE & INHALT","translation":"Übersetzung","audioSrc":"Audio-Quelle","autoUI":"Wie Übersetzung","audioDevice":"Gerät","chooseUnit":"Wählen Sie eine Einheit.","allUnits":"Alle Einheiten","unit":"Einheit","appearance":"DARSTELLUNG","design":"Design","light":"Hell","dark":"Dunkel","switchLang":"SPRACHE WECHSELN","switchLevel":"LERNBEREICH WECHSELN","topHeard":"AM HÄUFIGSTEN GEHÖRT","masteredN":"Gemeistert","inProgress":"In Arbeit","totalHeard":"Gehört gesamt","streak":"Streak","synonyms":"SYNONYME","example":"BEISPIEL","verbForms":"VERBFORMEN","nounForms":"NOMENFORMEN","uiLangLabel":"App-Sprache","listEndless":"Liste endlos","repeatCard":"Karte wdh.","once":"Einmal","days":"Tage","nothingHeard":"Noch nichts gehört","noMarked":"Noch keine Wörter markiert.","voice":"Stimme","germanWord":"DEUTSCH","speaking":"spricht…","fArticle":"Artikel","fSingular":"Singular","fPlural":"Plural","fInfinitive":"Infinitiv","fPresent":"Präsens","fPast":"Präteritum","fPerfect":"Perfekt","fPlus":"Plusquamperfekt","voiceLabel":"Stimme","step1":"SCHRITT 1 · SPRACHE","step2":"SCHRITT 2 · ART","step3":"SCHRITT 3 · NIVEAU","back2":"Zurück","materialType":"Lernmaterial","vocabType":"Wortschatz","irregularType":"Unregelmäßige Verben","restart":"Neu wählen","backToSelect":"Buch / Bereich neu wählen","initiativeBy":"Initiative von Khalid Noorzad","noVoiceHint":"Keine {lang}-Stimme auf diesem Gerät — in den Systemeinstellungen installierbar."},
@@ -429,6 +429,30 @@ function pickVoice(code){
   // 1) voices whose lang matches this language base (de, en, fa, ...)
   var matches=vs.filter(function(v){return norm(v.lang).indexOf(base)===0});
   if(matches.length){
+    // ENGLISH: Apple ships ~40 robotic "novelty" voices (Albert, Organ, Fred, Bells…) that
+    // pollute the list. A blocklist can't keep up. Use an ALLOWLIST of genuinely good voices
+    // (real Apple voices + any cloud/Google/Microsoft/Natural/Neural voice) and pick from those.
+    if(base==='en'){
+      // Cross-platform allowlist. APPLE: good voices have clean names (Samantha, Alex…);
+      // its ~40 novelty voices (Albert, Organ, Bells…) are simply not on this list.
+      // ANDROID: Google TTS voices are named like "en-us-x-iol-network" / "Google US English";
+      // the good ones are NETWORK voices (localService===false or name/URI ending -network),
+      // the robotic ones are the -local compact voices.
+      var GOOD=/samantha|alex|aaron|nicky|siri|daniel|karen|moira|tessa|serena|kate|arthur|martha|stephanie|nathan|aria|jenny|guy|libby|ryan|sonia|emma|google|microsoft|natural|neural|enhanced|premium|online|en-[a-z]{2}-x-|-network\b|network$|-local\b|local$/i;
+      var scoreEN=function(v){
+        var n=((v.name||'')+' '+(v.voiceURI||''));var s=voiceScore(v,code);
+        if(v.localService===false)s+=80;                 // network voice = best (both platforms)
+        else if(/-local\b|local$/i.test(n))s-=10;         // Android local Google = decent, mild penalty
+        return s;
+      };
+      // Accept: Android Google voices (network OR local — both are fine), cloud voices, and
+      // the named real Apple voices. This EXCLUDES Apple novelty voices (Albert, Organ, Bells…),
+      // which have none of these markers.
+      var good=matches.filter(function(v){var n=((v.name||'')+' '+(v.voiceURI||''));return GOOD.test(n)||v.localService===false;});
+      if(good.length){ return good.slice().sort(function(a,b){return scoreEN(b)-scoreEN(a)})[0]; }
+      // Only robotic/novelty voices on this device → null so English falls back to MP3.
+      return null;
+    }
     // drop only obvious novelty voices; keep everything else
     var clean=matches.filter(function(v){return !p.reject.test(((v.name||'')+' '+(v.voiceURI||'')))});
     var use=clean.length?clean:matches;   // if reject killed all, still use a matching-language voice
@@ -541,8 +565,13 @@ function _speak(text,code,onend){
   var dv=pickVoice(code);
   var hq=dv&&isHQVoice(dv,code);
 
-  // ENGLISH ONLY: always use the best browser voice, never MP3 (matches the original app).
-  if((code||'').split('-')[0].toLowerCase()==='en'){ ttsSpeak(text,code,finish); return; }
+  // ENGLISH ONLY: use the best GENUINE browser voice (allowlist in pickVoice). If the device
+  // only has robotic novelty voices, pickVoice returns null → fall back to MP3 instead.
+  if((code||'').split('-')[0].toLowerCase()==='en'){
+    if(dv){ ttsSpeak(text,code,finish); return; }
+    playMp3(text,loc,code,function(){ noAudioHint(code); finish(); },finish);
+    return;
+  }
 
   // DEVICE-FIRST (all platforms): use the best genuine high-quality native voice first.
   if(hq){ ttsSpeak(text,code,finish); return; }
