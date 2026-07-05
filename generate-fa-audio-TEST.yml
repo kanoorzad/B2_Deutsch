@@ -17,12 +17,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Diagnostic run — ONE shard, small slice, verbose
+      - name: Diagnostic run — ONE shard, small slice, PACED, verbose
         env:
           AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
           AZURE_SPEECH_REGION: ${{ secrets.AZURE_SPEECH_REGION }}
           JOBS_CSV: audio_jobs_fa.csv
           SHARD_INDEX: '0'
-          SHARD_TOTAL: '840'   # ~10 clips only, just to prove Azure works
+          SHARD_TOTAL: '840'      # ~11 clips only
+          REQUEST_INTERVAL: '3.2' # paced for free F0 tier
           PYTHONUNBUFFERED: '1'
         run: python -u generate_audio_azure.py

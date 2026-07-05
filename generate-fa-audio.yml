@@ -11,12 +11,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Generate Persian clips in 6 parallel shards. Each shard does ~1,400 clips
-  # (~1 hour) so the whole 8,405-clip pack finishes in about an hour instead of
-  # timing out at 5h50m. Each shard uploads its clips as an artifact.
+  # S0 tier has no rate cap → run 6 shards in parallel, full speed. Finishes in minutes.
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 120
     strategy:
       fail-fast: false
       matrix:
@@ -24,12 +22,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
       - name: Generate Persian audio (shard ${{ matrix.shard }})
         env:
           AZURE_SPEECH_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
@@ -37,9 +33,9 @@ jobs:
           JOBS_CSV: audio_jobs_fa.csv
           SHARD_INDEX: ${{ matrix.shard }}
           SHARD_TOTAL: '6'
+          REQUEST_INTERVAL: '0'      # S0: no pacing needed
           PYTHONUNBUFFERED: '1'
         run: python -u generate_audio_azure.py
-
       - name: Upload shard clips
         if: always()
         uses: actions/upload-artifact@v4
@@ -49,7 +45,6 @@ jobs:
           if-no-files-found: ignore
           retention-days: 1
 
-  # Collect every shard's clips and commit them once, cleanly.
   commit:
     needs: generate
     if: always()
@@ -57,22 +52,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Download all shard clips
         uses: actions/download-artifact@v4
         with:
           path: _shards
           pattern: fa-audio-shard-*
           merge-multiple: false
-
       - name: Merge shards into audio/
         run: |
           mkdir -p audio
-          # each artifact extracts to _shards/fa-audio-shard-N/... ; move all mp3s into audio/
           find _shards -type f -name '*.mp3' -exec cp -n {} audio/ \; || true
           rm -rf _shards
           echo "audio/ now has $(ls audio | wc -l) files"
-
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
