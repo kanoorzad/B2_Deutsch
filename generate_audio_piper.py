@@ -84,16 +84,17 @@ def main():
 
     for i, row in enumerate(rows, 1):
         path = os.path.join(OUT, row["filename"])
-        if os.path.exists(path) and os.path.getsize(path) > 0:
+        if os.path.exists(path) and os.path.getsize(path) > 1000:   # real MP3, not a stub
             skipped += 1; continue
         ok = synth_to_mp3(row["text"], path)
         made += ok; failed += (not ok)
-        if i <= 5 or i % 100 == 0:
+        if i <= 5 or i % 100 == 0 or (not ok):
             print(f"  {i}/{total}  made={made} skipped={skipped} failed={failed}", flush=True)
 
-    print(f"DONE  made={made} skipped={skipped} failed={failed}", flush=True)
-    if failed > max(20, total * 0.10):
-        sys.exit(1)
+    print(f"DONE  made={made} skipped={skipped} failed={failed}  (of {total})", flush=True)
+    if failed:
+        print(f"NOTE: {failed} clips failed this run. Re-run to retry just those "
+              f"(existing clips are skipped).", flush=True)
     sys.exit(0)
 
 
