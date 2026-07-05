@@ -1,23 +1,14 @@
 #!/usr/bin/env python3
 """
 FREE offline neural TTS using Piper — no API, no key, no quota, no rate limit.
-Runs entirely inside the GitHub Actions runner. Reads the same audio_jobs_*.csv
-(columns: filename, locale, voice, text) and writes MP3s with the EXACT filenames
-the app expects, so no app change is needed.
-
-Piper produces WAV; we convert to MP3 with ffmpeg to match the app's <hash>.mp3 lookup.
-
-Env:
-  JOBS_CSV        CSV of jobs (default audio_jobs_fa.csv)
-  AUDIO_OUT       output dir (default audio)
-  PIPER_MODEL     path to the .onnx voice model (default fa_IR-gyro-medium.onnx)
-  SHARD_INDEX / SHARD_TOTAL   optional parallel sharding
+Reads audio_jobs_*.csv (filename, locale, voice, text) and writes MP3s with the
+EXACT filenames the app expects. Piper outputs WAV; ffmpeg converts to MP3.
 """
-import os, sys, csv, subprocess, wave
+import os, sys, csv, subprocess, wave, glob, traceback
 
 JOBS  = os.environ.get("JOBS_CSV", "audio_jobs_fa.csv")
 OUT   = os.environ.get("AUDIO_OUT", "audio")
-MODEL = os.environ.get("PIPER_MODEL", "fa_IR-gyro-medium.onnx")
+MODEL = os.environ.get("PIPER_MODEL", "")   # path to .onnx; auto-detected if empty
 
 try:
     SHARD_INDEX = int(os.environ.get("SHARD_INDEX", "0"))
@@ -27,12 +18,26 @@ except ValueError:
 if SHARD_TOTAL < 1: SHARD_TOTAL = 1
 if not (0 <= SHARD_INDEX < SHARD_TOTAL): SHARD_INDEX = 0
 
-# Load Piper once (the model stays in memory for the whole run — this is what makes
-# it fast: no per-clip network round-trip like a cloud API).
-from piper import PiperVoice
-print(f"Loading Piper model: {MODEL}", flush=True)
-voice = PiperVoice.load(MODEL)
-print("Model loaded.", flush=True)
+# Locate the model file if not given explicitly.
+if not MODEL:
+    cands = sorted(glob.glob("*.onnx")) + sorted(glob.glob("**/*.onnx", recursive=True))
+    if not cands:
+        sys.exit("ERROR: no .onnx Piper model found in the working directory.")
+    MODEL = cands[0]
+
+print(f"Using model: {MODEL}", flush=True)
+if not os.path.exists(MODEL) or os.path.getsize(MODEL) < 1_000_000:
+    sz = os.path.getsize(MODEL) if os.path.exists(MODEL) else 0
+    sys.exit(f"ERROR: model file looks wrong (size={sz} bytes). Download likely failed.")
+
+try:
+    from piper import PiperVoice
+    voice = PiperVoice.load(MODEL)
+    print("Piper model loaded OK.", flush=True)
+except Exception as e:
+    print("ERROR loading Piper model:", repr(e), flush=True)
+    traceback.print_exc()
+    sys.exit(1)
 
 
 def synth_to_mp3(text, mp3_path):
@@ -40,14 +45,13 @@ def synth_to_mp3(text, mp3_path):
     try:
         with wave.open(wav_path, "wb") as wf:
             voice.synthesize_wav(text, wf)
-        # convert WAV -> MP3 (24kHz mono, ~64k) with ffmpeg, quietly
         r = subprocess.run(
             ["ffmpeg", "-y", "-loglevel", "error", "-i", wav_path,
              "-ar", "24000", "-ac", "1", "-b:a", "64k", mp3_path],
             capture_output=True)
         ok = (r.returncode == 0 and os.path.exists(mp3_path) and os.path.getsize(mp3_path) > 0)
         if not ok:
-            print(f"  ffmpeg failed for {os.path.basename(mp3_path)}: {r.stderr.decode()[:120]}", flush=True)
+            print(f"  ffmpeg failed: {r.stderr.decode()[:160]}", flush=True)
         return ok
     except Exception as e:
         print(f"  synth error for {os.path.basename(mp3_path)}: {e!r}", flush=True)
@@ -71,10 +75,12 @@ def main():
 
     if total:
         r0 = rows[0]
-        print("SELFTEST: synthesizing 1 clip with Piper…", flush=True)
+        print(f"SELFTEST: synthesizing 1 clip… text={r0['text'][:30]!r}", flush=True)
         ok0 = synth_to_mp3(r0["text"], os.path.join(OUT, r0["filename"]))
         print(f"SELFTEST: {'OK' if ok0 else 'FAILED'}", flush=True)
-        if ok0: made += 1
+        if not ok0:
+            sys.exit("SELFTEST failed — see the error above (model/phonemization/ffmpeg).")
+        made += 1
 
     for i, row in enumerate(rows, 1):
         path = os.path.join(OUT, row["filename"])
@@ -86,7 +92,6 @@ def main():
             print(f"  {i}/{total}  made={made} skipped={skipped} failed={failed}", flush=True)
 
     print(f"DONE  made={made} skipped={skipped} failed={failed}", flush=True)
-    # Piper is deterministic and offline; a high failure rate means a real problem.
     if failed > max(20, total * 0.10):
         sys.exit(1)
     sys.exit(0)
