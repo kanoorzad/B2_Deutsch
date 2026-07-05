@@ -1,29 +1,31 @@
-HOW TO INSTALL — B2_Deutsch (Persian audio, FREE-TIER paced build)
-===================================================================
-This zip mirrors your repo layout. Copy files keeping the SAME folders:
-  • top-level files         -> repo ROOT (overwrite)
-  • .github/workflows/*.yml -> repo .github/workflows/ (overwrite; TEST file is new)
+FREE PERSIAN AUDIO — using Piper (no Azure, no cost, no limits)
+================================================================
+Your Azure F0 key is quota-capped, so Persian could never finish there. This uses
+PIPER, a free open-source neural TTS that runs INSIDE the GitHub runner — no API,
+no key, no quota, no rate limit. It writes MP3s with the SAME filenames your app
+already expects, so NO app change is needed.
 
-WHAT CHANGED
-------------
-Your Azure key is the FREE (F0) tier, which is rate-limited to ~20 requests/min —
-that's why every request got "429 THROTTLED". The generator now PACES itself at
-~18 requests/min (REQUEST_INTERVAL=3.2s) so Azure stops throttling. It runs as a
-SINGLE stream (parallel shards would re-trigger the limit).
+INSTALL
+-------
+Copy files keeping the SAME folders (overwrite existing):
+  • top-level files (incl. generate_audio_piper.py)  -> repo ROOT
+  • .github/workflows/generate-fa-audio-piper.yml     -> repo .github/workflows/  (NEW)
 
-RUN IT
-------
-1) (optional) Actions -> "TEST Persian audio" -> Run workflow. In ~1 min it should
-   now show "SELFTEST: OK" and make ~11 clips (no more 429s).
-2) Actions -> "Build Persian audio pack" -> Run workflow.
-   • At ~18 clips/min, 8,405 clips take ~7.5h, so it needs about 2 runs.
-   • It commits a checkpoint every 500 clips and skips clips that already exist,
-     so when the first run ends, just RUN IT AGAIN to finish. Nothing is lost.
-3) When it finishes with no missing clips, Persian audio is live.
+RUN
+---
+Actions -> "Build Persian audio pack (FREE - Piper)" -> Run workflow.
+  • Installs Piper + ffmpeg, downloads the Persian voice (~60 MB), then generates
+    all 8,405 clips across 3 parallel shards on the runner CPU.
+  • Takes roughly 30-60 minutes total; commits every clip at the end. FREE.
+  • The self-test prints "SELFTEST: OK" within a minute — no more 429s, ever.
 
-WANT IT FAST INSTEAD?
----------------------
-Upgrading the Azure Speech resource to the S0 (standard) tier removes the limit
-(neural TTS includes 500,000 free chars/month on S0 — your whole pack is under
-that, so likely free). On S0, set REQUEST_INTERVAL=0 in the workflow and it
-finishes in minutes.
+VOICE
+-----
+Default voice: fa_IR-gyro-medium (clear Persian male). To use a different one,
+change the download URL + PIPER_MODEL in the workflow to any of:
+  amir, ganji, ganji_adabi, gyro, reza_ibrahim  (all fa_IR ... medium)
+Quality note: Piper's Persian is genuine neural voice — very good for flashcards,
+though slightly less polished than Azure's Dilara. But it's free and unlimited.
+
+(You can still keep using Azure for other languages that already worked; this
+ Piper workflow is only for Persian.)
