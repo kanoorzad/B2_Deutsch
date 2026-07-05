@@ -4,22 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Deutsch lernen</title>
-<link rel="manifest" href="manifest.webmanifest?v=40">
+<link rel="manifest" href="manifest.webmanifest?v=41">
 <meta name="theme-color" content="#0f141b">
-<link rel="icon" href="icon.svg?v=40" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg?v=40">
+<link rel="icon" href="icon.svg?v=41" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg?v=41">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
 <style>
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/samim-font@v4.0.5/dist/font-face.css');
 :root{
-  --bg1:#0e1729; --bg2:#0a1120; --card1:#1a2740; --card2:#131c30;
-  --ink:#eef3fb; --ink2:#c4d2ec; --muted:#8a9bc0; --faint:#5a6b8c;
-  --blue:#2563d4; --blue2:#4a9bff; --green:#3ddc97; --gold:#ffb84d;
-  --line:rgba(255,255,255,.07);
+  --bg1:#0c1424; --bg2:#0a1120; --card1:#141d2f; --card2:#131c30;
+  --ink:#f2f6fc; --ink2:#c4d2ec; --muted:#7688a8; --faint:#5f7095;
+  --blue:#2563d4; --blue2:#4a9bff; --blueInk:#9fc2ff; --green:#3ddc97; --gold:#ffce85;
+  --line:rgba(255,255,255,.07); --line2:#1a2436; --panel:#151f31;
   --su:0 14px 34px rgba(0,0,0,.5); --sm:0 4px 12px rgba(0,0,0,.3);
-  --hi:inset 0 1px 0 rgba(255,255,255,.1);
-  --r:22px;
+  --hi:inset 0 1px 0 rgba(255,255,255,.08);
+  --r:20px;
+  --fa:'Samim',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;
 }
 [data-theme="light"]{
   --bg1:#eef3fb; --bg2:#e3ebf7; --card1:#ffffff; --card2:#f4f8fd;
@@ -121,13 +123,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
 .ex{background:linear-gradient(160deg,rgba(61,220,151,.12),rgba(61,220,151,.04))}
 .ex .lab{color:#5fc99a}.ex p{color:var(--ink)}.ex b{color:var(--green)}
 .ex .exTr{color:var(--muted);font-size:13px;margin-top:.35rem;font-style:italic}
-[dir="rtl"] .ex .exTr{text-align:right}
+[dir="rtl"] .ex .exTr{text-align:right;font-family:var(--fa);font-size:16px;line-height:1.95}
 .trans{background:linear-gradient(160deg,rgba(74,155,255,.12),rgba(74,155,255,.04));border:1.5px solid rgba(74,155,255,.18);transition:border-color .3s,box-shadow .3s}
 .trans.speaking{border-color:rgba(74,155,255,.6);box-shadow:0 0 0 3px rgba(74,155,255,.12)}
 .trans .lab{color:#7fa8e0}
-.trans .main{font-size:17px;font-weight:700;color:#9fc2ff;margin:.3rem 0 0}
-.trans .transEx{font-size:14px;color:#cfe0fb;margin:.4rem 0 0;line-height:1.45}
-[dir="rtl"] .trans .transEx{text-align:right}
+.trans .main{font-size:21px;font-weight:700;color:#9fc2ff;margin:.3rem 0 0;line-height:1.6}
+.trans .transEx{font-size:15px;color:#cfe0fb;margin:.4rem 0 0;line-height:1.6}
+[dir="rtl"] .trans .transEx{text-align:right;font-family:var(--fa);line-height:1.9}
+[dir="rtl"] .trans .main{font-family:var(--fa)}
 .trans .sub{font-size:13px;color:var(--muted);margin:.2rem 0 0}
 .live{display:none;align-items:center;gap:4px;font-size:10px;color:var(--blue2);font-weight:800}
 .trans.speaking .live{display:flex}
@@ -209,6 +212,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
 .voice{font-size:11px;color:var(--faint);text-align:center;margin:.6rem 1.1rem 0}
 .stamp{text-align:center;font-size:10px;color:var(--faint);opacity:.55;margin:.3rem 0 0}
 [dir="rtl"] .opt,[dir="rtl"] .panel,[dir="rtl"] .pmeta{text-align:right}
+/* Samim for all RTL (Persian/Arabic) UI text; German/Latin stays default */
+[dir="rtl"] .eyebrow,[dir="rtl"] .lab,[dir="rtl"] .panel,[dir="rtl"] .opt,[dir="rtl"] .pmeta,
+[dir="rtl"] .tab,[dir="rtl"] .pill,[dir="rtl"] .sb,[dir="rtl"] .crumb,[dir="rtl"] .streak,
+[dir="rtl"] .dHead,[dir="rtl"] .grp,[dir="rtl"] .selTitle,[dir="rtl"] .selSub,[dir="rtl"] .selStep,
+[dir="rtl"] h4,[dir="rtl"] label,[dir="rtl"] .pvH{font-family:var(--fa)}
 [dir="rtl"] .word,[dir="rtl"] .eyebrow{text-align:center}
 .word.longword{font-size:clamp(18px,5.2vw,26px);letter-spacing:-.3px}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
@@ -235,7 +243,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div class="scroll">
     <div class="card" id="card"><div class="cardPad" id="cardPad"></div></div>
     <p class="voice" id="voiceStatus"></p>
-    <p class="stamp">Build v40 · 7 Sprachen · Audio</p>
+    <p class="stamp">Build v41 · 7 Sprachen · Audio</p>
   </div>
 
   <div class="player" id="player" style="display:none">
@@ -285,8 +293,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div id="markedBody"></div>
 </div>
 
-<script src="data.js?v=40"></script>
-<script src="integration.js?v=40"></script>
+<script src="data.js?v=41"></script>
+<script src="integration.js?v=41"></script>
 <script>
 const UI={
   de:{"appTitle":"Deutsch lernen","chooseLang":"In welcher Sprache möchten Sie übersetzen?","area":"Lernbereich","chooseLevel":"Wählen Sie Ihr Niveau.","backLang":"‹ Sprache","irregular":"⚡ Unregelmäßige Verben","flip":"Umdrehen","mastered":"Gemeistert","autoloop":"Auto-Loop","running":"läuft weiter","tabLearn":"Lernen","tabProgress":"Fortschritt","tabMarked":"Markiert","tabOptions":"Optionen","back":"‹ Zurück","progress":"Fortschritt","markedWords":"Markierte Wörter","options":"Optionen","playback":"WIEDERGABE","tempo":"Tempo","pauseCards":"Pause zw. Karten","langContent":"SPRACHE & INHALT","translation":"Übersetzung","audioSrc":"Audio-Quelle","autoUI":"Wie Übersetzung","audioDevice":"Gerät","chooseUnit":"Wählen Sie eine Einheit.","allUnits":"Alle Einheiten","unit":"Einheit","appearance":"DARSTELLUNG","design":"Design","light":"Hell","dark":"Dunkel","switchLang":"SPRACHE WECHSELN","switchLevel":"LERNBEREICH WECHSELN","topHeard":"AM HÄUFIGSTEN GEHÖRT","masteredN":"Gemeistert","inProgress":"In Arbeit","totalHeard":"Gehört gesamt","streak":"Streak","synonyms":"SYNONYME","example":"BEISPIEL","verbForms":"VERBFORMEN","nounForms":"NOMENFORMEN","uiLangLabel":"App-Sprache","listEndless":"Liste endlos","repeatCard":"Karte wdh.","once":"Einmal","days":"Tage","nothingHeard":"Noch nichts gehört","noMarked":"Noch keine Wörter markiert.","voice":"Stimme","germanWord":"DEUTSCH","speaking":"spricht…","fArticle":"Artikel","fSingular":"Singular","fPlural":"Plural","fInfinitive":"Infinitiv","fPresent":"Präsens","fPast":"Präteritum","fPerfect":"Perfekt","fPlus":"Plusquamperfekt","voiceLabel":"Stimme","step1":"SCHRITT 1 · SPRACHE","step2":"SCHRITT 2 · ART","step3":"SCHRITT 3 · NIVEAU","back2":"Zurück","materialType":"Lernmaterial","vocabType":"Wortschatz","irregularType":"Unregelmäßige Verben","restart":"Neu wählen","backToSelect":"Buch / Bereich neu wählen","initiativeBy":"Initiative von Khalid Noorzad","noVoiceHint":"Keine {lang}-Stimme auf diesem Gerät — in den Systemeinstellungen installierbar."},
