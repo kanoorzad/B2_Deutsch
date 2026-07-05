@@ -1,5 +1,5 @@
-/* Deutsch lernen — service worker (Build v45) */
-const VER = 'v45';
+/* Deutsch lernen — service worker (Build v47) */
+const VER = 'v47';
 const CACHE = 'deutsch-lernen-' + VER;
 
 /* App shell — small, always cached for offline use.

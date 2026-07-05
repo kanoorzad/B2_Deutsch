@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Deutsch lernen</title>
-<link rel="manifest" href="manifest.webmanifest?v=45">
+<link rel="manifest" href="manifest.webmanifest?v=47">
 <meta name="theme-color" content="#0f141b">
-<link rel="icon" href="icon.svg?v=45" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg?v=45">
+<link rel="icon" href="icon.svg?v=47" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg?v=47">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
@@ -278,7 +278,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div class="scroll">
     <div class="card" id="card"><div class="cardPad" id="cardPad"></div></div>
     <p class="voice" id="voiceStatus"></p>
-    <p class="stamp">Build v45 · 7 Sprachen · Audio</p>
+    <p class="stamp">Build v47 · 7 Sprachen · Audio</p>
   </div>
 
   <div class="player" id="player" style="display:none">
@@ -338,8 +338,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div id="markedBody"></div>
 </div>
 
-<script src="data.js?v=45"></script>
-<script src="integration.js?v=45"></script>
+<script src="data.js?v=47"></script>
+<script src="integration.js?v=47"></script>
 <script>
 const UI={
   de:{"appTitle":"Deutsch lernen","chooseLang":"In welcher Sprache möchten Sie übersetzen?","area":"Lernbereich","chooseLevel":"Wählen Sie Ihr Niveau.","backLang":"‹ Sprache","irregular":"⚡ Unregelmäßige Verben","flip":"Umdrehen","mastered":"Gemeistert","autoloop":"Auto-Loop","running":"läuft weiter","tabLearn":"Lernen","tabProgress":"Fortschritt","tabMarked":"Markiert","tabOptions":"Optionen","back":"‹ Zurück","progress":"Fortschritt","markedWords":"Markierte Wörter","options":"Optionen","playback":"WIEDERGABE","tempo":"Tempo","pauseCards":"Pause zw. Karten","langContent":"SPRACHE & INHALT","translation":"Übersetzung","audioSrc":"Audio-Quelle","autoUI":"Wie Übersetzung","audioDevice":"Gerät","chooseUnit":"Wählen Sie eine Einheit.","allUnits":"Alle Einheiten","unit":"Einheit","appearance":"DARSTELLUNG","design":"Design","light":"Hell","dark":"Dunkel","switchLang":"SPRACHE WECHSELN","switchLevel":"LERNBEREICH WECHSELN","topHeard":"AM HÄUFIGSTEN GEHÖRT","masteredN":"Gemeistert","inProgress":"In Arbeit","totalHeard":"Gehört gesamt","streak":"Streak","synonyms":"SYNONYME","example":"BEISPIEL","verbForms":"VERBFORMEN","nounForms":"NOMENFORMEN","uiLangLabel":"App-Sprache","listEndless":"Liste endlos","repeatCard":"Karte wdh.","once":"Einmal","days":"Tage","nothingHeard":"Noch nichts gehört","noMarked":"Noch keine Wörter markiert.","voice":"Stimme","germanWord":"DEUTSCH","speaking":"spricht…","fArticle":"Artikel","fSingular":"Singular","fPlural":"Plural","fInfinitive":"Infinitiv","fPresent":"Präsens","fPast":"Präteritum","fPerfect":"Perfekt","fPlus":"Plusquamperfekt","voiceLabel":"Stimme","step1":"SCHRITT 1 · SPRACHE","step2":"SCHRITT 2 · ART","step3":"SCHRITT 3 · NIVEAU","back2":"Zurück","materialType":"Lernmaterial","vocabType":"Wortschatz","irregularType":"Unregelmäßige Verben","restart":"Neu wählen","backToSelect":"Buch / Bereich neu wählen","initiativeBy":"Initiative von Khalid Noorzad","noVoiceHint":"Keine {lang}-Stimme auf diesem Gerät — in den Systemeinstellungen installierbar."},
@@ -565,13 +565,35 @@ function speakNormDE(text){
   return s.trim();
 }
 var MP3_MISSING={};  // per-URL cache of clips known to be absent (NOT per-locale)
-// One shared Audio element, unlocked once on first user gesture. iOS/Safari blocks
-// audio created outside a user gesture, which is why Persian clips "skip unless you tap
-// quickly" — a freshly-created Audio each time isn't unlocked. Reusing one unlocked
-// element makes clips play during the auto-sequence without needing a new tap each time.
+// --- Background / locked-screen playback support ---------------------------
+// Device TTS (speechSynthesis) is killed by the OS when the screen locks, but MP3
+// <audio> can keep playing if the browser sees an active Media Session. We detect
+// when the page is hidden and force MP3-only playback (skipping TTS, which is dead),
+// and we publish a Media Session so the OS keeps our audio alive in the pocket.
+var PAGE_HIDDEN=false;
+document.addEventListener('visibilitychange',function(){ PAGE_HIDDEN=document.hidden; });
+function setupMediaSession(){
+  if(!('mediaSession'in navigator))return;
+  try{
+    navigator.mediaSession.metadata=new MediaMetadata({
+      title:'Deutsch lernen', artist:'Auto-Loop', album:'Vocabulary'
+    });
+    navigator.mediaSession.setActionHandler('play',function(){ if(!playing)loop(); });
+    navigator.mediaSession.setActionHandler('pause',function(){ stop(); });
+    navigator.mediaSession.setActionHandler('nexttrack',function(){ if(CARDS.length){ stop(); pos=(pos+1)%CARDS.length; renderStudy(); loop(); } });
+    navigator.mediaSession.setActionHandler('previoustrack',function(){ if(CARDS.length){ stop(); pos=(pos-1+CARDS.length)%CARDS.length; renderStudy(); loop(); } });
+  }catch(_){}
+}
+function mediaSessionState(s){ if('mediaSession'in navigator){ try{navigator.mediaSession.playbackState=s;}catch(_){}} }
 var _mp3El=null;
 function _getMp3El(){
-  if(!_mp3El){ _mp3El=new Audio(); _mp3El.preload='auto'; }
+  if(!_mp3El){
+    _mp3El=new Audio();
+    _mp3El.preload='auto';
+    // iOS needs these for reliable in-pocket / locked-screen playback:
+    _mp3El.setAttribute('playsinline','');
+    _mp3El.playsInline=true;
+  }
   return _mp3El;
 }
 function unlockMp3(){
@@ -584,6 +606,7 @@ function unlockMp3(){
     var p=a.play();
     if(p&&p.then)p.then(function(){a.pause();a.muted=false;}).catch(function(){a.muted=false;});
   }catch(_){}
+  setupMediaSession();
 }
 function playMp3(text,loc,code,onMiss,finish){
   // Returns true if it started an MP3 attempt; calls onMiss() if it can't/does fail.
@@ -650,6 +673,14 @@ function _speak(text,code,onend){
   var loc=azLocale(code);
   var dv=pickVoice(code);
   var hq=dv&&isHQVoice(dv,code);
+
+  // LOCKED / BACKGROUND: device TTS is suspended by the OS when the screen is off,
+  // so play the MP3 clip instead (works in-pocket via Media Session). If the clip is
+  // genuinely missing we just advance — no TTS attempt, which would silently stall.
+  if(PAGE_HIDDEN){
+    playMp3(text,loc,code,function(){ finish(); },finish);
+    return;
+  }
 
   // ENGLISH ONLY: use the best GENUINE browser voice (allowlist in pickVoice). If the device
   // only has robotic novelty voices, pickVoice returns null → fall back to MP3 instead.
@@ -916,7 +947,7 @@ async function playOne(myToken){
   if(trEl)trEl.classList.remove('speaking');
 }
 async function loop(){
-  playing=true; var myToken=++token; setToggle(); acquireWakeLock();
+  playing=true; var myToken=++token; setToggle(); acquireWakeLock(); mediaSessionState('playing');
   while(playing&&myToken===token){
     await playOne(myToken); if(!playing||myToken!==token)break;
     await sleep(gapMs); if(!playing||myToken!==token)break;
@@ -925,7 +956,7 @@ async function loop(){
     pos=(pos+1)%CARDS.length; renderStudy();
   }
 }
-function stop(){playing=false;token++;setToggle();if('speechSynthesis'in window)speechSynthesis.cancel();if(window.__curAudio){try{window.__curAudio.pause()}catch(_){}}releaseWakeLock();var tr=$('trans');if(tr)tr.classList.remove('speaking')}
+function stop(){playing=false;token++;setToggle();if('speechSynthesis'in window)speechSynthesis.cancel();if(window.__curAudio){try{window.__curAudio.pause()}catch(_){}}releaseWakeLock();mediaSessionState('paused');var tr=$('trans');if(tr)tr.classList.remove('speaking')}
 function setToggle(){$('toggleIcon').innerHTML=playing?'<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>':'<path d="M8 5v14l11-7z"/>'}
 $('toggle').onclick=function(){playing?stop():loop()};
 $('next').onclick=function(){stop();pos=(pos+1)%CARDS.length;renderStudy()};
