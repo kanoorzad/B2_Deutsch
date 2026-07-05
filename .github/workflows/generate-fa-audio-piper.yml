@@ -33,12 +33,13 @@ jobs:
           pip install piper-tts
           sudo apt-get update && sudo apt-get install -y ffmpeg
 
-      - name: Download Persian voice model
+      - name: Download Persian voice model (via Piper's own downloader)
         run: |
-          BASE="https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/fa/fa_IR/gyro/medium"
-          curl -sL -o fa_IR-gyro-medium.onnx      "$BASE/fa_IR-gyro-medium.onnx?download=true"
-          curl -sL -o fa_IR-gyro-medium.onnx.json "$BASE/fa_IR-gyro-medium.onnx.json?download=true.json"
-          echo "model size:"; du -h fa_IR-gyro-medium.onnx
+          python -m piper.download_voices fa_IR-gyro-medium --download-dir .
+          echo "--- downloaded files ---"
+          ls -la *.onnx *.onnx.json
+          echo "--- model size check ---"
+          du -h fa_IR-gyro-medium.onnx
 
       - name: Generate Persian audio (shard ${{ matrix.shard }})
         env:
