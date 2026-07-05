@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Deutsch lernen</title>
-<link rel="manifest" href="manifest.webmanifest?v=43">
+<link rel="manifest" href="manifest.webmanifest?v=44">
 <meta name="theme-color" content="#0f141b">
-<link rel="icon" href="icon.svg?v=43" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg?v=43">
+<link rel="icon" href="icon.svg?v=44" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg?v=44">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
@@ -132,7 +132,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
 .syn .lab{color:#7fa8e0}.syn p{color:var(--ink2);font-weight:600}
 .ex{background:linear-gradient(160deg,rgba(61,220,151,.12),rgba(61,220,151,.04))}
 .ex .lab{color:#5fc99a}.ex p{color:var(--ink)}.ex b{color:var(--green)}
-.ex .exTr{color:var(--muted);font-size:13px;margin-top:.35rem;font-style:italic}
+.ex .exTr{color:#cfe0fb;font-size:15px;margin-top:.5rem;line-height:1.6}
 [dir="rtl"] .ex .exTr{text-align:right;font-family:var(--fa);font-size:16px;line-height:1.95}
 .trans{background:linear-gradient(160deg,rgba(74,155,255,.12),rgba(74,155,255,.04));border:1.5px solid rgba(74,155,255,.18);transition:border-color .3s,box-shadow .3s}
 .trans.speaking{border-color:rgba(74,155,255,.6);box-shadow:0 0 0 3px rgba(74,155,255,.12)}
@@ -243,10 +243,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
 .sheetH{font-size:13px;color:var(--muted);font-weight:800;margin:0 0 12px;text-align:center}
 .sheetGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:52vh;overflow-y:auto}
 .sheetOpt{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 10px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
   text-align:center;font-size:14px;color:var(--ink2);font-weight:700;cursor:pointer;transition:transform .12s,border-color .15s}
 .sheetOpt:active{transform:scale(.97)}
 .sheetOpt.on{border-color:var(--blue2);background:rgba(74,155,255,.12);color:var(--blueInk)}
 .sheetOpt.wide{grid-column:1/-1}
+.sheetIco{flex:0 0 auto;display:flex;align-items:center}
+.sheetIco .flag{border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,.15)}
 [dir="rtl"] .sheetH,[dir="rtl"] .sheetOpt{font-family:var(--fa)}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;transition-duration:.001ms!important}}
 </style>
@@ -274,7 +277,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div class="scroll">
     <div class="card" id="card"><div class="cardPad" id="cardPad"></div></div>
     <p class="voice" id="voiceStatus"></p>
-    <p class="stamp">Build v43 · 7 Sprachen · Audio</p>
+    <p class="stamp">Build v44 · 7 Sprachen · Audio</p>
   </div>
 
   <div class="player" id="player" style="display:none">
@@ -334,8 +337,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div id="markedBody"></div>
 </div>
 
-<script src="data.js?v=43"></script>
-<script src="integration.js?v=43"></script>
+<script src="data.js?v=44"></script>
+<script src="integration.js?v=44"></script>
 <script>
 const UI={
   de:{"appTitle":"Deutsch lernen","chooseLang":"In welcher Sprache möchten Sie übersetzen?","area":"Lernbereich","chooseLevel":"Wählen Sie Ihr Niveau.","backLang":"‹ Sprache","irregular":"⚡ Unregelmäßige Verben","flip":"Umdrehen","mastered":"Gemeistert","autoloop":"Auto-Loop","running":"läuft weiter","tabLearn":"Lernen","tabProgress":"Fortschritt","tabMarked":"Markiert","tabOptions":"Optionen","back":"‹ Zurück","progress":"Fortschritt","markedWords":"Markierte Wörter","options":"Optionen","playback":"WIEDERGABE","tempo":"Tempo","pauseCards":"Pause zw. Karten","langContent":"SPRACHE & INHALT","translation":"Übersetzung","audioSrc":"Audio-Quelle","autoUI":"Wie Übersetzung","audioDevice":"Gerät","chooseUnit":"Wählen Sie eine Einheit.","allUnits":"Alle Einheiten","unit":"Einheit","appearance":"DARSTELLUNG","design":"Design","light":"Hell","dark":"Dunkel","switchLang":"SPRACHE WECHSELN","switchLevel":"LERNBEREICH WECHSELN","topHeard":"AM HÄUFIGSTEN GEHÖRT","masteredN":"Gemeistert","inProgress":"In Arbeit","totalHeard":"Gehört gesamt","streak":"Streak","synonyms":"SYNONYME","example":"BEISPIEL","verbForms":"VERBFORMEN","nounForms":"NOMENFORMEN","uiLangLabel":"App-Sprache","listEndless":"Liste endlos","repeatCard":"Karte wdh.","once":"Einmal","days":"Tage","nothingHeard":"Noch nichts gehört","noMarked":"Noch keine Wörter markiert.","voice":"Stimme","germanWord":"DEUTSCH","speaking":"spricht…","fArticle":"Artikel","fSingular":"Singular","fPlural":"Plural","fInfinitive":"Infinitiv","fPresent":"Präsens","fPast":"Präteritum","fPerfect":"Perfekt","fPlus":"Plusquamperfekt","voiceLabel":"Stimme","step1":"SCHRITT 1 · SPRACHE","step2":"SCHRITT 2 · ART","step3":"SCHRITT 3 · NIVEAU","back2":"Zurück","materialType":"Lernmaterial","vocabType":"Wortschatz","irregularType":"Unregelmäßige Verben","restart":"Neu wählen","backToSelect":"Buch / Bereich neu wählen","initiativeBy":"Initiative von Khalid Noorzad","noVoiceHint":"Keine {lang}-Stimme auf diesem Gerät — in den Systemeinstellungen installierbar."},
@@ -952,15 +955,15 @@ function enterStudy(list,unit){
   try{if('speechSynthesis'in window){var u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}}catch(_){}
 }
 
-/* ---- bottom-sheet pickers (language / unit) ---- */
+/* ---- bottom-sheet pickers (language / book / unit) ---- */
 function openSheet(title,opts){
-  // opts: [{label, on, wide, onPick}]
+  // opts: [{label, icon(html), on, wide, onPick}]
   var g=$('sheetGrid'); g.innerHTML='';
   $('sheetH').textContent=title;
   opts.forEach(function(o){
     var b=document.createElement('button');
     b.className='sheetOpt'+(o.on?' on':'')+(o.wide?' wide':'');
-    b.textContent=o.label;
+    b.innerHTML=(o.icon?'<span class="sheetIco">'+o.icon+'</span>':'')+'<span>'+esc(o.label)+'</span>';
     b.onclick=function(){ closeSheet(); setTimeout(o.onPick,180); };
     g.appendChild(b);
   });
@@ -972,7 +975,7 @@ $('sheetBackdrop').onclick=closeSheet;
 
 function openLangSheet(){
   var opts=LANGS.map(function(L){
-    return {label:L[1], on:(LANG.code===L[0]), onPick:function(){
+    return {label:L[1], icon:flagSVG(L[0]), on:(LANG.code===L[0]), onPick:function(){
       LANG.code=L[0]; LANG.label=L[1];
       if(UILANG_MODE==='auto'){UILANG=uiKeyFor(LANG.code);applyUILang()}
       showVoice();
@@ -981,13 +984,31 @@ function openLangSheet(){
   });
   openSheet(t('translation'), opts);
 }
+
+// Book/material sheet: shows every list from every material in one bottom sheet.
+function openBookSheet(){
+  var opts=[];
+  MATERIALS.forEach(function(M){
+    M.lists.forEach(function(L){
+      opts.push({label:L[1], on:(currentList===L[0]), onPick:function(){
+        stop(); currentMaterial=M.type; currentList=L[0];
+        // go straight into the unit sheet for the chosen book (or study if no units)
+        var all=loadRealCards(L[0]); var nums=[],seen={};
+        all.forEach(function(c){var n=unitNum(c);if(n!=null&&!seen[n]){seen[n]=1;nums.push(n)}});
+        if(nums.length<2){ enterStudy(L[0],null); } else { setTimeout(openUnitSheet,220); }
+      }});
+    });
+  });
+  openSheet(t('chooseLevel'), opts);
+}
+
 function openUnitSheet(){
-  if(!currentList){ swapCard(renderSelectLevel); return; }
+  if(!currentList){ openBookSheet(); return; }
   var all=loadRealCards(currentList);
   var nums=[],seen={};
   all.forEach(function(c){var n=unitNum(c);if(n!=null&&!seen[n]){seen[n]=1;nums.push(n)}});
   nums.sort(function(a,b){return a-b});
-  if(nums.length<2){ swapCard(renderSelectLevel); return; }  // no real units → let them change book instead
+  if(nums.length<2){ openBookSheet(); return; }  // no real units → let them change book instead
   var opts=[{label:t('allUnits'), wide:true, on:(currentUnit==null), onPick:function(){ stop(); enterStudy(currentList,null); }}];
   nums.forEach(function(n){ opts.push({label:t('unit')+' '+localNum(n), on:(currentUnit===n), onPick:function(){ stop(); enterStudy(currentList,n); }}); });
   openSheet(t('chooseUnit'), opts);
@@ -995,7 +1016,7 @@ function openUnitSheet(){
 
 /* pills open bottom sheets */
 $('pillLang').onclick=function(){ openLangSheet(); };
-$('pillLevel').onclick=function(){ stop(); swapCard(renderSelectLevel); };   /* back arrow → book/level */
+$('pillLevel').onclick=function(){ openBookSheet(); };       /* back arrow → book/material sheet */
 var _pl2=$('pillLevel2'); if(_pl2)_pl2.onclick=function(){ openUnitSheet(); };  /* crumb → unit sheet */
 
 /* ============ drawer ============ */
