@@ -1,0 +1,83 @@
+name: Build German audio pack (FREE - Piper)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: audio-de-german
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Piper + ffmpeg
+        run: |
+          python -m pip install --upgrade pip
+          pip install piper-tts
+          sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Download German voice model
+        run: |
+          python -m piper.download_voices de_DE-thorsten-high --download-dir .
+          ls -la *.onnx *.onnx.json
+      - name: Generate German audio (shard ${{ matrix.shard }})
+        env:
+          JOBS_CSV: audio_jobs_de.csv
+          PIPER_MODEL: de_DE-thorsten-high.onnx
+          SHARD_INDEX: ${{ matrix.shard }}
+          SHARD_TOTAL: '4'
+          PYTHONUNBUFFERED: '1'
+        run: python -u generate_audio_piper.py
+      - name: Upload shard clips
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: de-audio-shard-${{ matrix.shard }}
+          path: audio/
+          if-no-files-found: ignore
+          retention-days: 1
+
+  commit:
+    needs: generate
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download all shard clips
+        uses: actions/download-artifact@v4
+        with:
+          path: _shards
+          pattern: de-audio-shard-*
+      - name: Merge shards into audio/
+        run: |
+          mkdir -p audio
+          find _shards -type f -name '*.mp3' -exec cp -n {} audio/ \; || true
+          rm -rf _shards
+          echo "audio/ now has $(ls audio | wc -l) files"
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add audio
+          if git diff --cached --quiet; then echo "No new audio."; exit 0; fi
+          git commit -m "Add German audio clips (Piper, free)"
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep 5
+          done
+          exit 1
