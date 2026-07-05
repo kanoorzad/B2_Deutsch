@@ -1,31 +1,32 @@
-FREE PERSIAN AUDIO — using Piper (no Azure, no cost, no limits)
-================================================================
-Your Azure F0 key is quota-capped, so Persian could never finish there. This uses
-PIPER, a free open-source neural TTS that runs INSIDE the GitHub runner — no API,
-no key, no quota, no rate limit. It writes MP3s with the SAME filenames your app
-already expects, so NO app change is needed.
+B2_Deutsch — FULL PACKAGE (app Build v41 + Persian audio Piper workflow)
+========================================================================
+This zip mirrors your repository layout. Copy files into your repo keeping the
+SAME folders (overwrite existing).
+
+WHAT'S IN HERE
+--------------
+APP (repo root):
+  index.html ............ Build v41 — modernised styling pass 1:
+                          • Samim font for all Persian/Arabic text + UI
+                          • larger, more legible translation text
+                          • refined dark theme tokens
+                          (all audio/voice/playback logic unchanged)
+  service-worker.js ..... v41 cache
+  data.js, integration.js, manifest.webmanifest, icon.svg
+
+PERSIAN AUDIO (free, no Azure):
+  generate_audio_piper.py ................ Piper TTS generator
+  .github/workflows/generate-fa-audio-piper.yml .. "Build Persian audio pack (FREE - Piper)"
+  (other language workflows + azure generator included as-is)
 
 INSTALL
 -------
-Copy files keeping the SAME folders (overwrite existing):
-  • top-level files (incl. generate_audio_piper.py)  -> repo ROOT
-  • .github/workflows/generate-fa-audio-piper.yml     -> repo .github/workflows/  (NEW)
+1) Extract, copy everything into your repo keeping folders, overwrite, commit.
+2) Hard-refresh the app once (service worker is sticky) to load Build v41.
 
-RUN
----
-Actions -> "Build Persian audio pack (FREE - Piper)" -> Run workflow.
-  • Installs Piper + ffmpeg, downloads the Persian voice (~60 MB), then generates
-    all 8,405 clips across 3 parallel shards on the runner CPU.
-  • Takes roughly 30-60 minutes total; commits every clip at the end. FREE.
-  • The self-test prints "SELFTEST: OK" within a minute — no more 429s, ever.
-
-VOICE
+NOTES
 -----
-Default voice: fa_IR-gyro-medium (clear Persian male). To use a different one,
-change the download URL + PIPER_MODEL in the workflow to any of:
-  amir, ganji, ganji_adabi, gyro, reza_ibrahim  (all fa_IR ... medium)
-Quality note: Piper's Persian is genuine neural voice — very good for flashcards,
-though slightly less polished than Azure's Dilara. But it's free and unlimited.
-
-(You can still keep using Azure for other languages that already worked; this
- Piper workflow is only for Persian.)
+• The visual redesign is in progress — this is Pass 1 (fonts, sizing, colours).
+  The compact nav top bar + book/unit/language picker sheets come in later passes.
+• Persian audio: if any words are still silent, re-run the Piper workflow; it
+  skips existing clips and fills only the gaps.
