@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Deutsch lernen</title>
-<link rel="manifest" href="manifest.webmanifest?v=39">
+<link rel="manifest" href="manifest.webmanifest?v=40">
 <meta name="theme-color" content="#0f141b">
-<link rel="icon" href="icon.svg?v=39" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg?v=39">
+<link rel="icon" href="icon.svg?v=40" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg?v=40">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
@@ -235,7 +235,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div class="scroll">
     <div class="card" id="card"><div class="cardPad" id="cardPad"></div></div>
     <p class="voice" id="voiceStatus"></p>
-    <p class="stamp">Build v39 · 7 Sprachen · Audio</p>
+    <p class="stamp">Build v40 · 7 Sprachen · Audio</p>
   </div>
 
   <div class="player" id="player" style="display:none">
@@ -285,8 +285,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sa
   <div id="markedBody"></div>
 </div>
 
-<script src="data.js?v=39"></script>
-<script src="integration.js?v=39"></script>
+<script src="data.js?v=40"></script>
+<script src="integration.js?v=40"></script>
 <script>
 const UI={
   de:{"appTitle":"Deutsch lernen","chooseLang":"In welcher Sprache möchten Sie übersetzen?","area":"Lernbereich","chooseLevel":"Wählen Sie Ihr Niveau.","backLang":"‹ Sprache","irregular":"⚡ Unregelmäßige Verben","flip":"Umdrehen","mastered":"Gemeistert","autoloop":"Auto-Loop","running":"läuft weiter","tabLearn":"Lernen","tabProgress":"Fortschritt","tabMarked":"Markiert","tabOptions":"Optionen","back":"‹ Zurück","progress":"Fortschritt","markedWords":"Markierte Wörter","options":"Optionen","playback":"WIEDERGABE","tempo":"Tempo","pauseCards":"Pause zw. Karten","langContent":"SPRACHE & INHALT","translation":"Übersetzung","audioSrc":"Audio-Quelle","autoUI":"Wie Übersetzung","audioDevice":"Gerät","chooseUnit":"Wählen Sie eine Einheit.","allUnits":"Alle Einheiten","unit":"Einheit","appearance":"DARSTELLUNG","design":"Design","light":"Hell","dark":"Dunkel","switchLang":"SPRACHE WECHSELN","switchLevel":"LERNBEREICH WECHSELN","topHeard":"AM HÄUFIGSTEN GEHÖRT","masteredN":"Gemeistert","inProgress":"In Arbeit","totalHeard":"Gehört gesamt","streak":"Streak","synonyms":"SYNONYME","example":"BEISPIEL","verbForms":"VERBFORMEN","nounForms":"NOMENFORMEN","uiLangLabel":"App-Sprache","listEndless":"Liste endlos","repeatCard":"Karte wdh.","once":"Einmal","days":"Tage","nothingHeard":"Noch nichts gehört","noMarked":"Noch keine Wörter markiert.","voice":"Stimme","germanWord":"DEUTSCH","speaking":"spricht…","fArticle":"Artikel","fSingular":"Singular","fPlural":"Plural","fInfinitive":"Infinitiv","fPresent":"Präsens","fPast":"Präteritum","fPerfect":"Perfekt","fPlus":"Plusquamperfekt","voiceLabel":"Stimme","step1":"SCHRITT 1 · SPRACHE","step2":"SCHRITT 2 · ART","step3":"SCHRITT 3 · NIVEAU","back2":"Zurück","materialType":"Lernmaterial","vocabType":"Wortschatz","irregularType":"Unregelmäßige Verben","restart":"Neu wählen","backToSelect":"Buch / Bereich neu wählen","initiativeBy":"Initiative von Khalid Noorzad","noVoiceHint":"Keine {lang}-Stimme auf diesem Gerät — in den Systemeinstellungen installierbar."},
@@ -517,6 +517,26 @@ function speakNormDE(text){
   return s.trim();
 }
 var MP3_MISSING={};  // per-URL cache of clips known to be absent (NOT per-locale)
+// One shared Audio element, unlocked once on first user gesture. iOS/Safari blocks
+// audio created outside a user gesture, which is why Persian clips "skip unless you tap
+// quickly" — a freshly-created Audio each time isn't unlocked. Reusing one unlocked
+// element makes clips play during the auto-sequence without needing a new tap each time.
+var _mp3El=null;
+function _getMp3El(){
+  if(!_mp3El){ _mp3El=new Audio(); _mp3El.preload='auto'; }
+  return _mp3El;
+}
+function unlockMp3(){
+  // Called from the first user gesture (see unlock()). Plays a silent data URI to
+  // satisfy the autoplay policy, so later programmatic .play() calls are allowed.
+  try{
+    var a=_getMp3El();
+    a.muted=true;
+    a.src='data:audio/mpeg;base64,//uQxAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAACcQCA';
+    var p=a.play();
+    if(p&&p.then)p.then(function(){a.pause();a.muted=false;}).catch(function(){a.muted=false;});
+  }catch(_){}
+}
 function playMp3(text,loc,code,onMiss,finish){
   // Returns true if it started an MP3 attempt; calls onMiss() if it can't/does fail.
   if(!(AUDIO_ENABLED&&loc)){ onMiss(); return false; }
@@ -525,8 +545,9 @@ function playMp3(text,loc,code,onMiss,finish){
   var settled=false, ended=false;
   function doFinish(){ if(ended)return; ended=true; finish&&finish(); }
   function miss(markMissing){ if(settled)return; settled=true; if(markMissing)MP3_MISSING[url]=true; onMiss(); }
-  var a=new Audio();
-  a.preload='auto';
+  var a=_getMp3El();
+  try{ a.pause(); }catch(_){}
+  a.muted=false;
   a.__isDe=(code&&code.indexOf('de')===0);
   a.playbackRate=(a.__isDe?0.95:1.0)*rateMul;
   try{ a.preservesPitch=true; a.mozPreservesPitch=true; a.webkitPreservesPitch=true; }catch(_){}
@@ -535,15 +556,20 @@ function playMp3(text,loc,code,onMiss,finish){
   a.onerror=function(){ miss(true); };
   window.__curAudio=a;
   a.src=url;
+  try{ a.currentTime=0; }catch(_){}
   var pr=a.play();
-  if(pr&&pr.catch)pr.catch(function(e){ miss(!(e&&e.name==='NotAllowedError')); });
-  // Safety net: if it started playing but 'onended' never fires (a known mobile quirk),
-  // advance based on the clip's own duration so the sequence never stalls on a word.
+  if(pr&&pr.catch)pr.catch(function(e){
+    // NotAllowedError should no longer happen (element is pre-unlocked); if it does,
+    // don't mark the clip missing — just advance so the sequence continues.
+    miss(!(e&&e.name==='NotAllowedError'));
+  });
+  // Safety net: if playback starts but 'onended' never fires (mobile quirk), advance
+  // based on the clip's duration so the sequence never stalls on a word.
   a.onloadedmetadata=function(){
     var ms=(isFinite(a.duration)&&a.duration>0? a.duration*1000 : 4000)+800;
     setTimeout(function(){ if(!ended){ doFinish(); } }, Math.min(ms, 15000));
   };
-  // Hard fallback if the clip never even loads metadata within 6s → treat as missing.
+  // Hard fallback if the clip never loads within 6s → treat as missing (only this clip).
   setTimeout(function(){ if(!settled)miss(false); },6000);
   return true;
 }
@@ -962,6 +988,7 @@ setTimeout(showVoice,800);
 (function(){
   var unlocked=false;
   function unlock(){ if(unlocked)return; unlocked=true;
+    unlockMp3();   // unlock the shared <audio> so Persian/MP3 clips play in the auto-sequence
     try{if('speechSynthesis'in window){
       loadVoices();
       // Prime with the actual translation-language voice (e.g. English) so the FIRST
