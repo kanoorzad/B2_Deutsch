@@ -930,7 +930,7 @@ function bumpListen(){var c=CARDS[pos];listen[c.id]=(listen[c.id]||0)+1;wr(LS.li
   var pe=document.querySelector('.ring .pct');if(pe)pe.textContent=pct;var lce=document.querySelector('.lc');if(lce)lce.innerHTML=lce.innerHTML.replace(/×\d+/,'×'+n)}}
 async function playOne(myToken){
   var c=CARDS[pos];
-  await new Promise(function(res){speak(c.word,'de-DE',res)}); if(myToken!==token)return;
+  var germanWord=c.word||c.german||c.singular||''; if(germanWord){await new Promise(function(res){speak(germanWord,'de-DE',res)}); if(myToken!==token)return;}
   bumpListen(); await sleep(150); if(myToken!==token)return;
   if(c.cat==='verb'){
     var items=verbFormItems(c);
