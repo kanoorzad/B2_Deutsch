@@ -930,7 +930,11 @@ function bumpListen(){var c=CARDS[pos];listen[c.id]=(listen[c.id]||0)+1;wr(LS.li
   var pe=document.querySelector('.ring .pct');if(pe)pe.textContent=pct;var lce=document.querySelector('.lc');if(lce)lce.innerHTML=lce.innerHTML.replace(/×\d+/,'×'+n)}}
 async function playOne(myToken){
   var c=CARDS[pos];
-  var germanWord=c.word||c.german||c.singular||''; if(germanWord){await new Promise(function(res){speak(germanWord,'de-DE',res)}); if(myToken!==token)return;}
+  var isVAP=c.cat==='vp'||c.cat==='ap';  // Detect VAP cards (no MP3s exist for expressions)
+  var germanWord=c.word||c.german||c.singular||''; if(germanWord){
+    if(isVAP){ await new Promise(function(res){ttsSpeak(germanWord,'de-DE',res)}); } else { await new Promise(function(res){speak(germanWord,'de-DE',res)}); }
+    if(myToken!==token)return;
+  }
   bumpListen(); await sleep(150); if(myToken!==token)return;
   if(c.cat==='verb'){
     var items=verbFormItems(c);
@@ -943,7 +947,10 @@ async function playOne(myToken){
     }
   }
   // German example sentence
-  if(c.ex&&c.ex.join('').trim()){ await new Promise(function(res){speak(c.ex.join(''),'de-DE',res)}); if(myToken!==token)return; }
+  if(c.ex&&c.ex.join('').trim()){ 
+    if(isVAP){ await new Promise(function(res){ttsSpeak(c.ex.join(''),'de-DE',res)}); } else { await new Promise(function(res){speak(c.ex.join(''),'de-DE',res)}); }
+    if(myToken!==token)return; 
+  }
   await sleep(200); if(myToken!==token)return;
   // translation turn: word translation, then example translation, in the selected language
   var tr=resolveTrans(c);
